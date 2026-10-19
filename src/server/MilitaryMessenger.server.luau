@@ -1,6 +1,8 @@
 -- MilitaryMessenger.server.luau
 -- 군대 RP 실시간 채팅 서버
-
+local Permissions = require(
+    script.Parent:WaitForChild("MessengerPermissions")
+)
 local Players = game:GetService("Players")
 local TextChatService = game:GetService("TextChatService")
 
@@ -77,12 +79,10 @@ commandChannel.ShouldDeliverCallback = function(message, recipientSource)
     local sender = getPlayer(message.TextSource)
     local recipient = getPlayer(recipientSource)
 
-    if not sender or not recipient then
-        return false
-    end
-
-    return getRank(sender) >= OFFICER_RANK
-        and getRank(recipient) >= OFFICER_RANK
+    return sender ~= nil
+        and recipient ~= nil
+        and Permissions.has(sender, "VIEW_COMMAND")
+        and Permissions.has(recipient, "VIEW_COMMAND")
 end
 
 -- 공지사항:
@@ -91,11 +91,9 @@ noticeChannel.ShouldDeliverCallback = function(message, recipientSource)
     local sender = getPlayer(message.TextSource)
     local recipient = getPlayer(recipientSource)
 
-    if not sender or not recipient then
-        return false
-    end
-
-    return getRank(sender) >= OFFICER_RANK
+    return sender ~= nil
+        and recipient ~= nil
+        and Permissions.has(sender, "POST_NOTICES")
 end
 
 local function findSource(channel, player)
@@ -129,12 +127,15 @@ local function ensureSource(channel, player)
     return source
 end
 
--- 계급 또는 소속 변경 시 채널 권한 업데이트
 local function refreshPlayer(player)
     if player.Parent ~= Players then
         return
     end
 
+    -- 권한 정보를 클라이언트에도 알려 주기
+    Permissions.publish(player)
+
+    local generalSource = ensureSource(generalChannel, player)
     local unitSource = ensureSource(unitChannel, player)
     local noticeSource = ensureSource(noticeChannel, player)
 
@@ -142,22 +143,30 @@ local function refreshPlayer(player)
         return
     end
 
+    local canSend = Permissions.has(player, "SEND_MESSAGES")
+
+    if generalSource then
+        generalSource.CanSend = canSend
+    end
+
     if unitSource then
-        unitSource.CanSend = getUnit(player) ~= nil
+        unitSource.CanSend = canSend and getUnit(player) ~= nil
     end
 
     if noticeSource then
-        noticeSource.CanSend = getRank(player) >= OFFICER_RANK
+        noticeSource.CanSend = canSend
+            and Permissions.has(player, "POST_NOTICES")
     end
 
-    -- 지휘관만 지휘 채널에 가입
     local commandSource = findSource(commandChannel, player)
 
-    if getRank(player) >= OFFICER_RANK then
-        commandSource = commandSource or ensureSource(commandChannel, player)
+    if Permissions.has(player, "VIEW_COMMAND") then
+        commandSource = commandSource
+            or ensureSource(commandChannel, player)
 
         if commandSource then
-            commandSource.CanSend = true
+            commandSource.CanSend = canSend
+                and Permissions.has(player, "WRITE_COMMAND")
         end
     elseif commandSource then
         commandSource:Destroy()
@@ -193,3 +202,14 @@ for _, player in Players:GetPlayers() do
 end
 
 print("[MilitaryMessenger] 서버 시작 완료")
+
+
+Permissions.Changed:Connect(function(target)
+    if target then
+        task.spawn(refreshPlayer, target)
+    else
+        for _, player in Players:GetPlayers() do
+            task.spawn(refreshPlayer, player)
+        end
+    end
+end)

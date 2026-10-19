@@ -88,7 +88,7 @@ end
 
 local function canView(id)
     if id == "command" then
-        return getRankOrder(player) >= 11
+        return player:GetAttribute("MessengerCanViewCommand") == true
     end
 
     if id == "unit" then
@@ -99,8 +99,16 @@ local function canView(id)
 end
 
 local function canWrite(id)
-    if id == "command" or id == "notice" then
-        return getRankOrder(player) >= 11
+    if player:GetAttribute("MessengerCanSend") ~= true then
+        return false
+    end
+
+    if id == "command" then
+        return player:GetAttribute("MessengerCanWriteCommand") == true
+    end
+
+    if id == "notice" then
+        return player:GetAttribute("MessengerCanPostNotices") == true
     end
 
     if id == "unit" then
@@ -886,6 +894,21 @@ local function updateAccess()
     end
 
     selectChannel(selectedChannel)
+
+    local permissionAttributes = {
+    "MessengerCanSend",
+    "MessengerCanCreate",
+    "MessengerCanDelete",
+    "MessengerCanManageRoles",
+    "MessengerCanManageSettings",
+    "MessengerCanPostNotices",
+    "MessengerCanViewCommand",
+    "MessengerCanWriteCommand",
+}
+
+for _, attributeName in permissionAttributes do
+    player:GetAttributeChangedSignal(attributeName):Connect(updateAccess)
+end
 end
 
 local playerConnections = {}
