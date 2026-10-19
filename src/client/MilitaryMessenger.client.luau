@@ -1851,16 +1851,46 @@ closeButton.Activated:Connect(function()
     setOpen(false)
 end)
 
--- M키로 열기 / 닫기
+-- Discord-inspired keyboard navigation (Mac Cmd and Windows Ctrl supported).
 UserInputService.InputBegan:Connect(function(key, processed)
-    if processed then
+    local isModifier=UserInputService:IsKeyDown(Enum.KeyCode.LeftControl)
+        or UserInputService:IsKeyDown(Enum.KeyCode.RightControl)
+        or UserInputService:IsKeyDown(Enum.KeyCode.LeftMeta)
+        or UserInputService:IsKeyDown(Enum.KeyCode.RightMeta)
+        or UserInputService:IsKeyDown(Enum.KeyCode.LeftSuper)
+        or UserInputService:IsKeyDown(Enum.KeyCode.RightSuper)
+    if opened and not processed and isModifier and key.KeyCode==Enum.KeyCode.F then
+        messageSearch:CaptureFocus()
+        return
+    elseif opened and not processed and isModifier and key.KeyCode==Enum.KeyCode.P then
+        pinsPanel.Visible=not pinsPanel.Visible
+        if pinsPanel.Visible then refreshPins() end
         return
     end
-
-    if key.KeyCode == Enum.KeyCode.Escape or key.KeyCode == Enum.KeyCode.ButtonB then
-        if opened then setOpen(false) end
-    elseif key.KeyCode == Enum.KeyCode.M then
+    if key.KeyCode==Enum.KeyCode.Escape or key.KeyCode==Enum.KeyCode.ButtonB then
+        if not opened or processed then return end
+        if pinsPanel.Visible then
+            pinsPanel.Visible=false
+        elseif editTarget or replyTarget or threadRoot then
+            editTarget=nil;replyTarget=nil;threadRoot=nil
+            updateMode();renderMessages()
+        else
+            setOpen(false)
+        end
+    elseif key.KeyCode==Enum.KeyCode.M and not processed then
         setOpen(not opened)
+    end
+end)
+
+input.InputBegan:Connect(function(key)
+    if key.KeyCode~=Enum.KeyCode.Up or input.Text~="" or not opened then return end
+    for index=#(history[selectedChannel] or {}),1,-1 do
+        local entry=history[selectedChannel][index]
+        if entry.userId==player.UserId and not entry.deleted and
+            ((threadRoot==nil and entry.threadRoot==nil) or entry.threadRoot==threadRoot) then
+            beginEdit(entry)
+            return
+        end
     end
 end)
 
