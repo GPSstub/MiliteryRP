@@ -423,12 +423,68 @@ local messageSearch = create("TextBox", center, {
     TextSize = 13, Font = Enum.Font.Gotham, ClearTextOnFocus = false,
 })
 corner(messageSearch, 6)
+
+-- Discord-style channel actions: pins, notification mute and mark-as-read.
+local pinsButton = button(center, "📌", C.surface)
+pinsButton.Name="PinnedMessagesButton"
+pinsButton.Position=UDim2.new(1,-88,0,40)
+pinsButton.Size=UDim2.fromOffset(34,26)
+pinsButton.TextSize=15
+local muteButton = button(center, "🔔", C.surface)
+muteButton.Name="ChannelMuteButton"
+muteButton.Position=UDim2.new(1,-48,0,40)
+muteButton.Size=UDim2.fromOffset(34,26)
+muteButton.TextSize=15
+local markReadButton = button(center, "✓", C.surface)
+markReadButton.Name="MarkReadButton"
+markReadButton.Position=UDim2.new(1,-128,0,40)
+markReadButton.Size=UDim2.fromOffset(34,26)
+markReadButton.TextSize=15
+
+local threadBackButton = button(center, "←  스레드 나가기", C.surface)
+threadBackButton.Name="ThreadBackButton"
+threadBackButton.Position=UDim2.fromOffset(12,72)
+threadBackButton.Size=UDim2.new(1,-24,0,30)
+threadBackButton.Visible=false
+
+local modeBar = create("Frame", center, {
+    Name="MessageModeBar", BackgroundColor3=C.sidebar,BorderSizePixel=0,
+    Position=UDim2.new(0,12,1,-124), Size=UDim2.new(1,-24,0,30),Visible=false,
+})
+corner(modeBar,6)
+local modeCaption = label(modeBar,"",12,C.accentLight,false)
+modeCaption.Position=UDim2.fromOffset(10,0)
+modeCaption.Size=UDim2.new(1,-45,1,0)
+local modeCancel = button(modeBar,"×",C.hover)
+modeCancel.Position=UDim2.new(1,-32,0,2)
+modeCancel.Size=UDim2.fromOffset(28,26)
+
+-- Pins are only available for messages delivered during this game session.
+local pinsPanel = create("Frame",center,{
+    Name="PinnedMessagesPanel",Position=UDim2.new(0,12,0,78),Size=UDim2.new(1,-24,1,-174),
+    BackgroundColor3=C.sidebar,BorderSizePixel=0,Visible=false,ZIndex=10,
+})
+corner(pinsPanel,10)
+local pinsHeading=label(pinsPanel,"📌  고정 메시지 · 현재 접속 기록",15,C.white,true)
+pinsHeading.Position=UDim2.fromOffset(12,8)
+pinsHeading.Size=UDim2.new(1,-60,0,30)
+pinsHeading.ZIndex=11
+local pinsClose=button(pinsPanel,"×",C.hover)
+pinsClose.Position=UDim2.new(1,-43,0,8)
+pinsClose.Size=UDim2.fromOffset(30,30)
+pinsClose.ZIndex=11
+local pinsList=create("ScrollingFrame",pinsPanel,{
+    Name="PinnedList",Position=UDim2.fromOffset(8,46),Size=UDim2.new(1,-16,1,-54),
+    BackgroundTransparency=1,BorderSizePixel=0,ScrollBarThickness=3,
+    AutomaticCanvasSize=Enum.AutomaticSize.Y,CanvasSize=UDim2.fromOffset(0,0),
+})
+create("UIListLayout",pinsList,{SortOrder=Enum.SortOrder.LayoutOrder,Padding=UDim.new(0,6)})
 -- 메시지 스크롤
 local feed = create("ScrollingFrame", center, {
     Name = "Messages",
 
     Position = UDim2.fromOffset(12, 78),
-    Size = UDim2.new(1, -24, 1, -180),
+    Size = UDim2.new(1, -24, 1, -212),
 
     BackgroundTransparency = 1,
     BorderSizePixel = 0,
@@ -579,6 +635,10 @@ local function updateLayout(viewportOverride: Vector2?)
     channelTitle.TextSize = if centerWidth < 390 then 15 else 18
     messageSearch.Size = UDim2.fromOffset(if centerWidth < 390 then 108 else 144, 32)
     channelTitle.Size = UDim2.new(1, if centerWidth < 390 then -132 else -172, 0, 30)
+    markReadButton.Visible = centerWidth >= 420
+    pinsButton.Position=UDim2.new(1,-88,0,40)
+    muteButton.Position=UDim2.new(1,-48,0,40)
+    threadBackButton.Size=UDim2.new(1,-24,0,30)
 
 end
 
