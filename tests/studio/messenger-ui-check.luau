@@ -54,6 +54,38 @@ check(#history.general==300,"History memory cap exceeded")
 count=0
 for _,child in feed:GetChildren() do if child:IsA("Frame") and child.Name=="Message" then count+=1 end end
 check(count==300,"Visible message memory cap exceeded")
+-- Exercise filtered-message UI protocol; this fake input is only for Studio harness use.
+local root=history.general[#history.general]
+local edited=fakeMessage(311)
+edited.Metadata=assert(Protocol.encode("e","ui-regression-311",root.id))
+edited.Text="새로 수정한 필터된 텍스트"
+receiveMessage(edited)
+check(root.message=="새로 수정한 필터된 텍스트" and root.edited,"Edit UI did not replace filtered text")
+local reply=fakeMessage(312)
+reply.Metadata=assert(Protocol.encode("r","ui-regression-312",root.id))
+receiveMessage(reply)
+check(history.general[#history.general].replyTo==root.id,"Reply metadata not applied")
+local threadMessage=fakeMessage(313)
+threadMessage.Metadata=assert(Protocol.encode("t","ui-regression-313",root.id))
+receiveMessage(threadMessage)
+check(root.threadCount==1,"Thread reply not grouped")
+threadRoot=root.id
+updateMode();renderMessages()
+count=0
+for _,child in feed:GetChildren() do
+    if child:IsA("Frame") and child.Name=="Message" then count+=1 end
+end
+check(count==2,"Thread view must show root and thread reply only")
+threadRoot=nil;updateMode();renderMessages()
+root.pinned=true
+messageSearch.Text="has:pin"
+task.wait(.1)
+count=0
+for _,child in feed:GetChildren() do
+    if child:IsA("Frame") and child.Name=="Message" then count+=1 end
+end
+check(count==1,"Pinned-message search failed")
+messageSearch.Text=""
 channelSearch.Text="전체"
 task.wait(.1)
 check(channelButtons.general.Visible and not channelButtons.notice.Visible,"Channel search incorrect")
