@@ -50,6 +50,7 @@ local function createChannel(name)
     return channel
 end
 
+local generalChannel = createChannel("RP_General")
 local unitChannel = createChannel("RP_Unit")
 local commandChannel = createChannel("RP_Command")
 local noticeChannel = createChannel("RP_Notice")

@@ -5,7 +5,7 @@ local Players = game:GetService("Players")
 local TextChatService = game:GetService("TextChatService")
 local TweenService = game:GetService("TweenService")
 local UserInputService = game:GetService("UserInputService")
-local generalChannel = createChannel("RP_General")
+
 local player = Players.LocalPlayer
 
 -- ==========================================
@@ -1058,36 +1058,14 @@ local function sendMessage()
 
     task.spawn(function()
         local success, result = pcall(function()
-            local channel
+        local channel = TextChatService:WaitForChild(info.channel, 10)
 
-            -- 기본 채널과 커스텀 채널은 위치가 다름
-            if id == "general" then
-                local folder = TextChatService:WaitForChild(
-                    "TextChannels",
-                    10
-                )
+        if not channel or not channel:IsA("TextChannel") then
+        error("채팅 채널을 찾을 수 없습니다.")
+        end
 
-                if not folder then
-                    error("기본 채팅 폴더가 없습니다.")
-                end
-
-                channel = folder:WaitForChild(
-                    "RBXGeneral",
-                    10
-                )
-            else
-                channel = TextChatService:WaitForChild(
-                    info.channel,
-                    10
-                )
-            end
-
-            if not channel or not channel:IsA("TextChannel") then
-                error("채팅 채널을 찾을 수 없습니다.")
-            end
-
-            return channel:SendAsync(content)
-        end)
+        return channel:SendAsync(content)
+    end)
 
         sending = false
 
