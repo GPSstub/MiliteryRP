@@ -930,6 +930,111 @@ local function getChannelInfo(id)
     return CHANNELS[1]
 end
 
+-- Read only published, server-filtered bulletin posts, never raw user text.
+-- Cursor is a monotonically increasing sequence rather than an array index,
+-- so removing older posts cannot shift the paging boundary.
+loadArchive = function(channelId: string,before: number?)
+    if archiveLoading[channelId] or not canView(channelId)
+        or not (channelAccess[channelId] and channelAccess[channelId].persistent) then return end
+    local now=os.clock()
+    if now-(archiveLastFetch[channelId] or -math.huge)<0.65 then
+        archiveDirty[channelId]=true
+        task.delay(0.85,function()
+            if archiveDirty[channelId] and channelId==selectedChannel then
+                archiveDirty[channelId]=false
+                loadArchive(channelId,before)
+            end
+        end)
+        return
+    end
+    archiveLastFetch[channelId]=now
+    archiveLoading[channelId]=true
+    task.spawn(function()
+        local ok,result=pcall(function()
+            return archiveRemote:InvokeServer("load",{channelId=channelId,before=before})
+        end)
+        archiveLoading[channelId]=false
+        if not ok or type(result)~="table" or result.ok~=true then
+            if selectedChannel==channelId then
+                description.Text=(if ok and type(result)=="table" then result.message else nil)
+                    or "영구 기록을 불러오지 못했습니다. 다시 시도해 주세요."
+            end
+            return
+        end
+        if not canView(channelId) or not (channelAccess[channelId] and channelAccess[channelId].persistent) then
+            return
+        end
+        local previous=history[channelId] or {}
+        local byId={}
+        for _,item in previous do
+            if item.seq then byId[item.id]=item end
+        end
+        -- Newest-page refresh deletes locally cached posts which disappeared
+        -- from that page (e.g. administrator delete or a revoked message).
+        if before==nil then
+            local smallest=math.huge
+            local currentIds={}
+            for _,entry in result.entries or {} do
+                if type(entry.seq)=="number" then
+                    smallest=math.min(smallest,entry.seq)
+                    currentIds[entry.id]=true
+                end
+            end
+            if smallest==math.huge then
+                byId={}
+            else
+                for id,entry in byId do
+                    if entry.seq>=smallest and not currentIds[id] then byId[id]=nil end
+                end
+            end
+        end
+        for _,item in result.entries or {} do
+            if type(item.id)=="string" and type(item.message)=="string" and type(item.seq)=="number" then
+                item.channelId=channelId
+                item.time=item.timeLabel or "이전 기록"
+                item.reactions=item.reactions or {}
+                item.deleted=false
+                byId[item.id]=item
+            end
+        end
+        local merged={}
+        for _,item in byId do table.insert(merged,item) end
+        table.sort(merged,function(a,b) return a.seq<b.seq end)
+        -- Bound client memory to the server's 300-post maximum.
+        while #merged>300 do table.remove(merged,1) end
+        for _,item in merged do item.threadCount=0 end
+        local roots={}
+        for _,item in merged do roots[item.id]=item end
+        for _,item in merged do
+            if item.threadRoot and roots[item.threadRoot] then
+                roots[item.threadRoot].threadCount+=1
+            end
+        end
+        history[channelId]=merged
+        archiveCursor[channelId]=result.cursor
+        archiveLoaded[channelId]=true
+        archiveDirty[channelId]=false
+        if channelId==selectedChannel then
+            renderMessages()
+            if pinsPanel.Visible then refreshPins() end
+        end
+    end)
+end
+
+archiveChanged.OnClientEvent:Connect(function(data: any)
+    if type(data)~="table" or type(data.channelId)~="string" then return end
+    local id=data.channelId
+    archiveDirty[id]=true
+    if id==selectedChannel and canView(id) then
+        task.delay(0.7,function()
+            if archiveDirty[id] and id==selectedChannel and not archiveLoading[id] then
+                archiveDirty[id]=false
+                loadArchive(id)
+            end
+        end)
+    end
+end)
+
 local function updateChannelButtons()
     local totalUnread = 0
 
