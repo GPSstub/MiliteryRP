@@ -281,4 +281,44 @@ Players.PlayerRemoving:Connect(function(player)
     assigned[player.UserId] = nil
 end)
 
+
+-- Read-only snapshot for the management UI.
+function Permissions.snapshot()
+    local roleCopy = {}
+    for roleId, grants in roles do
+        roleCopy[roleId] = table.clone(grants)
+    end
+    local people = {}
+    for _, player in Players:GetPlayers() do
+        local active = {}
+        for roleId in (assigned[player.UserId] or {}) do
+            if roles[roleId] then table.insert(active, roleId) end
+        end
+        table.sort(active)
+        people[#people + 1] = {
+            userId = player.UserId, name = player.Name,
+            displayName = player.DisplayName, roles = active,
+        }
+    end
+    return { roles = roleCopy, people = people, ownerId = OWNER_ID }
+end
+
+function Permissions.deleteRole(actor, roleId)
+    if not Permissions.has(actor, "MANAGE_ROLES") then
+        return false, "역할 관리 권한이 없습니다."
+    end
+    if type(roleId) ~= "string" or protectedRoles[roleId] or not roles[roleId] then
+        return false, "삭제할 수 없는 역할입니다."
+    end
+    if not canGrant(actor, roleId) then
+        return false, "이 역할을 관리할 권한이 부족합니다."
+    end
+    roles[roleId] = nil
+    for _, grants in assigned do
+        grants[roleId] = nil
+    end
+    changed:Fire(nil)
+    return true, "역할 삭제 완료"
+end
+
 return Permissions
