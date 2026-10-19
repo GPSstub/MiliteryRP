@@ -18,9 +18,9 @@
 - 계급장은 제공된 참고의 모양을 게임 GUI 도형으로 재현한 것이며 공식 그림 파일 자체를 복제하거나 업로드하지 않았다. 훈련병은 계급장 없이 이름과 계급명만 표시한다.
 - Roblox 기본 플레이어 목록에 계급 표시.
 - 팀과 1대대 소속 구분, 기존 큰 HUD, 훈련/XP/탄약/분대 버튼 없음.
-- 계급 자동 진급·계급 영구 저장은 아직 없음. 메신저 설정의 영구 저장은 별도로 구현됨.
+- 계급 자동 진급은 아직 없음. 계급은 사용자별 DataStore에 즉시 영구 저장되며, 메신저 설정도 별도 DataStore에 저장됨.
 
-신규 접속은 훈련병이며 리스폰 시 계급을 유지한다. 재접속 시에는 훈련병으로 초기화된다.
+처음 접속한 플레이어는 훈련병으로 시작합니다. 이후 계급 명령어로 변경한 계급은 저장이 성공한 뒤 적용되며, 리스폰·재접속·서버 재시작 후에도 복원됩니다. Roblox API 연결 실패 시 기존 저장 데이터를 덮어쓰지 않고 오류를 표시합니다. Studio와 실제 게임은 서로 다른 계급 DataStore를 사용합니다.
 
 ## 본인 전용 채팅 명령어
 
@@ -35,6 +35,14 @@ Studio에서 Play를 시작하고 채팅에 입력한다.
 | `/rank captain`, `/ranks` | 영어 별칭 |
 
 명령어 실행자는 로컬 Studio에서 확인한 본인 계정 `pikachu6361phw` (UserId `1153125948`)으로 한정했다. 이는 계급 변경 명령어만의 제한이며 군대 계급별 권한 시스템은 아니다. 다른 계정을 사용할 때는 서버 파일 `RankCommands.luau`의 `COMMAND_OWNER_USER_ID`를 바꾼다. 계급은 한글 명칭 또는 내부 영문 ID로 지정할 수 있다. 이름 일부나 DisplayName 추측 매칭은 하지 않는다.
+
+### 계급 영구 저장 테스트
+
+비공개 테스트 게임을 Roblox에 게시한 뒤 **Game Settings → Security → Enable Studio Access to API Services**를 켜고 저장하세요. Studio 버전에 따라 **File → Game Settings** 경로로 이동해야 할 수 있습니다. 테스트용 경험을 따로 사용하세요.
+
+Studio에서 `/계급 대위`를 실행하고 성공 메시지가 표시되면 Stop → Play로 재접속해서 계급을 확인합니다. Explorer의 Players → 본인 플레이어 → Attributes에서 `RankStorageStatus`가 `Ready`인지 확인할 수 있습니다. `Error`이면 Output의 `[RankStore]` 경고와 API 설정을 확인하세요.
+
+저장소 이름은 Studio에서 `MilitaryRP_Ranks_Dev_v1`, 실제 공개/비공개 서버에서는 `MilitaryRP_Ranks_v1`이며 키는 `user_<UserId>` 형식입니다. 최초 접속 시 훈련병을 화면에 임시 표시했다가 저장된 계급을 불러옵니다. **채팅 메시지·기존 메신저 기록은 여전히 영구 저장하지 않습니다.**
 
 ## 계급표
 
@@ -53,7 +61,8 @@ Studio에서 Play를 시작하고 채팅에 입력한다.
 ## 소스와 재생성
 
 - `src/shared/RankCatalog.luau`: 계급 정의.
-- `src/server/RankService.luau`: 서버 계급과 표시 동기화, 리스폰/외형 교체 대응.
+- `src/server/RankService.luau`: 서버 계급과 표시 동기화, 접속 시 복원, 리스폰/외형 교체 대응.
+- `src/server/RankStore.luau`: 사용자별 계급 DataStore GetAsync/UpdateAsync 영구 저장.
 - `src/server/RankInsignia.luau`: 업로드 없이 GUI 도형으로 계급장 렌더링.
 - `src/server/RankCommandParser.luau`, `RankCommands.luau`: 입력 해석, 실행자 확인, 변경 명령어.
 - `src/server/Main.server.luau`: 초기화.
