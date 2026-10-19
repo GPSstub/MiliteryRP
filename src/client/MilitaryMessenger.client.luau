@@ -477,6 +477,7 @@ local pinsList=create("ScrollingFrame",pinsPanel,{
     Name="PinnedList",Position=UDim2.fromOffset(8,46),Size=UDim2.new(1,-16,1,-54),
     BackgroundTransparency=1,BorderSizePixel=0,ScrollBarThickness=3,
     AutomaticCanvasSize=Enum.AutomaticSize.Y,CanvasSize=UDim2.fromOffset(0,0),
+    ZIndex=11,
 })
 create("UIListLayout",pinsList,{SortOrder=Enum.SortOrder.LayoutOrder,Padding=UDim.new(0,6)})
 -- 메시지 스크롤
@@ -982,8 +983,11 @@ end
 muteButton.Activated:Connect(function()
     mutedChannels[selectedChannel]=not mutedChannels[selectedChannel]
     muteButton.Text=if mutedChannels[selectedChannel] then "🔕" else "🔔"
+    if mutedChannels[selectedChannel] then
+        unread[selectedChannel]=0;pendingMessages[selectedChannel]=0
+    end
     description.Text=if mutedChannels[selectedChannel] then "이 채널의 일반 알림이 음소거되었습니다." else "알림을 다시 활성화했습니다."
-    updateChannelButtons()
+    updateNotice();updateChannelButtons()
 end)
 markReadButton.Activated:Connect(function() acknowledgeMessages() end)
 
