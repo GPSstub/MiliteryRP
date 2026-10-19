@@ -16,7 +16,7 @@ local function renderCharacter(player: Player, character: Model)
     if humanoid then humanoid.DisplayDistanceType=Enum.HumanoidDisplayDistanceType.None end
     local tag=Instance.new("BillboardGui")
     tag.Name="RankTag"; tag.Adornee=head; tag.Size=UDim2.fromOffset(180,88)
-    tag.StudsOffsetWorldSpace=Vector3.new(0,2.7,0); tag.MaxDistance=25; tag.AlwaysOnTop=false
+    tag.StudsOffsetWorldSpace=Vector3.new(0,2.7,0); tag.MaxDistance=100; tag.AlwaysOnTop=true
     tag.Parent=head
     local identity=Instance.new("TextLabel")
     identity.Name="Identity"; identity.Size=UDim2.new(1,0,0,26); identity.Position=UDim2.fromOffset(0,0)
@@ -58,9 +58,13 @@ end
 -- Rank commands call this API on the server; clients cannot assign ranks directly.
 function RankService.set(player: Player, rankId: any): boolean
     local rank=Catalog.find(rankId)
-    if not states[player] or player.Parent ~= Players or not rank then return false end
+    if player.Parent ~= Players or not rank then return false end
+    -- Recover if the player joined before the rank initializer completed.
+    if not states[player] then RankService.add(player) end
+    if not states[player] then return false end
     states[player]=rank.id
     publish(player,rank)
+    if player.Character then task.spawn(renderCharacter,player,player.Character) end
     return true
 end
 function RankService.get(player: Player): Rank?
@@ -70,17 +74,19 @@ end
 function RankService.add(player: Player)
     if states[player] then return end
     states[player]=Catalog.DefaultId
-    local stats=Instance.new("Folder"); stats.Name="leaderstats"; stats.Parent=player
-    local value=Instance.new("StringValue"); value.Name="계급"; value.Parent=stats
+    local stats=player:FindFirstChild("leaderstats")
+    if not stats then stats=Instance.new("Folder"); stats.Name="leaderstats"; stats.Parent=player end
+    local value=stats:FindFirstChild("계급")
+    if not value then value=Instance.new("StringValue"); value.Name="계급"; value.Parent=stats end
     local rank=Catalog.find(Catalog.DefaultId)
     assert(rank,"Default rank must exist")
     publish(player,rank)
     connections[player]={
         player.CharacterAdded:Connect(function(character: Model)
-            renderCharacter(player,character)
+            task.spawn(renderCharacter,player,character)
         end),
         player.CharacterAppearanceLoaded:Connect(function(character: Model)
-            renderCharacter(player,character)
+            task.spawn(renderCharacter,player,character)
         end),
     }
     if player.Character then task.spawn(renderCharacter,player,player.Character) end
