@@ -300,6 +300,9 @@ sideTitle.Position = UDim2.fromOffset(14, 18)
 sideTitle.Size = UDim2.new(1, -62, 0, 24)
 
 local channelButtons = {}
+local categories = {}
+local categoryHeaders = {}
+local collapsedCategories = {}
 local channelsScroll = create("ScrollingFrame", sidebar, {
     Name = "ChannelList",
     Position = UDim2.fromOffset(0, 96),
@@ -560,7 +563,7 @@ local function updateLayout(viewportOverride: Vector2?)
     local height = math.min(720, math.max(240, viewport.Y - 84))
     compact = width < 640
     local sidebarWidth = if compact then (if drawerOpen then width else 0) else (if width < 840 then 190 else 220)
-    local memberWidth = if width >= 960 then 190 else 0
+    local memberWidth = if width >= 960 and gui:GetAttribute("ShowMembers")~=false then 190 else 0
     local centerWidth = width - (if compact then 0 else sidebarWidth) - memberWidth
     window.Size = UDim2.fromOffset(width, height)
     sidebar.Position = UDim2.fromOffset(0, 60)
@@ -609,6 +612,7 @@ end)
 
 local selectedChannel = "general"
 local opened = false
+local playerListBefore: boolean? = nil
 local sending = false
 local drafts = {}
 local scrollPositions = {}
@@ -650,6 +654,8 @@ local function updateChannelButtons()
     local totalUnread = 0
 
     local visibleIndex = 0
+    local lastCategory = nil
+    for _,row in categoryHeaders do row.Visible=false end
     local query = string.lower(channelSearch.Text)
     for _, info in CHANNELS do
         local id = info.id
@@ -657,7 +663,23 @@ local function updateChannelButtons()
 
         local allowed = canView(id)
 
-        row.Visible = allowed and (query == "" or string.find(string.lower(info.name), query, 1, true) ~= nil)
+        local matches = query == "" or string.find(string.lower(info.name), query, 1, true) ~= nil
+        local categoryId = info.categoryId
+        if categoryId and categories[categoryId] and allowed and matches then
+            if lastCategory ~= categoryId then
+                lastCategory = categoryId
+                local heading = categoryHeaders[categoryId]
+                if not heading then
+                    heading=button(channelsScroll,"",C.sidebar);heading.Name="Category_"..categoryId;heading.TextSize=12;heading.TextXAlignment=Enum.TextXAlignment.Left
+                    heading.Activated:Connect(function() collapsedCategories[categoryId]=not collapsedCategories[categoryId];updateChannelButtons() end)
+                    categoryHeaders[categoryId]=heading
+                end
+                heading.Text=(if collapsedCategories[categoryId] then "> " else "v ")..categories[categoryId].name
+                heading.Position=UDim2.fromOffset(10,8+visibleIndex*46);heading.Size=UDim2.new(1,-20,0,38);heading.Visible=true
+                visibleIndex+=1
+            end
+        end
+        row.Visible = allowed and matches and (query~="" or not categoryId or not collapsedCategories[categoryId] or unread[id]>0 or id==selectedChannel)
         if row.Visible then
             row.Position = UDim2.fromOffset(10, 8 + visibleIndex * 46)
             visibleIndex += 1
@@ -699,7 +721,7 @@ end
 
 local function updateNotice()
     local count = pendingMessages[selectedChannel] or 0
-    newMessages.Visible = count > 0 and messageSearch.Text == ""
+    newMessages.Visible = count > 0 and messageSearch.Text == "" and gui:GetAttribute("ShowNotifications")~=false
     newMessages.Text = "새 메시지 " .. tostring(count) .. "개  ·  확인하기 ↓"
 end
 
@@ -729,7 +751,12 @@ input:GetPropertyChangedSignal("Text"):Connect(function()
 end)
 
 
-local function createMessage(entry, order)
+local function createMessage(entry, order, previous)
+    local grouped = gui:GetAttribute("GroupMessages")~=false and previous and previous.userId==entry.userId
+        and math.abs((entry.timestamp or 0)-(previous.timestamp or 0))<=300
+    local showAvatar = gui:GetAttribute("ShowAvatars")~=false
+    local left = if showAvatar then 46 else 8
+    local top = if grouped then 0 else 24
     local row = create("Frame", feed, {
         Name = "Message",
 
@@ -742,7 +769,7 @@ local function createMessage(entry, order)
         AutomaticSize = Enum.AutomaticSize.Y,
     })
 
-    create("UISizeConstraint", row, { MinSize = Vector2.new(0, 48) })
+    create("UISizeConstraint", row, { MinSize = Vector2.new(0, if grouped then 22 else 48) })
     local avatar = create("ImageLabel", row, {
         Position = UDim2.fromOffset(0, 2),
         Size = UDim2.fromOffset(36, 36),
@@ -757,6 +784,7 @@ local function createMessage(entry, order)
         ),
     })
 
+    avatar.Visible=showAvatar and not grouped
     corner(avatar, 18)
 
     local author = label(
@@ -767,19 +795,20 @@ local function createMessage(entry, order)
         true
     )
 
-    author.Position = UDim2.fromOffset(46, 0)
+    author.Visible=not grouped
+    author.Position = UDim2.fromOffset(left, 0)
     author.Size = UDim2.new(1, -50, 0, 22)
 
     local messageText = label(
         row,
         entry.message,
-        15,
+        gui:GetAttribute("MessageFontSize") or 16,
         C.white,
         false
     )
 
-    messageText.Position = UDim2.fromOffset(46, 24)
-    messageText.Size = UDim2.new(1, -52, 0, 0)
+    messageText.Position = UDim2.fromOffset(left, top)
+    messageText.Size = UDim2.new(1, -left-6, 0, 0)
 
     messageText.AutomaticSize = Enum.AutomaticSize.Y
     messageText.TextWrapped = true
@@ -799,11 +828,13 @@ local function renderMessages()
     end
     local query = string.lower(messageSearch.Text)
     local count = 0
+    local previous = nil
     for _, entry in history[selectedChannel] or {} do
         if query == "" or string.find(string.lower(entry.message), query, 1, true)
             or string.find(string.lower(entry.name), query, 1, true) then
             count += 1
-            createMessage(entry, count)
+            createMessage(entry, count, previous)
+            previous=entry
         end
     end
     if count == 0 then
@@ -973,6 +1004,9 @@ local function syncCustomChannels()
     end)
     if not ok or not result or not result.ok or not result.data then return end
     local previousSelection = selectedChannel
+    categories={}
+    for _,category in result.data.categories or {} do categories[category.id]=category end
+    for id,row in categoryHeaders do if not categories[id] then row:Destroy();categoryHeaders[id]=nil;collapsedCategories[id]=nil end end
     local incoming = {}
     channelAccess = {}
     for _, item in result.data.channels or {} do
@@ -999,7 +1033,7 @@ local function syncCustomChannels()
     for _, info in incoming do
         for _, existing in CHANNELS do
             if existing.id == info.id then
-                existing.name = info.name; existing.description = info.description
+                existing.name = info.name; existing.description = info.description;existing.categoryId=info.categoryId;existing.order=info.order
             end
         end
         if not channelButtons[info.id] then
@@ -1016,6 +1050,14 @@ local function syncCustomChannels()
             row.Activated:Connect(function() selectChannel(id) end)
         end
     end
+    table.sort(CHANNELS,function(a,b)
+        local ac=(categories[a.categoryId] or {}).order or -1
+        local bc=(categories[b.categoryId] or {}).order or -1
+        if ac~=bc then return ac<bc end
+        if (a.categoryId or "")~=(b.categoryId or "") then return (a.categoryId or "")<(b.categoryId or "") end
+        if (a.order or 0)~=(b.order or 0) then return (a.order or 0)<(b.order or 0) end
+        return a.id<b.id
+    end)
     for index, info in CHANNELS do
         local row = channelButtons[info.id]
         if row then
@@ -1025,9 +1067,14 @@ local function syncCustomChannels()
         end
     end
     channelsScroll.CanvasSize = UDim2.fromOffset(0, 20 + #CHANNELS * 46)
+    local selectedRevoked=false
     for id in history do
-        if not canView(id) then history[id] = {}; unread[id] = 0; drafts[id] = nil; pendingMessages[id] = nil; scrollPositions[id] = nil end
+        if not canView(id) then
+            if id==selectedChannel then selectedRevoked=true end
+            history[id] = {}; unread[id] = 0; drafts[id] = nil; pendingMessages[id] = nil; scrollPositions[id] = nil
+        end
     end
+    if selectedRevoked then input.Text="";renderMessages() end
     if not canView(selectedChannel) then
         selectedChannel = "general"
         input.Text = drafts.general or ""
@@ -1207,6 +1254,7 @@ local function receiveMessage(message)
 
         message = message.Text,
         time = os.date("%H:%M"),
+        timestamp = os.time(),
     }
 
     table.insert(history[id], entry)
@@ -1220,14 +1268,14 @@ local function receiveMessage(message)
         if empty then empty:Destroy() end
         -- Incremental append leaves the reader's viewport untouched.
         messageOrder += 1
-        createMessage(entry, messageOrder)
+        createMessage(entry, messageOrder, history[id][#history[id]-1])
         if dropped then
             local oldest = nil
             for _, child in feed:GetChildren() do
                 if child:IsA("Frame") and child.Name == "Message" and (not oldest or child.LayoutOrder < oldest.LayoutOrder) then oldest = child end
             end
             if oldest then
-                local removedHeight = oldest.AbsoluteSize.Y + 12
+                local removedHeight = oldest.AbsoluteSize.Y + (if gui:GetAttribute("CompactMessages") then 4 else 12)
                 local position = feed.CanvasPosition
                 oldest:Destroy()
                 feed.CanvasPosition = Vector2.new(0, math.max(0, position.Y - removedHeight))
@@ -1328,6 +1376,15 @@ end)
 -- ==========================================
 
 local function setOpen(state)
+    local starterGui=game:GetService("StarterGui")
+    if state and not opened then
+        local ok,value=pcall(function() return starterGui:GetCoreGuiEnabled(Enum.CoreGuiType.PlayerList) end)
+        if ok then playerListBefore=value end
+        pcall(function() starterGui:SetCoreGuiEnabled(Enum.CoreGuiType.PlayerList,false) end)
+    elseif not state and opened and playerListBefore~=nil then
+        pcall(function() starterGui:SetCoreGuiEnabled(Enum.CoreGuiType.PlayerList,playerListBefore) end)
+        playerListBefore=nil
+    end
     opened = state
 
     launcher.Visible = not state
@@ -1375,6 +1432,14 @@ UserInputService.InputBegan:Connect(function(key, processed)
         setOpen(not opened)
     end
 end)
+
+for _,attribute in {"GroupMessages","CompactMessages","ShowAvatars","MessageFontSize","ShowMembers","ShowNotifications"} do
+    gui:GetAttributeChangedSignal(attribute):Connect(function()
+        local layout=feed:FindFirstChildOfClass("UIListLayout")
+        if layout then layout.Padding=UDim.new(0,if gui:GetAttribute("CompactMessages") then 4 else 12) end
+        updateLayout();renderMessages()
+    end)
+end
 
 -- ==========================================
 -- 초기화

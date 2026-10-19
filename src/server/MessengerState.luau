@@ -43,6 +43,26 @@ function State.has(data: any, actor: any, permission: string): boolean
     for id in roles do if data.roles[id].permissions[permission] then return true end end
     return false
 end
+-- Existing ACL grants remain the base. Explicit overwrites apply everyone first,
+-- then assigned roles (combined deny, then combined allow), like Discord's role overwrites.
+function State.effectiveAccess(data: any, actor: any, entry: any, mode: string): boolean
+    local source=entry
+    if entry.synced and entry.categoryId and data.categories and data.categories[entry.categoryId] then source=data.categories[entry.categoryId] end
+    local roles=State.rolesFor(data,actor)
+    local allowed=false
+    for id in roles do if source.acl[mode][id] then allowed=true end end
+    local overrides=(source.overwrites or {})[mode] or {}
+    if overrides.member~=nil then allowed=overrides.member end
+    local deny,allow=false,false
+    for id in roles do
+        if id~="member" then
+            if overrides[id]==false then deny=true elseif overrides[id]==true then allow=true end
+        end
+    end
+    if deny then allowed=false end
+    if allow then allowed=true end
+    return allowed
+end
 function State.channel(data: any, actor: any, id: string, mode: string): boolean
     local entry=data.channels[id]
     if not entry or not entry.acl[mode] then return false end
@@ -54,8 +74,7 @@ function State.channel(data: any, actor: any, id: string, mode: string): boolean
         if id=="command" and not State.has(data,actor,"WRITE_COMMAND") then return false end
     end
     if id=="command" and mode=="read" and not State.has(data,actor,"VIEW_COMMAND") then return false end
-    for role in State.rolesFor(data,actor) do if entry.acl[mode][role] then return true end end
-    return false
+    return State.effectiveAccess(data,actor,entry,mode)
 end
 local function count(items): number local n=0;for _ in items do n+=1 end;return n end
 local function validName(name): boolean
@@ -68,14 +87,34 @@ local function grantsValid(grants): boolean
     for key,value in grants do if not State.PERMISSIONS[key] or type(value)~="boolean" then return false end end
     return true
 end
+local function validAcl(acl: any,roles: any): boolean
+    if type(acl)~="table" then return false end
+    for _,mode in {"read","write","manage"} do
+        if type(acl[mode])~="table" or count(acl[mode])>30 then return false end
+        for id,value in acl[mode] do if not roles[id] or type(value)~="boolean" then return false end end
+    end
+    return true
+end
+local function validOrder(value: any): boolean
+    return value==nil or (type(value)=="number" and value==value and value>=0 and value<=10000 and value%1==0)
+end
 -- Stored configuration is bounded and validated before use; unknown schemas fail closed.
 function State.valid(data: any): boolean
-    if type(data)~="table" or data.schema~=1 or type(data.revision)~="number" or data.revision<0 or data.revision%1~=0 then return false end
+    if type(data)~="table" or (data.schema~=1 and data.schema~=2) or type(data.revision)~="number" or data.revision<0 or data.revision%1~=0 then return false end
     for _,key in {"roles","channels","assignments","receipts"} do if type(data[key])~="table" then return false end end
     if count(data.roles)>30 or count(data.channels)>28 or count(data.assignments)>1000 or #data.receipts>64 then return false end
     for id in protected do if type(data.roles[id])~="table" then return false end end
     for id,role in data.roles do
         if type(id)~="string" or not id:match("^[a-z][a-z0-9_]*$") or #id>48 or type(role)~="table" or not validName(role.name) or not grantsValid(role.permissions) or type(role.authorId)~="number" or role.authorId<0 or role.authorId%1~=0 then return false end
+    end
+    if data.categories~=nil then
+        if type(data.categories)~="table" or count(data.categories)>12 then return false end
+        for id,entry in data.categories do
+            if type(id)~="string" or not id:match("^cat_%w+$") or #id>48 or type(entry)~="table"
+                or not validName(entry.name) or type(entry.authorId)~="number" or entry.authorId<0 or entry.authorId%1~=0
+                or not validOrder(entry.order) or not validAcl(entry.acl,data.roles)
+                or (entry.overwrites~=nil and not validAcl(entry.overwrites,data.roles)) then return false end
+        end
     end
     for id,entry in data.channels do
         if type(id)~="string" or type(entry)~="table" or entry.id~=id or not validName(entry.name) or type(entry.authorId)~="number" or type(entry.channel)~="string" or type(entry.acl)~="table" then return false end
@@ -84,6 +123,10 @@ function State.valid(data: any): boolean
         if builtins[id] then
             if entry.builtin~=true or entry.channel~=builtins[id] then return false end
         elseif entry.builtin~=false or not id:match("^custom_%w+$") or #id>48 or entry.channel~="RP_"..id then return false end
+        if not validOrder(entry.order) or (entry.synced~=nil and type(entry.synced)~="boolean")
+            or (entry.categoryId~=nil and (type(entry.categoryId)~="string" or not (data.categories or {})[entry.categoryId]))
+            or (entry.synced and not entry.categoryId)
+            or (entry.overwrites~=nil and not validAcl(entry.overwrites,data.roles)) then return false end
         for _,mode in {"read","write","manage"} do
             if type(entry.acl[mode])~="table" or count(entry.acl[mode])>30 then return false end
             for role,value in entry.acl[mode] do if not data.roles[role] or type(value)~="boolean" then return false end end
@@ -105,11 +148,78 @@ local function canGrant(data,actor,role): boolean
     return true
 end
 function State.apply(data: any, actor: any, op: any): (any?, string)
+    if op.action=="batch_settings" then
+        if type(op.operations)~="table" or #op.operations<1 or #op.operations>40 then return nil,"한 번에 최대 40개까지 저장할 수 있습니다." end
+        local current=data
+        for _,operation in op.operations do
+            if type(operation)~="table" or not table.find({"set_overwrite","place_channel","move_category","set_permission"},operation.action) then return nil,"일괄 저장 대상 오류" end
+            local nextData,message=State.apply(current,actor,operation)
+            if not nextData then return nil,message end
+            current=nextData
+        end
+        current.revision=data.revision+1
+        return current,"설정 저장 완료"
+    end
     local updated=State.copy(data)
+    -- Old servers understand schema 1 only and must fail closed after advanced ACL writes.
+    updated.schema=2
+    updated.categories=updated.categories or {}
     local action=op.action
     local entry=updated.channels[op.id]
     local role=updated.roles[op.roleId]
-    if action=="create_channel" then
+    if action=="create_category" or action=="rename_category" or action=="delete_category" or action=="move_category" then
+        if not State.has(data,actor,"MANAGE_SETTINGS") then return nil,"통신망 관리 권한이 없습니다." end
+        local category=updated.categories[op.id]
+        if action=="create_category" then
+            if type(op.id)~="string" or not op.id:match("^cat_%w+$") or #op.id>48 or category or count(updated.categories)>=12 or not validName(op.name) then return nil,"카테고리 이름 또는 개수 제한을 확인하세요." end
+            updated.categories[op.id]={name=op.name,authorId=actor.userId,order=count(updated.categories)+1,
+                acl={read={member=true},write={member=true},manage={operator=true}}}
+        elseif not category then return nil,"카테고리를 찾을 수 없습니다."
+        elseif action=="rename_category" then
+            if not validName(op.name) then return nil,"이름은 2~24자입니다." end
+            category.name=op.name;category.authorId=actor.userId
+        elseif action=="move_category" then
+            if op.order==nil or not validOrder(op.order) then return nil,"잘못된 순서입니다." end
+            local ordered={}
+            for id,value in updated.categories do if id~=op.id then table.insert(ordered,{id=id,order=value.order or 0}) end end
+            table.sort(ordered,function(a,b) return if a.order==b.order then a.id<b.id else a.order<b.order end)
+            table.insert(ordered,math.clamp(op.order,1,#ordered+1),{id=op.id})
+            for index,value in ordered do updated.categories[value.id].order=index end
+        else
+            -- Deleting a category preserves channels and their effective permissions.
+            for _,channel in updated.channels do
+                if channel.categoryId==op.id then
+                    if channel.synced then channel.acl=State.copy(category.acl);channel.overwrites=State.copy(category.overwrites) end
+                    channel.categoryId=nil;channel.synced=nil
+                end
+            end
+            updated.categories[op.id]=nil
+        end
+    elseif action=="place_channel" then
+        if not entry or not State.channel(data,actor,op.id,"manage") or not State.has(data,actor,"MANAGE_SETTINGS") then return nil,"통신망 관리 권한이 없습니다." end
+        if op.categoryId~="" and not updated.categories[op.categoryId] then return nil,"카테고리를 찾을 수 없습니다." end
+        if type(op.synced)~="boolean" or not validOrder(op.order) or (op.synced and op.categoryId=="") then return nil,"배치 설정 오류" end
+        if entry.synced and entry.categoryId and not op.synced then
+            local category=updated.categories[entry.categoryId]
+            entry.acl=State.copy(category.acl);entry.overwrites=State.copy(category.overwrites)
+        end
+        entry.categoryId=if op.categoryId=="" then nil else op.categoryId
+        entry.synced=op.synced
+        local ordered={}
+        for id,value in updated.channels do if id~=op.id and value.categoryId==entry.categoryId then table.insert(ordered,{id=id,order=value.order or 0}) end end
+        table.sort(ordered,function(a,b) return if a.order==b.order then a.id<b.id else a.order<b.order end)
+        table.insert(ordered,math.clamp(op.order or #ordered+1,1,#ordered+1),{id=op.id})
+        for index,value in ordered do updated.channels[value.id].order=index end
+    elseif action=="set_overwrite" then
+        local target=if op.scope=="category" then updated.categories[op.id] else entry
+        if (op.scope~="channel" and op.scope~="category") or not target then return nil,"대상을 찾을 수 없습니다." end
+        if (op.scope=="category" and not State.has(data,actor,"MANAGE_SETTINGS"))
+            or (op.scope=="channel" and not State.channel(data,actor,op.id,"manage")) then return nil,"권한 편집 권한이 없습니다." end
+        if target.synced then return nil,"카테고리와 동기화 중입니다. 먼저 동기화를 해제하세요." end
+        if not data.roles[op.roleId] or not target.acl[op.mode] or not table.find({"allow","deny","inherit"},op.value) then return nil,"잘못된 권한 설정입니다." end
+        target.overwrites=target.overwrites or {read={},write={},manage={}}
+        target.overwrites[op.mode][op.roleId]=if op.value=="inherit" then nil else op.value=="allow"
+    elseif action=="create_channel" then
         if not State.has(data,actor,"CREATE_CHANNELS") then return nil,"채널 개설 권한이 없습니다." end
         if not validName(op.name) or type(op.id)~="string" or not op.id:match("^custom_%w+$") or updated.channels[op.id] or count(updated.channels)>=28 then return nil,"채널 이름 또는 개수 제한을 확인하세요." end
         for _,other in updated.channels do if other.name==op.name then return nil,"같은 이름의 채널이 있습니다." end end
@@ -154,7 +264,12 @@ function State.apply(data: any, actor: any, op: any): (any?, string)
                 else
                     updated.roles[op.roleId]=nil
                     for key,assigned in updated.assignments do assigned[op.roleId]=nil;if next(assigned)==nil then updated.assignments[key]=nil end end
-                    for _,channel in updated.channels do for _,acl in channel.acl do acl[op.roleId]=nil end end
+                    for _,group in {updated.channels,updated.categories} do
+                        for _,channel in group do
+                            for _,acl in channel.acl do acl[op.roleId]=nil end
+                            for _,acl in channel.overwrites or {} do acl[op.roleId]=nil end
+                        end
+                    end
                 end
             end
         end
