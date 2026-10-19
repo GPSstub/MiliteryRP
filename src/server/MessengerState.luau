@@ -15,6 +15,7 @@ function State.default(): any
     local function role(name, grants) return {name=name, authorId=0, permissions=grants} end
     local function channel(id, name, transport, writer)
         return {id=id, name=name, authorId=0, channel=transport, builtin=true,
+            persistent=id=="notice",
             acl={read={[if id=="command" then "officer" else "member"]=true}, write={[writer]=true}, manage={operator=true}}}
     end
     return {schema=1, revision=0, receipts={}, assignments={}, roles={
@@ -26,6 +27,14 @@ function State.default(): any
         unit=channel("unit","부대 채팅","RP_Unit","member"),
         command=channel("command","지휘 채팅","RP_Command","officer"),
         notice=channel("notice","공지사항","RP_Notice","officer")}}
+end
+-- Backward compatible with existing schema=1 config records. Older notice channels
+-- without a persistent field still behave as permanent announcements.
+function State.isPersistent(data: any, id: string): boolean
+    local channel=data.channels and data.channels[id]
+    if not channel then return false end
+    if channel.persistent~=nil then return channel.persistent==true end
+    return id=="notice"
 end
 function State.rolesFor(data: any, actor: any): any
     local result = {member=true}
@@ -78,7 +87,7 @@ function State.valid(data: any): boolean
         if type(id)~="string" or not id:match("^[a-z][a-z0-9_]*$") or #id>48 or type(role)~="table" or not validName(role.name) or not grantsValid(role.permissions) or type(role.authorId)~="number" or role.authorId<0 or role.authorId%1~=0 then return false end
     end
     for id,entry in data.channels do
-        if type(id)~="string" or type(entry)~="table" or entry.id~=id or not validName(entry.name) or type(entry.authorId)~="number" or type(entry.channel)~="string" or type(entry.acl)~="table" then return false end
+        if type(id)~="string" or type(entry)~="table" or entry.id~=id or not validName(entry.name) or type(entry.authorId)~="number" or type(entry.channel)~="string" or type(entry.acl)~="table" or (entry.persistent~=nil and type(entry.persistent)~="boolean") then return false end
         if entry.authorId<0 or entry.authorId%1~=0 then return false end
         local builtins={general="RP_General",unit="RP_Unit",command="RP_Command",notice="RP_Notice"}
         if builtins[id] then
@@ -113,12 +122,18 @@ function State.apply(data: any, actor: any, op: any): (any?, string)
         if not State.has(data,actor,"CREATE_CHANNELS") then return nil,"채널 개설 권한이 없습니다." end
         if not validName(op.name) or type(op.id)~="string" or not op.id:match("^custom_%w+$") or updated.channels[op.id] or count(updated.channels)>=28 then return nil,"채널 이름 또는 개수 제한을 확인하세요." end
         for _,other in updated.channels do if other.name==op.name then return nil,"같은 이름의 채널이 있습니다." end end
-        updated.channels[op.id]={id=op.id,name=op.name,authorId=actor.userId,channel="RP_"..op.id,builtin=false,acl={read={member=true},write={member=true},manage={operator=true}}}
-    elseif action=="rename_channel" or action=="delete_channel" or action=="set_channel_access" then
+        if op.persistent~=nil and type(op.persistent)~="boolean" then return nil,"영구 저장 설정이 올바르지 않습니다." end
+        updated.channels[op.id]={id=op.id,name=op.name,authorId=actor.userId,channel="RP_"..op.id,builtin=false,persistent=op.persistent==true,acl={read={member=true},write={member=true},manage={operator=true}}}
+    elseif action=="rename_channel" or action=="delete_channel" or action=="set_channel_access" or action=="set_channel_persistence" then
         if not entry or not State.channel(data,actor,op.id,"manage") then return nil,"채널 관리 권한이 없습니다." end
         if action=="delete_channel" then
             if entry.builtin or not State.has(data,actor,"DELETE_CHANNELS") then return nil,"삭제할 수 없는 채널입니다." end
             updated.channels[op.id]=nil
+        elseif action=="set_channel_persistence" then
+            if type(op.persistent)~="boolean" then return nil,"영구 저장 설정이 올바르지 않습니다." end
+            -- Read-only managers should not turn a private channel into an archive.
+            if not State.has(data,actor,"MANAGE_SETTINGS") then return nil,"채널 설정 관리 권한이 없습니다." end
+            entry.persistent=op.persistent
         elseif action=="rename_channel" then
             if not validName(op.name) then return nil,"이름은 2~24자로 지정하세요." end
             for id,other in updated.channels do if id~=op.id and other.name==op.name then return nil,"같은 이름의 채널이 있습니다." end end
