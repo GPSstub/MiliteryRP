@@ -19,14 +19,15 @@ end
 function Core.valid(value: any): boolean
     if type(value)~="table" or value.version~=1 or type(value.nextSeq)~="number"
         or value.nextSeq<1 or value.nextSeq%1~=0 or type(value.entries)~="table"
-        or #value.entries>Core.MAX_ENTRIES or type(value.revision)~="number" then return false end
+        or #value.entries>Core.MAX_ENTRIES or type(value.revision)~="number"
+        or value.revision<0 or value.revision%1~=0 then return false end
     local lastSeq=0
     for _,item in value.entries do
         if type(item)~="table" or type(item.id)~="string" or type(item.text)~="string"
             or type(item.authorId)~="number" or type(item.seq)~="number"
             or item.seq<=lastSeq or item.seq%1~=0 or item.seq>=value.nextSeq
             or type(item.reactions)~="table" or type(item.pinned)~="boolean"
-            or type(item.time)~="number" then return false end
+            or type(item.time)~="number" or #item.id>90 or #item.text>1200 then return false end
         lastSeq=item.seq
     end
     return true
@@ -52,6 +53,10 @@ function Core.apply(source: any,operation: any): (any?,string)
             return nil,"이 채널의 저장 한도(300개)에 도달했습니다. 관리자가 오래된 글을 삭제해야 합니다."
         end
         local entry=copy(operation.entry)
+        if entry.replyTo or entry.threadRoot then
+            local reference=Core.find(updated,entry.replyTo or entry.threadRoot)
+            if not reference then return nil,"답장할 원본 글을 찾을 수 없습니다." end
+        end
         entry.seq=updated.nextSeq
         updated.nextSeq+=1
         entry.reactions={};entry.pinned=false;entry.edited=false
