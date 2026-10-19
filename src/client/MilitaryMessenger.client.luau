@@ -1808,6 +1808,9 @@ local function receiveMessage(message)
     if not canView(id) then
         return
     end
+    -- Permanent notice/rules channels are server-filtered boards, not
+    -- TextChatService conversations. Never mix unarchived chat with posts.
+    if channelAccess[id] and channelAccess[id].persistent then return end
 
     -- 중복 메시지 방지
     local messageId = message.MessageId
