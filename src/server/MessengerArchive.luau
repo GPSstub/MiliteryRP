@@ -40,8 +40,10 @@ end
 local function read(id: string,useCache: boolean?): (any?,string?)
     local snapshot=cache[id]
     if useCache and snapshot and os.clock()-snapshot.at<2 then return snapshot.data,nil end
+    local options=Instance.new("DataStoreGetOptions")
+    options.UseCache=false
     local ok,value=pcall(function()
-        return ds:GetAsync(key(id))
+        return ds:GetAsync(key(id),options)
     end)
     if not ok then
         warn("[MessengerArchive] Unable to read channel",id)
