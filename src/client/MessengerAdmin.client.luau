@@ -16,10 +16,13 @@ local function make(class: string,parent: Instance,props: any): any
     obj.Parent=parent;return obj
 end
 local function corner(o: Instance) make("UICorner",o,{CornerRadius=UDim.new(0,8)}) end
+local function pad(o: Instance)
+    make("UIPadding",o,{PaddingLeft=UDim.new(0,14),PaddingRight=UDim.new(0,14)})
+end
 local function button(parent: Instance,name: string,value: string,color: Color3?): TextButton
     local b=make("TextButton",parent,{Name=name,Text=value,Font=Enum.Font.GothamMedium,TextSize=13,TextColor3=C.white,
         BackgroundColor3=color or C.surface,BorderSizePixel=0,Size=UDim2.new(1,-8,0,44),ZIndex=17,Selectable=true})
-    corner(b);return b
+    pad(b);b.TextXAlignment=Enum.TextXAlignment.Left;corner(b);return b
 end
 local function text(parent: Instance,value: string,height: number): TextLabel
     return make("TextLabel",parent,{Text=value,Font=Enum.Font.GothamMedium,TextSize=13,TextColor3=C.white,
@@ -28,18 +31,20 @@ end
 local function input(parent: Instance,placeholder: string): TextBox
     local box=make("TextBox",parent,{Text="",PlaceholderText=placeholder,ClearTextOnFocus=false,Font=Enum.Font.Gotham,TextSize=14,
         TextColor3=C.white,PlaceholderColor3=C.muted,BackgroundColor3=C.surface,BorderSizePixel=0,Size=UDim2.new(1,-8,0,44),ZIndex=17})
-    corner(box);return box
+    pad(box);box.TextXAlignment=Enum.TextXAlignment.Left;corner(box);return box
 end
 local open=button(header,"MessengerSettingsButton","설정")
-open.AnchorPoint=Vector2.new(1,0);open.Position=UDim2.new(1,-60,0,9);open.Size=UDim2.fromOffset(72,40)
+open.AnchorPoint=Vector2.new(1,0);open.Position=UDim2.new(1,-60,0,9);open.Size=UDim2.fromOffset(72,40);open.TextXAlignment=Enum.TextXAlignment.Center
 local plus=button(sidebar,"CreateChannelButton","+")
-plus.AnchorPoint=Vector2.new(1,0);plus.Position=UDim2.new(1,-8,0,6);plus.Size=UDim2.fromOffset(40,40);plus.TextSize=25
-local overlay=make("Frame",window,{Name="SettingsOverlay",Position=UDim2.fromOffset(0,60),Size=UDim2.new(1,0,1,-60),BackgroundColor3=C.bg,BorderSizePixel=0,Visible=false,ZIndex=15})
+plus.AnchorPoint=Vector2.new(1,0);plus.Position=UDim2.new(1,-8,0,6);plus.Size=UDim2.fromOffset(40,40);plus.TextSize=25;plus.TextXAlignment=Enum.TextXAlignment.Center
+local overlay=make("Frame",window,{Name="SettingsOverlay",Position=UDim2.fromOffset(0,60),Size=UDim2.new(1,0,1,-60),BackgroundColor3=C.bg,BorderSizePixel=0,Active=true,Visible=false,ZIndex=15})
 local nav=make("Frame",overlay,{Name="SettingsSidebar",BackgroundColor3=C.side,BorderSizePixel=0,ZIndex=16})
 local body=make("ScrollingFrame",overlay,{Name="SettingsBody",BackgroundTransparency=1,BorderSizePixel=0,ScrollBarThickness=4,
     CanvasSize=UDim2.new(),AutomaticCanvasSize=Enum.AutomaticSize.Y,ZIndex=16})
 make("UIListLayout",body,{Padding=UDim.new(0,8),SortOrder=Enum.SortOrder.LayoutOrder})
 make("UIPadding",body,{PaddingRight=UDim.new(0,8),PaddingBottom=UDim.new(0,16)})
+local heading=text(overlay,"통신망 설정",36)
+heading.Name="SettingsHeading";heading.TextSize=22;heading.Font=Enum.Font.GothamBold
 local status=text(overlay,"설정을 불러오는 중…",40)
 status.Position=UDim2.new(0,12,1,-44);status.Size=UDim2.new(1,-24,0,40);status.TextColor3=C.muted
 local back=button(nav,"BackToChannels","← 통신망")
@@ -50,6 +55,9 @@ local selectedRole="member"
 local busy=false
 local render: ()->()
 local refresh: ()->()
+local scrim=make("TextButton",window,{Name="ModalBackdrop",Text="",AutoButtonColor=false,
+    Size=UDim2.fromScale(1,1),BackgroundColor3=Color3.new(0,0,0),BackgroundTransparency=0.35,
+    BorderSizePixel=0,Visible=false,ZIndex=24})
 local modal=make("Frame",window,{Name="ChannelModal",BackgroundColor3=C.bg,BorderSizePixel=0,Size=UDim2.fromScale(0.9,0.75),
     AnchorPoint=Vector2.new(0.5,0.5),Position=UDim2.fromScale(0.5,0.5),Visible=false,ZIndex=25})
 corner(modal)
@@ -60,29 +68,35 @@ local modalInfo=text(modal,"",90);modalInfo.Position=UDim2.fromOffset(20,118);mo
 local confirm=button(modal,"Confirm","저장",C.accent);confirm.Position=UDim2.new(0,20,1,-56);confirm.Size=UDim2.new(0.5,-26,0,44);confirm.ZIndex=26
 local cancel=button(modal,"Cancel","취소");cancel.Position=UDim2.new(0.5,6,1,-56);cancel.Size=UDim2.new(0.5,-26,0,44);cancel.ZIndex=26
 local modalAction: ((string)->())?=nil
+modal:GetPropertyChangedSignal("Visible"):Connect(function() scrim.Visible=modal.Visible end)
+scrim.Activated:Connect(function() if not busy then modal.Visible=false;modalInput:ReleaseFocus(false) end end)
 cancel.Activated:Connect(function() if not busy then modal.Visible=false;modalInput:ReleaseFocus() end end)
 confirm.Activated:Connect(function() if modalAction and not busy then modalAction(modalInput.Text) end end)
 local function prompt(title: string,initial: string?,fn: (string)->())
     modalTitle.Text=title;modalInput.Text=initial or "";modalInput.Visible=initial~=nil
     modalInfo.Text=if initial==nil then "이 작업을 실행할까요? 삭제 후에는 해당 채널·역할이 즉시 제거됩니다." else "이름은 Roblox 필터를 거쳐 표시됩니다. 이름 생성·변경은 1분에 한 번 가능합니다."
     modalAction=fn;modal.Visible=true
+    confirm.Text=if initial==nil then "확인" else "저장"
+    confirm.BackgroundColor3=if initial==nil then C.red else C.accent
+    if initial~=nil then modalInput:CaptureFocus() end
 end
 local function useData(data)
     if type(data)~="table" then return end
     state=data;plus.Visible=data.canCreate==true and data.storage.ready
-    render()
+    if not game:GetService("UserInputService"):GetFocusedTextBox() then render() end
 end
 local function call(action: string,payload: any?): boolean
     if busy then return false end
-    busy=true;confirm.Active=false
+    busy=true;confirm.Active=false;status.Text="변경 사항을 확인하고 있습니다…";confirm.Text="처리 중…"
     if payload then payload.revision=state.revision end
     local ok,result=pcall(function() return remote:InvokeServer(action,payload) end)
-    busy=false;confirm.Active=true
+    busy=false;confirm.Active=true;confirm.Text="저장"
     if not ok or type(result)~="table" then
         status.Text="서버 응답을 확인하지 못했습니다. 새로고침 후 확인하세요.";modalInfo.Text=status.Text;return false
     end
     if result.data then useData(result.data) end
-    status.Text=result.message or (state.storage.ready and "모든 변경은 영구 저장 후 반영됩니다." or state.storage.error)
+    status.Text=result.message or (state.storage.ready and "변경 사항이 안전하게 저장됩니다." or state.storage.error)
+    status.TextColor3=if result.ok then C.muted else Color3.fromRGB(244,167,167)
     if result.ok and action~="snapshot" and action~="refresh" then modal.Visible=false;modalInput:ReleaseFocus(false)
     else modalInfo.Text=status.Text end
     return result.ok==true
@@ -91,18 +105,31 @@ refresh=function() call("snapshot") end
 local function row(value: string,fn: ()->(),color: Color3?): TextButton
     local b=button(body,value,value,color);b.Activated:Connect(fn);return b
 end
-local function note(value: string,height: number?) text(body,value,height or 36) end
+local function note(value: string,height: number?)
+    local label=text(body,value,height or 36)
+    label.TextColor3=C.muted
+end
+local function permissionRow(value: string,enabled: boolean,fn: ()->())
+    local line=make("Frame",body,{Name="PermissionRow",Size=UDim2.new(1,-8,0,50),BackgroundColor3=C.surface,BorderSizePixel=0,ZIndex=17})
+    corner(line)
+    local caption=text(line,value,50);caption.Position=UDim2.fromOffset(14,0);caption.Size=UDim2.new(1,-124,1,0)
+    local toggle=button(line,"Toggle",if enabled then "✓ 허용" else "미허용",if enabled then C.accent else C.side)
+    toggle.AnchorPoint=Vector2.new(1,0.5);toggle.Position=UDim2.new(1,-8,0.5,0);toggle.Size=UDim2.fromOffset(92,36)
+    toggle.TextXAlignment=Enum.TextXAlignment.Center;toggle.ZIndex=18;toggle.Activated:Connect(fn)
+end
 local tabs={}
 local function layout()
     local narrow=window.AbsoluteSize.X<600
-    nav.Position=UDim2.fromOffset(0,0);nav.Size=if narrow then UDim2.new(1,0,0,100) else UDim2.new(0,144,1,-48)
-    back.Position=UDim2.fromOffset(8,8);back.Size=UDim2.new(if narrow then 0 else 1,if narrow then 110 else -16,0,40)
+    nav.Position=UDim2.fromOffset(0,0);nav.Size=if narrow then UDim2.new(1,0,0,80) else UDim2.new(0,144,1,-48)
+    back.Position=UDim2.fromOffset(8,8);back.Size=UDim2.new(if narrow then 0 else 1,if narrow then 110 else -16,0,if narrow then 32 else 40)
     for i,b in tabs do
-        b.Position=if narrow then UDim2.new((i-1)/4,4,0,54) else UDim2.fromOffset(8,64+(i-1)*50)
-        b.Size=if narrow then UDim2.new(0.25,-8,0,40) else UDim2.new(1,-16,0,44)
+        b.Position=if narrow then UDim2.new((i-1)/4,4,0,40) else UDim2.fromOffset(8,64+(i-1)*50)
+        b.Size=if narrow then UDim2.new(0.25,-8,0,36) else UDim2.new(1,-16,0,44)
     end
-    body.Position=if narrow then UDim2.fromOffset(12,112) else UDim2.fromOffset(160,12)
-    body.Size=if narrow then UDim2.new(1,-24,1,-162) else UDim2.new(1,-172,1,-62)
+    heading.Position=if narrow then UDim2.fromOffset(16,84) else UDim2.fromOffset(176,12)
+    heading.Size=if narrow then UDim2.new(1,-32,0,36) else UDim2.new(1,-192,0,36)
+    body.Position=if narrow then UDim2.fromOffset(16,120) else UDim2.fromOffset(176,60)
+    body.Size=if narrow then UDim2.new(1,-32,1,-170) else UDim2.new(1,-192,1,-110)
 end
 for i,spec in {{"channels","채널"},{"roles","역할"},{"people","사용자"},{"settings","저장 상태"}} do
     local b=button(nav,"Tab_"..spec[1],spec[2]);tabs[i]=b
@@ -116,6 +143,8 @@ local function roleIds()
     local ids={};for id in state.permissions.roles do table.insert(ids,id) end;table.sort(ids);return ids
 end
 render=function()
+    heading.Text=({channels="채널 설정",roles="역할과 권한",people="사용자 역할",settings="저장 및 동기화"})[page]
+    body.CanvasPosition=Vector2.zero
     for _,child in body:GetChildren() do if child:IsA("GuiObject") then child:Destroy() end end
     for i,spec in {{"channels","채널"},{"roles","역할"},{"people","사용자"},{"settings","저장 상태"}} do tabs[i].BackgroundColor3=if page==spec[1] then C.accent else C.surface end
     if not state.storage.ready then
@@ -140,10 +169,10 @@ render=function()
         note("역할 허용은 합산됩니다. 비공개 채널은 member 읽기를 먼저 해제하세요.",46)
         for _,id in roleIds() do
             local role=state.permissions.roles[id]
-            note(role.name.."  ("..id..")",32)
+            note(role.name,32)
             for _,spec in {{"read","읽기"},{"write","쓰기"},{"manage","관리"}} do
                 local value=entry.acl[spec[1]][id]==true
-                row((if value then "[허용] " else "[미허용] ")..spec[2],function() call("set_channel_access",{id=entry.id,roleId=id,mode=spec[1],enabled=not value}) end)
+                permissionRow(spec[2],value,function() call("set_channel_access",{id=entry.id,roleId=id,mode=spec[1],enabled=not value}) end)
             end
         end
     elseif page=="roles" then
@@ -156,7 +185,7 @@ render=function()
             if role.protected then note("기본 역할은 수정·삭제할 수 없습니다.",40)
             else
                 row("역할 이름 변경",function() prompt("역할 이름 변경",role.name,function(name) call("rename_role",{roleId=selectedRole,name=name}) end) end)
-                for _,spec in perms do row((if role.permissions[spec[1]] then "[허용] " else "[미허용] ")..spec[2],function() call("set_permission",{roleId=selectedRole,permission=spec[1],enabled=not role.permissions[spec[1]]}) end) end
+                for _,spec in perms do permissionRow(spec[2],role.permissions[spec[1]]==true,function() call("set_permission",{roleId=selectedRole,permission=spec[1],enabled=not role.permissions[spec[1]]}) end) end
                 row("역할 삭제",function() prompt("역할 삭제",nil,function() if call("delete_role",{roleId=selectedRole}) then selectedRole="member";render() end end) end,C.red)
             end
         end
@@ -166,7 +195,16 @@ render=function()
         row("+ 역할 생성",function() call("create_role",{roleId=roleId.Text,name=roleName.Text,permissions={}}) end,C.accent)
     elseif page=="people" then
         if not state.canManageRoles then note("역할 배정 권한이 없습니다.");return end
-        note("역할 탭에서 선택한 역할: "..selectedRole,40)
+        note("부여할 역할을 먼저 선택하세요.",32)
+        for _,id in roleIds() do
+            if id~="member" and id~="officer" then
+                row((if selectedRole==id then "●  " else "○  ")..state.permissions.roles[id].name,function() selectedRole=id;render() end,if selectedRole==id then C.accent else nil)
+            end
+        end
+        if selectedRole=="member" or selectedRole=="officer" or not state.permissions.roles[selectedRole] then
+            note("일반 사용자·장교 역할은 자동으로 적용됩니다. 위에서 수동 역할을 선택하세요.",64);return
+        end
+        note("선택한 역할: "..state.permissions.roles[selectedRole].name,40)
         for _,person in state.permissions.people do
             local assigned=table.find(person.roles,selectedRole)~=nil
             row("@"..person.name.."  · "..(if assigned then "역할 제거" else "역할 부여"),function() call(if assigned then "remove_role" else "assign_role",{userId=person.userId,roleId=selectedRole}) end)
