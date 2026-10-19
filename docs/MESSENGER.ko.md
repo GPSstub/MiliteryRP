@@ -30,7 +30,7 @@
 `MessengerStore`: 실제 DataStoreService와 MessagingService 연결.
 `MessengerRuntime`: TextChannel 수명·참여자·전달 권한 및 메타데이터 필터링.
 
-저장소는 schema 1 문서 한 개이며 채널, 표시 이름 원문과 작성자 ID, 역할, ACL, 사용자 ID별 역할 배정, revision, 최근 작업 영수증을 함께 저장합니다. 메시지 내용·채팅 기록·군대 계급·무적/비행 상태는 저장하지 않습니다. main의 기존 메모리 전용 설정을 과거 서버에서 복구할 수는 없으며, 최초 저장은 기본 설정에서 시작합니다.
+저장소는 schema 1 문서 한 개이며 채널, 표시 이름 원문과 작성자 ID, 역할, ACL, 사용자 ID별 역할 배정, revision, 최근 작업 영수증을 함께 저장합니다. 메신저 설정 DataStore는 메시지 내용·채팅 기록·군대 계급·무적/비행 상태를 저장하지 않습니다. **군대 계급은 별도의 `RankStore.luau`와 사용자별 DataStore에 영구 저장**됩니다. Studio 계급 데이터와 실제 서버 계급 데이터는 서로 분리됩니다. main의 기존 메모리 전용 설정을 과거 서버에서 복구할 수는 없으며, 최초 저장은 기본 설정에서 시작합니다.
 
 - 실제 서버: `MilitaryMessenger_Config_v1` / `configuration`
 - Studio: `MilitaryMessenger_Config_Dev_v1` / `configuration`
