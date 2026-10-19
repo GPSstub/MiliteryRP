@@ -1,3 +1,4 @@
+--!strict
 -- MilitaryMessenger.client.luau
 -- Discord 스타일 군용 메신저 UI
 
@@ -86,7 +87,9 @@ local function getUnit(target)
     return nil
 end
 
+local channelAccess = {}
 local function canView(id)
+    if not channelAccess[id] or not channelAccess[id].canRead then return false end
     if id == "command" then
         return player:GetAttribute("MessengerCanViewCommand") == true
     end
@@ -99,6 +102,7 @@ local function canView(id)
 end
 
 local function canWrite(id)
+    if not channelAccess[id] or not channelAccess[id].canWrite then return false end
     if player:GetAttribute("MessengerCanSend") ~= true then
         return false
     end
@@ -247,18 +251,18 @@ local header = create("Frame", window, {
 
 local title = label(
     header,
-    "●  MILITARY NETWORK",
+    "국군 생활 RP",
     17,
     C.white,
     true
 )
 
 title.Position = UDim2.fromOffset(18, 7)
-title.Size = UDim2.new(1, -90, 0, 30)
+title.Size = UDim2.new(1, -190, 0, 30)
 
 local subtitle = label(
     header,
-    "SECURE COMMUNICATION  /  RP NETWORK",
+    "통신망  ·  채널과 역할로 연결되는 부대",
     10,
     C.muted,
     false
@@ -279,26 +283,27 @@ closeButton.TextSize = 26
 -- ==========================================
 
 local sidebar = create("Frame", window, {
+    Name = "ChannelSidebar",
     BackgroundColor3 = C.sidebar,
     BorderSizePixel = 0,
 })
 
 local sideTitle = label(
     sidebar,
-    "TEXT CHANNELS",
+    "텍스트 채널",
     11,
     C.muted,
     true
 )
 
 sideTitle.Position = UDim2.fromOffset(14, 18)
-sideTitle.Size = UDim2.new(1, -28, 0, 24)
+sideTitle.Size = UDim2.new(1, -62, 0, 24)
 
 local channelButtons = {}
 local channelsScroll = create("ScrollingFrame", sidebar, {
     Name = "ChannelList",
-    Position = UDim2.fromOffset(0, 45),
-    Size = UDim2.new(1, 0, 1, -132),
+    Position = UDim2.fromOffset(0, 96),
+    Size = UDim2.new(1, 0, 1, -178),
     BackgroundTransparency = 1,
     BorderSizePixel = 0,
     ScrollBarThickness = 2,
@@ -321,6 +326,21 @@ for index, info in CHANNELS do
 
     channelButtons[info.id] = row
 end
+
+local channelSearch = create("TextBox", sidebar, {
+    Name = "ChannelSearch", Position = UDim2.fromOffset(10, 48), Size = UDim2.new(1, -20, 0, 40),
+    BackgroundColor3 = C.surface, BorderSizePixel = 0, Text = "", PlaceholderText = "채널 찾기",
+    TextColor3 = C.white, PlaceholderColor3 = C.muted, TextSize = 14, Font = Enum.Font.Gotham,
+    ClearTextOnFocus = false,
+})
+corner(channelSearch, 8)
+local channelToggle = button(header, "채널", C.surface)
+channelToggle.Name = "ChannelDrawerButton"
+channelToggle.Position = UDim2.fromOffset(10, 9)
+channelToggle.Size = UDim2.fromOffset(52, 42)
+channelToggle.Visible = false
+local drawerOpen = false
+local compact = false
 
 -- 내 프로필
 local profile = create("Frame", sidebar, {
@@ -361,6 +381,7 @@ myRank.Size = UDim2.new(1, -24, 0, 20)
 -- ==========================================
 
 local center = create("Frame", window, {
+    Name = "Conversation",
     BackgroundColor3 = C.bg,
     BorderSizePixel = 0,
 })
@@ -374,7 +395,7 @@ local channelTitle = label(
 )
 
 channelTitle.Position = UDim2.fromOffset(16, 10)
-channelTitle.Size = UDim2.new(1, -32, 0, 30)
+channelTitle.Size = UDim2.new(1, -172, 0, 30)
 
 local description = label(
     center,
@@ -395,12 +416,19 @@ create("Frame", center, {
     BorderSizePixel = 0,
 })
 
+local messageSearch = create("TextBox", center, {
+    Name = "MessageSearch", AnchorPoint = Vector2.new(1, 0), Position = UDim2.new(1, -12, 0, 10),
+    Size = UDim2.fromOffset(144, 32), BackgroundColor3 = C.sidebar, BorderSizePixel = 0,
+    Text = "", PlaceholderText = "대화 검색", TextColor3 = C.white, PlaceholderColor3 = C.muted,
+    TextSize = 13, Font = Enum.Font.Gotham, ClearTextOnFocus = false,
+})
+corner(messageSearch, 6)
 -- 메시지 스크롤
 local feed = create("ScrollingFrame", center, {
     Name = "Messages",
 
     Position = UDim2.fromOffset(12, 78),
-    Size = UDim2.new(1, -24, 1, -159),
+    Size = UDim2.new(1, -24, 1, -180),
 
     BackgroundTransparency = 1,
     BorderSizePixel = 0,
@@ -429,7 +457,7 @@ create("UIPadding", feed, {
 
 local composer = create("Frame", center, {
     AnchorPoint = Vector2.new(0, 1),
-    Position = UDim2.new(0, 12, 1, -12),
+    Position = UDim2.new(0, 12, 1, -30),
     Size = UDim2.new(1, -24, 0, 54),
 
     BackgroundColor3 = C.surface,
@@ -466,6 +494,18 @@ sendButton.AnchorPoint = Vector2.new(1, 0.5)
 sendButton.Position = UDim2.new(1, -6, 0.5, 0)
 sendButton.Size = UDim2.fromOffset(78, 42)
 
+local composerHint = label(center, "Enter로 전송  ·  0 / 180", 11, C.muted, false)
+composerHint.Name = "ComposerHint"
+composerHint.Position = UDim2.new(0, 18, 1, -26)
+composerHint.Size = UDim2.new(1, -36, 0, 22)
+local newMessages = button(center, "새 메시지 ↓", C.accent)
+newMessages.Name = "NewMessageNotice"
+newMessages.AnchorPoint = Vector2.new(0.5, 1)
+newMessages.Position = UDim2.new(0.5, 0, 1, -90)
+newMessages.Size = UDim2.new(1, -40, 0, 40)
+newMessages.ZIndex = 5
+newMessages.Visible = false
+
 -- ==========================================
 -- 오른쪽 접속자 목록
 -- ==========================================
@@ -477,7 +517,7 @@ local members = create("Frame", window, {
 
 local membersTitle = label(
     members,
-    "ONLINE",
+    "접속 중",
     12,
     C.muted,
     true
@@ -507,53 +547,49 @@ create("UIListLayout", membersFeed, {
 -- 반응형 레이아웃
 -- ==========================================
 
-local function updateLayout()
+local function updateLayout(viewportOverride: Vector2?)
     local camera = workspace.CurrentCamera
 
     if not camera then
         return
     end
 
-    local viewport = camera.ViewportSize
+    local viewport = viewportOverride or camera.ViewportSize
 
-    local width = math.min(820, math.max(290, viewport.X - 24))
-    local height = math.min(580, math.max(280, viewport.Y - 24))
-
-    local sidebarWidth
-
-    if width < 520 then
-        sidebarWidth = 112
-    elseif width < 720 then
-        sidebarWidth = 155
-    else
-        sidebarWidth = 185
-    end
-
-    local memberWidth = width >= 740 and 160 or 0
-    local centerWidth = width - sidebarWidth - memberWidth
-
+    local width = math.min(1080, math.max(260, viewport.X - 24))
+    local height = math.min(720, math.max(240, viewport.Y - 84))
+    compact = width < 640
+    local sidebarWidth = if compact then (if drawerOpen then width else 0) else (if width < 840 then 190 else 220)
+    local memberWidth = if width >= 960 then 190 else 0
+    local centerWidth = width - (if compact then 0 else sidebarWidth) - memberWidth
     window.Size = UDim2.fromOffset(width, height)
-
     sidebar.Position = UDim2.fromOffset(0, 60)
     sidebar.Size = UDim2.fromOffset(sidebarWidth, height - 60)
-
-    center.Position = UDim2.fromOffset(sidebarWidth, 60)
+    sidebar.Visible = not compact or drawerOpen
+    center.Position = UDim2.fromOffset(if compact then 0 else sidebarWidth, 60)
     center.Size = UDim2.fromOffset(centerWidth, height - 60)
-
-    members.Position = UDim2.fromOffset(
-        width - memberWidth,
-        60
-    )
-
+    center.Visible = not compact or not drawerOpen
+    members.Position = UDim2.fromOffset(width - memberWidth, 60)
     members.Size = UDim2.fromOffset(memberWidth, height - 60)
     members.Visible = memberWidth > 0
+    channelToggle.Visible = compact
+    title.Position = UDim2.fromOffset(if compact then 72 else 18, 7)
+    title.Size = UDim2.new(1, if compact then -215 else -170, 0, 30)
+    subtitle.Visible = not compact
+    channelTitle.TextSize = if centerWidth < 390 then 15 else 18
+    messageSearch.Size = UDim2.fromOffset(if centerWidth < 390 then 108 else 144, 32)
+    channelTitle.Size = UDim2.new(1, if centerWidth < 390 then -132 else -172, 0, 30)
+
 end
 
+channelToggle.Activated:Connect(function() drawerOpen = not drawerOpen; updateLayout() end)
 updateLayout()
 
+local cameraConnection: RBXScriptConnection? = nil
 local function connectCamera(camera)
+    if cameraConnection then cameraConnection:Disconnect(); cameraConnection = nil end
     if camera then
-        camera:GetPropertyChangedSignal("ViewportSize"):Connect(
+        cameraConnection = camera:GetPropertyChangedSignal("ViewportSize"):Connect(
             updateLayout
         )
 
@@ -574,6 +610,11 @@ end)
 local selectedChannel = "general"
 local opened = false
 local sending = false
+local drafts = {}
+local scrollPositions = {}
+local pendingMessages = {}
+local restoringDraft = false
+local renderGeneration = 0
 
 local history = {
     general = {},
@@ -589,6 +630,7 @@ local unread = {
     notice = 0,
 }
 
+local messageOrder = 1000
 local seenMessages = {}
 local seenQueue = {}
 
@@ -607,12 +649,19 @@ end
 local function updateChannelButtons()
     local totalUnread = 0
 
+    local visibleIndex = 0
+    local query = string.lower(channelSearch.Text)
     for _, info in CHANNELS do
         local id = info.id
         local row = channelButtons[id]
 
         local allowed = canView(id)
 
+        row.Visible = allowed and (query == "" or string.find(string.lower(info.name), query, 1, true) ~= nil)
+        if row.Visible then
+            row.Position = UDim2.fromOffset(10, 8 + visibleIndex * 46)
+            visibleIndex += 1
+        end
         row.BackgroundColor3 = (
             selectedChannel == id and C.hover or C.sidebar
         )
@@ -634,6 +683,7 @@ local function updateChannelButtons()
         end
     end
 
+    channelsScroll.CanvasSize = UDim2.fromOffset(0, 16 + visibleIndex * 46)
     launcher.Text = totalUnread > 0
         and ("●  통신  " .. tostring(totalUnread))
         or "●  통신"
@@ -647,21 +697,37 @@ end
 -- 메시지 표시
 -- ==========================================
 
-local function scrollToBottom()
-    task.delay(0.05, function()
-        if not feed.Parent then
-            return
-        end
-
-        feed.CanvasPosition = Vector2.new(
-            0,
-            math.max(
-                0,
-                feed.AbsoluteCanvasSize.Y - feed.AbsoluteWindowSize.Y
-            )
-        )
-    end)
+local function updateNotice()
+    local count = pendingMessages[selectedChannel] or 0
+    newMessages.Visible = count > 0 and messageSearch.Text == ""
+    newMessages.Text = "새 메시지 " .. tostring(count) .. "개  ·  확인하기 ↓"
 end
+
+local function acknowledgeMessages()
+    pendingMessages[selectedChannel] = 0
+    unread[selectedChannel] = 0
+    updateNotice()
+    updateChannelButtons()
+end
+
+-- New messages never write CanvasPosition. Only this explicit user action jumps.
+newMessages.Activated:Connect(function()
+    local id = selectedChannel
+    task.defer(function()
+        if id ~= selectedChannel then return end
+        feed.CanvasPosition = Vector2.new(0, math.max(0, feed.AbsoluteCanvasSize.Y - feed.AbsoluteWindowSize.Y))
+        scrollPositions[id] = feed.CanvasPosition
+        acknowledgeMessages()
+    end)
+end)
+channelSearch:GetPropertyChangedSignal("Text"):Connect(updateChannelButtons)
+input:GetPropertyChangedSignal("Text"):Connect(function()
+    if not restoringDraft then drafts[selectedChannel] = input.Text end
+    local count = utf8.len(input.Text)
+    composerHint.Text = (if count and count <= 180 then "Enter로 전송  ·  " else "180자 이내로 입력하세요  ·  ") .. tostring(count or 0) .. " / 180"
+    composerHint.TextColor3 = if not count or count > 180 then C.warning else C.muted
+end)
+
 
 local function createMessage(entry, order)
     local row = create("Frame", feed, {
@@ -676,6 +742,7 @@ local function createMessage(entry, order)
         AutomaticSize = Enum.AutomaticSize.Y,
     })
 
+    create("UISizeConstraint", row, { MinSize = Vector2.new(0, 48) })
     local avatar = create("ImageLabel", row, {
         Position = UDim2.fromOffset(0, 2),
         Size = UDim2.fromOffset(36, 36),
@@ -694,7 +761,7 @@ local function createMessage(entry, order)
 
     local author = label(
         row,
-        "[" .. entry.rank .. "] " .. entry.name .. "   " .. entry.time,
+        entry.name .. "  ·  " .. entry.rank .. "  ·  " .. entry.time,
         13,
         C.accentLight,
         true
@@ -706,7 +773,7 @@ local function createMessage(entry, order)
     local messageText = label(
         row,
         entry.message,
-        14,
+        15,
         C.white,
         false
     )
@@ -724,34 +791,39 @@ local function createMessage(entry, order)
 end
 
 local function renderMessages()
+    local position = scrollPositions[selectedChannel] or Vector2.zero
+    renderGeneration += 1
+    local generation = renderGeneration
     for _, child in feed:GetChildren() do
-        if child:IsA("GuiObject") then
-            child:Destroy()
+        if child:IsA("GuiObject") then child:Destroy() end
+    end
+    local query = string.lower(messageSearch.Text)
+    local count = 0
+    for _, entry in history[selectedChannel] or {} do
+        if query == "" or string.find(string.lower(entry.message), query, 1, true)
+            or string.find(string.lower(entry.name), query, 1, true) then
+            count += 1
+            createMessage(entry, count)
         end
     end
-
-    local messages = history[selectedChannel]
-
-    if #messages == 0 then
-        local empty = label(
-            feed,
-            "아직 메시지가 없습니다.\n첫 번째 메시지를 보내 보세요.",
-            14,
-            C.muted,
-            false
-        )
-
+    if count == 0 then
+        local empty = label(feed, if query ~= "" then "검색 결과가 없습니다." else "# " .. getChannelInfo(selectedChannel).name .. "에 오신 것을 환영합니다.\n이 채널에서 대화를 시작해 보세요.", 15, C.muted, false)
+        empty.Name = "EmptyState"
         empty.Size = UDim2.new(1, -12, 0, 100)
         empty.TextWrapped = true
         empty.TextXAlignment = Enum.TextXAlignment.Center
-    else
-        for index, entry in messages do
-            createMessage(entry, index)
-        end
     end
-
-    scrollToBottom()
+    task.defer(function()
+        if renderGeneration == generation then feed.CanvasPosition = position end
+    end)
+    updateNotice()
 end
+messageSearch:GetPropertyChangedSignal("Text"):Connect(function()
+    renderMessages()
+end)
+feed:GetPropertyChangedSignal("CanvasPosition"):Connect(function()
+    scrollPositions[selectedChannel] = feed.CanvasPosition
+end)
 
 -- ==========================================
 -- 접속자 목록
@@ -774,7 +846,7 @@ local function renderMembers()
                 and getUnit(player) == getUnit(target)
 
         elseif selectedChannel == "command" then
-            allowed = getRankOrder(target) >= 11
+            allowed = target:GetAttribute("MessengerCanViewCommand") == true
         end
 
         if allowed then
@@ -827,7 +899,7 @@ local function renderMembers()
         end
     end
 
-    membersTitle.Text = "ONLINE  ·  " .. tostring(count)
+    membersTitle.Text = "접속 중  ·  " .. tostring(count)
 end
 
 -- ==========================================
@@ -840,8 +912,19 @@ local function selectChannel(id)
         return
     end
 
-    selectedChannel = id
-    unread[id] = 0
+    local switched = selectedChannel ~= id
+    if switched then
+        drafts[selectedChannel] = input.Text
+        scrollPositions[selectedChannel] = feed.CanvasPosition
+        selectedChannel = id
+        restoringDraft = true
+        input.Text = drafts[id] or ""
+        restoringDraft = false
+        messageSearch.Text = ""
+    end
+    drawerOpen = false
+    updateLayout()
+    window:SetAttribute("SelectedChannel", id)
 
     local info = getChannelInfo(id)
 
@@ -857,7 +940,7 @@ local function selectChannel(id)
     input.TextEditable = writable
 
     input.PlaceholderText = writable
-        and "메시지 보내기..."
+        and ("# " .. info.name .. "에 메시지 보내기")
         or "읽기 전용 채널입니다."
 
     sendButton.Text = writable and "전송" or "읽기 전용"
@@ -867,7 +950,8 @@ local function selectChannel(id)
         or C.hover
 
     updateChannelButtons()
-    renderMessages()
+    if switched or #feed:GetChildren() <= 2 then renderMessages() end
+    updateNotice()
     renderMembers()
 end
 
@@ -888,11 +972,14 @@ local function syncCustomChannels()
         return manageRemote:InvokeServer("snapshot")
     end)
     if not ok or not result or not result.ok or not result.data then return end
+    local previousSelection = selectedChannel
     local incoming = {}
+    channelAccess = {}
     for _, item in result.data.channels or {} do
         if type(item) == "table" and type(item.id) == "string"
             and type(item.channel) == "string" and type(item.name) == "string" then
             incoming[item.id] = item
+            channelAccess[item.id] = item
         end
     end
     for index = #CHANNELS, 1, -1 do
@@ -904,11 +991,17 @@ local function syncCustomChannels()
             channelIds[info.channel] = nil
             history[info.id] = nil
             unread[info.id] = nil
+            drafts[info.id] = nil; scrollPositions[info.id] = nil; pendingMessages[info.id] = nil
             table.remove(CHANNELS, index)
-            if selectedChannel == info.id then selectedChannel = "general" end
+            if selectedChannel == info.id then selectedChannel = "general"; input.Text = drafts.general or "" end
         end
     end
     for _, info in incoming do
+        for _, existing in CHANNELS do
+            if existing.id == info.id then
+                existing.name = info.name; existing.description = info.description
+            end
+        end
         if not channelButtons[info.id] then
             table.insert(CHANNELS, info)
             channelIds[info.channel] = info.id
@@ -932,7 +1025,19 @@ local function syncCustomChannels()
         end
     end
     channelsScroll.CanvasSize = UDim2.fromOffset(0, 20 + #CHANNELS * 46)
-    selectChannel(selectedChannel)
+    for id in history do
+        if not canView(id) then history[id] = {}; unread[id] = 0; drafts[id] = nil; pendingMessages[id] = nil; scrollPositions[id] = nil end
+    end
+    if not canView(selectedChannel) then
+        selectedChannel = "general"
+        input.Text = drafts.general or ""
+        channelTitle.Text = "통신망"
+        description.Text = result.data.storage and result.data.storage.error or "읽을 수 있는 채널이 없습니다."
+        input.TextEditable = false
+        renderMessages()
+    else selectChannel(selectedChannel) end
+    if previousSelection ~= selectedChannel then renderMessages() end
+    updateChannelButtons()
 end
 channelsChanged.OnClientEvent:Connect(function()
     task.delay(0.25, syncCustomChannels)
@@ -951,19 +1056,25 @@ local function updateAccess()
         previousUnit = currentUnit
         history.unit = {}
         unread.unit = 0
+        drafts.unit = nil; pendingMessages.unit = nil; scrollPositions.unit = nil
+        if selectedChannel == "unit" then input.Text = ""; renderMessages() end
     end
 
     -- 지휘관 권한 상실 시 이전 지휘 채팅 기록 제거
     if not canView("command") then
         history.command = {}
         unread.command = 0
+        drafts.command = nil; pendingMessages.command = nil; scrollPositions.command = nil
+        if selectedChannel == "command" then input.Text = ""; renderMessages() end
     end
 
     if not canView(selectedChannel) then
         selectedChannel = "general"
+        input.Text = drafts.general or ""
+        renderMessages()
     end
 
-    selectChannel(selectedChannel)
+    if canView(selectedChannel) then selectChannel(selectedChannel) else renderMessages(); updateChannelButtons() end
 end
 
 -- Register these signals once, not every time updateAccess runs.
@@ -1038,7 +1149,7 @@ end)
 -- 메시지 수신
 -- ==========================================
 
-TextChatService.MessageReceived:Connect(function(message)
+local function receiveMessage(message)
     if not message.TextChannel then
         return
     end
@@ -1100,19 +1211,34 @@ TextChatService.MessageReceived:Connect(function(message)
 
     table.insert(history[id], entry)
 
-    -- 채널당 최근 80개 메시지만 메모리에 보관
-    if #history[id] > 80 then
-        table.remove(history[id], 1)
+    local dropped = nil
+    if #history[id] > 80 then dropped = table.remove(history[id], 1) end
+    pendingMessages[id] = (pendingMessages[id] or 0) + 1
+    unread[id] = (unread[id] or 0) + 1
+    if opened and selectedChannel == id and messageSearch.Text == "" then
+        local empty = feed:FindFirstChild("EmptyState")
+        if empty then empty:Destroy() end
+        -- Incremental append leaves the reader's viewport untouched.
+        messageOrder += 1
+        createMessage(entry, messageOrder)
+        if dropped then
+            local oldest = nil
+            for _, child in feed:GetChildren() do
+                if child:IsA("Frame") and child.Name == "Message" and (not oldest or child.LayoutOrder < oldest.LayoutOrder) then oldest = child end
+            end
+            if oldest then
+                local removedHeight = oldest.AbsoluteSize.Y + 12
+                local position = feed.CanvasPosition
+                oldest:Destroy()
+                feed.CanvasPosition = Vector2.new(0, math.max(0, position.Y - removedHeight))
+            end
+        end
     end
-
-    if opened and selectedChannel == id then
-        renderMessages()
-    else
-        unread[id] += 1
-    end
+    updateNotice()
 
     updateChannelButtons()
-end)
+end
+TextChatService.MessageReceived:Connect(receiveMessage)
 
 -- ==========================================
 -- 메시지 전송
@@ -1148,6 +1274,7 @@ local function sendMessage()
     sendButton.Text = "..."
 
     input.Text = ""
+    drafts[id] = ""
 
     task.spawn(function()
         local success, result = pcall(function()
@@ -1171,15 +1298,19 @@ local function sendMessage()
         if not success then
             warn("[Messenger] 메시지 전송 실패:", result)
 
-            description.Text = "전송 실패. Output 창을 확인해 주세요."
+            description.Text = "메시지를 보내지 못했습니다. 잠시 후 다시 시도해 주세요."
 
-            if input.Text == "" then
-                input.Text = content
+            if canView(id) and (drafts[id] or "") == "" then
+                drafts[id] = content
+                if selectedChannel == id then input.Text = content end
             end
 
         elseif result.Status ~= Enum.TextChatMessageStatus.Success then
-            description.Text = "메시지 전송 제한: "
-                .. result.Status.Name
+            if canView(id) and (drafts[id] or "") == "" then
+                drafts[id] = content
+                if selectedChannel == id then input.Text = content end
+            end
+            description.Text = "통신 설정 또는 채널 권한으로 전송이 제한됐습니다."
         end
     end)
 end
@@ -1218,6 +1349,7 @@ local function setOpen(state)
         ):Play()
 
         selectChannel(selectedChannel)
+        renderMessages()
     else
         input:ReleaseFocus()
     end
@@ -1237,7 +1369,9 @@ UserInputService.InputBegan:Connect(function(key, processed)
         return
     end
 
-    if key.KeyCode == Enum.KeyCode.M then
+    if key.KeyCode == Enum.KeyCode.Escape or key.KeyCode == Enum.KeyCode.ButtonB then
+        if opened then setOpen(false) end
+    elseif key.KeyCode == Enum.KeyCode.M then
         setOpen(not opened)
     end
 end)
