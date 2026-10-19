@@ -1551,7 +1551,7 @@ local function receiveMessage(message)
         seenMessages[messageId] = true
         table.insert(seenQueue, messageId)
 
-        if #seenQueue > 250 then
+        if #seenQueue > 800 then
             local oldest = table.remove(seenQueue, 1)
             seenMessages[oldest] = nil
         end
@@ -1559,8 +1559,29 @@ local function receiveMessage(message)
 
     local userId = message.TextSource.UserId
     local sender = Players:GetPlayerByUserId(userId)
+    local metadata=message.Metadata or ""
+    local mode,reference,token=metadata:match("^mrp1|([ert])|([^|]+)|([^|]+)$")
+    local plainToken=metadata:match("^mrp1|m|([^|]+)$")
+    if mode=="e" then
+        -- Edits are normal, Roblox-filtered TextChatService messages.
+        local target=findEntry(reference)
+        if target and target.userId==userId and not target.deleted then
+            target.message=message.Text
+            target.edited=true
+            if selectedChannel==id then
+                renderMessages()
+                if pinsPanel.Visible then refreshPins() end
+            end
+        end
+        return
+    end
 
     local entry = {
+        id=plainToken or token or message.MessageId,
+        replyTo=if mode=="r" then reference else nil,
+        threadRoot=if mode=="t" then reference else nil,
+        date=os.date("%Y-%m-%d"),
+        reactions={},pinned=false,deleted=false,edited=false,
         userId = userId,
 
         name = sender
@@ -1578,16 +1599,26 @@ local function receiveMessage(message)
     table.insert(history[id], entry)
 
     local dropped = nil
-    if #history[id] > 80 then dropped = table.remove(history[id], 1) end
-    pendingMessages[id] = (pendingMessages[id] or 0) + 1
-    unread[id] = (unread[id] or 0) + 1
-    if opened and selectedChannel == id and messageSearch.Text == "" then
+    if #history[id] > 300 then dropped = table.remove(history[id], 1) end
+    if entry.threadRoot then
+        local root=findEntry(entry.threadRoot)
+        if root then root.threadCount=(root.threadCount or 0)+1 end
+    end
+    local mentionsMe=string.find(string.lower(entry.message),"@"..string.lower(player.Name),1,true)~=nil
+        or string.find(string.lower(entry.message),"@"..string.lower(player.DisplayName),1,true)~=nil
+    if userId~=player.UserId and (not mutedChannels[id] or mentionsMe) then
+        pendingMessages[id]=(pendingMessages[id] or 0)+1
+        unread[id]=(unread[id] or 0)+1
+    end
+    local threadVisible=if threadRoot then (entry.threadRoot==threadRoot or entry.id==threadRoot)
+        else entry.threadRoot==nil
+    if opened and selectedChannel == id and messageSearch.Text == "" and threadVisible then
         local empty = feed:FindFirstChild("EmptyState")
         if empty then empty:Destroy() end
         -- Incremental append leaves the reader's viewport untouched.
         messageOrder += 1
         createMessage(entry, messageOrder)
-        if dropped then
+        if dropped and not dropped.threadRoot then
             local oldest = nil
             for _, child in feed:GetChildren() do
                 if child:IsA("Frame") and child.Name == "Message" and (not oldest or child.LayoutOrder < oldest.LayoutOrder) then oldest = child end
