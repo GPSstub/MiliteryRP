@@ -5,6 +5,7 @@ local TextService=game:GetService("TextService")
 local Store=require(script.Parent.MessengerStore)
 local Permissions=require(script.Parent.MessengerPermissions)
 local Actions=require(script.Parent.MessengerActions)
+local Archive=require(script.Parent.MessengerArchive)
 local Runtime={}
 local started=false
 local channels: {[string]: TextChannel}={}
@@ -32,7 +33,7 @@ local function unit(p: Player): string?
     return if p.Team and not p.Neutral then p.Team.Name else nil
 end
 local function delivery(id: string,message: TextChatMessage,recipient: TextSource): boolean
-    if not Store.status().ready then return false end
+    if not Store.status().ready or Archive.isEnabled(id) then return false end
     local sender=message.TextSource and Players:GetPlayerByUserId(message.TextSource.UserId)
     local receiver=Players:GetPlayerByUserId(recipient.UserId)
     if not sender or not receiver or not Permissions.channel(sender,id,"write") or not Permissions.channel(receiver,id,"read") then return false end
@@ -57,7 +58,7 @@ local function refreshPlayer(player: Player)
             end
             if source then
                 if not allowed() then source:Destroy()
-                else source.CanSend=Permissions.channel(player,id,"write") and (id~="unit" or unit(player)~=nil) end
+                else source.CanSend=not Archive.isEnabled(id) and Permissions.channel(player,id,"write") and (id~="unit" or unit(player)~=nil) end
             end
         end
     until not pending[player] or player.Parent~=Players
@@ -107,6 +108,7 @@ end
 function Runtime.start()
     if started then return end;started=true
     Actions.start()
+    Archive.start()
     local function added(p: Player)
         for _,attribute in {"RankOrder","Unit"} do p:GetAttributeChangedSignal(attribute):Connect(function() task.spawn(refreshPlayer,p) end) end
         for _,property in {"Team","Neutral"} do p:GetPropertyChangedSignal(property):Connect(function() task.spawn(refreshPlayer,p) end) end
