@@ -1275,6 +1275,10 @@ local function selectChannel(id)
 
     local switched = selectedChannel ~= id
     if switched then
+        threadRoot=nil;replyTarget=nil;editTarget=nil
+        expandedMenu=nil;expandedEmoji=nil
+        pinsPanel.Visible=false
+        updateMode()
         drafts[selectedChannel] = input.Text
         scrollPositions[selectedChannel] = feed.CanvasPosition
         selectedChannel = id
@@ -1291,6 +1295,7 @@ local function selectChannel(id)
 
     channelTitle.Text = "#  " .. info.name
     description.Text = info.description
+    muteButton.Text=if mutedChannels[id] then "🔕" else "🔔"
 
     if id == "unit" then
         description.Text = "소속 부대: " .. tostring(getUnit(player))
@@ -1630,6 +1635,16 @@ local function sendMessage()
 
     local id = selectedChannel
     local info = getChannelInfo(id)
+    local token=HttpService:GenerateGUID(false)
+    local metadata="mrp1|m|"..token
+    if editTarget then
+        if editTarget.userId~=player.UserId then return end
+        metadata="mrp1|e|"..editTarget.id.."|"..token
+    elseif threadRoot then
+        metadata="mrp1|t|"..threadRoot.."|"..token
+    elseif replyTarget then
+        metadata="mrp1|r|"..replyTarget.id.."|"..token
+    end
 
     sending = true
     sendButton.Text = "..."
@@ -1645,7 +1660,7 @@ local function sendMessage()
         error("채팅 채널을 찾을 수 없습니다.")
         end
 
-        return channel:SendAsync(content)
+        return channel:SendAsync(content,metadata)
     end)
 
         sending = false
@@ -1672,6 +1687,10 @@ local function sendMessage()
                 if selectedChannel == id then input.Text = content end
             end
             description.Text = "통신 설정 또는 채널 권한으로 전송이 제한됐습니다."
+        elseif selectedChannel==id then
+            editTarget=nil
+            replyTarget=nil
+            updateMode()
         end
     end)
 end
