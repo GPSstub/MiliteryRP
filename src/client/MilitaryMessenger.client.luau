@@ -699,6 +699,7 @@ local previousUnit = getUnit(player)
 -- Message bodies remain in TextChatService/local client memory. Only session metadata
 -- (IDs, emoji reactions, pin/delete state) goes through the authorized server API.
 local HttpService=game:GetService("HttpService")
+local Protocol=require(game:GetService("ReplicatedStorage"):WaitForChild("Shared"):WaitForChild("MessengerActionProtocol"))
 local actionRemote=game:GetService("ReplicatedStorage"):WaitForChild("MessengerActions") :: RemoteFunction
 local actionChanged=game:GetService("ReplicatedStorage"):WaitForChild("MessengerActionsChanged") :: RemoteEvent
 local mutedChannels: {[string]: boolean} = {}
@@ -1601,9 +1602,11 @@ local function receiveMessage(message)
 
     local userId = message.TextSource.UserId
     local sender = Players:GetPlayerByUserId(userId)
-    local metadata=message.Metadata or ""
-    local mode,reference,token=metadata:match("^mrp1|([ert])|([^|]+)|([^|]+)$")
-    local plainToken=metadata:match("^mrp1|m|([^|]+)$")
+    local parsed=Protocol.decode(message.Metadata or "")
+    local mode=if parsed then parsed.kind else nil
+    local reference=if parsed then parsed.target else nil
+    local token=if parsed then parsed.id else nil
+    local plainToken=if mode=="m" then token else nil
     if mode=="e" then
         -- Edits are normal, Roblox-filtered TextChatService messages.
         local target=findEntry(reference)
@@ -1744,14 +1747,14 @@ local function sendMessage()
     local id = selectedChannel
     local info = getChannelInfo(id)
     local token=HttpService:GenerateGUID(false)
-    local metadata="mrp1|m|"..token
+    local metadata=assert(Protocol.encode("m",token))
     if editTarget then
         if editTarget.userId~=player.UserId then return end
-        metadata="mrp1|e|"..editTarget.id.."|"..token
+        metadata=assert(Protocol.encode("e",token,editTarget.id))
     elseif threadRoot then
-        metadata="mrp1|t|"..threadRoot.."|"..token
+        metadata=assert(Protocol.encode("t",token,threadRoot))
     elseif replyTarget then
-        metadata="mrp1|r|"..replyTarget.id.."|"..token
+        metadata=assert(Protocol.encode("r",token,replyTarget.id))
     end
 
     sending = true
