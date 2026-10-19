@@ -884,7 +884,7 @@ local function updateAccess()
     end
 
     -- 지휘관 권한 상실 시 이전 지휘 채팅 기록 제거
-    if getRankOrder(player) < 11 then
+    if not canView("command") then
         history.command = {}
         unread.command = 0
     end
@@ -894,8 +894,10 @@ local function updateAccess()
     end
 
     selectChannel(selectedChannel)
+end
 
-    local permissionAttributes = {
+-- Register these signals once, not every time updateAccess runs.
+local permissionAttributes = {
     "MessengerCanSend",
     "MessengerCanCreate",
     "MessengerCanDelete",
@@ -905,10 +907,8 @@ local function updateAccess()
     "MessengerCanViewCommand",
     "MessengerCanWriteCommand",
 }
-
 for _, attributeName in permissionAttributes do
     player:GetAttributeChangedSignal(attributeName):Connect(updateAccess)
-end
 end
 
 local playerConnections = {}
