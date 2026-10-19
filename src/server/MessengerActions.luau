@@ -4,6 +4,7 @@
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Permissions = require(script.Parent.MessengerPermissions)
+local Protocol = require(ReplicatedStorage:WaitForChild("Shared"):WaitForChild("MessengerActionProtocol"))
 
 local Actions = {}
 local messages: {[string]: any} = {}
@@ -16,9 +17,7 @@ local changed: RemoteEvent? = nil
 local lastAction: {[Player]: number} = {}
 local lastSnapshot: {[Player]: number} = {}
 
-local function validId(id: any): boolean
-    return type(id) == "string" and #id >= 8 and #id <= 90 and id:match("^[%w%-_]+$") ~= nil
-end
+local validId=Protocol.validId
 
 local function find(id: any): any?
     if not validId(id) then return nil end
@@ -88,16 +87,9 @@ function Actions.observe(channelId: string, message: TextChatMessage): boolean
     local kind, target, newId = nil, nil, nil
 
     if metadata ~= "" then
-        local mode, a, b=metadata:match("^mrp1|([mert])|([^|]+)|?([^|]*)$")
-        if not mode then return false end
-        kind=mode
-        if mode=="m" then
-            if b~="" or not validId(a) then return false end
-            newId=a
-        else
-            if not validId(a) or not validId(b) then return false end
-            target=a;newId=b
-        end
+        local parsed=Protocol.decode(metadata)
+        if not parsed then return false end
+        kind=parsed.kind;target=parsed.target;newId=parsed.id
     else
         -- Messages sent through the default Roblox UI can participate where IDs exist.
         newId=message.MessageId
