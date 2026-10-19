@@ -1021,12 +1021,56 @@ loadArchive = function(channelId: string,before: number?)
     end)
 end
 
+local lastArchiveLookup: {[string]: number}={}
 archiveChanged.OnClientEvent:Connect(function(data: any)
     if type(data)~="table" or type(data.channelId)~="string" then return end
     local id=data.channelId
     archiveDirty[id]=true
+    local messageId=data.id
+    if type(messageId)=="string" and canView(id) then
+        if data.action=="delete" then
+            local list=history[id] or {}
+            for index=#list,1,-1 do
+                if list[index].id==messageId then table.remove(list,index) end
+            end
+            if editTarget and editTarget.id==messageId then editTarget=nil end
+            if replyTarget and replyTarget.id==messageId then replyTarget=nil end
+            updateMode()
+            if id==selectedChannel then
+                renderMessages()
+                if pinsPanel.Visible then refreshPins() end
+            end
+        elseif data.action=="edit" or data.action=="pin" or data.action=="react" then
+            local existing=findEntry(messageId)
+            if existing and os.clock()-(lastArchiveLookup[messageId] or -math.huge)>0.4 then
+                lastArchiveLookup[messageId]=os.clock()
+                task.spawn(function()
+                    local ok,result=pcall(function()
+                        return archiveRemote:InvokeServer("lookup",{channelId=id,id=messageId})
+                    end)
+                    if not ok or type(result)~="table" or not result.ok then return end
+                    if not canView(id) then return end
+                    if result.entry then
+                        result.entry.channelId=id
+                        result.entry.time=result.entry.timeLabel or "이전 기록"
+                        local list=history[id] or {}
+                        for index,item in list do
+                            if item.id==messageId then
+                                list[index]=result.entry
+                                break
+                            end
+                        end
+                        if id==selectedChannel then
+                            renderMessages()
+                            if pinsPanel.Visible then refreshPins() end
+                        end
+                    end
+                end)
+            end
+        end
+    end
     if id==selectedChannel and canView(id) then
-        task.delay(0.7,function()
+        task.delay(0.8,function()
             if archiveDirty[id] and id==selectedChannel and not archiveLoading[id] then
                 archiveDirty[id]=false
                 loadArchive(id)
@@ -1538,6 +1582,8 @@ local function syncCustomChannels()
     end)
     if not ok or not result or not result.ok or not result.data then return end
     local previousSelection = selectedChannel
+    local previousModes={}
+    for id,item in channelAccess do previousModes[id]=item.persistent==true end
     local incoming = {}
     channelAccess = {}
     for _, item in result.data.channels or {} do
@@ -1563,6 +1609,12 @@ local function syncCustomChannels()
         end
     end
     for _, info in incoming do
+        if previousModes[info.id]~=nil and previousModes[info.id]~=(info.persistent==true) then
+            history[info.id]={}
+            unread[info.id]=0;pendingMessages[info.id]=0
+            archiveLoaded[info.id]=nil;archiveCursor[info.id]=nil
+            archiveDirty[info.id]=true
+        end
         for _, existing in CHANNELS do
             if existing.id == info.id then
                 existing.name = info.name;existing.description=info.description;existing.persistent=info.persistent==true
