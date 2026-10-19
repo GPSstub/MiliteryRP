@@ -1,4 +1,5 @@
-<roblox xmlns:xmime="http://www.w3.org/2005/05/xmlmime" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.roblox.com/roblox.xsd" version="4">
+<?xml version='1.0' encoding='utf-8'?>
+<roblox xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.roblox.com/roblox.xsd" version="4">
 	<External>null</External>
 	<External>nil</External>
 	<Item class="Workspace" referent="RBX1">
@@ -116,12 +117,12 @@
 					<R22>1</R22>
 				</CFrame>
 			</OptionalCoordinateFrame>
-			<BinaryString name="AttributesSerialize"></BinaryString>
+			<BinaryString name="AttributesSerialize" />
 			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 			<bool name="DefinesCapabilities">false</bool>
 			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
 			<string name="Name">Workspace</string>
-			<BinaryString name="SerializedOverrides"></BinaryString>
+			<BinaryString name="SerializedOverrides" />
 			<int64 name="SourceAssetId">-1</int64>
 			<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 			<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca800000002</UniqueId>
@@ -131,8 +132,8 @@
 				<token name="AcquisitionMethod">0</token>
 				<bool name="Decoration">false</bool>
 				<float name="GrassLength">0.699999988</float>
-				<BinaryString name="MaterialColors"><![CDATA[AAAAAAAAan8/P39rf2Y/ilY+j35fi21PZmxvZbDqw8faiVpHOi4kHh4lZlw76JxKc3trhHta
-gcLgc4RKxr21zq2UlJSM]]></BinaryString>
+				<BinaryString name="MaterialColors">AAAAAAAAan8/P39rf2Y/ilY+j35fi21PZmxvZbDqw8faiVpHOi4kHh4lZlw76JxKc3trhHta
+gcLgc4RKxr21zq2UlJSM</BinaryString>
 				<SharedString name="Materials">leDEa27wHRPaBssaK0OoqQ==</SharedString>
 				<BinaryString name="PhysicsGrid">AgMAAAAAAAAAAAAAAAA=</BinaryString>
 				<BinaryString name="SmoothGrid">AQU=</BinaryString>
@@ -193,7 +194,7 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 				<bool name="Locked">true</bool>
 				<bool name="Massless">false</bool>
 				<token name="Material">256</token>
-				<string name="MaterialVariantSerialized"></string>
+				<string name="MaterialVariantSerialized" />
 				<CoordinateFrame name="PivotOffset">
 					<X>0</X>
 					<Y>0</Y>
@@ -234,12 +235,12 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 					<Y>252</Y>
 					<Z>2044</Z>
 				</Vector3>
-				<BinaryString name="AttributesSerialize"></BinaryString>
+				<BinaryString name="AttributesSerialize" />
 				<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 				<bool name="DefinesCapabilities">false</bool>
 				<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
 				<string name="Name">Terrain</string>
-				<BinaryString name="SerializedOverrides"></BinaryString>
+				<BinaryString name="SerializedOverrides" />
 				<int64 name="SourceAssetId">-1</int64>
 				<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 				<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca8000003de</UniqueId>
@@ -286,12 +287,12 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 				<token name="ProjectionType">0</token>
 				<bool name="VRTiltAndRollEnabled">false</bool>
 				<float name="ViewStretch">1</float>
-				<BinaryString name="AttributesSerialize"></BinaryString>
+				<BinaryString name="AttributesSerialize" />
 				<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 				<bool name="DefinesCapabilities">false</bool>
 				<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
 				<string name="Name">Camera</string>
-				<BinaryString name="SerializedOverrides"></BinaryString>
+				<BinaryString name="SerializedOverrides" />
 				<int64 name="SourceAssetId">-1</int64>
 				<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 				<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca800000915</UniqueId>
@@ -347,7 +348,7 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 				<bool name="Locked">false</bool>
 				<bool name="Massless">false</bool>
 				<token name="Material">256</token>
-				<string name="MaterialVariantSerialized"></string>
+				<string name="MaterialVariantSerialized" />
 				<CoordinateFrame name="PivotOffset">
 					<X>0</X>
 					<Y>0</Y>
@@ -388,12 +389,12 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 					<Y>1</Y>
 					<Z>120</Z>
 				</Vector3>
-				<BinaryString name="AttributesSerialize"></BinaryString>
+				<BinaryString name="AttributesSerialize" />
 				<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 				<bool name="DefinesCapabilities">false</bool>
 				<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
 				<string name="Name">RankTestFloor</string>
-				<BinaryString name="SerializedOverrides"></BinaryString>
+				<BinaryString name="SerializedOverrides" />
 				<int64 name="SourceAssetId">-1</int64>
 				<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 				<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca800000f64</UniqueId>
@@ -454,7 +455,7 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 				<bool name="Locked">false</bool>
 				<bool name="Massless">false</bool>
 				<token name="Material">256</token>
-				<string name="MaterialVariantSerialized"></string>
+				<string name="MaterialVariantSerialized" />
 				<CoordinateFrame name="PivotOffset">
 					<X>0</X>
 					<Y>0</Y>
@@ -495,12 +496,12 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 					<Y>1</Y>
 					<Z>8</Z>
 				</Vector3>
-				<BinaryString name="AttributesSerialize"></BinaryString>
+				<BinaryString name="AttributesSerialize" />
 				<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 				<bool name="DefinesCapabilities">false</bool>
 				<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
 				<string name="Name">RankSpawn</string>
-				<BinaryString name="SerializedOverrides"></BinaryString>
+				<BinaryString name="SerializedOverrides" />
 				<int64 name="SourceAssetId">-1</int64>
 				<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 				<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca800000f65</UniqueId>
@@ -556,7 +557,7 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 				<bool name="Locked">false</bool>
 				<bool name="Massless">false</bool>
 				<token name="Material">256</token>
-				<string name="MaterialVariantSerialized"></string>
+				<string name="MaterialVariantSerialized" />
 				<CoordinateFrame name="PivotOffset">
 					<X>0</X>
 					<Y>0</Y>
@@ -597,12 +598,12 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 					<Y>1</Y>
 					<Z>120</Z>
 				</Vector3>
-				<BinaryString name="AttributesSerialize"></BinaryString>
+				<BinaryString name="AttributesSerialize" />
 				<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 				<bool name="DefinesCapabilities">false</bool>
 				<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
 				<string name="Name">TestFloor</string>
-				<BinaryString name="SerializedOverrides"></BinaryString>
+				<BinaryString name="SerializedOverrides" />
 				<int64 name="SourceAssetId">-1</int64>
 				<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 				<UniqueId name="UniqueId">01d403e696a9a5530ae7b2b000001575</UniqueId>
@@ -610,18 +611,18 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 		</Item>
 		<Item class="LocalScript" referent="RBXda52c6c149ff4376a04f96c9f26bfc60">
 			<Properties>
-				<ProtectedString name="Source"><![CDATA[print("Hello world!")
-]]></ProtectedString>
+				<ProtectedString name="Source">print("Hello world!")
+</ProtectedString>
 				<bool name="Disabled">false</bool>
-				<Content name="LinkedSource"><null></null></Content>
+				<Content name="LinkedSource"><null /></Content>
 				<token name="RunContext">0</token>
 				<string name="ScriptGuid">{faecfa26-a6fc-48eb-a336-022fa07af56b}</string>
-				<BinaryString name="AttributesSerialize"></BinaryString>
+				<BinaryString name="AttributesSerialize" />
 				<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 				<bool name="DefinesCapabilities">false</bool>
 				<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
 				<string name="Name">LocalScript</string>
-				<BinaryString name="SerializedOverrides"></BinaryString>
+				<BinaryString name="SerializedOverrides" />
 				<int64 name="SourceAssetId">-1</int64>
 				<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 				<UniqueId name="UniqueId">01d403e696a9a5530ae7b2b00000190e</UniqueId>
@@ -630,12 +631,12 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 	</Item>
 	<Item class="TimerService" referent="RBX64770baffa194685a84c3a2ee6d3dc85">
 		<Properties>
-			<BinaryString name="AttributesSerialize"></BinaryString>
+			<BinaryString name="AttributesSerialize" />
 			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 			<bool name="DefinesCapabilities">false</bool>
 			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
 			<string name="Name">TimerService</string>
-			<BinaryString name="SerializedOverrides"></BinaryString>
+			<BinaryString name="SerializedOverrides" />
 			<int64 name="SourceAssetId">-1</int64>
 			<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 			<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca800000360</UniqueId>
@@ -643,12 +644,12 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 	</Item>
 	<Item class="CollectionService" referent="RBX550089b965444e138b07f76e1b1de110">
 		<Properties>
-			<BinaryString name="AttributesSerialize"></BinaryString>
+			<BinaryString name="AttributesSerialize" />
 			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 			<bool name="DefinesCapabilities">false</bool>
 			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
 			<string name="Name">CollectionService</string>
-			<BinaryString name="SerializedOverrides"></BinaryString>
+			<BinaryString name="SerializedOverrides" />
 			<int64 name="SourceAssetId">-1</int64>
 			<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 			<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca800000361</UniqueId>
@@ -686,12 +687,12 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 			<bool name="ReverbEnabled">true</bool>
 			<float name="RolloffScale">1</float>
 			<token name="VolumetricAudio">1</token>
-			<BinaryString name="AttributesSerialize"></BinaryString>
+			<BinaryString name="AttributesSerialize" />
 			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 			<bool name="DefinesCapabilities">false</bool>
 			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
 			<string name="Name">SoundService</string>
-			<BinaryString name="SerializedOverrides"></BinaryString>
+			<BinaryString name="SerializedOverrides" />
 			<int64 name="SourceAssetId">-1</int64>
 			<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 			<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca800000362</UniqueId>
@@ -699,12 +700,12 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 	</Item>
 	<Item class="VideoCaptureService" referent="RBX6eec6830279249dda4dc3f3c3aeac1f5">
 		<Properties>
-			<BinaryString name="AttributesSerialize"></BinaryString>
+			<BinaryString name="AttributesSerialize" />
 			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 			<bool name="DefinesCapabilities">false</bool>
 			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
 			<string name="Name">VideoCaptureService</string>
-			<BinaryString name="SerializedOverrides"></BinaryString>
+			<BinaryString name="SerializedOverrides" />
 			<int64 name="SourceAssetId">-1</int64>
 			<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 			<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca80000036e</UniqueId>
@@ -712,12 +713,12 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 	</Item>
 	<Item class="NonReplicatedCSGDictionaryService" referent="RBX48ac2d1eea6f4e51bafa9a58e23c81c6">
 		<Properties>
-			<BinaryString name="AttributesSerialize"></BinaryString>
+			<BinaryString name="AttributesSerialize" />
 			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 			<bool name="DefinesCapabilities">false</bool>
 			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
 			<string name="Name">NonReplicatedCSGDictionaryService</string>
-			<BinaryString name="SerializedOverrides"></BinaryString>
+			<BinaryString name="SerializedOverrides" />
 			<int64 name="SourceAssetId">-1</int64>
 			<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 			<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca80000036f</UniqueId>
@@ -725,12 +726,12 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 	</Item>
 	<Item class="CSGDictionaryService" referent="RBX4f1925ceef704515b966a191d055d804">
 		<Properties>
-			<BinaryString name="AttributesSerialize"></BinaryString>
+			<BinaryString name="AttributesSerialize" />
 			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 			<bool name="DefinesCapabilities">false</bool>
 			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
 			<string name="Name">CSGDictionaryService</string>
-			<BinaryString name="SerializedOverrides"></BinaryString>
+			<BinaryString name="SerializedOverrides" />
 			<int64 name="SourceAssetId">-1</int64>
 			<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 			<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca800000370</UniqueId>
@@ -741,12 +742,12 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 			<bool name="BubbleChatEnabled">false</bool>
 			<bool name="IsAutoMigrated">false</bool>
 			<bool name="LoadDefaultChat">true</bool>
-			<BinaryString name="AttributesSerialize"></BinaryString>
+			<BinaryString name="AttributesSerialize" />
 			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 			<bool name="DefinesCapabilities">false</bool>
 			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
 			<string name="Name">Chat</string>
-			<BinaryString name="SerializedOverrides"></BinaryString>
+			<BinaryString name="SerializedOverrides" />
 			<int64 name="SourceAssetId">-1</int64>
 			<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 			<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca800000376</UniqueId>
@@ -760,12 +761,12 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 			<int name="PreferredPlayersInternal">1</int>
 			<float name="RespawnTime">5</float>
 			<bool name="UseStrafingAnimations">false</bool>
-			<BinaryString name="AttributesSerialize"></BinaryString>
+			<BinaryString name="AttributesSerialize" />
 			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 			<bool name="DefinesCapabilities">false</bool>
 			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
 			<string name="Name">Players</string>
-			<BinaryString name="SerializedOverrides"></BinaryString>
+			<BinaryString name="SerializedOverrides" />
 			<int64 name="SourceAssetId">-1</int64>
 			<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 			<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca800000378</UniqueId>
@@ -773,12 +774,12 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 	</Item>
 	<Item class="ReplicatedFirst" referent="RBXea877b06b59f45dbbf54483d0340e2f5">
 		<Properties>
-			<BinaryString name="AttributesSerialize"></BinaryString>
+			<BinaryString name="AttributesSerialize" />
 			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 			<bool name="DefinesCapabilities">false</bool>
 			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
 			<string name="Name">ReplicatedFirst</string>
-			<BinaryString name="SerializedOverrides"></BinaryString>
+			<BinaryString name="SerializedOverrides" />
 			<int64 name="SourceAssetId">-1</int64>
 			<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 			<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca80000037b</UniqueId>
@@ -786,12 +787,12 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 	</Item>
 	<Item class="TweenService" referent="RBXdfaba2940e374218a384107b5b05e3c5">
 		<Properties>
-			<BinaryString name="AttributesSerialize"></BinaryString>
+			<BinaryString name="AttributesSerialize" />
 			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 			<bool name="DefinesCapabilities">false</bool>
 			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
 			<string name="Name">TweenService</string>
-			<BinaryString name="SerializedOverrides"></BinaryString>
+			<BinaryString name="SerializedOverrides" />
 			<int64 name="SourceAssetId">-1</int64>
 			<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 			<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca80000037d</UniqueId>
@@ -840,12 +841,12 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 			<bool name="Use2022MaterialsXml">false</bool>
 			<string name="WoodName">Wood</string>
 			<string name="WoodPlanksName">WoodPlanks</string>
-			<BinaryString name="AttributesSerialize"></BinaryString>
+			<BinaryString name="AttributesSerialize" />
 			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 			<bool name="DefinesCapabilities">false</bool>
 			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
 			<string name="Name">MaterialService</string>
-			<BinaryString name="SerializedOverrides"></BinaryString>
+			<BinaryString name="SerializedOverrides" />
 			<int64 name="SourceAssetId">-1</int64>
 			<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 			<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca80000037e</UniqueId>
@@ -861,12 +862,12 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 			<bool name="HasSeenDeprecationDialog">false</bool>
 			<bool name="IsLegacyChatDisabled">false</bool>
 			<token name="PlatformIntegratedChat">0</token>
-			<BinaryString name="AttributesSerialize"></BinaryString>
+			<BinaryString name="AttributesSerialize" />
 			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 			<bool name="DefinesCapabilities">false</bool>
 			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
 			<string name="Name">TextChatService</string>
-			<BinaryString name="SerializedOverrides"></BinaryString>
+			<BinaryString name="SerializedOverrides" />
 			<int64 name="SourceAssetId">-1</int64>
 			<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 			<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca80000037f</UniqueId>
@@ -903,12 +904,12 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 				<double name="TextStrokeTransparency">0.5</double>
 				<token name="VerticalAlignment">1</token>
 				<float name="WidthScale">1</float>
-				<BinaryString name="AttributesSerialize"></BinaryString>
+				<BinaryString name="AttributesSerialize" />
 				<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 				<bool name="DefinesCapabilities">false</bool>
 				<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
 				<string name="Name">ChatWindowConfiguration</string>
-				<BinaryString name="SerializedOverrides"></BinaryString>
+				<BinaryString name="SerializedOverrides" />
 				<int64 name="SourceAssetId">-1</int64>
 				<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 				<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca8000003e0</UniqueId>
@@ -949,12 +950,12 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 					<B>0</B>
 				</Color3>
 				<double name="TextStrokeTransparency">0.5</double>
-				<BinaryString name="AttributesSerialize"></BinaryString>
+				<BinaryString name="AttributesSerialize" />
 				<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 				<bool name="DefinesCapabilities">false</bool>
 				<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
 				<string name="Name">ChatInputBarConfiguration</string>
-				<BinaryString name="SerializedOverrides"></BinaryString>
+				<BinaryString name="SerializedOverrides" />
 				<int64 name="SourceAssetId">-1</int64>
 				<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 				<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca8000003e1</UniqueId>
@@ -995,12 +996,12 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 				</Color3>
 				<int64 name="TextSize">16</int64>
 				<float name="VerticalStudsOffset">0</float>
-				<BinaryString name="AttributesSerialize"></BinaryString>
+				<BinaryString name="AttributesSerialize" />
 				<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 				<bool name="DefinesCapabilities">false</bool>
 				<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
 				<string name="Name">BubbleChatConfiguration</string>
-				<BinaryString name="SerializedOverrides"></BinaryString>
+				<BinaryString name="SerializedOverrides" />
 				<int64 name="SourceAssetId">-1</int64>
 				<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 				<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca8000003e2</UniqueId>
@@ -1043,12 +1044,12 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 					<B>0</B>
 				</Color3>
 				<double name="TextStrokeTransparency">1</double>
-				<BinaryString name="AttributesSerialize"></BinaryString>
+				<BinaryString name="AttributesSerialize" />
 				<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 				<bool name="DefinesCapabilities">false</bool>
 				<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
 				<string name="Name">ChannelTabsConfiguration</string>
-				<BinaryString name="SerializedOverrides"></BinaryString>
+				<BinaryString name="SerializedOverrides" />
 				<int64 name="SourceAssetId">-1</int64>
 				<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 				<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca8000003e3</UniqueId>
@@ -1057,12 +1058,12 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 	</Item>
 	<Item class="PermissionsService" referent="RBX3165d294b9234a728a30a5d3b5930b6d">
 		<Properties>
-			<BinaryString name="AttributesSerialize"></BinaryString>
+			<BinaryString name="AttributesSerialize" />
 			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 			<bool name="DefinesCapabilities">false</bool>
 			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
 			<string name="Name">PermissionsService</string>
-			<BinaryString name="SerializedOverrides"></BinaryString>
+			<BinaryString name="SerializedOverrides" />
 			<int64 name="SourceAssetId">-1</int64>
 			<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 			<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca800000381</UniqueId>
@@ -1071,18 +1072,18 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 	<Item class="PlayerEmulatorService" referent="RBX67c3818bfd254e3a84d213e4bbf15426">
 		<Properties>
 			<bool name="CustomPoliciesEnabled">false</bool>
-			<string name="EmulatedCountryCode"></string>
-			<string name="EmulatedGameLocale"></string>
+			<string name="EmulatedCountryCode" />
+			<string name="EmulatedGameLocale" />
 			<bool name="PlayerEmulationEnabled">false</bool>
 			<bool name="PseudolocalizationEnabled">false</bool>
-			<BinaryString name="SerializedEmulatedPolicyInfo"></BinaryString>
+			<BinaryString name="SerializedEmulatedPolicyInfo" />
 			<int name="TextElongationFactor">0</int>
-			<BinaryString name="AttributesSerialize"></BinaryString>
+			<BinaryString name="AttributesSerialize" />
 			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 			<bool name="DefinesCapabilities">false</bool>
 			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
 			<string name="Name">PlayerEmulatorService</string>
-			<BinaryString name="SerializedOverrides"></BinaryString>
+			<BinaryString name="SerializedOverrides" />
 			<int64 name="SourceAssetId">-1</int64>
 			<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 			<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca800000382</UniqueId>
@@ -1091,12 +1092,12 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 	<Item class="StudioData" referent="RBX9ceb49287e914425aa6cd6576407a86f">
 		<Properties>
 			<bool name="EnableScriptCollabByDefaultOnLoad">false</bool>
-			<BinaryString name="AttributesSerialize"></BinaryString>
+			<BinaryString name="AttributesSerialize" />
 			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 			<bool name="DefinesCapabilities">false</bool>
 			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
 			<string name="Name">StudioData</string>
-			<BinaryString name="SerializedOverrides"></BinaryString>
+			<BinaryString name="SerializedOverrides" />
 			<int64 name="SourceAssetId">-1</int64>
 			<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 			<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca800000385</UniqueId>
@@ -1136,36 +1137,36 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 			<int name="PlayerModuleStatus">0</int>
 			<token name="UseImprovedCharacterEvents">0</token>
 			<bool name="UserEmotesEnabled">true</bool>
-			<BinaryString name="AttributesSerialize"></BinaryString>
+			<BinaryString name="AttributesSerialize" />
 			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 			<bool name="DefinesCapabilities">false</bool>
 			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
 			<string name="Name">StarterPlayer</string>
-			<BinaryString name="SerializedOverrides"></BinaryString>
+			<BinaryString name="SerializedOverrides" />
 			<int64 name="SourceAssetId">-1</int64>
 			<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 			<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca800000387</UniqueId>
 		</Properties>
 		<Item class="StarterPlayerScripts" referent="RBX7">
 			<Properties>
-				<BinaryString name="AttributesSerialize"></BinaryString>
+				<BinaryString name="AttributesSerialize" />
 				<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 				<bool name="DefinesCapabilities">false</bool>
 				<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
 				<string name="Name">StarterPlayerScripts</string>
-				<BinaryString name="SerializedOverrides"></BinaryString>
+				<BinaryString name="SerializedOverrides" />
 				<int64 name="SourceAssetId">-1</int64>
 				<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 				<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca8000003dc</UniqueId>
 			</Properties>
 			<Item class="LocalScript" referent="RBXa6d5443fcf6747bc92e938803549c726">
 				<Properties>
-					<ProtectedString name="Source"><![CDATA[--!strict
+					<ProtectedString name="Source">--!strict
 local ReplicatedStorage=game:GetService("ReplicatedStorage")
 local TextChatService=game:GetService("TextChatService")
 local feedback=ReplicatedStorage:WaitForChild("RankCommandFeedback") :: RemoteEvent
 feedback.OnClientEvent:Connect(function(message: any)
-    if type(message)~="string" or #message>2048 then return end
+    if type(message)~="string" or #message&gt;2048 then return end
     local channels=TextChatService:WaitForChild("TextChannels",5)
     local channel=if channels then channels:FindFirstChild("RBXGeneral") else nil
     if channel and channel:IsA("TextChannel") then
@@ -1186,17 +1187,17 @@ local function shimmer(instance: Instance)
 end
 workspace.DescendantAdded:Connect(shimmer)
 for _, instance in workspace:GetDescendants() do shimmer(instance) end
-]]></ProtectedString>
+</ProtectedString>
 					<bool name="Disabled">false</bool>
-					<Content name="LinkedSource"><null></null></Content>
+					<Content name="LinkedSource"><null /></Content>
 					<token name="RunContext">0</token>
 					<string name="ScriptGuid">{ef6b0531-b315-417b-9c85-8cad39f43a48}</string>
-					<BinaryString name="AttributesSerialize"></BinaryString>
+					<BinaryString name="AttributesSerialize" />
 					<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 					<bool name="DefinesCapabilities">false</bool>
 					<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
 					<string name="Name">RankFeedback</string>
-					<BinaryString name="SerializedOverrides"></BinaryString>
+					<BinaryString name="SerializedOverrides" />
 					<int64 name="SourceAssetId">-1</int64>
 					<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 					<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca800000f62</UniqueId>
@@ -1204,7 +1205,7 @@ for _, instance in workspace:GetDescendants() do shimmer(instance) end
 			</Item>
 			<Item class="LocalScript" referent="RBX0e4a68c14ad84cdbb9127293a9e70b2d">
 				<Properties>
-					<ProtectedString name="Source"><![CDATA[--!strict
+					<ProtectedString name="Source">--!strict
 local Players = game:GetService("Players")
 local TweenService = game:GetService("TweenService")
 local UserInputService = game:GetService("UserInputService")
@@ -1338,17 +1339,17 @@ UserInputService.InputBegan:Connect(function(input: InputObject, processed: bool
 end)
 -- Admin actions are validated separately by AdminService on the server.
 gui.Parent = player:WaitForChild("PlayerGui")
-]]></ProtectedString>
+</ProtectedString>
 					<bool name="Disabled">false</bool>
-					<Content name="LinkedSource"><null></null></Content>
+					<Content name="LinkedSource"><null /></Content>
 					<token name="RunContext">0</token>
 					<string name="ScriptGuid">{dfd0c046-4884-409d-b204-754bc8f9b392}</string>
-					<BinaryString name="AttributesSerialize"></BinaryString>
+					<BinaryString name="AttributesSerialize" />
 					<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 					<bool name="DefinesCapabilities">false</bool>
 					<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
 					<string name="Name">MilitaryMenu</string>
-					<BinaryString name="SerializedOverrides"></BinaryString>
+					<BinaryString name="SerializedOverrides" />
 					<int64 name="SourceAssetId">-1</int64>
 					<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 					<UniqueId name="UniqueId">714f218494dedcfd0ae79ad400000c9d</UniqueId>
@@ -1356,8 +1357,8 @@ gui.Parent = player:WaitForChild("PlayerGui")
 			</Item>
 			<Item class="ModuleScript" referent="RBXaa272997c07b41bbbc9384584e7c4680">
 				<Properties>
-					<Content name="LinkedSource"><null></null></Content>
-					<ProtectedString name="Source"><![CDATA[--!strict
+					<Content name="LinkedSource"><null /></Content>
+					<ProtectedString name="Source">--!strict
 local Players=game:GetService("Players")
 local Teams=game:GetService("Teams")
 local ReplicatedStorage=game:GetService("ReplicatedStorage")
@@ -1428,7 +1429,7 @@ function Panel.mount(parent: Frame)
     local hint=text(pages.command,"Hint","허용된 관리 명령만 실행됩니다. Luau 코드 실행 기능은 없습니다.",28);hint.Position=UDim2.fromOffset(0,102);hint.TextColor3=MUTED;hint.TextSize=12
     local status=text(content,"Status","명령을 실행하면 여기에 결과가 표시됩니다.",40);status.LayoutOrder=5;status.TextColor3=MUTED
     local function run(value: string)
-        if #value>256 then status.Text="명령어가 너무 깁니다.";return end
+        if #value&gt;256 then status.Text="명령어가 너무 깁니다.";return end
         status.Text="실행 중…";request:FireServer("command",value)
     end
     local function submit()
@@ -1507,7 +1508,7 @@ function Panel.mount(parent: Frame)
         row.TextSize=12;row.TextYAlignment=Enum.TextYAlignment.Top;row.LayoutOrder=order
         row.TextColor3=if entry.ok then PAPER else Color3.fromRGB(237,177,153)
         table.insert(rows,row)
-        if #rows>60 then table.remove(rows,1):Destroy() end
+        if #rows&gt;60 then table.remove(rows,1):Destroy() end
         task.defer(function() logs.CanvasPosition=Vector2.new(0,math.max(0,logs.AbsoluteCanvasSize.Y-logs.AbsoluteWindowSize.Y)) end)
     end
     response.OnClientEvent:Connect(function(kind: string,data: any)
@@ -1536,14 +1537,14 @@ function Panel.mount(parent: Frame)
     return show
 end
 return Panel
-]]></ProtectedString>
+</ProtectedString>
 					<string name="ScriptGuid">{e71640fe-e9d7-48a3-8978-c51a6f675f2c}</string>
-					<BinaryString name="AttributesSerialize"></BinaryString>
+					<BinaryString name="AttributesSerialize" />
 					<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 					<bool name="DefinesCapabilities">false</bool>
 					<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
 					<string name="Name">AdminPanel</string>
-					<BinaryString name="SerializedOverrides"></BinaryString>
+					<BinaryString name="SerializedOverrides" />
 					<int64 name="SourceAssetId">-1</int64>
 					<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 					<UniqueId name="UniqueId">714f218494dedcfd0ae79ad4000012e1</UniqueId>
@@ -1551,7 +1552,7 @@ return Panel
 			</Item>
 			<Item class="LocalScript" referent="RBXff13c88be609445492f3e64fdf66a086">
 				<Properties>
-					<ProtectedString name="Source"><![CDATA[--!strict
+					<ProtectedString name="Source">--!strict
 local Players=game:GetService("Players")
 local ReplicatedStorage=game:GetService("ReplicatedStorage")
 local RunService=game:GetService("RunService")
@@ -1587,7 +1588,7 @@ UserInputService.WindowFocusReleased:Connect(function() focused=false;upHeld=fal
 UserInputService.WindowFocused:Connect(function() focused=true end)
 RunService.Heartbeat:Connect(function(dt)
     if not player:GetAttribute("AdminFlying") then return end
-    timer+=dt;if timer<1/12 then return end;timer=0
+    timer+=dt;if timer&lt;1/12 then return end;timer=0
     local camera=workspace.CurrentCamera
     local character=player.Character;local humanoid=character and character:FindFirstChildOfClass("Humanoid")
     if not camera or not humanoid then return end
@@ -1602,20 +1603,20 @@ RunService.Heartbeat:Connect(function(dt)
         vertical+=if upHeld then 1 else 0;vertical-=if downHeld then 1 else 0
         direction+=Vector3.yAxis*math.clamp(vertical,-1,1)
     end
-    if direction.Magnitude>1 then direction=direction.Unit end
+    if direction.Magnitude&gt;1 then direction=direction.Unit end
     remote:FireServer(direction,camera.CFrame.LookVector)
 end)
-]]></ProtectedString>
+</ProtectedString>
 					<bool name="Disabled">false</bool>
-					<Content name="LinkedSource"><null></null></Content>
+					<Content name="LinkedSource"><null /></Content>
 					<token name="RunContext">0</token>
 					<string name="ScriptGuid">{889d7fc2-ad19-4948-b121-b55981ea9350}</string>
-					<BinaryString name="AttributesSerialize"></BinaryString>
+					<BinaryString name="AttributesSerialize" />
 					<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 					<bool name="DefinesCapabilities">false</bool>
 					<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
 					<string name="Name">AdminFlight</string>
-					<BinaryString name="SerializedOverrides"></BinaryString>
+					<BinaryString name="SerializedOverrides" />
 					<int64 name="SourceAssetId">-1</int64>
 					<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 					<UniqueId name="UniqueId">714f218494dedcfd0ae79ad4000012e3</UniqueId>
@@ -1623,7 +1624,8 @@ end)
 			</Item>
 			<Item class="LocalScript" referent="RBXe0f751ecfd9c4a0882748e23b6c11a34">
 				<Properties>
-					<ProtectedString name="Source"><![CDATA[-- MilitaryMessenger.client.luau
+					<ProtectedString name="Source">--!strict
+-- MilitaryMessenger.client.luau
 -- Discord 스타일 군용 메신저 UI
 
 local Players = game:GetService("Players")
@@ -1638,19 +1640,19 @@ local player = Players.LocalPlayer
 -- ==========================================
 
 local C = {
-	bg = Color3.fromRGB(27, 30, 37),
-	sidebar = Color3.fromRGB(20, 23, 29),
-	surface = Color3.fromRGB(37, 42, 51),
-	hover = Color3.fromRGB(49, 56, 66),
+    bg = Color3.fromRGB(27, 30, 37),
+    sidebar = Color3.fromRGB(20, 23, 29),
+    surface = Color3.fromRGB(37, 42, 51),
+    hover = Color3.fromRGB(49, 56, 66),
 
-	accent = Color3.fromRGB(106, 149, 113),
-	accentLight = Color3.fromRGB(166, 207, 166),
+    accent = Color3.fromRGB(106, 149, 113),
+    accentLight = Color3.fromRGB(166, 207, 166),
 
-	white = Color3.fromRGB(241, 242, 245),
-	muted = Color3.fromRGB(153, 162, 174),
-	border = Color3.fromRGB(58, 66, 76),
+    white = Color3.fromRGB(241, 242, 245),
+    muted = Color3.fromRGB(153, 162, 174),
+    border = Color3.fromRGB(58, 66, 76),
 
-	warning = Color3.fromRGB(235, 185, 105),
+    warning = Color3.fromRGB(235, 185, 105),
 }
 
 -- ==========================================
@@ -1658,81 +1660,92 @@ local C = {
 -- ==========================================
 
 local CHANNELS = {
-	{
-		id = "general",
-		name = "전체 채팅",
-		channel = "RBXGeneral",
-		description = "현재 서버의 모든 병사가 참여하는 채팅입니다.",
-	},
+    {
+        id = "general",
+        name = "전체 채팅",
+        channel = "RP_General",
+        description = "현재 서버의 모든 병사가 참여하는 채팅입니다.",
+    },
 
-	{
-		id = "unit",
-		name = "부대 채팅",
-		channel = "RP_Unit",
-		description = "같은 소속 부대의 병사끼리 통신합니다.",
-	},
+    {
+        id = "unit",
+        name = "부대 채팅",
+        channel = "RP_Unit",
+        description = "같은 소속 부대의 병사끼리 통신합니다.",
+    },
 
-	{
-		id = "command",
-		name = "지휘 채팅",
-		channel = "RP_Command",
-		description = "소위 이상 지휘관 전용 통신입니다.",
-	},
+    {
+        id = "command",
+        name = "지휘 채팅",
+        channel = "RP_Command",
+        description = "소위 이상 지휘관 전용 통신입니다.",
+    },
 
-	{
-		id = "notice",
-		name = "공지사항",
-		channel = "RP_Notice",
-		description = "군 주요 공지사항을 확인합니다.",
-	},
+    {
+        id = "notice",
+        name = "공지사항",
+        channel = "RP_Notice",
+        description = "군 주요 공지사항을 확인합니다.",
+    },
 }
 
 local channelIds = {}
 
 for _, info in CHANNELS do
-	channelIds[info.channel] = info.id
+    channelIds[info.channel] = info.id
 end
 
 local function getRankOrder(target)
-	return tonumber(target:GetAttribute("RankOrder")) or 0
+    return tonumber(target:GetAttribute("RankOrder")) or 0
 end
 
 local function getUnit(target)
-	local unit = target:GetAttribute("Unit")
+    local unit = target:GetAttribute("Unit")
 
-	if type(unit) == "string" and unit ~= "" then
-		return unit
-	end
+    if type(unit) == "string" and unit ~= "" then
+        return unit
+    end
 
-	if target.Team and not target.Neutral then
-		return target.Team.Name
-	end
+    if target.Team and not target.Neutral then
+        return target.Team.Name
+    end
 
-	return nil
+    return nil
 end
 
+local channelAccess = {}
 local function canView(id)
-	if id == "command" then
-		return getRankOrder(player) >= 11
-	end
+    if not channelAccess[id] or not channelAccess[id].canRead then return false end
+    if id == "command" then
+        return player:GetAttribute("MessengerCanViewCommand") == true
+    end
 
-	if id == "unit" then
-		return getUnit(player) ~= nil
-	end
+    if id == "unit" then
+        return getUnit(player) ~= nil
+    end
 
-	return true
+    return true
 end
 
 local function canWrite(id)
-	if id == "command" or id == "notice" then
-		return getRankOrder(player) >= 11
-	end
+    if not channelAccess[id] or not channelAccess[id].canWrite then return false end
+    if player:GetAttribute("MessengerCanSend") ~= true then
+        return false
+    end
 
-	if id == "unit" then
-		return getUnit(player) ~= nil
-	end
+    if id == "command" then
+        return player:GetAttribute("MessengerCanWriteCommand") == true
+    end
 
-	return true
+    if id == "notice" then
+        return player:GetAttribute("MessengerCanPostNotices") == true
+    end
+
+    if id == "unit" then
+        return getUnit(player) ~= nil
+    end
+
+    return true
 end
 
 -- ==========================================
@@ -1740,65 +1753,65 @@ end
 -- ==========================================
 
 local function create(className, parent, properties)
-	local object = Instance.new(className)
+    local object = Instance.new(className)
 
-	for property, value in pairs(properties or {}) do
-		object[property] = value
-	end
+    for property, value in pairs(properties or {}) do
+        object[property] = value
+    end
 
-	object.Parent = parent
+    object.Parent = parent
 
-	return object
+    return object
 end
 
 local function corner(object, radius)
-	create("UICorner", object, {
-		CornerRadius = UDim.new(0, radius),
-	})
+    create("UICorner", object, {
+        CornerRadius = UDim.new(0, radius),
+    })
 end
 
 local function outline(object)
-	create("UIStroke", object, {
-		Color = C.border,
-		Thickness = 1,
-		Transparency = 0.3,
-	})
+    create("UIStroke", object, {
+        Color = C.border,
+        Thickness = 1,
+        Transparency = 0.3,
+    })
 end
 
 local function label(parent, content, size, color, bold)
-	return create("TextLabel", parent, {
-		BackgroundTransparency = 1,
-		BorderSizePixel = 0,
+    return create("TextLabel", parent, {
+        BackgroundTransparency = 1,
+        BorderSizePixel = 0,
 
-		Text = content,
-		TextSize = size,
-		TextColor3 = color,
+        Text = content,
+        TextSize = size,
+        TextColor3 = color,
 
-		Font = bold and Enum.Font.GothamBold or Enum.Font.Gotham,
+        Font = bold and Enum.Font.GothamBold or Enum.Font.Gotham,
 
-		TextXAlignment = Enum.TextXAlignment.Left,
-		TextYAlignment = Enum.TextYAlignment.Center,
+        TextXAlignment = Enum.TextXAlignment.Left,
+        TextYAlignment = Enum.TextYAlignment.Center,
 
-		TextTruncate = Enum.TextTruncate.AtEnd,
-	})
+        TextTruncate = Enum.TextTruncate.AtEnd,
+    })
 end
 
 local function button(parent, content, color)
-	local object = create("TextButton", parent, {
-		BackgroundColor3 = color or C.surface,
-		BorderSizePixel = 0,
+    local object = create("TextButton", parent, {
+        BackgroundColor3 = color or C.surface,
+        BorderSizePixel = 0,
 
-		Text = content,
-		TextColor3 = C.white,
-		TextSize = 14,
-		Font = Enum.Font.GothamBold,
+        Text = content,
+        TextColor3 = C.white,
+        TextSize = 14,
+        Font = Enum.Font.GothamBold,
 
-		AutoButtonColor = true,
-	})
+        AutoButtonColor = true,
+    })
 
-	corner(object, 10)
+    corner(object, 10)
 
-	return object
+    return object
 end
 
 -- ==========================================
@@ -1806,11 +1819,11 @@ end
 -- ==========================================
 
 local gui = create("ScreenGui", player:WaitForChild("PlayerGui"), {
-	Name = "MilitaryMessenger",
-	ResetOnSpawn = false,
-	DisplayOrder = 30,
-	ZIndexBehavior = Enum.ZIndexBehavior.Sibling,
-	ScreenInsets = Enum.ScreenInsets.CoreUISafeInsets,
+    Name = "MilitaryMessenger",
+    ResetOnSpawn = false,
+    DisplayOrder = 30,
+    ZIndexBehavior = Enum.ZIndexBehavior.Sibling,
+    ScreenInsets = Enum.ScreenInsets.CoreUISafeInsets,
 })
 
 -- 오른쪽 중앙 버튼
@@ -1830,25 +1843,25 @@ outline(launcher)
 -- ==========================================
 
 local window = create("Frame", gui, {
-	Name = "MessengerWindow",
+    Name = "MessengerWindow",
 
-	AnchorPoint = Vector2.new(1, 0.5),
-	Position = UDim2.new(1, -12, 0.5, 0),
+    AnchorPoint = Vector2.new(1, 0.5),
+    Position = UDim2.new(1, -12, 0.5, 0),
 
-	Size = UDim2.fromOffset(820, 550),
+    Size = UDim2.fromOffset(820, 550),
 
-	BackgroundColor3 = C.bg,
-	BorderSizePixel = 0,
+    BackgroundColor3 = C.bg,
+    BorderSizePixel = 0,
 
-	ClipsDescendants = true,
-	Visible = false,
+    ClipsDescendants = true,
+    Visible = false,
 })
 
 corner(window, 16)
 outline(window)
 
 local windowScale = create("UIScale", window, {
-	Scale = 1,
+    Scale = 1,
 })
 
 -- ==========================================
@@ -1856,28 +1869,29 @@ local windowScale = create("UIScale", window, {
 -- ==========================================
 
 local header = create("Frame", window, {
-	Size = UDim2.new(1, 0, 0, 60),
-	BackgroundColor3 = C.sidebar,
-	BorderSizePixel = 0,
+    Name = "Header",
+    Size = UDim2.new(1, 0, 0, 60),
+    BackgroundColor3 = C.sidebar,
+    BorderSizePixel = 0,
 })
 
 local title = label(
-	header,
-	"●  MILITARY NETWORK",
-	17,
-	C.white,
-	true
+    header,
+    "●  MILITARY NETWORK",
+    17,
+    C.white,
+    true
 )
 
 title.Position = UDim2.fromOffset(18, 7)
-title.Size = UDim2.new(1, -90, 0, 30)
+title.Size = UDim2.new(1, -190, 0, 30)
 
 local subtitle = label(
-	header,
-	"SECURE COMMUNICATION  /  RP NETWORK",
-	10,
-	C.muted,
-	false
+    header,
+    "SECURE COMMUNICATION  /  RP NETWORK",
+    10,
+    C.muted,
+    false
 )
 
 subtitle.Position = UDim2.fromOffset(39, 35)
@@ -1895,69 +1909,79 @@ closeButton.TextSize = 26
 -- ==========================================
 
 local sidebar = create("Frame", window, {
-	BackgroundColor3 = C.sidebar,
-	BorderSizePixel = 0,
+    Name = "ChannelSidebar",
+    BackgroundColor3 = C.sidebar,
+    BorderSizePixel = 0,
 })
 
 local sideTitle = label(
-	sidebar,
-	"TEXT CHANNELS",
-	11,
-	C.muted,
-	true
+    sidebar,
+    "TEXT CHANNELS",
+    11,
+    C.muted,
+    true
 )
 
 sideTitle.Position = UDim2.fromOffset(14, 18)
-sideTitle.Size = UDim2.new(1, -28, 0, 24)
+sideTitle.Size = UDim2.new(1, -62, 0, 24)
 
 local channelButtons = {}
-
+local channelsScroll = create("ScrollingFrame", sidebar, {
+    Name = "ChannelList",
+    Position = UDim2.fromOffset(0, 45),
+    Size = UDim2.new(1, 0, 1, -132),
+    BackgroundTransparency = 1,
+    BorderSizePixel = 0,
+    ScrollBarThickness = 2,
+    AutomaticCanvasSize = Enum.AutomaticSize.Y,
+    CanvasSize = UDim2.fromOffset(0, 0),
+})
 for index, info in CHANNELS do
-	local row = button(sidebar, "#  " .. info.name, C.sidebar)
+    local row = button(channelsScroll, "#  " .. info.name, C.sidebar)
 
-	row.Name = info.id
-	row.TextXAlignment = Enum.TextXAlignment.Left
-	row.TextSize = 13
+    row.Name = info.id
+    row.TextXAlignment = Enum.TextXAlignment.Left
+    row.TextSize = 13
 
-	row.Position = UDim2.fromOffset(
-		10,
-		54 + (index - 1) * 46
-	)
+    row.Position = UDim2.fromOffset(
+        10,
+        10 + (index - 1) * 46
+    )
 
-	row.Size = UDim2.new(1, -20, 0, 40)
+    row.Size = UDim2.new(1, -20, 0, 40)
 
-	channelButtons[info.id] = row
+    channelButtons[info.id] = row
 end
 
 -- 내 프로필
 local profile = create("Frame", sidebar, {
-	AnchorPoint = Vector2.new(0, 1),
-	Position = UDim2.new(0, 10, 1, -12),
-	Size = UDim2.new(1, -20, 0, 62),
+    AnchorPoint = Vector2.new(0, 1),
+    Position = UDim2.new(0, 10, 1, -12),
+    Size = UDim2.new(1, -20, 0, 62),
 
-	BackgroundColor3 = C.surface,
-	BorderSizePixel = 0,
+    BackgroundColor3 = C.surface,
+    BorderSizePixel = 0,
 })
 
 corner(profile, 10)
 
 local myName = label(
-	profile,
-	player.DisplayName,
-	13,
-	C.white,
-	true
+    profile,
+    player.DisplayName,
+    13,
+    C.white,
+    true
 )
 
 myName.Position = UDim2.fromOffset(12, 7)
 myName.Size = UDim2.new(1, -24, 0, 24)
 
 local myRank = label(
-	profile,
-	"훈련병",
-	11,
-	C.accentLight,
-	false
+    profile,
+    "훈련병",
+    11,
+    C.accentLight,
+    false
 )
 
 myRank.Position = UDim2.fromOffset(12, 31)
@@ -1968,66 +1992,66 @@ myRank.Size = UDim2.new(1, -24, 0, 20)
 -- ==========================================
 
 local center = create("Frame", window, {
-	BackgroundColor3 = C.bg,
-	BorderSizePixel = 0,
+    BackgroundColor3 = C.bg,
+    BorderSizePixel = 0,
 })
 
 local channelTitle = label(
-	center,
-	"#  전체 채팅",
-	18,
-	C.white,
-	true
+    center,
+    "#  전체 채팅",
+    18,
+    C.white,
+    true
 )
 
 channelTitle.Position = UDim2.fromOffset(16, 10)
 channelTitle.Size = UDim2.new(1, -32, 0, 30)
 
 local description = label(
-	center,
-	"현재 서버의 모든 병사가 참여하는 채팅입니다.",
-	11,
-	C.muted,
-	false
+    center,
+    "현재 서버의 모든 병사가 참여하는 채팅입니다.",
+    11,
+    C.muted,
+    false
 )
 
 description.Position = UDim2.fromOffset(17, 40)
 description.Size = UDim2.new(1, -34, 0, 20)
 
 create("Frame", center, {
-	Position = UDim2.fromOffset(0, 68),
-	Size = UDim2.new(1, 0, 0, 1),
+    Position = UDim2.fromOffset(0, 68),
+    Size = UDim2.new(1, 0, 0, 1),
 
-	BackgroundColor3 = C.border,
-	BorderSizePixel = 0,
+    BackgroundColor3 = C.border,
+    BorderSizePixel = 0,
 })
 
 -- 메시지 스크롤
 local feed = create("ScrollingFrame", center, {
-	Name = "Messages",
+    Name = "Messages",
 
-	Position = UDim2.fromOffset(12, 78),
-	Size = UDim2.new(1, -24, 1, -159),
+    Position = UDim2.fromOffset(12, 78),
+    Size = UDim2.new(1, -24, 1, -159),
 
-	BackgroundTransparency = 1,
-	BorderSizePixel = 0,
+    BackgroundTransparency = 1,
+    BorderSizePixel = 0,
 
-	ScrollBarThickness = 3,
-	ScrollBarImageColor3 = C.muted,
+    ScrollBarThickness = 3,
+    ScrollBarImageColor3 = C.muted,
 
-	AutomaticCanvasSize = Enum.AutomaticSize.Y,
-	CanvasSize = UDim2.fromOffset(0, 0),
-	ScrollingDirection = Enum.ScrollingDirection.Y,
+    AutomaticCanvasSize = Enum.AutomaticSize.Y,
+    CanvasSize = UDim2.fromOffset(0, 0),
+    ScrollingDirection = Enum.ScrollingDirection.Y,
 })
 
 create("UIListLayout", feed, {
-	SortOrder = Enum.SortOrder.LayoutOrder,
-	Padding = UDim.new(0, 12),
+    SortOrder = Enum.SortOrder.LayoutOrder,
+    Padding = UDim.new(0, 12),
 })
 
 create("UIPadding", feed, {
-	PaddingTop = UDim.new(0, 8),
-	PaddingBottom = UDim.new(0, 8),
+    PaddingTop = UDim.new(0, 8),
+    PaddingBottom = UDim.new(0, 8),
 })
 
 -- ==========================================
@@ -2035,36 +2059,36 @@ create("UIPadding", feed, {
 -- ==========================================
 
 local composer = create("Frame", center, {
-	AnchorPoint = Vector2.new(0, 1),
-	Position = UDim2.new(0, 12, 1, -12),
-	Size = UDim2.new(1, -24, 0, 54),
+    AnchorPoint = Vector2.new(0, 1),
+    Position = UDim2.new(0, 12, 1, -12),
+    Size = UDim2.new(1, -24, 0, 54),
 
-	BackgroundColor3 = C.surface,
-	BorderSizePixel = 0,
+    BackgroundColor3 = C.surface,
+    BorderSizePixel = 0,
 })
 
 corner(composer, 10)
 
 local input = create("TextBox", composer, {
-	Name = "MessageInput",
+    Name = "MessageInput",
 
-	Position = UDim2.fromOffset(14, 5),
-	Size = UDim2.new(1, -108, 1, -10),
+    Position = UDim2.fromOffset(14, 5),
+    Size = UDim2.new(1, -108, 1, -10),
 
-	BackgroundTransparency = 1,
-	BorderSizePixel = 0,
+    BackgroundTransparency = 1,
+    BorderSizePixel = 0,
 
-	Font = Enum.Font.Gotham,
-	TextSize = 14,
-	TextColor3 = C.white,
-	PlaceholderColor3 = C.muted,
+    Font = Enum.Font.Gotham,
+    TextSize = 14,
+    TextColor3 = C.white,
+    PlaceholderColor3 = C.muted,
 
-	PlaceholderText = "메시지 보내기...",
-	Text = "",
+    PlaceholderText = "메시지 보내기...",
+    Text = "",
 
-	TextXAlignment = Enum.TextXAlignment.Left,
-	ClearTextOnFocus = false,
-	MultiLine = false,
+    TextXAlignment = Enum.TextXAlignment.Left,
+    ClearTextOnFocus = false,
+    MultiLine = false,
 })
 
 local sendButton = button(composer, "전송", C.accent)
@@ -2078,36 +2102,36 @@ sendButton.Size = UDim2.fromOffset(78, 42)
 -- ==========================================
 
 local members = create("Frame", window, {
-	BackgroundColor3 = C.sidebar,
-	BorderSizePixel = 0,
+    BackgroundColor3 = C.sidebar,
+    BorderSizePixel = 0,
 })
 
 local membersTitle = label(
-	members,
-	"ONLINE",
-	12,
-	C.muted,
-	true
+    members,
+    "ONLINE",
+    12,
+    C.muted,
+    true
 )
 
 membersTitle.Position = UDim2.fromOffset(14, 18)
 membersTitle.Size = UDim2.new(1, -28, 0, 24)
 
 local membersFeed = create("ScrollingFrame", members, {
-	Position = UDim2.fromOffset(8, 52),
-	Size = UDim2.new(1, -16, 1, -64),
+    Position = UDim2.fromOffset(8, 52),
+    Size = UDim2.new(1, -16, 1, -64),
 
-	BackgroundTransparency = 1,
-	BorderSizePixel = 0,
+    BackgroundTransparency = 1,
+    BorderSizePixel = 0,
 
-	ScrollBarThickness = 0,
-	AutomaticCanvasSize = Enum.AutomaticSize.Y,
-	CanvasSize = UDim2.fromOffset(0, 0),
+    ScrollBarThickness = 0,
+    AutomaticCanvasSize = Enum.AutomaticSize.Y,
+    CanvasSize = UDim2.fromOffset(0, 0),
 })
 
 create("UIListLayout", membersFeed, {
-	SortOrder = Enum.SortOrder.LayoutOrder,
-	Padding = UDim.new(0, 7),
+    SortOrder = Enum.SortOrder.LayoutOrder,
+    Padding = UDim.new(0, 7),
 })
 
 -- ==========================================
@@ -2115,63 +2139,63 @@ create("UIListLayout", membersFeed, {
 -- ==========================================
 
 local function updateLayout()
-	local camera = workspace.CurrentCamera
+    local camera = workspace.CurrentCamera
 
-	if not camera then
-		return
-	end
+    if not camera then
+        return
+    end
 
-	local viewport = camera.ViewportSize
+    local viewport = camera.ViewportSize
 
-	local width = math.min(820, math.max(290, viewport.X - 24))
-	local height = math.min(580, math.max(280, viewport.Y - 24))
+    local width = math.min(820, math.max(290, viewport.X - 24))
+    local height = math.min(580, math.max(280, viewport.Y - 24))
 
-	local sidebarWidth
+    local sidebarWidth
 
-	if width < 520 then
-		sidebarWidth = 112
-	elseif width < 720 then
-		sidebarWidth = 155
-	else
-		sidebarWidth = 185
-	end
+    if width &lt; 520 then
+        sidebarWidth = 112
+    elseif width &lt; 720 then
+        sidebarWidth = 155
+    else
+        sidebarWidth = 185
+    end
 
-	local memberWidth = width >= 740 and 160 or 0
-	local centerWidth = width - sidebarWidth - memberWidth
+    local memberWidth = width &gt;= 740 and 160 or 0
+    local centerWidth = width - sidebarWidth - memberWidth
 
-	window.Size = UDim2.fromOffset(width, height)
+    window.Size = UDim2.fromOffset(width, height)
 
-	sidebar.Position = UDim2.fromOffset(0, 60)
-	sidebar.Size = UDim2.fromOffset(sidebarWidth, height - 60)
+    sidebar.Position = UDim2.fromOffset(0, 60)
+    sidebar.Size = UDim2.fromOffset(sidebarWidth, height - 60)
 
-	center.Position = UDim2.fromOffset(sidebarWidth, 60)
-	center.Size = UDim2.fromOffset(centerWidth, height - 60)
+    center.Position = UDim2.fromOffset(sidebarWidth, 60)
+    center.Size = UDim2.fromOffset(centerWidth, height - 60)
 
-	members.Position = UDim2.fromOffset(
-		width - memberWidth,
-		60
-	)
+    members.Position = UDim2.fromOffset(
+        width - memberWidth,
+        60
+    )
 
-	members.Size = UDim2.fromOffset(memberWidth, height - 60)
-	members.Visible = memberWidth > 0
+    members.Size = UDim2.fromOffset(memberWidth, height - 60)
+    members.Visible = memberWidth &gt; 0
 end
 
 updateLayout()
 
 local function connectCamera(camera)
-	if camera then
-		camera:GetPropertyChangedSignal("ViewportSize"):Connect(
-			updateLayout
-		)
+    if camera then
+        camera:GetPropertyChangedSignal("ViewportSize"):Connect(
+            updateLayout
+        )
 
-		updateLayout()
-	end
+        updateLayout()
+    end
 end
 
 connectCamera(workspace.CurrentCamera)
 
 workspace:GetPropertyChangedSignal("CurrentCamera"):Connect(function()
-	connectCamera(workspace.CurrentCamera)
+    connectCamera(workspace.CurrentCamera)
 end)
 
 -- ==========================================
@@ -2183,17 +2207,17 @@ local opened = false
 local sending = false
 
 local history = {
-	general = {},
-	unit = {},
-	command = {},
-	notice = {},
+    general = {},
+    unit = {},
+    command = {},
+    notice = {},
 }
 
 local unread = {
-	general = 0,
-	unit = 0,
-	command = 0,
-	notice = 0,
+    general = 0,
+    unit = 0,
+    command = 0,
+    notice = 0,
 }
 
 local seenMessages = {}
@@ -2202,52 +2226,52 @@ local seenQueue = {}
 local previousUnit = getUnit(player)
 
 local function getChannelInfo(id)
-	for _, info in CHANNELS do
-		if info.id == id then
-			return info
-		end
-	end
+    for _, info in CHANNELS do
+        if info.id == id then
+            return info
+        end
+    end
 
-	return CHANNELS[1]
+    return CHANNELS[1]
 end
 
 local function updateChannelButtons()
-	local totalUnread = 0
+    local totalUnread = 0
 
-	for _, info in CHANNELS do
-		local id = info.id
-		local row = channelButtons[id]
+    for _, info in CHANNELS do
+        local id = info.id
+        local row = channelButtons[id]
 
-		local allowed = canView(id)
+        local allowed = canView(id)
 
-		row.BackgroundColor3 = (
-			selectedChannel == id and C.hover or C.sidebar
-		)
+        row.BackgroundColor3 = (
+            selectedChannel == id and C.hover or C.sidebar
+        )
 
-		row.TextColor3 = allowed and C.white or C.muted
+        row.TextColor3 = allowed and C.white or C.muted
 
-		local content = "#  " .. info.name
+        local content = "#  " .. info.name
 
-		if not allowed then
-			content ..= "  ·"
-		elseif unread[id] > 0 then
-			content ..= "  •" .. tostring(unread[id])
-		end
+        if not allowed then
+            content ..= "  ·"
+        elseif unread[id] &gt; 0 then
+            content ..= "  •" .. tostring(unread[id])
+        end
 
-		row.Text = content
+        row.Text = content
 
-		if allowed then
-			totalUnread += unread[id]
-		end
-	end
+        if allowed then
+            totalUnread += unread[id]
+        end
+    end
 
-	launcher.Text = totalUnread > 0
-		and ("●  통신  " .. tostring(totalUnread))
-		or "●  통신"
+    launcher.Text = totalUnread &gt; 0
+        and ("●  통신  " .. tostring(totalUnread))
+        or "●  통신"
 
-	myRank.Text = tostring(
-		player:GetAttribute("Rank") or "훈련병"
-	)
+    myRank.Text = tostring(
+        player:GetAttribute("Rank") or "훈련병"
+    )
 end
 
 -- ==========================================
@@ -2255,109 +2279,109 @@ end
 -- ==========================================
 
 local function scrollToBottom()
-	task.delay(0.05, function()
-		if not feed.Parent then
-			return
-		end
+    task.delay(0.05, function()
+        if not feed.Parent then
+            return
+        end
 
-		feed.CanvasPosition = Vector2.new(
-			0,
-			math.max(
-				0,
-				feed.AbsoluteCanvasSize.Y - feed.AbsoluteWindowSize.Y
-			)
-		)
-	end)
+        feed.CanvasPosition = Vector2.new(
+            0,
+            math.max(
+                0,
+                feed.AbsoluteCanvasSize.Y - feed.AbsoluteWindowSize.Y
+            )
+        )
+    end)
 end
 
 local function createMessage(entry, order)
-	local row = create("Frame", feed, {
-		Name = "Message",
+    local row = create("Frame", feed, {
+        Name = "Message",
 
-		LayoutOrder = order,
+        LayoutOrder = order,
 
-		BackgroundTransparency = 1,
-		BorderSizePixel = 0,
+        BackgroundTransparency = 1,
+        BorderSizePixel = 0,
 
-		Size = UDim2.new(1, -8, 0, 0),
-		AutomaticSize = Enum.AutomaticSize.Y,
-	})
+        Size = UDim2.new(1, -8, 0, 0),
+        AutomaticSize = Enum.AutomaticSize.Y,
+    })
 
-	local avatar = create("ImageLabel", row, {
-		Position = UDim2.fromOffset(0, 2),
-		Size = UDim2.fromOffset(36, 36),
+    local avatar = create("ImageLabel", row, {
+        Position = UDim2.fromOffset(0, 2),
+        Size = UDim2.fromOffset(36, 36),
 
-		BackgroundColor3 = C.surface,
-		BorderSizePixel = 0,
+        BackgroundColor3 = C.surface,
+        BorderSizePixel = 0,
 
-		Image = (
-			"rbxthumb://type=AvatarHeadShot&id="
-				.. tostring(entry.userId)
-				.. "&w=100&h=100"
-		),
-	})
+        Image = (
+            "rbxthumb://type=AvatarHeadShot&amp;id="
+            .. tostring(entry.userId)
+            .. "&amp;w=100&amp;h=100"
+        ),
+    })
 
-	corner(avatar, 18)
+    corner(avatar, 18)
 
-	local author = label(
-		row,
-		"[" .. entry.rank .. "] " .. entry.name .. "   " .. entry.time,
-		13,
-		C.accentLight,
-		true
-	)
+    local author = label(
+        row,
+        "[" .. entry.rank .. "] " .. entry.name .. "   " .. entry.time,
+        13,
+        C.accentLight,
+        true
+    )
 
-	author.Position = UDim2.fromOffset(46, 0)
-	author.Size = UDim2.new(1, -50, 0, 22)
+    author.Position = UDim2.fromOffset(46, 0)
+    author.Size = UDim2.new(1, -50, 0, 22)
 
-	local messageText = label(
-		row,
-		entry.message,
-		14,
-		C.white,
-		false
-	)
+    local messageText = label(
+        row,
+        entry.message,
+        14,
+        C.white,
+        false
+    )
 
-	messageText.Position = UDim2.fromOffset(46, 24)
-	messageText.Size = UDim2.new(1, -52, 0, 0)
+    messageText.Position = UDim2.fromOffset(46, 24)
+    messageText.Size = UDim2.new(1, -52, 0, 0)
 
-	messageText.AutomaticSize = Enum.AutomaticSize.Y
-	messageText.TextWrapped = true
-	messageText.TextTruncate = Enum.TextTruncate.None
-	messageText.TextYAlignment = Enum.TextYAlignment.Top
-	messageText.RichText = false
+    messageText.AutomaticSize = Enum.AutomaticSize.Y
+    messageText.TextWrapped = true
+    messageText.TextTruncate = Enum.TextTruncate.None
+    messageText.TextYAlignment = Enum.TextYAlignment.Top
+    messageText.RichText = false
 
-	return row
+    return row
 end
 
 local function renderMessages()
-	for _, child in feed:GetChildren() do
-		if child:IsA("GuiObject") then
-			child:Destroy()
-		end
-	end
+    for _, child in feed:GetChildren() do
+        if child:IsA("GuiObject") then
+            child:Destroy()
+        end
+    end
 
-	local messages = history[selectedChannel]
+    local messages = history[selectedChannel]
 
-	if #messages == 0 then
-		local empty = label(
-			feed,
-			"아직 메시지가 없습니다.\n첫 번째 메시지를 보내 보세요.",
-			14,
-			C.muted,
-			false
-		)
+    if #messages == 0 then
+        local empty = label(
+            feed,
+            "아직 메시지가 없습니다.\n첫 번째 메시지를 보내 보세요.",
+            14,
+            C.muted,
+            false
+        )
 
-		empty.Size = UDim2.new(1, -12, 0, 100)
-		empty.TextWrapped = true
-		empty.TextXAlignment = Enum.TextXAlignment.Center
-	else
-		for index, entry in messages do
-			createMessage(entry, index)
-		end
-	end
+        empty.Size = UDim2.new(1, -12, 0, 100)
+        empty.TextWrapped = true
+        empty.TextXAlignment = Enum.TextXAlignment.Center
+    else
+        for index, entry in messages do
+            createMessage(entry, index)
+        end
+    end
 
-	scrollToBottom()
+    scrollToBottom()
 end
 
 -- ==========================================
@@ -2365,76 +2389,76 @@ end
 -- ==========================================
 
 local function renderMembers()
-	for _, child in membersFeed:GetChildren() do
-		if child:IsA("GuiObject") then
-			child:Destroy()
-		end
-	end
+    for _, child in membersFeed:GetChildren() do
+        if child:IsA("GuiObject") then
+            child:Destroy()
+        end
+    end
 
-	local count = 0
+    local count = 0
 
-	for _, target in Players:GetPlayers() do
-		local allowed = true
+    for _, target in Players:GetPlayers() do
+        local allowed = true
 
-		if selectedChannel == "unit" then
-			allowed = getUnit(player) ~= nil
-				and getUnit(player) == getUnit(target)
+        if selectedChannel == "unit" then
+            allowed = getUnit(player) ~= nil
+                and getUnit(player) == getUnit(target)
 
-		elseif selectedChannel == "command" then
-			allowed = getRankOrder(target) >= 11
-		end
+        elseif selectedChannel == "command" then
+            allowed = target:GetAttribute("MessengerCanViewCommand") == true
+        end
 
-		if allowed then
-			count += 1
+        if allowed then
+            count += 1
 
-			local row = create("Frame", membersFeed, {
-				LayoutOrder = count,
+            local row = create("Frame", membersFeed, {
+                LayoutOrder = count,
 
-				Size = UDim2.new(1, 0, 0, 46),
-				BackgroundTransparency = 1,
-			})
+                Size = UDim2.new(1, 0, 0, 46),
+                BackgroundTransparency = 1,
+            })
 
-			local avatar = create("ImageLabel", row, {
-				Position = UDim2.fromOffset(2, 6),
-				Size = UDim2.fromOffset(34, 34),
+            local avatar = create("ImageLabel", row, {
+                Position = UDim2.fromOffset(2, 6),
+                Size = UDim2.fromOffset(34, 34),
 
-				BackgroundColor3 = C.surface,
-				BorderSizePixel = 0,
+                BackgroundColor3 = C.surface,
+                BorderSizePixel = 0,
 
-				Image = (
-					"rbxthumb://type=AvatarHeadShot&id="
-						.. tostring(target.UserId)
-						.. "&w=100&h=100"
-				),
-			})
+                Image = (
+                    "rbxthumb://type=AvatarHeadShot&amp;id="
+                    .. tostring(target.UserId)
+                    .. "&amp;w=100&amp;h=100"
+                ),
+            })
 
-			corner(avatar, 17)
+            corner(avatar, 17)
 
-			local name = label(
-				row,
-				target.DisplayName,
-				12,
-				C.white,
-				true
-			)
+            local name = label(
+                row,
+                target.DisplayName,
+                12,
+                C.white,
+                true
+            )
 
-			name.Position = UDim2.fromOffset(44, 4)
-			name.Size = UDim2.new(1, -47, 0, 20)
+            name.Position = UDim2.fromOffset(44, 4)
+            name.Size = UDim2.new(1, -47, 0, 20)
 
-			local rank = label(
-				row,
-				tostring(target:GetAttribute("Rank") or "훈련병"),
-				10,
-				C.muted,
-				false
-			)
+            local rank = label(
+                row,
+                tostring(target:GetAttribute("Rank") or "훈련병"),
+                10,
+                C.muted,
+                false
+            )
 
-			rank.Position = UDim2.fromOffset(44, 24)
-			rank.Size = UDim2.new(1, -47, 0, 17)
-		end
-	end
+            rank.Position = UDim2.fromOffset(44, 24)
+            rank.Size = UDim2.new(1, -47, 0, 17)
+        end
+    end
 
-	membersTitle.Text = "ONLINE  ·  " .. tostring(count)
+    membersTitle.Text = "ONLINE  ·  " .. tostring(count)
 end
 
 -- ==========================================
@@ -2442,128 +2466,221 @@ end
 -- ==========================================
 
 local function selectChannel(id)
-	if not canView(id) then
-		description.Text = "이 채널에 접근할 권한이 없습니다."
-		return
-	end
+    if not canView(id) then
+        description.Text = "이 채널에 접근할 권한이 없습니다."
+        return
+    end
 
-	selectedChannel = id
-	unread[id] = 0
+    selectedChannel = id
+    window:SetAttribute("SelectedChannel", id)
+    unread[id] = 0
 
-	local info = getChannelInfo(id)
+    local info = getChannelInfo(id)
 
-	channelTitle.Text = "#  " .. info.name
-	description.Text = info.description
+    channelTitle.Text = "#  " .. info.name
+    description.Text = info.description
 
-	if id == "unit" then
-		description.Text = "소속 부대: " .. tostring(getUnit(player))
-	end
+    if id == "unit" then
+        description.Text = "소속 부대: " .. tostring(getUnit(player))
+    end
 
-	local writable = canWrite(id)
+    local writable = canWrite(id)
 
-	input.TextEditable = writable
+    input.TextEditable = writable
 
-	input.PlaceholderText = writable
-		and "메시지 보내기..."
-		or "읽기 전용 채널입니다."
+    input.PlaceholderText = writable
+        and "메시지 보내기..."
+        or "읽기 전용 채널입니다."
 
-	sendButton.Text = writable and "전송" or "읽기 전용"
+    sendButton.Text = writable and "전송" or "읽기 전용"
 
-	sendButton.BackgroundColor3 = writable
-		and C.accent
-		or C.hover
+    sendButton.BackgroundColor3 = writable
+        and C.accent
+        or C.hover
 
-	updateChannelButtons()
-	renderMessages()
-	renderMembers()
+    updateChannelButtons()
+    renderMessages()
+    renderMembers()
 end
 
 for _, info in CHANNELS do
-	local id = info.id
+    local id = info.id
 
-	channelButtons[id].Activated:Connect(function()
-		selectChannel(id)
-	end)
+    channelButtons[id].Activated:Connect(function()
+        selectChannel(id)
+    end)
 end
+
+-- Keep channel listings in sync with the server. Only the server creates/deletes channels.
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local manageRemote = ReplicatedStorage:WaitForChild("MessengerManage") :: RemoteFunction
+local channelsChanged = ReplicatedStorage:WaitForChild("MessengerChannelsChanged") :: RemoteEvent
+local function syncCustomChannels()
+    local ok, result = pcall(function()
+        return manageRemote:InvokeServer("snapshot")
+    end)
+    if not ok or not result or not result.ok or not result.data then return end
+    local incoming = {}
+    channelAccess = {}
+    for _, item in result.data.channels or {} do
+        if type(item) == "table" and type(item.id) == "string"
+            and type(item.channel) == "string" and type(item.name) == "string" then
+            incoming[item.id] = item
+            channelAccess[item.id] = item
+        end
+    end
+    for index = #CHANNELS, 1, -1 do
+        local info = CHANNELS[index]
+        if info.id:sub(1, 7) == "custom_" and not incoming[info.id] then
+            local row = channelButtons[info.id]
+            if row then row:Destroy() end
+            channelButtons[info.id] = nil
+            channelIds[info.channel] = nil
+            history[info.id] = nil
+            unread[info.id] = nil
+            table.remove(CHANNELS, index)
+            if selectedChannel == info.id then selectedChannel = "general" end
+        end
+    end
+    for _, info in incoming do
+        for _, existing in CHANNELS do
+            if existing.id == info.id then
+                existing.name = info.name; existing.description = info.description
+            end
+        end
+        if not channelButtons[info.id] then
+            table.insert(CHANNELS, info)
+            channelIds[info.channel] = info.id
+            history[info.id] = {}
+            unread[info.id] = 0
+            local row = button(channelsScroll, "#  " .. info.name, C.sidebar)
+            row.Name = info.id
+            row.TextXAlignment = Enum.TextXAlignment.Left
+            row.TextSize = 13
+            channelButtons[info.id] = row
+            local id = info.id
+            row.Activated:Connect(function() selectChannel(id) end)
+        end
+    end
+    for index, info in CHANNELS do
+        local row = channelButtons[info.id]
+        if row then
+            row.Position = UDim2.fromOffset(10, 10 + (index - 1) * 46)
+            row.Size = UDim2.new(1, -20, 0, 40)
+            if info.id:sub(1, 7) == "custom_" then row.Text = "#  " .. info.name end
+        end
+    end
+    channelsScroll.CanvasSize = UDim2.fromOffset(0, 20 + #CHANNELS * 46)
+    for id in history do
+        if not canView(id) then history[id] = {}; unread[id] = 0 end
+    end
+    if not canView(selectedChannel) then
+        selectedChannel = "general"
+        channelTitle.Text = "통신망"
+        description.Text = result.data.storage and result.data.storage.error or "읽을 수 있는 채널이 없습니다."
+        input.TextEditable = false
+        renderMessages()
+    else selectChannel(selectedChannel) end
+    updateChannelButtons()
+end
+channelsChanged.OnClientEvent:Connect(function()
+    task.delay(0.25, syncCustomChannels)
+end)
+task.defer(syncCustomChannels)
 
 -- ==========================================
 -- 플레이어 정보 변화 감지
 -- ==========================================
 
 local function updateAccess()
-	local currentUnit = getUnit(player)
+    local currentUnit = getUnit(player)
 
-	-- 소속 부대 변경 시 이전 부대의 채팅 기록 제거
-	if currentUnit ~= previousUnit then
-		previousUnit = currentUnit
-		history.unit = {}
-		unread.unit = 0
-	end
+    -- 소속 부대 변경 시 이전 부대의 채팅 기록 제거
+    if currentUnit ~= previousUnit then
+        previousUnit = currentUnit
+        history.unit = {}
+        unread.unit = 0
+    end
 
-	-- 지휘관 권한 상실 시 이전 지휘 채팅 기록 제거
-	if getRankOrder(player) < 11 then
-		history.command = {}
-		unread.command = 0
-	end
+    -- 지휘관 권한 상실 시 이전 지휘 채팅 기록 제거
+    if not canView("command") then
+        history.command = {}
+        unread.command = 0
+    end
 
-	if not canView(selectedChannel) then
-		selectedChannel = "general"
-	end
+    if not canView(selectedChannel) then
+        selectedChannel = "general"
+    end
 
-	selectChannel(selectedChannel)
+    if canView(selectedChannel) then selectChannel(selectedChannel) else renderMessages(); updateChannelButtons() end
+end
+
+-- Register these signals once, not every time updateAccess runs.
+local permissionAttributes = {
+    "MessengerCanSend",
+    "MessengerCanCreate",
+    "MessengerCanDelete",
+    "MessengerCanManageRoles",
+    "MessengerCanManageSettings",
+    "MessengerCanPostNotices",
+    "MessengerCanViewCommand",
+    "MessengerCanWriteCommand",
+}
+for _, attributeName in permissionAttributes do
+    player:GetAttributeChangedSignal(attributeName):Connect(updateAccess)
 end
 
 local playerConnections = {}
 
 local function watchPlayer(target)
-	if playerConnections[target] then
-		return
-	end
+    if playerConnections[target] then
+        return
+    end
 
-	playerConnections[target] = {
-		target:GetAttributeChangedSignal("Rank"):Connect(
-			updateAccess
-		),
+    playerConnections[target] = {
+        target:GetAttributeChangedSignal("Rank"):Connect(
+            updateAccess
+        ),
 
-		target:GetAttributeChangedSignal("RankOrder"):Connect(
-			updateAccess
-		),
+        target:GetAttributeChangedSignal("RankOrder"):Connect(
+            updateAccess
+        ),
 
-		target:GetAttributeChangedSignal("Unit"):Connect(
-			updateAccess
-		),
+        target:GetAttributeChangedSignal("Unit"):Connect(
+            updateAccess
+        ),
 
-		target:GetPropertyChangedSignal("Team"):Connect(
-			updateAccess
-		),
+        target:GetPropertyChangedSignal("Team"):Connect(
+            updateAccess
+        ),
 
-		target:GetPropertyChangedSignal("Neutral"):Connect(
-			updateAccess
-		),
-	}
+        target:GetPropertyChangedSignal("Neutral"):Connect(
+            updateAccess
+        ),
+    }
 end
 
 for _, target in Players:GetPlayers() do
-	watchPlayer(target)
+    watchPlayer(target)
 end
 
 Players.PlayerAdded:Connect(function(target)
-	watchPlayer(target)
-	renderMembers()
+    watchPlayer(target)
+    renderMembers()
 end)
 
 Players.PlayerRemoving:Connect(function(target)
-	local connections = playerConnections[target]
+    local connections = playerConnections[target]
 
-	if connections then
-		for _, connection in connections do
-			connection:Disconnect()
-		end
-	end
+    if connections then
+        for _, connection in connections do
+            connection:Disconnect()
+        end
+    end
 
-	playerConnections[target] = nil
+    playerConnections[target] = nil
 
-	task.defer(renderMembers)
+    task.defer(renderMembers)
 end)
 
 -- ==========================================
@@ -2571,79 +2688,79 @@ end)
 -- ==========================================
 
 TextChatService.MessageReceived:Connect(function(message)
-	if not message.TextChannel then
-		return
-	end
+    if not message.TextChannel then
+        return
+    end
 
-	if not message.TextSource then
-		return
-	end
+    if not message.TextSource then
+        return
+    end
 
-	-- 처리 중인 로컬 메시지는 표시하지 않음
-	if message.Status ~= Enum.TextChatMessageStatus.Success then
-		return
-	end
+    -- 처리 중인 로컬 메시지는 표시하지 않음
+    if message.Status ~= Enum.TextChatMessageStatus.Success then
+        return
+    end
 
-	local channelName = message.TextChannel.Name
-	local id = channelIds[channelName]
+    local channelName = message.TextChannel.Name
+    local id = channelIds[channelName]
 
-	if not id then
-		return
-	end
+    if not id then
+        return
+    end
 
-	if not canView(id) then
-		return
-	end
+    if not canView(id) then
+        return
+    end
 
-	-- 중복 메시지 방지
-	local messageId = message.MessageId
+    -- 중복 메시지 방지
+    local messageId = message.MessageId
 
-	if messageId and messageId ~= "" then
-		if seenMessages[messageId] then
-			return
-		end
+    if messageId and messageId ~= "" then
+        if seenMessages[messageId] then
+            return
+        end
 
-		seenMessages[messageId] = true
-		table.insert(seenQueue, messageId)
+        seenMessages[messageId] = true
+        table.insert(seenQueue, messageId)
 
-		if #seenQueue > 250 then
-			local oldest = table.remove(seenQueue, 1)
-			seenMessages[oldest] = nil
-		end
-	end
+        if #seenQueue &gt; 250 then
+            local oldest = table.remove(seenQueue, 1)
+            seenMessages[oldest] = nil
+        end
+    end
 
-	local userId = message.TextSource.UserId
-	local sender = Players:GetPlayerByUserId(userId)
+    local userId = message.TextSource.UserId
+    local sender = Players:GetPlayerByUserId(userId)
 
-	local entry = {
-		userId = userId,
+    local entry = {
+        userId = userId,
 
-		name = sender
-			and sender.DisplayName
-			or "Unknown",
+        name = sender
+            and sender.DisplayName
+            or "Unknown",
 
-		rank = sender
-			and tostring(sender:GetAttribute("Rank") or "훈련병")
-			or "알 수 없음",
+        rank = sender
+            and tostring(sender:GetAttribute("Rank") or "훈련병")
+            or "알 수 없음",
 
-		message = message.Text,
-		time = os.date("%H:%M"),
-	}
+        message = message.Text,
+        time = os.date("%H:%M"),
+    }
 
-	table.insert(history[id], entry)
+    table.insert(history[id], entry)
 
-	-- 채널당 최근 80개 메시지만 메모리에 보관
-	if #history[id] > 80 then
-		table.remove(history[id], 1)
-	end
+    -- 채널당 최근 80개 메시지만 메모리에 보관
+    if #history[id] &gt; 80 then
+        table.remove(history[id], 1)
+    end
 
-	if opened and selectedChannel == id then
-		renderMessages()
-	else
-		unread[id] += 1
-	end
+    if opened and selectedChannel == id then
+        renderMessages()
+    else
+        unread[id] += 1
+    end
 
-	updateChannelButtons()
+    updateChannelButtons()
 end)
 
 -- ==========================================
@@ -2651,99 +2768,77 @@ end)
 -- ==========================================
 
 local function sendMessage()
-	if sending then
-		return
-	end
+    if sending then
+        return
+    end
 
-	if not canWrite(selectedChannel) then
-		description.Text = "메시지 작성 권한이 없습니다."
-		return
-	end
+    if not canWrite(selectedChannel) then
+        description.Text = "메시지 작성 권한이 없습니다."
+        return
+    end
 
-	local content = input.Text:match("^%s*(.-)%s*$")
+    local content = input.Text:match("^%s*(.-)%s*$")
 
-	if not content or content == "" then
-		return
-	end
+    if not content or content == "" then
+        return
+    end
 
-	local characterCount = utf8.len(content)
+    local characterCount = utf8.len(content)
 
-	if not characterCount or characterCount > 180 then
-		description.Text = "메시지는 180자 이내로 작성해 주세요."
-		return
-	end
+    if not characterCount or characterCount &gt; 180 then
+        description.Text = "메시지는 180자 이내로 작성해 주세요."
+        return
+    end
 
-	local id = selectedChannel
-	local info = getChannelInfo(id)
+    local id = selectedChannel
+    local info = getChannelInfo(id)
 
-	sending = true
-	sendButton.Text = "..."
+    sending = true
+    sendButton.Text = "..."
 
-	input.Text = ""
+    input.Text = ""
 
-	task.spawn(function()
-		local success, result = pcall(function()
-			local channel
+    task.spawn(function()
+        local success, result = pcall(function()
+        local channel = TextChatService:WaitForChild(info.channel, 10)
 
-			-- 기본 채널과 커스텀 채널은 위치가 다름
-			if id == "general" then
-				local folder = TextChatService:WaitForChild(
-					"TextChannels",
-					10
-				)
+        if not channel or not channel:IsA("TextChannel") then
+        error("채팅 채널을 찾을 수 없습니다.")
+        end
 
-				if not folder then
-					error("기본 채팅 폴더가 없습니다.")
-				end
+        return channel:SendAsync(content)
+    end)
 
-				channel = folder:WaitForChild(
-					"RBXGeneral",
-					10
-				)
-			else
-				channel = TextChatService:WaitForChild(
-					info.channel,
-					10
-				)
-			end
+        sending = false
 
-			if not channel or not channel:IsA("TextChannel") then
-				error("채팅 채널을 찾을 수 없습니다.")
-			end
+        if selectedChannel == id then
+            sendButton.Text = canWrite(id)
+                and "전송"
+                or "읽기 전용"
+        end
 
-			return channel:SendAsync(content)
-		end)
+        if not success then
+            warn("[Messenger] 메시지 전송 실패:", result)
 
-		sending = false
+            description.Text = "전송 실패. Output 창을 확인해 주세요."
 
-		if selectedChannel == id then
-			sendButton.Text = canWrite(id)
-				and "전송"
-				or "읽기 전용"
-		end
+            if input.Text == "" then
+                input.Text = content
+            end
 
-		if not success then
-			warn("[Messenger] 메시지 전송 실패:", result)
-
-			description.Text = "전송 실패. Output 창을 확인해 주세요."
-
-			if input.Text == "" then
-				input.Text = content
-			end
-
-		elseif result.Status ~= Enum.TextChatMessageStatus.Success then
-			description.Text = "메시지 전송 제한: "
-				.. result.Status.Name
-		end
-	end)
+        elseif result.Status ~= Enum.TextChatMessageStatus.Success then
+            description.Text = "메시지 전송 제한: "
+                .. result.Status.Name
+        end
+    end)
 end
 
 sendButton.Activated:Connect(sendMessage)
 
 input.FocusLost:Connect(function(enterPressed)
-	if enterPressed then
-		sendMessage()
-	end
+    if enterPressed then
+        sendMessage()
+    end
 end)
 
 -- ==========================================
@@ -2751,49 +2846,49 @@ end)
 -- ==========================================
 
 local function setOpen(state)
-	opened = state
+    opened = state
 
-	launcher.Visible = not state
-	window.Visible = state
+    launcher.Visible = not state
+    window.Visible = state
 
-	if state then
-		windowScale.Scale = 0.94
+    if state then
+        windowScale.Scale = 0.94
 
-		TweenService:Create(
-			windowScale,
-			TweenInfo.new(
-				0.18,
-				Enum.EasingStyle.Quint,
-				Enum.EasingDirection.Out
-			),
-			{
-				Scale = 1,
-			}
-		):Play()
+        TweenService:Create(
+            windowScale,
+            TweenInfo.new(
+                0.18,
+                Enum.EasingStyle.Quint,
+                Enum.EasingDirection.Out
+            ),
+            {
+                Scale = 1,
+            }
+        ):Play()
 
-		selectChannel(selectedChannel)
-	else
-		input:ReleaseFocus()
-	end
+        selectChannel(selectedChannel)
+    else
+        input:ReleaseFocus()
+    end
 end
 
 launcher.Activated:Connect(function()
-	setOpen(true)
+    setOpen(true)
 end)
 
 closeButton.Activated:Connect(function()
-	setOpen(false)
+    setOpen(false)
 end)
 
 -- M키로 열기 / 닫기
 UserInputService.InputBegan:Connect(function(key, processed)
-	if processed then
-		return
-	end
+    if processed then
+        return
+    end
 
-	if key.KeyCode == Enum.KeyCode.M then
-		setOpen(not opened)
-	end
+    if key.KeyCode == Enum.KeyCode.M then
+        setOpen(not opened)
+    end
 end)
 
 -- ==========================================
@@ -2803,31 +2898,269 @@ end)
 selectChannel("general")
 updateChannelButtons()
 
-print("[MilitaryMessenger] 클라이언트 UI 시작 완료")]]></ProtectedString>
+print("[MilitaryMessenger] 클라이언트 UI 시작 완료")</ProtectedString>
 					<bool name="Disabled">false</bool>
-					<Content name="LinkedSource"><null></null></Content>
+					<Content name="LinkedSource"><null /></Content>
 					<token name="RunContext">0</token>
 					<string name="ScriptGuid">{166a23bf-dd7a-46b1-8631-5f73c6baa52c}</string>
-					<BinaryString name="AttributesSerialize"></BinaryString>
+					<BinaryString name="AttributesSerialize" />
 					<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 					<bool name="DefinesCapabilities">false</bool>
 					<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
 					<string name="Name">MilitaryMessenger</string>
-					<BinaryString name="SerializedOverrides"></BinaryString>
+					<BinaryString name="SerializedOverrides" />
 					<int64 name="SourceAssetId">-1</int64>
 					<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 					<UniqueId name="UniqueId">01d403e696a9a5530ae7b2b000001920</UniqueId>
 				</Properties>
 			</Item>
-		</Item>
+		<Item class="LocalScript" referent="MessengerSync7"><Properties><string name="Name">GeneralBubbleChat</string><ProtectedString name="Source">--!strict
+-- GeneralBubbleChat.client.luau
+-- 일반 채팅에만 말풍선 표시
+
+local Players = game:GetService("Players")
+local TextChatService = game:GetService("TextChatService")
+
+-- 자동 말풍선 비활성화
+local bubbleConfig = TextChatService:WaitForChild("BubbleChatConfiguration")
+bubbleConfig.Enabled = false
+
+-- 수신한 메시지 확인
+TextChatService.MessageReceived:Connect(function(message)
+
+    -- 정상적으로 전달된 메시지만 처리
+    if message.Status ~= Enum.TextChatMessageStatus.Success then
+        return
+    end
+
+    if not message.TextChannel or not message.TextSource then
+        return
+    end
+
+    -- 일반 Roblox 채팅 메시지만 말풍선 표시
+    if message.TextChannel.Name ~= "RBXGeneral" then
+        return
+    end
+
+    local sender = Players:GetPlayerByUserId(
+        message.TextSource.UserId
+    )
+
+    if not sender or not sender.Character then
+        return
+    end
+
+    -- 이미 필터링된 메시지로 말풍선 생성
+    TextChatService:DisplayBubble(
+        sender.Character,
+        message.Text
+    )
+
+end)</ProtectedString><bool name="Disabled">false</bool></Properties></Item><Item class="LocalScript" referent="MessengerSync8"><Properties><string name="Name">MessengerAdmin</string><ProtectedString name="Source">--!strict
+-- Discord-like server settings. UI grants no authority; every mutation is a server transaction.
+local Players=game:GetService("Players")
+local ReplicatedStorage=game:GetService("ReplicatedStorage")
+local player=Players.LocalPlayer
+local gui=player:WaitForChild("PlayerGui"):WaitForChild("MilitaryMessenger")
+local window=gui:WaitForChild("MessengerWindow") :: Frame
+local header=window:WaitForChild("Header") :: Frame
+local sidebar=window:WaitForChild("ChannelSidebar") :: Frame
+local remote=ReplicatedStorage:WaitForChild("MessengerManage") :: RemoteFunction
+local changed=ReplicatedStorage:WaitForChild("MessengerChannelsChanged") :: RemoteEvent
+local C={bg=Color3.fromRGB(27,30,37),side=Color3.fromRGB(20,23,29),surface=Color3.fromRGB(37,42,51),white=Color3.fromRGB(241,242,245),muted=Color3.fromRGB(153,162,174),accent=Color3.fromRGB(106,149,113),red=Color3.fromRGB(150,67,75)}
+local function make(class: string,parent: Instance,props: any): any
+    local obj=Instance.new(class)
+    for k,v in props do (obj :: any)[k]=v end
+    obj.Parent=parent;return obj
+end
+local function corner(o: Instance) make("UICorner",o,{CornerRadius=UDim.new(0,8)}) end
+local function button(parent: Instance,name: string,value: string,color: Color3?): TextButton
+    local b=make("TextButton",parent,{Name=name,Text=value,Font=Enum.Font.GothamMedium,TextSize=13,TextColor3=C.white,
+        BackgroundColor3=color or C.surface,BorderSizePixel=0,Size=UDim2.new(1,-8,0,44),ZIndex=17,Selectable=true})
+    corner(b);return b
+end
+local function text(parent: Instance,value: string,height: number): TextLabel
+    return make("TextLabel",parent,{Text=value,Font=Enum.Font.GothamMedium,TextSize=13,TextColor3=C.white,
+        BackgroundTransparency=1,Size=UDim2.new(1,-8,0,height),TextWrapped=true,TextXAlignment=Enum.TextXAlignment.Left,ZIndex=17})
+end
+local function input(parent: Instance,placeholder: string): TextBox
+    local box=make("TextBox",parent,{Text="",PlaceholderText=placeholder,ClearTextOnFocus=false,Font=Enum.Font.Gotham,TextSize=14,
+        TextColor3=C.white,PlaceholderColor3=C.muted,BackgroundColor3=C.surface,BorderSizePixel=0,Size=UDim2.new(1,-8,0,44),ZIndex=17})
+    corner(box);return box
+end
+local open=button(header,"MessengerSettingsButton","설정")
+open.AnchorPoint=Vector2.new(1,0);open.Position=UDim2.new(1,-60,0,9);open.Size=UDim2.fromOffset(72,40)
+local plus=button(sidebar,"CreateChannelButton","+")
+plus.AnchorPoint=Vector2.new(1,0);plus.Position=UDim2.new(1,-8,0,6);plus.Size=UDim2.fromOffset(40,40);plus.TextSize=25
+local overlay=make("Frame",window,{Name="SettingsOverlay",Position=UDim2.fromOffset(0,60),Size=UDim2.new(1,0,1,-60),BackgroundColor3=C.bg,BorderSizePixel=0,Visible=false,ZIndex=15})
+local nav=make("Frame",overlay,{Name="SettingsSidebar",BackgroundColor3=C.side,BorderSizePixel=0,ZIndex=16})
+local body=make("ScrollingFrame",overlay,{Name="SettingsBody",BackgroundTransparency=1,BorderSizePixel=0,ScrollBarThickness=4,
+    CanvasSize=UDim2.new(),AutomaticCanvasSize=Enum.AutomaticSize.Y,ZIndex=16})
+make("UIListLayout",body,{Padding=UDim.new(0,8),SortOrder=Enum.SortOrder.LayoutOrder})
+make("UIPadding",body,{PaddingRight=UDim.new(0,8),PaddingBottom=UDim.new(0,16)})
+local status=text(overlay,"설정을 불러오는 중…",40)
+status.Position=UDim2.new(0,12,1,-44);status.Size=UDim2.new(1,-24,0,40);status.TextColor3=C.muted
+local back=button(nav,"BackToChannels","← 통신망")
+local state: any={channels={},permissions={roles={},people={}},storage={ready=false},revision=0}
+local page="channels"
+local selectedChannel="general"
+local selectedRole="member"
+local busy=false
+local render: ()-&gt;()
+local refresh: ()-&gt;()
+local modal=make("Frame",window,{Name="ChannelModal",BackgroundColor3=C.bg,BorderSizePixel=0,Size=UDim2.fromScale(0.9,0.75),
+    AnchorPoint=Vector2.new(0.5,0.5),Position=UDim2.fromScale(0.5,0.5),Visible=false,ZIndex=25})
+corner(modal)
+make("UISizeConstraint",modal,{MaxSize=Vector2.new(420,330)})
+local modalTitle=text(modal,"채널 만들기",36);modalTitle.Position=UDim2.fromOffset(20,16);modalTitle.Size=UDim2.new(1,-40,0,36);modalTitle.TextSize=19;modalTitle.ZIndex=26
+local modalInput=input(modal,"이름 (2~24자)");modalInput.Name="NameInput";modalInput.Position=UDim2.fromOffset(20,66);modalInput.Size=UDim2.new(1,-40,0,44);modalInput.ZIndex=26
+local modalInfo=text(modal,"",90);modalInfo.Position=UDim2.fromOffset(20,118);modalInfo.Size=UDim2.new(1,-40,1,-184);modalInfo.ZIndex=26
+local confirm=button(modal,"Confirm","저장",C.accent);confirm.Position=UDim2.new(0,20,1,-56);confirm.Size=UDim2.new(0.5,-26,0,44);confirm.ZIndex=26
+local cancel=button(modal,"Cancel","취소");cancel.Position=UDim2.new(0.5,6,1,-56);cancel.Size=UDim2.new(0.5,-26,0,44);cancel.ZIndex=26
+local modalAction: ((string)-&gt;())?=nil
+cancel.Activated:Connect(function() if not busy then modal.Visible=false;modalInput:ReleaseFocus() end end)
+confirm.Activated:Connect(function() if modalAction and not busy then modalAction(modalInput.Text) end end)
+local function prompt(title: string,initial: string?,fn: (string)-&gt;())
+    modalTitle.Text=title;modalInput.Text=initial or "";modalInput.Visible=initial~=nil
+    modalInfo.Text=if initial==nil then "이 작업을 실행할까요? 삭제 후에는 해당 채널·역할이 즉시 제거됩니다." else "이름은 Roblox 필터를 거쳐 표시됩니다. 이름 생성·변경은 1분에 한 번 가능합니다."
+    modalAction=fn;modal.Visible=true
+end
+local function useData(data)
+    if type(data)~="table" then return end
+    state=data;plus.Visible=data.canCreate==true and data.storage.ready
+    render()
+end
+local function call(action: string,payload: any?): boolean
+    if busy then return false end
+    busy=true;confirm.Active=false
+    if payload then payload.revision=state.revision end
+    local ok,result=pcall(function() return remote:InvokeServer(action,payload) end)
+    busy=false;confirm.Active=true
+    if not ok or type(result)~="table" then
+        status.Text="서버 응답을 확인하지 못했습니다. 새로고침 후 확인하세요.";modalInfo.Text=status.Text;return false
+    end
+    if result.data then useData(result.data) end
+    status.Text=result.message or (state.storage.ready and "모든 변경은 영구 저장 후 반영됩니다." or state.storage.error)
+    if result.ok and action~="snapshot" and action~="refresh" then modal.Visible=false;modalInput:ReleaseFocus(false)
+    else modalInfo.Text=status.Text end
+    return result.ok==true
+end
+refresh=function() call("snapshot") end
+local function row(value: string,fn: ()-&gt;(),color: Color3?): TextButton
+    local b=button(body,value,value,color);b.Activated:Connect(fn);return b
+end
+local function note(value: string,height: number?) text(body,value,height or 36) end
+local tabs={}
+local function layout()
+    local narrow=window.AbsoluteSize.X&lt;600
+    nav.Position=UDim2.fromOffset(0,0);nav.Size=if narrow then UDim2.new(1,0,0,100) else UDim2.new(0,144,1,-48)
+    back.Position=UDim2.fromOffset(8,8);back.Size=UDim2.new(if narrow then 0 else 1,if narrow then 110 else -16,0,40)
+    for i,b in tabs do
+        b.Position=if narrow then UDim2.new((i-1)/4,4,0,54) else UDim2.fromOffset(8,64+(i-1)*50)
+        b.Size=if narrow then UDim2.new(0.25,-8,0,40) else UDim2.new(1,-16,0,44)
+    end
+    body.Position=if narrow then UDim2.fromOffset(12,112) else UDim2.fromOffset(160,12)
+    body.Size=if narrow then UDim2.new(1,-24,1,-162) else UDim2.new(1,-172,1,-62)
+end
+for i,spec in {{"channels","채널"},{"roles","역할"},{"people","사용자"},{"settings","저장 상태"}} do
+    local b=button(nav,"Tab_"..spec[1],spec[2]);tabs[i]=b
+    b.Activated:Connect(function() page=spec[1];render() end)
+end
+back.Activated:Connect(function() overlay.Visible=false;modal.Visible=false end)
+window:GetPropertyChangedSignal("AbsoluteSize"):Connect(layout);layout()
+local perms={{"SEND_MESSAGES","메시지 쓰기"},{"CREATE_CHANNELS","채널 생성"},{"DELETE_CHANNELS","채널 삭제"},{"MANAGE_ROLES","역할 관리"},
+    {"MANAGE_SETTINGS","통신망 관리"},{"POST_NOTICES","공지 작성"},{"VIEW_COMMAND","지휘 읽기"},{"WRITE_COMMAND","지휘 쓰기"}}
+local function roleIds()
+    local ids={};for id in state.permissions.roles do table.insert(ids,id) end;table.sort(ids);return ids
+end
+render=function()
+    for _,child in body:GetChildren() do if child:IsA("GuiObject") then child:Destroy() end end
+    for i,spec in {{"channels","채널"},{"roles","역할"},{"people","사용자"},{"settings","저장 상태"}} do tabs[i].BackgroundColor3=if page==spec[1] then C.accent else C.surface end
+    if not state.storage.ready then
+        note(state.storage.error or "저장소 연결 중입니다.",90)
+        row("저장소 다시 연결",function() call("refresh") end)
+        return
+    end
+    if page=="channels" then
+        note("채널 설정  /  이름 · 접근 권한",40)
+        if state.canCreate then row("+ 채널 만들기",function() prompt("채널 만들기","",function(name) call("create_channel",{name=name}) end) end,C.accent) end
+        local entry=nil
+        for _,channel in state.channels do
+            if channel.canManage then
+                row((if selectedChannel==channel.id then "●  " else "#  ")..channel.name,function() selectedChannel=channel.id;render() end)
+                if channel.id==selectedChannel then entry=channel end
+            end
+        end
+        if not entry then note("관리할 채널을 선택하세요.");return end
+        note("# "..entry.name.." 설정",40)
+        row("채널 이름 변경",function() prompt("채널 이름 변경",entry.name,function(name) call("rename_channel",{id=entry.id,name=name}) end) end)
+        if not entry.builtin then row("채널 삭제",function() prompt("채널 삭제",nil,function() call("delete_channel",{id=entry.id}) end) end,C.red) end
+        note("역할 허용은 합산됩니다. 비공개 채널은 member 읽기를 먼저 해제하세요.",46)
+        for _,id in roleIds() do
+            local role=state.permissions.roles[id]
+            note(role.name.."  ("..id..")",32)
+            for _,spec in {{"read","읽기"},{"write","쓰기"},{"manage","관리"}} do
+                local value=entry.acl[spec[1]][id]==true
+                row((if value then "[허용] " else "[미허용] ")..spec[2],function() call("set_channel_access",{id=entry.id,roleId=id,mode=spec[1],enabled=not value}) end)
+            end
+        end
+    elseif page=="roles" then
+        if not state.canManageRoles then note("역할 관리 권한이 없습니다.");return end
+        note("역할 관리",40)
+        for _,id in roleIds() do row((if selectedRole==id then "●  " else "○  ")..state.permissions.roles[id].name,function() selectedRole=id;render() end) end
+        local role=state.permissions.roles[selectedRole]
+        if role then
+            note("선택: "..role.name.."  / "..selectedRole,40)
+            if role.protected then note("기본 역할은 수정·삭제할 수 없습니다.",40)
+            else
+                row("역할 이름 변경",function() prompt("역할 이름 변경",role.name,function(name) call("rename_role",{roleId=selectedRole,name=name}) end) end)
+                for _,spec in perms do row((if role.permissions[spec[1]] then "[허용] " else "[미허용] ")..spec[2],function() call("set_permission",{roleId=selectedRole,permission=spec[1],enabled=not role.permissions[spec[1]]}) end) end
+                row("역할 삭제",function() prompt("역할 삭제",nil,function() if call("delete_role",{roleId=selectedRole}) then selectedRole="member";render() end end) end,C.red)
+            end
+        end
+        note("새 역할 · ID는 영문 소문자/숫자/밑줄 3~24자",44)
+        local roleId=input(body,"예: medic")
+        local roleName=input(body,"역할 표시 이름")
+        row("+ 역할 생성",function() call("create_role",{roleId=roleId.Text,name=roleName.Text,permissions={}}) end,C.accent)
+    elseif page=="people" then
+        if not state.canManageRoles then note("역할 배정 권한이 없습니다.");return end
+        note("역할 탭에서 선택한 역할: "..selectedRole,40)
+        for _,person in state.permissions.people do
+            local assigned=table.find(person.roles,selectedRole)~=nil
+            row("@"..person.name.."  · "..(if assigned then "역할 제거" else "역할 부여"),function() call(if assigned then "remove_role" else "assign_role",{userId=person.userId,roleId=selectedRole}) end)
+        end
+        note("오프라인 사용자도 Roblox 숫자 UserId로 배정할 수 있습니다.",46)
+        local userId=input(body,"숫자 UserId")
+        row("선택 역할 부여",function() call("assign_role",{userId=tonumber(userId.Text),roleId=selectedRole}) end,C.accent)
+        row("선택 역할 제거",function() call("remove_role",{userId=tonumber(userId.Text),roleId=selectedRole}) end)
+    else
+        note("저장소 연결 완료 · 리비전 "..state.revision,40)
+        note("저장소: "..state.storage.store,46)
+        note("설정은 서버 재시작 후 복원됩니다. 메시지 내용·채팅 기록은 저장하지 않습니다.",70)
+        note("서버 간 변경은 알림과 주기적 새로고침으로 반영됩니다. 동시 수정은 충돌 시 거부됩니다.",80)
+        row("최신 저장 데이터 새로고침",function() call("refresh") end)
+    end
+end
+plus.Activated:Connect(function()
+    if state.canCreate and state.storage.ready then prompt("채널 만들기","",function(name) call("create_channel",{name=name}) end) end
+end)
+open.Activated:Connect(function()
+    overlay.Visible=not overlay.Visible
+    if overlay.Visible then selectedChannel=window:GetAttribute("SelectedChannel") or selectedChannel;refresh() end
+end)
+changed.OnClientEvent:Connect(function() task.delay(0.65,refresh) end)
+window:GetPropertyChangedSignal("Visible"):Connect(function() if not window.Visible then modal.Visible=false;overlay.Visible=false;modalInput:ReleaseFocus(false) end end)
+render();plus.Visible=false
+task.delay(0.6,refresh)
+</ProtectedString><bool name="Disabled">false</bool></Properties></Item></Item>
 		<Item class="StarterCharacterScripts" referent="RBX280decb0b2774230b3f4a5d109ab505e">
 			<Properties>
-				<BinaryString name="AttributesSerialize"></BinaryString>
+				<BinaryString name="AttributesSerialize" />
 				<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 				<bool name="DefinesCapabilities">false</bool>
 				<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
 				<string name="Name">StarterCharacterScripts</string>
-				<BinaryString name="SerializedOverrides"></BinaryString>
+				<BinaryString name="SerializedOverrides" />
 				<int64 name="SourceAssetId">-1</int64>
 				<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 				<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca8000003df</UniqueId>
@@ -2836,12 +3169,12 @@ print("[MilitaryMessenger] 클라이언트 UI 시작 완료")]]></ProtectedStrin
 	</Item>
 	<Item class="StarterPack" referent="RBX99998dcfba984e3e98c610b3ddd6df77">
 		<Properties>
-			<BinaryString name="AttributesSerialize"></BinaryString>
+			<BinaryString name="AttributesSerialize" />
 			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 			<bool name="DefinesCapabilities">false</bool>
 			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
 			<string name="Name">StarterPack</string>
-			<BinaryString name="SerializedOverrides"></BinaryString>
+			<BinaryString name="SerializedOverrides" />
 			<int64 name="SourceAssetId">-1</int64>
 			<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 			<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca800000388</UniqueId>
@@ -2857,12 +3190,12 @@ print("[MilitaryMessenger] 클라이언트 UI 시작 완료")]]></ProtectedStrin
 			<Ref name="StudioDefaultStyleSheet">null</Ref>
 			<Ref name="StudioInsertWidgetLayerCollectorAutoLinkStyleSheet">null</Ref>
 			<token name="VirtualCursorMode">0</token>
-			<BinaryString name="AttributesSerialize"></BinaryString>
+			<BinaryString name="AttributesSerialize" />
 			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 			<bool name="DefinesCapabilities">false</bool>
 			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
 			<string name="Name">StarterGui</string>
-			<BinaryString name="SerializedOverrides"></BinaryString>
+			<BinaryString name="SerializedOverrides" />
 			<int64 name="SourceAssetId">-1</int64>
 			<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 			<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca800000389</UniqueId>
@@ -2870,12 +3203,12 @@ print("[MilitaryMessenger] 클라이언트 UI 시작 완료")]]></ProtectedStrin
 	</Item>
 	<Item class="LocalizationService" referent="RBXfa499faab4ad4323b2d756d45c907316">
 		<Properties>
-			<BinaryString name="AttributesSerialize"></BinaryString>
+			<BinaryString name="AttributesSerialize" />
 			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 			<bool name="DefinesCapabilities">false</bool>
 			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
 			<string name="Name">LocalizationService</string>
-			<BinaryString name="SerializedOverrides"></BinaryString>
+			<BinaryString name="SerializedOverrides" />
 			<int64 name="SourceAssetId">-1</int64>
 			<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 			<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca80000038b</UniqueId>
@@ -2883,12 +3216,12 @@ print("[MilitaryMessenger] 클라이언트 UI 시작 완료")]]></ProtectedStrin
 	</Item>
 	<Item class="TeleportService" referent="RBXb67beacc3a054323b41f64e8d158fba6">
 		<Properties>
-			<BinaryString name="AttributesSerialize"></BinaryString>
+			<BinaryString name="AttributesSerialize" />
 			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 			<bool name="DefinesCapabilities">false</bool>
 			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
 			<string name="Name">Teleport Service</string>
-			<BinaryString name="SerializedOverrides"></BinaryString>
+			<BinaryString name="SerializedOverrides" />
 			<int64 name="SourceAssetId">-1</int64>
 			<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 			<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca80000038f</UniqueId>
@@ -2896,12 +3229,12 @@ print("[MilitaryMessenger] 클라이언트 UI 시작 완료")]]></ProtectedStrin
 	</Item>
 	<Item class="PhysicsService" referent="RBX771ca5482cd44079a3cdfbfb1a75d8c5">
 		<Properties>
-			<BinaryString name="AttributesSerialize"></BinaryString>
+			<BinaryString name="AttributesSerialize" />
 			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 			<bool name="DefinesCapabilities">false</bool>
 			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
 			<string name="Name">PhysicsService</string>
-			<BinaryString name="SerializedOverrides"></BinaryString>
+			<BinaryString name="SerializedOverrides" />
 			<int64 name="SourceAssetId">-1</int64>
 			<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 			<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca800000391</UniqueId>
@@ -2910,12 +3243,12 @@ print("[MilitaryMessenger] 클라이언트 UI 시작 완료")]]></ProtectedStrin
 	<Item class="InsertService" referent="RBXa1415e8ad7804372a5da0f6ae8073421">
 		<Properties>
 			<bool name="AllowInsertFreeModels">false</bool>
-			<BinaryString name="AttributesSerialize"></BinaryString>
+			<BinaryString name="AttributesSerialize" />
 			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 			<bool name="DefinesCapabilities">false</bool>
 			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
 			<string name="Name">InsertService</string>
-			<BinaryString name="SerializedOverrides"></BinaryString>
+			<BinaryString name="SerializedOverrides" />
 			<int64 name="SourceAssetId">-1</int64>
 			<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 			<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca800000394</UniqueId>
@@ -2923,12 +3256,12 @@ print("[MilitaryMessenger] 클라이언트 UI 시작 완료")]]></ProtectedStrin
 		<Item class="StringValue" referent="RBXf0b9704b4e0843d3947137b562e250f1">
 			<Properties>
 				<string name="Value">{85d7605a-f7b8-4a9d-99d1-82e69e01f512}</string>
-				<BinaryString name="AttributesSerialize"></BinaryString>
+				<BinaryString name="AttributesSerialize" />
 				<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 				<bool name="DefinesCapabilities">false</bool>
 				<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
 				<string name="Name">InsertionHash</string>
-				<BinaryString name="SerializedOverrides"></BinaryString>
+				<BinaryString name="SerializedOverrides" />
 				<int64 name="SourceAssetId">-1</int64>
 				<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 				<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca800001258</UniqueId>
@@ -2937,12 +3270,12 @@ print("[MilitaryMessenger] 클라이언트 UI 시작 완료")]]></ProtectedStrin
 	</Item>
 	<Item class="GamePassService" referent="RBX9e96af3b9c384a17ac6e27247aa228e3">
 		<Properties>
-			<BinaryString name="AttributesSerialize"></BinaryString>
+			<BinaryString name="AttributesSerialize" />
 			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 			<bool name="DefinesCapabilities">false</bool>
 			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
 			<string name="Name">GamePassService</string>
-			<BinaryString name="SerializedOverrides"></BinaryString>
+			<BinaryString name="SerializedOverrides" />
 			<int64 name="SourceAssetId">-1</int64>
 			<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 			<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca800000395</UniqueId>
@@ -2951,12 +3284,12 @@ print("[MilitaryMessenger] 클라이언트 UI 시작 완료")]]></ProtectedStrin
 	<Item class="Debris" referent="RBXa22694bbe4df4975b793a35a5016c287">
 		<Properties>
 			<int name="MaxItems">1000</int>
-			<BinaryString name="AttributesSerialize"></BinaryString>
+			<BinaryString name="AttributesSerialize" />
 			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 			<bool name="DefinesCapabilities">false</bool>
 			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
 			<string name="Name">Debris</string>
-			<BinaryString name="SerializedOverrides"></BinaryString>
+			<BinaryString name="SerializedOverrides" />
 			<int64 name="SourceAssetId">-1</int64>
 			<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 			<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca800000396</UniqueId>
@@ -2964,12 +3297,12 @@ print("[MilitaryMessenger] 클라이언트 UI 시작 완료")]]></ProtectedStrin
 	</Item>
 	<Item class="CookiesService" referent="RBXd3bbd216072045ea8c1a75d4e6b6879d">
 		<Properties>
-			<BinaryString name="AttributesSerialize"></BinaryString>
+			<BinaryString name="AttributesSerialize" />
 			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 			<bool name="DefinesCapabilities">false</bool>
 			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
 			<string name="Name">CookiesService</string>
-			<BinaryString name="SerializedOverrides"></BinaryString>
+			<BinaryString name="SerializedOverrides" />
 			<int64 name="SourceAssetId">-1</int64>
 			<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 			<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca800000397</UniqueId>
@@ -2977,12 +3310,12 @@ print("[MilitaryMessenger] 클라이언트 UI 시작 완료")]]></ProtectedStrin
 	</Item>
 	<Item class="Selection" referent="RBX568f8a3460dd42de9dd689fb7880bb35">
 		<Properties>
-			<BinaryString name="AttributesSerialize"></BinaryString>
+			<BinaryString name="AttributesSerialize" />
 			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 			<bool name="DefinesCapabilities">false</bool>
 			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
 			<string name="Name">Selection</string>
-			<BinaryString name="SerializedOverrides"></BinaryString>
+			<BinaryString name="SerializedOverrides" />
 			<int64 name="SourceAssetId">-1</int64>
 			<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 			<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca800000398</UniqueId>
@@ -2995,12 +3328,12 @@ print("[MilitaryMessenger] 클라이언트 UI 시작 완료")]]></ProtectedStrin
 			<token name="ControllerModels">1</token>
 			<bool name="FadeOutViewOnCollision">true</bool>
 			<token name="LaserPointer">1</token>
-			<BinaryString name="AttributesSerialize"></BinaryString>
+			<BinaryString name="AttributesSerialize" />
 			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 			<bool name="DefinesCapabilities">false</bool>
 			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
 			<string name="Name">VRService</string>
-			<BinaryString name="SerializedOverrides"></BinaryString>
+			<BinaryString name="SerializedOverrides" />
 			<int64 name="SourceAssetId">-1</int64>
 			<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 			<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca80000039c</UniqueId>
@@ -3008,12 +3341,12 @@ print("[MilitaryMessenger] 클라이언트 UI 시작 완료")]]></ProtectedStrin
 	</Item>
 	<Item class="ContextActionService" referent="RBX59a20db6d85c42f4929b659747991432">
 		<Properties>
-			<BinaryString name="AttributesSerialize"></BinaryString>
+			<BinaryString name="AttributesSerialize" />
 			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 			<bool name="DefinesCapabilities">false</bool>
 			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
 			<string name="Name">ContextActionService</string>
-			<BinaryString name="SerializedOverrides"></BinaryString>
+			<BinaryString name="SerializedOverrides" />
 			<int64 name="SourceAssetId">-1</int64>
 			<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 			<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca80000039d</UniqueId>
@@ -3021,12 +3354,12 @@ print("[MilitaryMessenger] 클라이언트 UI 시작 완료")]]></ProtectedStrin
 	</Item>
 	<Item class="ScriptService" referent="RBX674b5482c581459cb6e2419dc4ae3ae4">
 		<Properties>
-			<BinaryString name="AttributesSerialize"></BinaryString>
+			<BinaryString name="AttributesSerialize" />
 			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 			<bool name="DefinesCapabilities">false</bool>
 			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
 			<string name="Name">ScriptService</string>
-			<BinaryString name="SerializedOverrides"></BinaryString>
+			<BinaryString name="SerializedOverrides" />
 			<int64 name="SourceAssetId">-1</int64>
 			<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 			<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca80000039e</UniqueId>
@@ -3035,12 +3368,12 @@ print("[MilitaryMessenger] 클라이언트 UI 시작 완료")]]></ProtectedStrin
 	<Item class="AssetService" referent="RBXe355d96fee9340c49202b2e2b74c0748">
 		<Properties>
 			<bool name="AllowInsertFreeAssets">false</bool>
-			<BinaryString name="AttributesSerialize"></BinaryString>
+			<BinaryString name="AttributesSerialize" />
 			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 			<bool name="DefinesCapabilities">false</bool>
 			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
 			<string name="Name">AssetService</string>
-			<BinaryString name="SerializedOverrides"></BinaryString>
+			<BinaryString name="SerializedOverrides" />
 			<int64 name="SourceAssetId">-1</int64>
 			<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 			<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca80000039f</UniqueId>
@@ -3048,12 +3381,12 @@ print("[MilitaryMessenger] 클라이언트 UI 시작 완료")]]></ProtectedStrin
 	</Item>
 	<Item class="TouchInputService" referent="RBX835dbdc6536844a38910e36c508a2311">
 		<Properties>
-			<BinaryString name="AttributesSerialize"></BinaryString>
+			<BinaryString name="AttributesSerialize" />
 			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 			<bool name="DefinesCapabilities">false</bool>
 			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
 			<string name="Name">TouchInputService</string>
-			<BinaryString name="SerializedOverrides"></BinaryString>
+			<BinaryString name="SerializedOverrides" />
 			<int64 name="SourceAssetId">-1</int64>
 			<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 			<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca8000003a1</UniqueId>
@@ -3062,12 +3395,12 @@ print("[MilitaryMessenger] 클라이언트 UI 시작 완료")]]></ProtectedStrin
 	<Item class="AvatarSettings" referent="RBXe85f74be2a53460888208fd77a64ec35">
 		<Properties>
 			<int name="RulesSchemaVersion">0</int>
-			<BinaryString name="AttributesSerialize"></BinaryString>
+			<BinaryString name="AttributesSerialize" />
 			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 			<bool name="DefinesCapabilities">false</bool>
 			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
 			<string name="Name">AvatarSettings</string>
-			<BinaryString name="SerializedOverrides"></BinaryString>
+			<BinaryString name="SerializedOverrides" />
 			<int64 name="SourceAssetId">-1</int64>
 			<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 			<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca8000003a7</UniqueId>
@@ -3075,12 +3408,12 @@ print("[MilitaryMessenger] 클라이언트 UI 시작 완료")]]></ProtectedStrin
 		<Item class="AvatarRules" referent="RBX76dc2a26a63646afa61c5002815dc406">
 			<Properties>
 				<token name="AvatarType">1</token>
-				<BinaryString name="AttributesSerialize"></BinaryString>
+				<BinaryString name="AttributesSerialize" />
 				<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 				<bool name="DefinesCapabilities">false</bool>
 				<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
 				<string name="Name">DefaultAvatarRules</string>
-				<BinaryString name="SerializedOverrides"></BinaryString>
+				<BinaryString name="SerializedOverrides" />
 				<int64 name="SourceAssetId">-1</int64>
 				<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 				<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca800000d4f</UniqueId>
@@ -3132,12 +3465,12 @@ print("[MilitaryMessenger] 클라이언트 UI 시작 완료")]]></ProtectedStrin
 					<int64 name="RightLegOverride">0</int64>
 					<token name="ScaleMode">0</token>
 					<int64 name="TorsoOverride">0</int64>
-					<BinaryString name="AttributesSerialize"></BinaryString>
+					<BinaryString name="AttributesSerialize" />
 					<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 					<bool name="DefinesCapabilities">false</bool>
 					<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
 					<string name="Name">AvatarBodyRules</string>
-					<BinaryString name="SerializedOverrides"></BinaryString>
+					<BinaryString name="SerializedOverrides" />
 					<int64 name="SourceAssetId">-1</int64>
 					<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 					<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca800000d50</UniqueId>
@@ -3153,12 +3486,12 @@ print("[MilitaryMessenger] 클라이언트 UI 시작 완료")]]></ProtectedStrin
 						<Y>3</Y>
 						<Z>1</Z>
 					</Vector3>
-					<BinaryString name="AttributesSerialize"></BinaryString>
+					<BinaryString name="AttributesSerialize" />
 					<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 					<bool name="DefinesCapabilities">false</bool>
 					<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
 					<string name="Name">AvatarCollisionRules</string>
-					<BinaryString name="SerializedOverrides"></BinaryString>
+					<BinaryString name="SerializedOverrides" />
 					<int64 name="SourceAssetId">-1</int64>
 					<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 					<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca800000d51</UniqueId>
@@ -3179,12 +3512,12 @@ print("[MilitaryMessenger] 클라이언트 UI 시작 완료")]]></ProtectedStrin
 					<bool name="EnableSprinting">true</bool>
 					<bool name="EnableSwimming">true</bool>
 					<bool name="EnableTurning">true</bool>
-					<BinaryString name="AttributesSerialize"></BinaryString>
+					<BinaryString name="AttributesSerialize" />
 					<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 					<bool name="DefinesCapabilities">false</bool>
 					<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
 					<string name="Name">AvatarAbilityRules</string>
-					<BinaryString name="SerializedOverrides"></BinaryString>
+					<BinaryString name="SerializedOverrides" />
 					<int64 name="SourceAssetId">-1</int64>
 					<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 					<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca800000d52</UniqueId>
@@ -3224,12 +3557,12 @@ print("[MilitaryMessenger] 클라이언트 UI 시작 완료")]]></ProtectedStrin
 					<int64 name="SwimAnimationOverride">0</int64>
 					<int64 name="SwimIdleAnimationOverride">0</int64>
 					<int64 name="WalkAnimationOverride">0</int64>
-					<BinaryString name="AttributesSerialize"></BinaryString>
+					<BinaryString name="AttributesSerialize" />
 					<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 					<bool name="DefinesCapabilities">false</bool>
 					<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
 					<string name="Name">AvatarAnimationRules</string>
-					<BinaryString name="SerializedOverrides"></BinaryString>
+					<BinaryString name="SerializedOverrides" />
 					<int64 name="SourceAssetId">-1</int64>
 					<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 					<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca800000d53</UniqueId>
@@ -3272,12 +3605,12 @@ print("[MilitaryMessenger] 클라이언트 UI 시작 완료")]]></ProtectedStrin
 					<int64 name="NeckAccessoryOverride">0</int64>
 					<int64 name="ShoulderAccessoryOverride">0</int64>
 					<int64 name="WaistAccessoryOverride">0</int64>
-					<BinaryString name="AttributesSerialize"></BinaryString>
+					<BinaryString name="AttributesSerialize" />
 					<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 					<bool name="DefinesCapabilities">false</bool>
 					<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
 					<string name="Name">AvatarAccessoryRules</string>
-					<BinaryString name="SerializedOverrides"></BinaryString>
+					<BinaryString name="SerializedOverrides" />
 					<int64 name="SourceAssetId">-1</int64>
 					<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 					<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca800000d54</UniqueId>
@@ -3328,12 +3661,12 @@ print("[MilitaryMessenger] 클라이언트 UI 시작 완료")]]></ProtectedStrin
 					<int64 name="ShortsAccessoryOverride">0</int64>
 					<int64 name="SweaterAccessoryOverride">0</int64>
 					<int64 name="TShirtAccessoryOverride">0</int64>
-					<BinaryString name="AttributesSerialize"></BinaryString>
+					<BinaryString name="AttributesSerialize" />
 					<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 					<bool name="DefinesCapabilities">false</bool>
 					<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
 					<string name="Name">AvatarClothingRules</string>
-					<BinaryString name="SerializedOverrides"></BinaryString>
+					<BinaryString name="SerializedOverrides" />
 					<int64 name="SourceAssetId">-1</int64>
 					<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 					<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca800000d55</UniqueId>
@@ -3347,12 +3680,12 @@ print("[MilitaryMessenger] 클라이언트 UI 시작 완료")]]></ProtectedStrin
 			<bool name="OverridesRecalculated">false</bool>
 			<int name="ShellPackagesCount">0</int>
 			<int name="SkippedInstancesCount">0</int>
-			<BinaryString name="AttributesSerialize"></BinaryString>
+			<BinaryString name="AttributesSerialize" />
 			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 			<bool name="DefinesCapabilities">false</bool>
 			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
 			<string name="Name">Packages</string>
-			<BinaryString name="SerializedOverrides"></BinaryString>
+			<BinaryString name="SerializedOverrides" />
 			<int64 name="SourceAssetId">-1</int64>
 			<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 			<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca8000003ab</UniqueId>
@@ -3360,12 +3693,12 @@ print("[MilitaryMessenger] 클라이언트 UI 시작 완료")]]></ProtectedStrin
 	</Item>
 	<Item class="GuidRegistryService" referent="RBXd7a9b709851148b1befb61f87b5dd775">
 		<Properties>
-			<BinaryString name="AttributesSerialize"></BinaryString>
+			<BinaryString name="AttributesSerialize" />
 			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 			<bool name="DefinesCapabilities">false</bool>
 			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
 			<string name="Name">GuidRegistryService</string>
-			<BinaryString name="SerializedOverrides"></BinaryString>
+			<BinaryString name="SerializedOverrides" />
 			<int64 name="SourceAssetId">-1</int64>
 			<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 			<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca8000003ac</UniqueId>
@@ -3373,12 +3706,12 @@ print("[MilitaryMessenger] 클라이언트 UI 시작 완료")]]></ProtectedStrin
 	</Item>
 	<Item class="LuaWebService" referent="RBX0a615d46358a4027bfb59cf8201dd1cf">
 		<Properties>
-			<BinaryString name="AttributesSerialize"></BinaryString>
+			<BinaryString name="AttributesSerialize" />
 			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 			<bool name="DefinesCapabilities">false</bool>
 			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
 			<string name="Name">LuaWebService</string>
-			<BinaryString name="SerializedOverrides"></BinaryString>
+			<BinaryString name="SerializedOverrides" />
 			<int64 name="SourceAssetId">-1</int64>
 			<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 			<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca8000003b3</UniqueId>
@@ -3386,12 +3719,12 @@ print("[MilitaryMessenger] 클라이언트 UI 시작 완료")]]></ProtectedStrin
 	</Item>
 	<Item class="ProcessInstancePhysicsService" referent="RBXad668361a3dc40af9a17384530a0d0b0">
 		<Properties>
-			<BinaryString name="AttributesSerialize"></BinaryString>
+			<BinaryString name="AttributesSerialize" />
 			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 			<bool name="DefinesCapabilities">false</bool>
 			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
 			<string name="Name">ProcessInstancePhysicsService</string>
-			<BinaryString name="SerializedOverrides"></BinaryString>
+			<BinaryString name="SerializedOverrides" />
 			<int64 name="SourceAssetId">-1</int64>
 			<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 			<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca8000003b4</UniqueId>
@@ -3399,12 +3732,12 @@ print("[MilitaryMessenger] 클라이언트 UI 시작 완료")]]></ProtectedStrin
 	</Item>
 	<Item class="ReplicatedStorage" referent="RBX3">
 		<Properties>
-			<BinaryString name="AttributesSerialize"></BinaryString>
+			<BinaryString name="AttributesSerialize" />
 			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 			<bool name="DefinesCapabilities">false</bool>
 			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
 			<string name="Name">ReplicatedStorage</string>
-			<BinaryString name="SerializedOverrides"></BinaryString>
+			<BinaryString name="SerializedOverrides" />
 			<int64 name="SourceAssetId">-1</int64>
 			<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 			<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca8000003b5</UniqueId>
@@ -3416,20 +3749,20 @@ print("[MilitaryMessenger] 클라이언트 UI 시작 완료")]]></ProtectedStrin
 					<G>0</G>
 					<B>0</B>
 				</Color3>
-				<BinaryString name="AttributesSerialize"></BinaryString>
+				<BinaryString name="AttributesSerialize" />
 				<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 				<bool name="DefinesCapabilities">false</bool>
 				<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
 				<string name="Name">Shared</string>
-				<BinaryString name="SerializedOverrides"></BinaryString>
+				<BinaryString name="SerializedOverrides" />
 				<int64 name="SourceAssetId">-1</int64>
 				<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 				<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca8000003d5</UniqueId>
 			</Properties>
 			<Item class="ModuleScript" referent="RBX39fe3772a6d744ea87e572aa954223dd">
 				<Properties>
-					<Content name="LinkedSource"><null></null></Content>
-					<ProtectedString name="Source"><![CDATA[--!strict
+					<Content name="LinkedSource"><null /></Content>
+					<ProtectedString name="Source">--!strict
 export type Rank = {read id: string, read name: string, read category: string, read order: number, read color: {number}, read symbol: string, read marks: number}
 local definitions: {{string}} = {
     {"trainee", "훈련병", "훈련병"},
@@ -3463,12 +3796,12 @@ local byId: {[string]: Rank} = {}
 for order, entry in definitions do
     local symbol="training"
     local marks=0
-    if order >= 2 and order <= 5 then symbol="bars"; marks=order-1
-    elseif order >= 6 and order <= 9 then symbol="chevrons"; marks=math.min(3,order-5)
+    if order &gt;= 2 and order &lt;= 5 then symbol="bars"; marks=order-1
+    elseif order &gt;= 6 and order &lt;= 9 then symbol="chevrons"; marks=math.min(3,order-5)
     elseif order == 10 then symbol="diamond"; marks=1
-    elseif order <= 13 and order >= 11 then symbol="diamond"; marks=order-10
-    elseif order <= 16 and order >= 14 then symbol="flower"; marks=order-13
-    elseif order >= 17 then symbol="star"; marks=order-16 end
+    elseif order &lt;= 13 and order &gt;= 11 then symbol="diamond"; marks=order-10
+    elseif order &lt;= 16 and order &gt;= 14 then symbol="flower"; marks=order-13
+    elseif order &gt;= 17 then symbol="star"; marks=order-16 end
     local rank: Rank = {id=entry[1], name=entry[2], category=entry[3],
         order=order, color=table.clone(colors[entry[3]]), symbol=symbol, marks=marks}
     table.freeze(rank.color)
@@ -3484,14 +3817,14 @@ function Catalog.find(id: any): Rank?
     return byId[id]
 end
 return table.freeze(Catalog)
-]]></ProtectedString>
+</ProtectedString>
 					<string name="ScriptGuid">{46995774-7e9d-48db-8bc6-b5573bee2b0f}</string>
-					<BinaryString name="AttributesSerialize"></BinaryString>
+					<BinaryString name="AttributesSerialize" />
 					<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 					<bool name="DefinesCapabilities">false</bool>
 					<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
 					<string name="Name">RankCatalog</string>
-					<BinaryString name="SerializedOverrides"></BinaryString>
+					<BinaryString name="SerializedOverrides" />
 					<int64 name="SourceAssetId">-1</int64>
 					<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 					<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca800000f55</UniqueId>
@@ -3502,19 +3835,19 @@ return table.freeze(Catalog)
 	<Item class="ServerScriptService" referent="RBX5">
 		<Properties>
 			<bool name="LoadStringEnabled">false</bool>
-			<BinaryString name="AttributesSerialize"></BinaryString>
+			<BinaryString name="AttributesSerialize" />
 			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 			<bool name="DefinesCapabilities">false</bool>
 			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
 			<string name="Name">ServerScriptService</string>
-			<BinaryString name="SerializedOverrides"></BinaryString>
+			<BinaryString name="SerializedOverrides" />
 			<int64 name="SourceAssetId">-1</int64>
 			<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 			<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca8000003b6</UniqueId>
 		</Properties>
 		<Item class="Script" referent="RBX11">
 			<Properties>
-				<ProtectedString name="Source"><![CDATA[--!strict
+				<ProtectedString name="Source">--!strict
 local Players=game:GetService("Players")
 local RankService=require(script.Parent:WaitForChild("RankService"))
 -- Rank metadata is independent of Roblox Teams; no units or team selection yet.
@@ -3523,17 +3856,17 @@ Players.PlayerRemoving:Connect(RankService.remove)
 for _,player in Players:GetPlayers() do RankService.add(player) end
 
 require(script.Parent:WaitForChild("RankCommands")).start()
-]]></ProtectedString>
-				<bool name="Disabled">true</bool>
-				<Content name="LinkedSource"><null></null></Content>
+</ProtectedString>
+				<bool name="Disabled">false</bool>
+				<Content name="LinkedSource"><null /></Content>
 				<token name="RunContext">0</token>
 				<string name="ScriptGuid">{01e0c560-b0a9-42e2-b9c6-4a45547cafb2}</string>
-				<BinaryString name="AttributesSerialize"></BinaryString>
+				<BinaryString name="AttributesSerialize" />
 				<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 				<bool name="DefinesCapabilities">false</bool>
 				<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
 				<string name="Name">Main</string>
-				<BinaryString name="SerializedOverrides"></BinaryString>
+				<BinaryString name="SerializedOverrides" />
 				<int64 name="SourceAssetId">-1</int64>
 				<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 				<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca8000003d9</UniqueId>
@@ -3541,8 +3874,8 @@ require(script.Parent:WaitForChild("RankCommands")).start()
 		</Item>
 		<Item class="ModuleScript" referent="RBXd0c6c12386eb4d1abf75f7b2d176f056">
 			<Properties>
-				<Content name="LinkedSource"><null></null></Content>
-				<ProtectedString name="Source"><![CDATA[--!strict
+				<Content name="LinkedSource"><null /></Content>
+				<ProtectedString name="Source">--!strict
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Catalog = require(ReplicatedStorage:WaitForChild("Shared"):WaitForChild("RankCatalog"))
@@ -3560,7 +3893,7 @@ local function renderCharacter(player: Player, character: Model)
     if humanoid then humanoid.DisplayDistanceType=Enum.HumanoidDisplayDistanceType.None end
     local tag=Instance.new("BillboardGui")
     tag.Name="RankTag"; tag.Adornee=head; tag.Size=UDim2.fromOffset(180,88)
-    tag.StudsOffsetWorldSpace=Vector3.new(0,2.7,0); tag.MaxDistance=25; tag.AlwaysOnTop=false
+    tag.StudsOffsetWorldSpace=Vector3.new(0,2.7,0); tag.MaxDistance=100; tag.AlwaysOnTop=true
     tag.Parent=head
     local identity=Instance.new("TextLabel")
     identity.Name="Identity"; identity.Size=UDim2.new(1,0,0,26); identity.Position=UDim2.fromOffset(0,0)
@@ -3601,25 +3934,15 @@ end
 -- Server-only assignment API for later gameplay systems; no permission or promotion policy yet.
 -- Rank commands call this API on the server; clients cannot assign ranks directly.
 function RankService.set(player: Player, rankId: any): boolean
-	local rank = Catalog.find(rankId)
-
-	if player.Parent ~= Players or not rank then
-		return false
-	end
-
-	-- 계급 정보가 없다면 자동 초기화
-	if not states[player] then
-		RankService.add(player)
-	end
-
-	if not states[player] then
-		return false
-	end
-
-	states[player] = rank.id
-	publish(player, rank)
-
-	return true
+    local rank=Catalog.find(rankId)
+    if player.Parent ~= Players or not rank then return false end
+    -- Recover if the player joined before the rank initializer completed.
+    if not states[player] then RankService.add(player) end
+    if not states[player] then return false end
+    states[player]=rank.id
+    publish(player,rank)
+    if player.Character then task.spawn(renderCharacter,player,player.Character) end
+    return true
 end
 function RankService.get(player: Player): Rank?
     local id=states[player]
@@ -3628,17 +3951,19 @@ end
 function RankService.add(player: Player)
     if states[player] then return end
     states[player]=Catalog.DefaultId
-    local stats=Instance.new("Folder"); stats.Name="leaderstats"; stats.Parent=player
-    local value=Instance.new("StringValue"); value.Name="계급"; value.Parent=stats
+    local stats=player:FindFirstChild("leaderstats")
+    if not stats then stats=Instance.new("Folder"); stats.Name="leaderstats"; stats.Parent=player end
+    local value=stats:FindFirstChild("계급")
+    if not value then value=Instance.new("StringValue"); value.Name="계급"; value.Parent=stats end
     local rank=Catalog.find(Catalog.DefaultId)
     assert(rank,"Default rank must exist")
     publish(player,rank)
     connections[player]={
         player.CharacterAdded:Connect(function(character: Model)
-            renderCharacter(player,character)
+            task.spawn(renderCharacter,player,character)
         end),
         player.CharacterAppearanceLoaded:Connect(function(character: Model)
-            renderCharacter(player,character)
+            task.spawn(renderCharacter,player,character)
         end),
     }
     if player.Character then task.spawn(renderCharacter,player,player.Character) end
@@ -3652,14 +3977,14 @@ function RankService.remove(player: Player)
     states[player]=nil
 end
 return RankService
-]]></ProtectedString>
+</ProtectedString>
 				<string name="ScriptGuid">{cce76092-d590-4c61-be59-c471ec534c8f}</string>
-				<BinaryString name="AttributesSerialize"></BinaryString>
+				<BinaryString name="AttributesSerialize" />
 				<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 				<bool name="DefinesCapabilities">false</bool>
 				<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
 				<string name="Name">RankService</string>
-				<BinaryString name="SerializedOverrides"></BinaryString>
+				<BinaryString name="SerializedOverrides" />
 				<int64 name="SourceAssetId">-1</int64>
 				<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 				<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca800000f58</UniqueId>
@@ -3667,8 +3992,8 @@ return RankService
 		</Item>
 		<Item class="ModuleScript" referent="RBXc964fa98844d4e58a27bb6060e918a13">
 			<Properties>
-				<Content name="LinkedSource"><null></null></Content>
-				<ProtectedString name="Source"><![CDATA[--!strict
+				<Content name="LinkedSource"><null /></Content>
+				<ProtectedString name="Source">--!strict
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Catalog = require(ReplicatedStorage:WaitForChild("Shared"):WaitForChild("RankCatalog"))
 type Rank = Catalog.Rank
@@ -3705,14 +4030,14 @@ function Insignia.render(tag: Instance, rank: Rank)
     image.Parent = plate
 end
 return Insignia
-]]></ProtectedString>
+</ProtectedString>
 				<string name="ScriptGuid">{6b7b055f-7876-4d3a-9563-21e6b1ea6d00}</string>
-				<BinaryString name="AttributesSerialize"></BinaryString>
+				<BinaryString name="AttributesSerialize" />
 				<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 				<bool name="DefinesCapabilities">false</bool>
 				<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
 				<string name="Name">RankInsignia</string>
-				<BinaryString name="SerializedOverrides"></BinaryString>
+				<BinaryString name="SerializedOverrides" />
 				<int64 name="SourceAssetId">-1</int64>
 				<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 				<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca800000f5a</UniqueId>
@@ -3720,16 +4045,16 @@ return Insignia
 		</Item>
 		<Item class="ModuleScript" referent="RBX8d14c6b162fe493695e5f9f861e5f7c4">
 			<Properties>
-				<Content name="LinkedSource"><null></null></Content>
-				<ProtectedString name="Source"><![CDATA[--!strict
+				<Content name="LinkedSource"><null /></Content>
+				<ProtectedString name="Source">--!strict
 export type Command = {kind: string, target: string?, rank: string?}
 local Parser={}
 function Parser.parse(message: any): Command?
-    if type(message) ~= "string" or #message > 256 then return nil end
+    if type(message) ~= "string" or #message &gt; 256 then return nil end
     local words: {string}={}
     for word in string.gmatch(message,"%S+") do
         table.insert(words,word)
-        if #words > 3 then return nil end
+        if #words &gt; 3 then return nil end
     end
     local alias=string.lower(words[1] or "")
     if alias=="/계급목록" or alias=="/ranks" then
@@ -3741,14 +4066,14 @@ function Parser.parse(message: any): Command?
     return nil
 end
 return table.freeze(Parser)
-]]></ProtectedString>
+</ProtectedString>
 				<string name="ScriptGuid">{9a72c432-67a1-4a78-85fb-272afd6b0d86}</string>
-				<BinaryString name="AttributesSerialize"></BinaryString>
+				<BinaryString name="AttributesSerialize" />
 				<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 				<bool name="DefinesCapabilities">false</bool>
 				<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
 				<string name="Name">RankCommandParser</string>
-				<BinaryString name="SerializedOverrides"></BinaryString>
+				<BinaryString name="SerializedOverrides" />
 				<int64 name="SourceAssetId">-1</int64>
 				<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 				<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca800000f5c</UniqueId>
@@ -3756,8 +4081,8 @@ return table.freeze(Parser)
 		</Item>
 		<Item class="ModuleScript" referent="RBX7c6bbcabd7e84de78922065eae2df9a0">
 			<Properties>
-				<Content name="LinkedSource"><null></null></Content>
-				<ProtectedString name="Source"><![CDATA[--!strict
+				<Content name="LinkedSource"><null /></Content>
+				<ProtectedString name="Source">--!strict
 local Players=game:GetService("Players")
 local TextChatService=game:GetService("TextChatService")
 local ReplicatedStorage=game:GetService("ReplicatedStorage")
@@ -3777,7 +4102,7 @@ local function handle(actor: Player, text: any): (boolean, string)
         return false,"계급 변경 명령어는 제작자 전용입니다."
     end
     local now=os.clock()
-    if now-(lastCommand[actor] or -math.huge)<0.5 then return false,"잠시 후 다시 입력하세요." end
+    if now-(lastCommand[actor] or -math.huge)&lt;0.5 then return false,"잠시 후 다시 입력하세요." end
     lastCommand[actor]=now
     local command=Parser.parse(text)
     if not command then return false,"사용법: /계급 대위 또는 /계급 플레이어명 병장 · /계급목록" end
@@ -3830,14 +4155,14 @@ function Commands.start()
     Players.PlayerRemoving:Connect(function(player: Player) lastCommand[player]=nil end)
 end
 return Commands
-]]></ProtectedString>
+</ProtectedString>
 				<string name="ScriptGuid">{14aa79a6-2a24-4a94-9d39-7e01204858d8}</string>
-				<BinaryString name="AttributesSerialize"></BinaryString>
+				<BinaryString name="AttributesSerialize" />
 				<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 				<bool name="DefinesCapabilities">false</bool>
 				<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
 				<string name="Name">RankCommands</string>
-				<BinaryString name="SerializedOverrides"></BinaryString>
+				<BinaryString name="SerializedOverrides" />
 				<int64 name="SourceAssetId">-1</int64>
 				<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 				<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca800000f5e</UniqueId>
@@ -3845,29 +4170,29 @@ return Commands
 		</Item>
 		<Item class="ModuleScript" referent="RBX15cc9104ec8e46d6a65f7e1bb4b1dc87">
 			<Properties>
-				<Content name="LinkedSource"><null></null></Content>
-				<ProtectedString name="Source"><![CDATA[--!strict
+				<Content name="LinkedSource"><null /></Content>
+				<ProtectedString name="Source">--!strict
 local Audit = {}
 local entries = {}
 Audit.Changed = Instance.new("BindableEvent")
 function Audit.record(actor: Player, command: string, ok: boolean, message: string)
     local entry = {name = actor.Name, command = string.sub(command, 1, 256), ok = ok, message = message, time = os.time()}
     table.insert(entries, entry)
-    if #entries > 60 then table.remove(entries, 1) end
+    if #entries &gt; 60 then table.remove(entries, 1) end
     Audit.Changed:Fire(entry)
 end
 function Audit.snapshot()
     return table.clone(entries)
 end
 return Audit
-]]></ProtectedString>
+</ProtectedString>
 				<string name="ScriptGuid">{84af9630-8985-4dd7-9e92-bef1f3f072ae}</string>
-				<BinaryString name="AttributesSerialize"></BinaryString>
+				<BinaryString name="AttributesSerialize" />
 				<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 				<bool name="DefinesCapabilities">false</bool>
 				<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
 				<string name="Name">AdminAudit</string>
-				<BinaryString name="SerializedOverrides"></BinaryString>
+				<BinaryString name="SerializedOverrides" />
 				<int64 name="SourceAssetId">-1</int64>
 				<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 				<UniqueId name="UniqueId">714f218494dedcfd0ae79ad4000012db</UniqueId>
@@ -3875,8 +4200,8 @@ return Audit
 		</Item>
 		<Item class="ModuleScript" referent="RBX2f3718c02ea641958aec8a03bf73a5d7">
 			<Properties>
-				<Content name="LinkedSource"><null></null></Content>
-				<ProtectedString name="Source"><![CDATA[--!strict
+				<Content name="LinkedSource"><null /></Content>
+				<ProtectedString name="Source">--!strict
 local Players = game:GetService("Players")
 local Teams = game:GetService("Teams")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -3921,7 +4246,7 @@ local function setFlight(player: Player, enabled: boolean): (boolean, string)
     local character = player.Character
     local root = character and character:FindFirstChild("HumanoidRootPart")
     local humanoid = character and character:FindFirstChildOfClass("Humanoid")
-    if not root or not root:IsA("BasePart") or not humanoid or humanoid.Health <= 0 or root.Anchored or humanoid.SeatPart then
+    if not root or not root:IsA("BasePart") or not humanoid or humanoid.Health &lt;= 0 or root.Anchored or humanoid.SeatPart then
         return false, "살아 있고 앉아 있지 않은 캐릭터가 필요합니다."
     end
     local attachment = Instance.new("Attachment"); attachment.Name = "AdminFlightAttachment"; attachment.Parent = root
@@ -3950,16 +4275,16 @@ local function applyGod(player: Player)
     if previousField then previousField:Destroy() end
     if not player:GetAttribute("AdminGod") then return end
     local humanoid = character:FindFirstChildOfClass("Humanoid")
-    if not humanoid or humanoid.Health <= 0 then return end
+    if not humanoid or humanoid.Health &lt;= 0 then return end
     local field = Instance.new("ForceField"); field.Name="AdminGodForceField"; field.Visible=false; field.Parent=character
     humanoid.Health = humanoid.MaxHealth
     healthConnections[player] = humanoid.HealthChanged:Connect(function(health)
-        if health > 0 and health < humanoid.MaxHealth and player:GetAttribute("AdminGod") then humanoid.Health=humanoid.MaxHealth end
+        if health &gt; 0 and health &lt; humanoid.MaxHealth and player:GetAttribute("AdminGod") then humanoid.Health=humanoid.MaxHealth end
     end)
 end
 function Service.execute(actor: Player, text: any): (boolean, string)
     if typeof(actor) ~= "Instance" or not actor:IsA("Player") or not authorized(actor) then return false, "제작자 전용 기능입니다." end
-    if type(text) ~= "string" or #text > 256 or not utf8.len(text) then return false, "명령어는 256바이트 이내로 입력하세요." end
+    if type(text) ~= "string" or #text &gt; 256 or not utf8.len(text) then return false, "명령어는 256바이트 이내로 입력하세요." end
     local words: {string} = {}
     for word in string.gmatch(text, "%S+") do table.insert(words, word) end
     local verb = words[1]
@@ -4002,7 +4327,7 @@ function Service.start()
     request.OnServerEvent:Connect(function(actor: Player, action: any, text: any)
         if not authorized(actor) then return end
         local now=os.clock()
-        if now-(requests[actor] or -math.huge)<0.25 then return end
+        if now-(requests[actor] or -math.huge)&lt;0.25 then return end
         requests[actor]=now
         if action=="sync" then response:FireClient(actor,"snapshot",Audit.snapshot())
         elseif action=="command" then
@@ -4012,23 +4337,23 @@ function Service.start()
     end)
     local function finiteVector(value: any): boolean
         return typeof(value)=="Vector3" and value.X==value.X and value.Y==value.Y and value.Z==value.Z
-            and math.abs(value.X)<=1.01 and math.abs(value.Y)<=1.01 and math.abs(value.Z)<=1.01 and value.Magnitude<=1.01
+            and math.abs(value.X)&lt;=1.01 and math.abs(value.Y)&lt;=1.01 and math.abs(value.Z)&lt;=1.01 and value.Magnitude&lt;=1.01
     end
     flightInput.OnServerEvent:Connect(function(player: Player, direction: any, facing: any)
         local state=flying[player]
         if not state then return end
         local now=os.clock()
-        if now-(inputs[player] or -math.huge)<0.04 then return end
+        if now-(inputs[player] or -math.huge)&lt;0.04 then return end
         inputs[player]=now
         if not finiteVector(direction) or not finiteVector(facing) then return end
         state.direction=direction; state.lastInput=now
         local flat=Vector3.new(facing.X,0,facing.Z)
-        if flat.Magnitude>0.01 then state.orientation.CFrame=CFrame.lookAt(Vector3.zero,flat) end
+        if flat.Magnitude&gt;0.01 then state.orientation.CFrame=CFrame.lookAt(Vector3.zero,flat) end
     end)
     RunService.Heartbeat:Connect(function()
         for player,state in flying do
-            if not state.root.Parent or state.humanoid.Health<=0 then stopFlight(player)
-            else state.velocity.VectorVelocity=if os.clock()-state.lastInput<0.4 then state.direction*32 else Vector3.zero end
+            if not state.root.Parent or state.humanoid.Health&lt;=0 then stopFlight(player)
+            else state.velocity.VectorVelocity=if os.clock()-state.lastInput&lt;0.4 then state.direction*32 else Vector3.zero end
         end
     end)
     local function added(player: Player)
@@ -4047,14 +4372,14 @@ function Service.start()
     end)
 end
 return Service
-]]></ProtectedString>
+</ProtectedString>
 				<string name="ScriptGuid">{a83397b3-bf02-4907-9822-edc308ac2cf7}</string>
-				<BinaryString name="AttributesSerialize"></BinaryString>
+				<BinaryString name="AttributesSerialize" />
 				<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 				<bool name="DefinesCapabilities">false</bool>
 				<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
 				<string name="Name">AdminService</string>
-				<BinaryString name="SerializedOverrides"></BinaryString>
+				<BinaryString name="SerializedOverrides" />
 				<int64 name="SourceAssetId">-1</int64>
 				<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 				<UniqueId name="UniqueId">714f218494dedcfd0ae79ad4000012dd</UniqueId>
@@ -4062,19 +4387,19 @@ return Service
 		</Item>
 		<Item class="Script" referent="RBX62c59e0f047a4ef0935106707c912864">
 			<Properties>
-				<ProtectedString name="Source"><![CDATA[--!strict
+				<ProtectedString name="Source">--!strict
 require(script.Parent:WaitForChild("AdminService")).start()
-]]></ProtectedString>
+</ProtectedString>
 				<bool name="Disabled">false</bool>
-				<Content name="LinkedSource"><null></null></Content>
+				<Content name="LinkedSource"><null /></Content>
 				<token name="RunContext">0</token>
 				<string name="ScriptGuid">{74c742a9-deff-4a70-b2e8-e59489eb9ee3}</string>
-				<BinaryString name="AttributesSerialize"></BinaryString>
+				<BinaryString name="AttributesSerialize" />
 				<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 				<bool name="DefinesCapabilities">false</bool>
 				<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
 				<string name="Name">AdminBootstrap</string>
-				<BinaryString name="SerializedOverrides"></BinaryString>
+				<BinaryString name="SerializedOverrides" />
 				<int64 name="SourceAssetId">-1</int64>
 				<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 				<UniqueId name="UniqueId">714f218494dedcfd0ae79ad4000012df</UniqueId>
@@ -4082,222 +4407,557 @@ require(script.Parent:WaitForChild("AdminService")).start()
 		</Item>
 		<Item class="Script" referent="RBX08dfc125aed2494b8c5c2890eff2e4b9">
 			<Properties>
-				<ProtectedString name="Source"><![CDATA[-- MilitaryMessenger.server.luau
--- 군대 RP 실시간 채팅 서버
-
-local Players = game:GetService("Players")
-local TextChatService = game:GetService("TextChatService")
-
--- RankCatalog 기준 소위 = 11
-local OFFICER_RANK = 11
-
-local function getRank(player)
-	return tonumber(player:GetAttribute("RankOrder")) or 0
-end
-
-local function getUnit(player)
-	local unit = player:GetAttribute("Unit")
-
-	if type(unit) == "string" and unit ~= "" then
-		return unit
-	end
-
-	if player.Team and not player.Neutral then
-		return player.Team.Name
-	end
-
-	return nil
-end
-
-local function getPlayer(textSource)
-	if not textSource then
-		return nil
-	end
-
-	return Players:GetPlayerByUserId(textSource.UserId)
-end
-
--- Roblox 공식 채팅 채널 생성
--- 커스텀 TextChannel은 TextChatService 바로 아래에 둔다.
-local function createChannel(name)
-	local existing = TextChatService:FindFirstChild(name)
-
-	if existing then
-		assert(existing:IsA("TextChannel"), name .. " 이름 충돌")
-		return existing
-	end
-
-	local channel = Instance.new("TextChannel")
-	channel.Name = name
-	channel.Parent = TextChatService
-
-	return channel
-end
-
-local unitChannel = createChannel("RP_Unit")
-local commandChannel = createChannel("RP_Command")
-local noticeChannel = createChannel("RP_Notice")
-
--- 부대 채팅:
--- 같은 소속 부대의 플레이어에게만 메시지 전달
-unitChannel.ShouldDeliverCallback = function(message, recipientSource)
-	local sender = getPlayer(message.TextSource)
-	local recipient = getPlayer(recipientSource)
-
-	if not sender or not recipient then
-		return false
-	end
-
-	local senderUnit = getUnit(sender)
-	local recipientUnit = getUnit(recipient)
-
-	return senderUnit ~= nil and senderUnit == recipientUnit
-end
-
--- 지휘 채팅:
--- 소위 이상만 메시지 발신 및 수신
-commandChannel.ShouldDeliverCallback = function(message, recipientSource)
-	local sender = getPlayer(message.TextSource)
-	local recipient = getPlayer(recipientSource)
-
-	if not sender or not recipient then
-		return false
-	end
-
-	return getRank(sender) >= OFFICER_RANK
-		and getRank(recipient) >= OFFICER_RANK
-end
-
--- 공지사항:
--- 소위 이상 작성, 모든 플레이어 수신
-noticeChannel.ShouldDeliverCallback = function(message, recipientSource)
-	local sender = getPlayer(message.TextSource)
-	local recipient = getPlayer(recipientSource)
-
-	if not sender or not recipient then
-		return false
-	end
-
-	return getRank(sender) >= OFFICER_RANK
-end
-
-local function findSource(channel, player)
-	for _, child in channel:GetChildren() do
-		if child:IsA("TextSource")
-			and child.UserId == player.UserId then
-			return child
-		end
-	end
-
-	return nil
-end
-
-local function ensureSource(channel, player)
-	local existing = findSource(channel, player)
-
-	if existing then
-		return existing
-	end
-
-	local success, source = pcall(function()
-		return channel:AddUserAsync(player.UserId)
-	end)
-
-	if not success then
-		warn("[Messenger] 채널 참가 실패:", channel.Name, source)
-		return nil
-	end
-
-	-- 채팅이 제한된 이용자는 nil이 반환될 수 있다.
-	return source
-end
-
--- 계급 또는 소속 변경 시 채널 권한 업데이트
-local function refreshPlayer(player)
-	if player.Parent ~= Players then
-		return
-	end
-
-	local unitSource = ensureSource(unitChannel, player)
-	local noticeSource = ensureSource(noticeChannel, player)
-
-	if player.Parent ~= Players then
-		return
-	end
-
-	if unitSource then
-		unitSource.CanSend = getUnit(player) ~= nil
-	end
-
-	if noticeSource then
-		noticeSource.CanSend = getRank(player) >= OFFICER_RANK
-	end
-
-	-- 지휘관만 지휘 채널에 가입
-	local commandSource = findSource(commandChannel, player)
-
-	if getRank(player) >= OFFICER_RANK then
-		commandSource = commandSource or ensureSource(commandChannel, player)
-
-		if commandSource then
-			commandSource.CanSend = true
-		end
-	elseif commandSource then
-		commandSource:Destroy()
-	end
-end
-
-local function onPlayerAdded(player)
-	player:GetAttributeChangedSignal("RankOrder"):Connect(function()
-		task.spawn(refreshPlayer, player)
-	end)
-
-	player:GetAttributeChangedSignal("Unit"):Connect(function()
-		task.spawn(refreshPlayer, player)
-	end)
-
-	player:GetPropertyChangedSignal("Team"):Connect(function()
-		task.spawn(refreshPlayer, player)
-	end)
-
-	player:GetPropertyChangedSignal("Neutral"):Connect(function()
-		task.spawn(refreshPlayer, player)
-	end)
-
-	task.spawn(refreshPlayer, player)
-end
-
-Players.PlayerAdded:Connect(onPlayerAdded)
-
-for _, player in Players:GetPlayers() do
-	onPlayerAdded(player)
-end
-
-print("[MilitaryMessenger] 서버 시작 완료")]]></ProtectedString>
+				<ProtectedString name="Source">--!strict
+-- All messenger channels use the same server ACL and TextChatService pipeline.
+require(script.Parent:WaitForChild("MessengerRuntime")).start()
+</ProtectedString>
 				<bool name="Disabled">false</bool>
-				<Content name="LinkedSource"><null></null></Content>
+				<Content name="LinkedSource"><null /></Content>
 				<token name="RunContext">0</token>
 				<string name="ScriptGuid">{0e92c435-763e-4e60-8673-85d29f3c39ed}</string>
-				<BinaryString name="AttributesSerialize"></BinaryString>
+				<BinaryString name="AttributesSerialize" />
 				<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 				<bool name="DefinesCapabilities">false</bool>
 				<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
 				<string name="Name">MilitaryMessenger</string>
-				<BinaryString name="SerializedOverrides"></BinaryString>
+				<BinaryString name="SerializedOverrides" />
 				<int64 name="SourceAssetId">-1</int64>
 				<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 				<UniqueId name="UniqueId">01d403e696a9a5530ae7b2b000001929</UniqueId>
 			</Properties>
 		</Item>
-	</Item>
+	<Item class="Script" referent="MessengerSync1"><Properties><string name="Name">MessengerManagement</string><ProtectedString name="Source">--!strict
+local Players=game:GetService("Players")
+local ReplicatedStorage=game:GetService("ReplicatedStorage")
+local HttpService=game:GetService("HttpService")
+local Store=require(script.Parent.MessengerStore)
+local Rules=require(script.Parent.MessengerState)
+local Permissions=require(script.Parent.MessengerPermissions)
+local Runtime=require(script.Parent.MessengerRuntime)
+Runtime.start()
+local remote=Instance.new("RemoteFunction");remote.Name="MessengerManage";remote.Parent=ReplicatedStorage
+local changed=Instance.new("RemoteEvent");changed.Name="MessengerChannelsChanged";changed.Parent=ReplicatedStorage
+local last={}
+local editing={}
+local metadataLast={}
+local function snapshot(actor: Player)
+    local data=Store.get()
+    local result={channels={},permissions={roles={},people={},ownerId=Rules.OWNER},storage=Store.status(),revision=data.revision,
+        canCreate=Permissions.has(actor,"CREATE_CHANNELS"),canManageRoles=Permissions.has(actor,"MANAGE_ROLES")}
+    if not result.storage.ready then return result end
+    for id,entry in data.channels do
+        local read=Permissions.channel(actor,id,"read")
+        local manage=Permissions.channel(actor,id,"manage")
+        if read or manage then
+            table.insert(result.channels,{id=id,name=Runtime.name(entry),channel=entry.channel,builtin=entry.builtin,
+                canRead=read,canWrite=Permissions.channel(actor,id,"write"),canManage=manage,acl=if manage then Rules.copy(entry.acl) else nil,
+                description=if read then "서버 권한이 적용된 통신 채널입니다." else "채널 관리 전용"})
+        end
+    end
+    table.sort(result.channels,function(a,b) return a.id&lt;b.id end)
+    -- Role names and grants are needed to edit channel ACLs; assignments remain manager-only.
+    for id,role in data.roles do
+        result.permissions.roles[id]={name=Runtime.name(role),permissions=Rules.copy(role.permissions),protected=table.find({"member","officer","operator","muted"},id)~=nil}
+    end
+    if result.canManageRoles then
+        local online={}
+        for _,p in Players:GetPlayers() do online[tostring(p.UserId)]={userId=p.UserId,name=p.Name,displayName=p.DisplayName,roles={}} end
+        for key,roles in data.assignments do
+            local person=online[key] or {userId=tonumber(key),name="User "..key,displayName="오프라인",roles={}}
+            for id in roles do table.insert(person.roles,id) end
+            online[key]=person
+        end
+        for _,person in online do table.insert(result.permissions.people,person) end
+        table.sort(result.permissions.people,function(a,b) return a.userId&lt;b.userId end)
+    end
+    return result
+end
+local actions={create_channel=true,rename_channel=true,delete_channel=true,set_channel_access=true,create_role=true,rename_role=true,
+    delete_role=true,set_permission=true,assign_role=true,remove_role=true}
+Store.Changed:Connect(function() changed:FireAllClients() end)
+local function incoming(actor: Player,action: any,payload: any)
+    if actor.Parent~=Players or type(action)~="string" then return {ok=false,message="잘못된 요청입니다."} end
+    local now=os.clock()
+    if now-(last[actor] or -math.huge)&lt;0.2 then return {ok=false,message="잠시 후 다시 시도하세요."} end
+    last[actor]=now
+    if action=="snapshot" then return {ok=true,data=snapshot(actor)} end
+    if action=="refresh" then Store.refresh();return {ok=true,data=snapshot(actor)} end
+    if not actions[action] or type(payload)~="table" then return {ok=false,message="잘못된 입력입니다."} end
+    if editing[actor] then return {ok=false,message="이전 변경을 저장 중입니다."} end
+    editing[actor]=true
+    local ok,result=pcall(function()
+        -- Copy only whitelisted scalar values. Never traverse arbitrary remote tables.
+        local op={action=action}
+        for _,key in {"id","name","roleId","permission","mode"} do
+            local value=payload[key]
+            if value~=nil and (type(value)~="string" or #value&gt;96 or not utf8.len(value)) then return {ok=false,message="입력 형식 오류"} end
+            op[key]=value
+        end
+        op.enabled=payload.enabled;op.userId=payload.userId
+        if op.enabled~=nil and type(op.enabled)~="boolean" then return {ok=false,message="입력 형식 오류"} end
+        if op.userId~=nil and type(op.userId)~="number" then return {ok=false,message="입력 형식 오류"} end
+        op.permissions={}
+        if action=="create_role" and payload.permissions~=nil then
+            if type(payload.permissions)~="table" then return {ok=false,message="권한 형식 오류"} end
+            for permission in Rules.PERMISSIONS do
+                local value=payload.permissions[permission]
+                if value~=nil and type(value)~="boolean" then return {ok=false,message="권한 형식 오류"} end
+                if value then op.permissions[permission]=true end
+            end
+        end
+        if action=="create_channel" then op.id="custom_"..HttpService:GenerateGUID(false):gsub("-","") end
+        -- Reject unauthorized edits before expensive filtering; transaction re-checks latest stored roles.
+        local preview,message=Rules.apply(Store.get(),Store.context(actor),op)
+        if not preview then return {ok=false,message=message} end
+        if op.name then
+            if now-(metadataLast[actor] or -math.huge)&lt;60 then return {ok=false,message="이름 생성·변경은 1분에 한 번 가능합니다."} end
+            metadataLast[actor]=now
+            if not Runtime.filter(op.name,actor.UserId) then return {ok=false,message="이름 필터링 실패. 변경하지 않았습니다."} end
+        end
+        local success,notice=Store.commit(actor,op,payload.revision)
+        return {ok=success,message=notice,data=snapshot(actor)}
+    end)
+    editing[actor]=nil
+    if not ok then warn("[MessengerManage] request failed");return {ok=false,message="요청 처리 실패. 새로고침 후 저장 상태를 확인하세요."} end
+    return result
+end
+remote.OnServerInvoke=incoming
+Players.PlayerRemoving:Connect(function(p) last[p]=nil;editing[p]=nil;metadataLast[p]=nil end)
+</ProtectedString><bool name="Disabled">false</bool></Properties></Item><Item class="ModuleScript" referent="MessengerSync2"><Properties><string name="Name">MessengerPermissions</string><ProtectedString name="Source">--!strict
+local Players=game:GetService("Players")
+local Rules=require(script.Parent.MessengerState)
+local Store=require(script.Parent.MessengerStore)
+local Permissions={Changed=Store.Changed}
+function Permissions.has(player: Player,permission: string): boolean
+    return player.Parent==Players and Rules.has(Store.get(),Store.context(player),permission)
+end
+function Permissions.channel(player: Player,id: string,mode: string): boolean
+    return player.Parent==Players and Rules.channel(Store.get(),Store.context(player),id,mode)
+end
+function Permissions.publish(player: Player)
+    for attribute,permission in {MessengerCanSend="SEND_MESSAGES",MessengerCanCreate="CREATE_CHANNELS",MessengerCanDelete="DELETE_CHANNELS",
+        MessengerCanManageRoles="MANAGE_ROLES",MessengerCanManageSettings="MANAGE_SETTINGS",MessengerCanPostNotices="POST_NOTICES",
+        MessengerCanViewCommand="VIEW_COMMAND",MessengerCanWriteCommand="WRITE_COMMAND"} do
+        player:SetAttribute(attribute,Permissions.has(player,permission))
+    end
+end
+return Permissions
+</ProtectedString></Properties></Item><Item class="ModuleScript" referent="MessengerSync3"><Properties><string name="Name">MessengerRuntime</string><ProtectedString name="Source">--!strict
+local Players=game:GetService("Players")
+local TextChatService=game:GetService("TextChatService")
+local TextService=game:GetService("TextService")
+local Store=require(script.Parent.MessengerStore)
+local Permissions=require(script.Parent.MessengerPermissions)
+local Runtime={}
+local started=false
+local channels: {[string]: TextChannel}={}
+local pending={}
+local filtered={}
+function Runtime.name(entry: any): string
+    if entry.authorId==0 then return entry.name end
+    local key=tostring(entry.authorId)..":"..entry.name
+    return filtered[key] or "이름 확인 중"
+end
+function Runtime.filter(name: any,userId: number): string?
+    if type(name)~="string" or #name&gt;96 or not utf8.len(name) then return nil end
+    local ok,value=pcall(function()
+        return TextService:FilterStringAsync(name,userId,Enum.TextFilterContext.PublicChat):GetNonChatStringForBroadcastAsync()
+    end)
+    if ok then
+        filtered[tostring(userId)..":"..name]=value
+        return value
+    end
+    return nil
+end
+local function unit(p: Player): string?
+    local value=p:GetAttribute("Unit")
+    if type(value)=="string" and value~="" then return value end
+    return if p.Team and not p.Neutral then p.Team.Name else nil
+end
+local function delivery(id: string,message: TextChatMessage,recipient: TextSource): boolean
+    if not Store.status().ready then return false end
+    local sender=message.TextSource and Players:GetPlayerByUserId(message.TextSource.UserId)
+    local receiver=Players:GetPlayerByUserId(recipient.UserId)
+    if not sender or not receiver or not Permissions.channel(sender,id,"write") or not Permissions.channel(receiver,id,"read") then return false end
+    return id~="unit" or (unit(sender)~=nil and unit(sender)==unit(receiver))
+end
+local function refreshPlayer(player: Player)
+    if player.Parent~=Players then return end
+    if pending[player]~=nil then pending[player]=true;return end
+    pending[player]=false
+    repeat
+        pending[player]=false
+        Permissions.publish(player)
+        for id,channel in channels do
+            local function allowed() return player.Parent==Players and channel.Parent~=nil and Store.status().ready and Permissions.channel(player,id,"read") end
+            local source: TextSource?=nil
+            for _,child in channel:GetChildren() do if child:IsA("TextSource") and child.UserId==player.UserId then source=child;break end end
+            if allowed() and not source then
+                -- AddUserAsync enforces Roblox communication eligibility; never create TextSources ourselves.
+                local ok,result=pcall(function() return channel:AddUserAsync(player.UserId) end)
+                if ok then source=result end
+            end
+            if source then
+                if not allowed() then source:Destroy()
+                else source.CanSend=Permissions.channel(player,id,"write") and (id~="unit" or unit(player)~=nil) end
+            end
+        end
+    until not pending[player] or player.Parent~=Players
+    pending[player]=nil
+end
+local function refreshOnce()
+    local data=Store.get()
+    -- Metadata filtering is separate from permissions, never inside ShouldDeliverCallback.
+    local activeNames={}
+    for _,group in {data.channels,data.roles} do
+        for _,entry in group do
+            if entry.authorId~=0 then
+                local key=tostring(entry.authorId)..":"..entry.name;activeNames[key]=true
+                if not filtered[key] then Runtime.filter(entry.name,entry.authorId) end
+            end
+        end
+    end
+    for key in filtered do if not activeNames[key] then filtered[key]=nil end end
+    if Store.get()~=data then return false end
+    for id,channel in channels do if not data.channels[id] then channel:Destroy();channels[id]=nil end end
+    for id,entry in data.channels do
+        if not channels[id] then
+            local existing=TextChatService:FindFirstChild(entry.channel)
+            if existing and not existing:IsA("TextChannel") then warn("[Messenger] TextChannel name collision");continue end
+            local channel=existing or Instance.new("TextChannel")
+            channel.Name=entry.channel
+            channel.ShouldDeliverCallback=function(message,recipient) return delivery(id,message,recipient) end
+            channel.Parent=TextChatService;channels[id]=channel
+        end
+    end
+    for _,p in Players:GetPlayers() do task.spawn(refreshPlayer,p) end
+    return true
+end
+local refreshing=false
+local refreshAgain=false
+function Runtime.refresh()
+    if refreshing then refreshAgain=true;return end
+    refreshing=true
+    repeat
+        refreshAgain=false
+        local ok,complete=pcall(refreshOnce)
+        if not ok then warn("[Messenger] refresh failed");break end
+        if not complete then refreshAgain=true end
+    until not refreshAgain
+    refreshing=false
+end
+function Runtime.start()
+    if started then return end;started=true
+    local function added(p: Player)
+        for _,attribute in {"RankOrder","Unit"} do p:GetAttributeChangedSignal(attribute):Connect(function() task.spawn(refreshPlayer,p) end) end
+        for _,property in {"Team","Neutral"} do p:GetPropertyChangedSignal(property):Connect(function() task.spawn(refreshPlayer,p) end) end
+        task.spawn(refreshPlayer,p)
+    end
+    Players.PlayerAdded:Connect(added)
+    Players.PlayerRemoving:Connect(function(p) pending[p]=nil end)
+    Store.Changed:Connect(function() task.spawn(Runtime.refresh) end)
+    for _,p in Players:GetPlayers() do added(p) end
+    task.spawn(Runtime.refresh)
+    task.spawn(function() while true do task.wait(20);for _,p in Players:GetPlayers() do task.spawn(refreshPlayer,p) end end end)
+end
+return Runtime
+</ProtectedString></Properties></Item><Item class="ModuleScript" referent="MessengerSync4"><Properties><string name="Name">MessengerState</string><ProtectedString name="Source">--!strict
+-- Pure, immutable configuration rules. No Roblox services or client trust.
+local State = {}
+State.OWNER = 1153125948
+State.PERMISSIONS = {SEND_MESSAGES=true, CREATE_CHANNELS=true, DELETE_CHANNELS=true,
+    MANAGE_ROLES=true, MANAGE_SETTINGS=true, POST_NOTICES=true, VIEW_COMMAND=true, WRITE_COMMAND=true}
+local protected = {member=true, officer=true, operator=true, muted=true}
+function State.copy(value: any): any
+    if type(value) ~= "table" then return value end
+    local result = {}
+    for key, item in value do result[key] = State.copy(item) end
+    return result
+end
+function State.default(): any
+    local function role(name, grants) return {name=name, authorId=0, permissions=grants} end
+    local function channel(id, name, transport, writer)
+        return {id=id, name=name, authorId=0, channel=transport, builtin=true,
+            acl={read={[if id=="command" then "officer" else "member"]=true}, write={[writer]=true}, manage={operator=true}}}
+    end
+    return {schema=1, revision=0, receipts={}, assignments={}, roles={
+        member=role("일반 사용자",{SEND_MESSAGES=true}),
+        officer=role("장교",{SEND_MESSAGES=true, POST_NOTICES=true, VIEW_COMMAND=true, WRITE_COMMAND=true}),
+        operator=role("통신망 관리자",{SEND_MESSAGES=true, CREATE_CHANNELS=true, DELETE_CHANNELS=true, MANAGE_ROLES=true, MANAGE_SETTINGS=true}),
+        muted=role("발언 제한",{}),
+    }, channels={general=channel("general","전체 채팅","RP_General","member"),
+        unit=channel("unit","부대 채팅","RP_Unit","member"),
+        command=channel("command","지휘 채팅","RP_Command","officer"),
+        notice=channel("notice","공지사항","RP_Notice","officer")}}
+end
+function State.rolesFor(data: any, actor: any): any
+    local result = {member=true}
+    if (actor.rankOrder or 0)&gt;=11 then result.officer=true end -- existing main behavior
+    for id, enabled in data.assignments[tostring(actor.userId)] or {} do
+        if enabled and data.roles[id] then result[id]=true end
+    end
+    return result
+end
+function State.has(data: any, actor: any, permission: string): boolean
+    if not State.PERMISSIONS[permission] then return false end
+    if actor.userId==State.OWNER then return true end
+    local roles=State.rolesFor(data,actor)
+    if roles.muted and (permission=="SEND_MESSAGES" or permission=="POST_NOTICES" or permission=="WRITE_COMMAND") then return false end
+    for id in roles do if data.roles[id].permissions[permission] then return true end end
+    return false
+end
+function State.channel(data: any, actor: any, id: string, mode: string): boolean
+    local entry=data.channels[id]
+    if not entry or not entry.acl[mode] then return false end
+    if actor.userId==State.OWNER then return true end
+    if mode=="manage" and State.has(data,actor,"MANAGE_SETTINGS") then return true end
+    if mode=="write" then
+        if not State.has(data,actor,"SEND_MESSAGES") or not State.channel(data,actor,id,"read") then return false end
+        if id=="notice" and not State.has(data,actor,"POST_NOTICES") then return false end
+        if id=="command" and not State.has(data,actor,"WRITE_COMMAND") then return false end
+    end
+    if id=="command" and mode=="read" and not State.has(data,actor,"VIEW_COMMAND") then return false end
+    for role in State.rolesFor(data,actor) do if entry.acl[mode][role] then return true end end
+    return false
+end
+local function count(items): number local n=0;for _ in items do n+=1 end;return n end
+local function validName(name): boolean
+    if type(name)~="string" or #name&gt;96 or name:find("[%c]") then return false end
+    local length=utf8.len(name)
+    return length~=nil and length&gt;=2 and length&lt;=24 and name:match("%S")~=nil
+end
+local function grantsValid(grants): boolean
+    if type(grants)~="table" or count(grants)&gt;8 then return false end
+    for key,value in grants do if not State.PERMISSIONS[key] or type(value)~="boolean" then return false end end
+    return true
+end
+-- Stored configuration is bounded and validated before use; unknown schemas fail closed.
+function State.valid(data: any): boolean
+    if type(data)~="table" or data.schema~=1 or type(data.revision)~="number" or data.revision&lt;0 or data.revision%1~=0 then return false end
+    for _,key in {"roles","channels","assignments","receipts"} do if type(data[key])~="table" then return false end end
+    if count(data.roles)&gt;30 or count(data.channels)&gt;28 or count(data.assignments)&gt;1000 or #data.receipts&gt;64 then return false end
+    for id in protected do if type(data.roles[id])~="table" then return false end end
+    for id,role in data.roles do
+        if type(id)~="string" or not id:match("^[a-z][a-z0-9_]*$") or #id&gt;48 or type(role)~="table" or not validName(role.name) or not grantsValid(role.permissions) or type(role.authorId)~="number" or role.authorId&lt;0 or role.authorId%1~=0 then return false end
+    end
+    for id,entry in data.channels do
+        if type(id)~="string" or type(entry)~="table" or entry.id~=id or not validName(entry.name) or type(entry.authorId)~="number" or type(entry.channel)~="string" or type(entry.acl)~="table" then return false end
+        if entry.authorId&lt;0 or entry.authorId%1~=0 then return false end
+        local builtins={general="RP_General",unit="RP_Unit",command="RP_Command",notice="RP_Notice"}
+        if builtins[id] then
+            if entry.builtin~=true or entry.channel~=builtins[id] then return false end
+        elseif entry.builtin~=false or not id:match("^custom_%w+$") or #id&gt;48 or entry.channel~="RP_"..id then return false end
+        for _,mode in {"read","write","manage"} do
+            if type(entry.acl[mode])~="table" or count(entry.acl[mode])&gt;30 then return false end
+            for role,value in entry.acl[mode] do if not data.roles[role] or type(value)~="boolean" then return false end end
+        end
+    end
+    for _,id in {"general","unit","command","notice"} do if not data.channels[id] or not data.channels[id].builtin then return false end end
+    if count(data.receipts)&gt;64 or count(data.receipts)~=#data.receipts then return false end
+    for _,receipt in data.receipts do
+        if type(receipt)~="table" or type(receipt.id)~="string" or #receipt.id&gt;64 then return false end
+    end
+    for userId,roles in data.assignments do
+        if type(userId)~="string" or not userId:match("^%d+$") or type(roles)~="table" or count(roles)&gt;30 then return false end
+        for role,value in roles do if not data.roles[role] or value~=true then return false end end
+    end
+    return true
+end
+local function canGrant(data,actor,role): boolean
+    for permission,enabled in role.permissions do if enabled and not State.has(data,actor,permission) then return false end end
+    return true
+end
+function State.apply(data: any, actor: any, op: any): (any?, string)
+    local updated=State.copy(data)
+    local action=op.action
+    local entry=updated.channels[op.id]
+    local role=updated.roles[op.roleId]
+    if action=="create_channel" then
+        if not State.has(data,actor,"CREATE_CHANNELS") then return nil,"채널 개설 권한이 없습니다." end
+        if not validName(op.name) or type(op.id)~="string" or not op.id:match("^custom_%w+$") or updated.channels[op.id] or count(updated.channels)&gt;=28 then return nil,"채널 이름 또는 개수 제한을 확인하세요." end
+        for _,other in updated.channels do if other.name==op.name then return nil,"같은 이름의 채널이 있습니다." end end
+        updated.channels[op.id]={id=op.id,name=op.name,authorId=actor.userId,channel="RP_"..op.id,builtin=false,acl={read={member=true},write={member=true},manage={operator=true}}}
+    elseif action=="rename_channel" or action=="delete_channel" or action=="set_channel_access" then
+        if not entry or not State.channel(data,actor,op.id,"manage") then return nil,"채널 관리 권한이 없습니다." end
+        if action=="delete_channel" then
+            if entry.builtin or not State.has(data,actor,"DELETE_CHANNELS") then return nil,"삭제할 수 없는 채널입니다." end
+            updated.channels[op.id]=nil
+        elseif action=="rename_channel" then
+            if not validName(op.name) then return nil,"이름은 2~24자로 지정하세요." end
+            for id,other in updated.channels do if id~=op.id and other.name==op.name then return nil,"같은 이름의 채널이 있습니다." end end
+            entry.name=op.name;entry.authorId=actor.userId
+        else
+            if not updated.roles[op.roleId] or not entry.acl[op.mode] or type(op.enabled)~="boolean" then return nil,"잘못된 채널 권한입니다." end
+            entry.acl[op.mode][op.roleId]=op.enabled or nil
+        end
+    elseif action=="create_role" or action=="rename_role" or action=="delete_role" or action=="set_permission" or action=="assign_role" or action=="remove_role" then
+        if not State.has(data,actor,"MANAGE_ROLES") then return nil,"역할 관리 권한이 없습니다." end
+        if action=="create_role" then
+            if type(op.roleId)~="string" or not op.roleId:match("^[a-z][a-z0-9_]*$") or #op.roleId&lt;3 or #op.roleId&gt;24 or role or count(updated.roles)&gt;=30 or not validName(op.name) or not grantsValid(op.permissions) then return nil,"역할 ID·이름·권한을 확인하세요." end
+            local created={name=op.name,authorId=actor.userId,permissions=State.copy(op.permissions)}
+            if not canGrant(data,actor,created) then return nil,"보유하지 않은 권한은 부여할 수 없습니다." end
+            updated.roles[op.roleId]=created
+        else
+            if not role or not canGrant(data,actor,role) then return nil,"이 역할을 관리할 권한이 부족합니다." end
+            if action=="assign_role" or action=="remove_role" then
+                if op.roleId=="member" or op.roleId=="officer" or type(op.userId)~="number" or op.userId&lt;1 or op.userId%1~=0 or op.userId&gt;2^53 then return nil,"유효한 사용자 ID와 수동 역할을 선택하세요." end
+                local key=tostring(op.userId)
+                if not updated.assignments[key] and count(updated.assignments)&gt;=1000 then return nil,"사용자 배정 한도입니다." end
+                updated.assignments[key]=updated.assignments[key] or {}
+                updated.assignments[key][op.roleId]=if action=="assign_role" then true else nil
+                if next(updated.assignments[key])==nil then updated.assignments[key]=nil end
+            else
+                if protected[op.roleId] then return nil,"기본 역할은 보호됩니다." end
+                if action=="rename_role" then
+                    if not validName(op.name) then return nil,"역할 이름은 2~24자입니다." end
+                    role.name=op.name;role.authorId=actor.userId
+                elseif action=="set_permission" then
+                    if not State.PERMISSIONS[op.permission] or type(op.enabled)~="boolean" or (op.enabled and not State.has(data,actor,op.permission)) then return nil,"권한을 부여할 수 없습니다." end
+                    role.permissions[op.permission]=op.enabled or nil
+                else
+                    updated.roles[op.roleId]=nil
+                    for key,assigned in updated.assignments do assigned[op.roleId]=nil;if next(assigned)==nil then updated.assignments[key]=nil end end
+                    for _,channel in updated.channels do for _,acl in channel.acl do acl[op.roleId]=nil end end
+                end
+            end
+        end
+    else return nil,"알 수 없는 요청입니다." end
+    updated.revision+=1
+    return updated,"저장 완료"
+end
+return State
+</ProtectedString></Properties></Item><Item class="ModuleScript" referent="MessengerSync5"><Properties><string name="Name">MessengerStore</string><ProtectedString name="Source">--!strict
+local DataStoreService=game:GetService("DataStoreService")
+local MessagingService=game:GetService("MessagingService")
+local HttpService=game:GetService("HttpService")
+local RunService=game:GetService("RunService")
+local Rules=require(script.Parent.MessengerState)
+local Core=require(script.Parent.MessengerStoreCore)
+local Store={}
+local changed=Instance.new("BindableEvent")
+Store.Changed=changed.Event
+local name=if RunService:IsStudio() then "MilitaryMessenger_Config_Dev_v1" else "MilitaryMessenger_Config_v1"
+local key="configuration"
+local topic=name.."_revision"
+local dataStore
+local ok=pcall(function() dataStore=DataStoreService:GetDataStore(name) end)
+local core=Core.new(Rules,{
+    get=function() assert(ok and dataStore,"DataStore unavailable");return dataStore:GetAsync(key) end,
+    update=function(transform)
+        return dataStore:UpdateAsync(key,function(current)
+            local updated=transform(current)
+            if updated and #HttpService:JSONEncode(updated)&gt;1000000 then error("Configuration exceeds 1MB") end
+            return updated
+        end)
+    end,
+    wait=task.wait,
+    id=function() return HttpService:GenerateGUID(false) end,
+})
+function Store.get() return core.data end
+function Store.status() return {ready=core.ready,revision=core.data.revision,error=core.error,store=name} end
+function Store.context(player: Player) return {userId=player.UserId,rankOrder=tonumber(player:GetAttribute("RankOrder")) or 0} end
+function Store.refresh()
+    local before=core.data.revision
+    local wasReady=core.ready
+    core:load()
+    if core.data.revision~=before or core.ready~=wasReady then changed:Fire() end
+end
+function Store.commit(player: Player,op: any,revision: any): (boolean,string)
+    local before=core.data.revision
+    local success,message=core:commit(Store.context(player),op,revision)
+    if core.data.revision~=before then changed:Fire() end
+    if success then
+        task.spawn(function() pcall(function() MessagingService:PublishAsync(topic,{revision=core.data.revision}) end) end)
+    end
+    return success,message
+end
+-- Notifications are hints; periodic reads recover dropped/out-of-order messages.
+task.spawn(function()
+    Store.refresh()
+    while true do
+        local subscribed=pcall(function()
+            MessagingService:SubscribeAsync(topic,function(message)
+                local data=message.Data
+                if type(data)=="table" and type(data.revision)=="number" and data.revision&gt;core.data.revision then task.spawn(Store.refresh) end
+            end)
+        end)
+        if subscribed then break end
+        task.wait(30)
+    end
+end)
+task.spawn(function() while true do task.wait(30+math.random()*10);Store.refresh() end end)
+-- No dirty write-behind cache: acknowledged changes have already committed in UpdateAsync.
+return Store
+</ProtectedString></Properties></Item><Item class="ModuleScript" referent="MessengerSync6"><Properties><string name="Name">MessengerStoreCore</string><ProtectedString name="Source">--!strict
+-- Adapter-driven transactional persistence, exercised with an in-memory fault-injecting store.
+local Core={}
+function Core.new(rules: any, adapter: any): any
+    local self={data=rules.default(),ready=false,busy=false,error="설정을 불러오는 중입니다."}
+    local function accept(data)
+        if not rules.valid(data) then return false end
+        if data.revision&gt;=self.data.revision then self.data=rules.copy(data) end
+        self.ready=true;self.error=""
+        return true
+    end
+    function self:load(): boolean
+        if self.busy then return false end
+        self.busy=true
+        local ok,value=pcall(adapter.get)
+        self.busy=false
+        if ok and accept(if value==nil then rules.default() else value) then return true end
+        self.ready=false;self.error="저장소를 불러오지 못했습니다. 관리 변경은 잠겨 있습니다."
+        return false
+    end
+    function self:commit(actor: any, op: any, expected: any): (boolean,string)
+        if not self.ready or self.busy then return false,"설정 로딩 또는 저장 중입니다. 새로고침 후 시도하세요." end
+        if type(expected)~="number" or expected%1~=0 or expected~=self.data.revision then return false,"다른 변경이 반영되었습니다. 새로고침 후 다시 시도하세요." end
+        self.busy=true
+        local operationId=adapter.id()
+        local reason="저장 결과를 확인하지 못했습니다. 새로고침하여 상태를 확인하세요."
+        for attempt=1,3 do
+            local resultOk=false
+            local ok,saved=pcall(function()
+                return adapter.update(function(current)
+                    local data=if current==nil then rules.default() else current
+                    if not rules.valid(data) then reason="지원하지 않거나 손상된 저장 데이터입니다.";return nil end
+                    for _,receipt in data.receipts do
+                        if receipt.id==operationId then resultOk=true;return data end
+                    end
+                    if data.revision~=expected then reason="다른 서버에서 수정했습니다. 새로고침 후 다시 시도하세요.";return nil end
+                    local changed,message=rules.apply(data,actor,op)
+                    reason=message
+                    if not changed then return nil end
+                    table.insert(changed.receipts,{id=operationId})
+                    if #changed.receipts&gt;64 then table.remove(changed.receipts,1) end
+                    if not rules.valid(changed) then reason="설정 데이터 검증 실패";return nil end
+                    resultOk=true
+                    return changed
+                end)
+            end)
+            if ok then
+                if resultOk and saved and accept(saved) then self.busy=false;return true,"영구 저장 완료" end
+                self.busy=false
+                self:load() -- conflict reload; never overwrite a newer revision with a cached snapshot
+                return false,reason
+            end
+            if attempt&lt;3 then adapter.wait(0.4*2^(attempt-1)) end
+        end
+        self.busy=false
+        self:load() -- write outcome can be unknown; reconcile without claiming success
+        return false,"저장 응답을 확인하지 못했습니다. 새로고침된 결과를 확인하세요."
+    end
+    return self
+end
+return Core
+</ProtectedString></Properties></Item></Item>
 	<Item class="ServerStorage" referent="RBX145d135019bc473e8e27cb539e78a4e9">
 		<Properties>
-			<BinaryString name="AttributesSerialize"></BinaryString>
+			<BinaryString name="AttributesSerialize" />
 			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 			<bool name="DefinesCapabilities">false</bool>
 			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
 			<string name="Name">ServerStorage</string>
-			<BinaryString name="SerializedOverrides"></BinaryString>
+			<BinaryString name="SerializedOverrides" />
 			<int64 name="SourceAssetId">-1</int64>
 			<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 			<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca8000003b7</UniqueId>
@@ -4307,12 +4967,12 @@ print("[MilitaryMessenger] 서버 시작 완료")]]></ProtectedString>
 		<Properties>
 			<BinaryString name="HiddenServices">AAAAAA==</BinaryString>
 			<BinaryString name="VisibleServices">AAAAAA==</BinaryString>
-			<BinaryString name="AttributesSerialize"></BinaryString>
+			<BinaryString name="AttributesSerialize" />
 			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 			<bool name="DefinesCapabilities">false</bool>
 			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
 			<string name="Name">ServiceVisibilityService</string>
-			<BinaryString name="SerializedOverrides"></BinaryString>
+			<BinaryString name="SerializedOverrides" />
 			<int64 name="SourceAssetId">-1</int64>
 			<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 			<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca8000003cc</UniqueId>
@@ -4320,12 +4980,12 @@ print("[MilitaryMessenger] 서버 시작 완료")]]></ProtectedString>
 	</Item>
 	<Item class="VideoService" referent="RBXd933080a29b146e49460110a4f1d42fa">
 		<Properties>
-			<BinaryString name="AttributesSerialize"></BinaryString>
+			<BinaryString name="AttributesSerialize" />
 			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 			<bool name="DefinesCapabilities">false</bool>
 			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
 			<string name="Name">VideoService</string>
-			<BinaryString name="SerializedOverrides"></BinaryString>
+			<BinaryString name="SerializedOverrides" />
 			<int64 name="SourceAssetId">-1</int64>
 			<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 			<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca8000003d0</UniqueId>
@@ -4334,12 +4994,12 @@ print("[MilitaryMessenger] 서버 시작 완료")]]></ProtectedString>
 	<Item class="HttpService" referent="RBXc04c70efe85a48bfa4f6e3e9d5a53c10">
 		<Properties>
 			<bool name="HttpEnabled">false</bool>
-			<BinaryString name="AttributesSerialize"></BinaryString>
+			<BinaryString name="AttributesSerialize" />
 			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 			<bool name="DefinesCapabilities">false</bool>
 			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
 			<string name="Name">HttpService</string>
-			<BinaryString name="SerializedOverrides"></BinaryString>
+			<BinaryString name="SerializedOverrides" />
 			<int64 name="SourceAssetId">-1</int64>
 			<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 			<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca8000003d1</UniqueId>
@@ -4347,12 +5007,12 @@ print("[MilitaryMessenger] 서버 시작 완료")]]></ProtectedString>
 	</Item>
 	<Item class="Teams" referent="RBX2">
 		<Properties>
-			<BinaryString name="AttributesSerialize"></BinaryString>
+			<BinaryString name="AttributesSerialize" />
 			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 			<bool name="DefinesCapabilities">false</bool>
 			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
 			<string name="Name">Teams</string>
-			<BinaryString name="SerializedOverrides"></BinaryString>
+			<BinaryString name="SerializedOverrides" />
 			<int64 name="SourceAssetId">-1</int64>
 			<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 			<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca8000003d4</UniqueId>
@@ -4400,15 +5060,15 @@ print("[MilitaryMessenger] 서버 시작 완료")]]></ProtectedString>
 			<float name="ShadowSoftness">0.5</float>
 			<token name="Technology">1</token>
 			<string name="TimeOfDay">14:00:00</string>
-			<BinaryString name="AttributesSerialize"><![CDATA[BQAAABQAAABSQlhfQmFja3VwQnJpZ2h0bmVzcwUAAIA/HgAAAFJCWF9CYWNrdXBFeHBvc3Vy
+			<BinaryString name="AttributesSerialize">BQAAABQAAABSQlhfQmFja3VwQnJpZ2h0bmVzcwUAAIA/HgAAAFJCWF9CYWNrdXBFeHBvc3Vy
 ZUNvbXBlbnNhdGlvbgUAAAAAIQAAAFJCWF9MaWdodGluZ0NvbXBhdGliaWxpdHlNaWdyYXRl
 ZAMBJgAAAFJCWF9MaWdodGluZ1RlY2hub2xvZ3lVbmlmaWVkTWlncmF0aW9uAwEgAAAAUkJY
-X09yaWdpbmFsVGVjaG5vbG9neU9uRmlsZUxvYWQEAQAAAA==]]></BinaryString>
+X09yaWdpbmFsVGVjaG5vbG9neU9uRmlsZUxvYWQEAQAAAA==</BinaryString>
 			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 			<bool name="DefinesCapabilities">false</bool>
 			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
 			<string name="Name">Lighting</string>
-			<BinaryString name="SerializedOverrides"></BinaryString>
+			<BinaryString name="SerializedOverrides" />
 			<int64 name="SourceAssetId">-1</int64>
 			<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 			<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca8000003fe</UniqueId>
@@ -4417,12 +5077,12 @@ X09yaWdpbmFsVGVjaG5vbG9neU9uRmlsZUxvYWQEAQAAAA==]]></BinaryString>
 			<Properties>
 				<token name="TonemapperPreset">1</token>
 				<bool name="Enabled">true</bool>
-				<BinaryString name="AttributesSerialize"></BinaryString>
+				<BinaryString name="AttributesSerialize" />
 				<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 				<bool name="DefinesCapabilities">false</bool>
 				<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
 				<string name="Name">ColorGrading</string>
-				<BinaryString name="SerializedOverrides"></BinaryString>
+				<BinaryString name="SerializedOverrides" />
 				<int64 name="SourceAssetId">-1</int64>
 				<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 				<UniqueId name="UniqueId">714f218494dedcfd0ae79ad4000003e0</UniqueId>
@@ -4434,12 +5094,12 @@ X09yaWdpbmFsVGVjaG5vbG9neU9uRmlsZUxvYWQEAQAAAA==]]></BinaryString>
 				<float name="Size">24</float>
 				<float name="Threshold">0.949999988</float>
 				<bool name="Enabled">true</bool>
-				<BinaryString name="AttributesSerialize"></BinaryString>
+				<BinaryString name="AttributesSerialize" />
 				<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 				<bool name="DefinesCapabilities">false</bool>
 				<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
 				<string name="Name">Bloom</string>
-				<BinaryString name="SerializedOverrides"></BinaryString>
+				<BinaryString name="SerializedOverrides" />
 				<int64 name="SourceAssetId">-1</int64>
 				<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 				<UniqueId name="UniqueId">714f218494dedcfd0ae79ad4000003e1</UniqueId>
@@ -4448,12 +5108,12 @@ X09yaWdpbmFsVGVjaG5vbG9neU9uRmlsZUxvYWQEAQAAAA==]]></BinaryString>
 	</Item>
 	<Item class="LodDataService" referent="RBX496f331deb0e49c7be56657fdb8437c0">
 		<Properties>
-			<BinaryString name="AttributesSerialize"></BinaryString>
+			<BinaryString name="AttributesSerialize" />
 			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 			<bool name="DefinesCapabilities">false</bool>
 			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
 			<string name="Name">LodDataService</string>
-			<BinaryString name="SerializedOverrides"></BinaryString>
+			<BinaryString name="SerializedOverrides" />
 			<int64 name="SourceAssetId">-1</int64>
 			<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 			<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca800000401</UniqueId>
@@ -4462,7 +5122,7 @@ X09yaWdpbmFsVGVjaG5vbG9neU9uRmlsZUxvYWQEAQAAAA==]]></BinaryString>
 	<Item class="TestService" referent="RBXc345baf41ae94b19aaef0fe495fa885f">
 		<Properties>
 			<bool name="AutoRuns">true</bool>
-			<string name="Description"></string>
+			<string name="Description" />
 			<bool name="ExecuteWithStudioRun">false</bool>
 			<bool name="IsPhysicsEnvironmentalThrottled">true</bool>
 			<bool name="IsSleepAllowed">true</bool>
@@ -4470,12 +5130,12 @@ X09yaWdpbmFsVGVjaG5vbG9neU9uRmlsZUxvYWQEAQAAAA==]]></BinaryString>
 			<double name="SimulateSecondsLag">0</double>
 			<bool name="ThrottlePhysicsToRealtime">true</bool>
 			<double name="Timeout">10</double>
-			<BinaryString name="AttributesSerialize"></BinaryString>
+			<BinaryString name="AttributesSerialize" />
 			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 			<bool name="DefinesCapabilities">false</bool>
 			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
 			<string name="Name">TestService</string>
-			<BinaryString name="SerializedOverrides"></BinaryString>
+			<BinaryString name="SerializedOverrides" />
 			<int64 name="SourceAssetId">-1</int64>
 			<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 			<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca80000047b</UniqueId>
@@ -4483,12 +5143,12 @@ X09yaWdpbmFsVGVjaG5vbG9neU9uRmlsZUxvYWQEAQAAAA==]]></BinaryString>
 	</Item>
 	<Item class="SerializationService" referent="RBX2cfee31c9fe04b25af6adb7c985de287">
 		<Properties>
-			<BinaryString name="AttributesSerialize"></BinaryString>
+			<BinaryString name="AttributesSerialize" />
 			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 			<bool name="DefinesCapabilities">false</bool>
 			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
 			<string name="Name">SerializationService</string>
-			<BinaryString name="SerializedOverrides"></BinaryString>
+			<BinaryString name="SerializedOverrides" />
 			<int64 name="SourceAssetId">-1</int64>
 			<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 			<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca80000047f</UniqueId>
@@ -4496,12 +5156,12 @@ X09yaWdpbmFsVGVjaG5vbG9neU9uRmlsZUxvYWQEAQAAAA==]]></BinaryString>
 	</Item>
 	<Item class="VirtualInputManager" referent="RBX436032b2373341118aa985f2e38af6b9">
 		<Properties>
-			<BinaryString name="AttributesSerialize"></BinaryString>
+			<BinaryString name="AttributesSerialize" />
 			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 			<bool name="DefinesCapabilities">false</bool>
 			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
 			<string name="Name">VirtualInputManager</string>
-			<BinaryString name="SerializedOverrides"></BinaryString>
+			<BinaryString name="SerializedOverrides" />
 			<int64 name="SourceAssetId">-1</int64>
 			<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 			<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca800000648</UniqueId>
@@ -4514,6 +5174,6 @@ AAAAAAAJAAAAZbDqEAYAAAAAAAAKAAAAw8faMAUAAAAAAAALAAAAiVpHkAMAAAAAAAAMAAAA
 Oi4kQAUAAAAAAAANAAAAHh4lFAMAAAAAAAAOAAAAZlw7UAUAAAAAAAAPAAAA6JxKJAMAAAAA
 AAAQAAAAc3trYAUAAAAAAAARAAAAhHtacAMAAAAAAAASAAAAgcLgAAYAAAAAAAATAAAAc4RK
 BAUAAAAAAAAUAAAAxr21cAUAAAAAAAAVAAAAzq2UNAMAAAAAAAAWAAAAlJSMRAMAAAAAAAA=</SharedString>
-		<SharedString md5="yuZpQdnvvUBOTYh1jqZ2cA=="></SharedString>
+		<SharedString md5="yuZpQdnvvUBOTYh1jqZ2cA==" />
 	</SharedStrings>
 </roblox>

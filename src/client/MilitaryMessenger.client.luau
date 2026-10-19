@@ -1,3 +1,4 @@
+--!strict
 -- MilitaryMessenger.client.luau
 -- Discord 스타일 군용 메신저 UI
 
@@ -86,7 +87,9 @@ local function getUnit(target)
     return nil
 end
 
+local channelAccess = {}
 local function canView(id)
+    if not channelAccess[id] or not channelAccess[id].canRead then return false end
     if id == "command" then
         return player:GetAttribute("MessengerCanViewCommand") == true
     end
@@ -99,6 +102,7 @@ local function canView(id)
 end
 
 local function canWrite(id)
+    if not channelAccess[id] or not channelAccess[id].canWrite then return false end
     if player:GetAttribute("MessengerCanSend") ~= true then
         return false
     end
@@ -254,7 +258,7 @@ local title = label(
 )
 
 title.Position = UDim2.fromOffset(18, 7)
-title.Size = UDim2.new(1, -90, 0, 30)
+title.Size = UDim2.new(1, -190, 0, 30)
 
 local subtitle = label(
     header,
@@ -279,6 +283,7 @@ closeButton.TextSize = 26
 -- ==========================================
 
 local sidebar = create("Frame", window, {
+    Name = "ChannelSidebar",
     BackgroundColor3 = C.sidebar,
     BorderSizePixel = 0,
 })
@@ -292,7 +297,7 @@ local sideTitle = label(
 )
 
 sideTitle.Position = UDim2.fromOffset(14, 18)
-sideTitle.Size = UDim2.new(1, -28, 0, 24)
+sideTitle.Size = UDim2.new(1, -62, 0, 24)
 
 local channelButtons = {}
 local channelsScroll = create("ScrollingFrame", sidebar, {
@@ -774,7 +779,7 @@ local function renderMembers()
                 and getUnit(player) == getUnit(target)
 
         elseif selectedChannel == "command" then
-            allowed = getRankOrder(target) >= 11
+            allowed = target:GetAttribute("MessengerCanViewCommand") == true
         end
 
         if allowed then
@@ -841,6 +846,7 @@ local function selectChannel(id)
     end
 
     selectedChannel = id
+    window:SetAttribute("SelectedChannel", id)
     unread[id] = 0
 
     local info = getChannelInfo(id)
@@ -889,10 +895,12 @@ local function syncCustomChannels()
     end)
     if not ok or not result or not result.ok or not result.data then return end
     local incoming = {}
+    channelAccess = {}
     for _, item in result.data.channels or {} do
         if type(item) == "table" and type(item.id) == "string"
             and type(item.channel) == "string" and type(item.name) == "string" then
             incoming[item.id] = item
+            channelAccess[item.id] = item
         end
     end
     for index = #CHANNELS, 1, -1 do
@@ -909,6 +917,11 @@ local function syncCustomChannels()
         end
     end
     for _, info in incoming do
+        for _, existing in CHANNELS do
+            if existing.id == info.id then
+                existing.name = info.name; existing.description = info.description
+            end
+        end
         if not channelButtons[info.id] then
             table.insert(CHANNELS, info)
             channelIds[info.channel] = info.id
@@ -932,7 +945,17 @@ local function syncCustomChannels()
         end
     end
     channelsScroll.CanvasSize = UDim2.fromOffset(0, 20 + #CHANNELS * 46)
-    selectChannel(selectedChannel)
+    for id in history do
+        if not canView(id) then history[id] = {}; unread[id] = 0 end
+    end
+    if not canView(selectedChannel) then
+        selectedChannel = "general"
+        channelTitle.Text = "통신망"
+        description.Text = result.data.storage and result.data.storage.error or "읽을 수 있는 채널이 없습니다."
+        input.TextEditable = false
+        renderMessages()
+    else selectChannel(selectedChannel) end
+    updateChannelButtons()
 end
 channelsChanged.OnClientEvent:Connect(function()
     task.delay(0.25, syncCustomChannels)
@@ -963,7 +986,7 @@ local function updateAccess()
         selectedChannel = "general"
     end
 
-    selectChannel(selectedChannel)
+    if canView(selectedChannel) then selectChannel(selectedChannel) else renderMessages(); updateChannelButtons() end
 end
 
 -- Register these signals once, not every time updateAccess runs.

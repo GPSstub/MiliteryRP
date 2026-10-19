@@ -1,3 +1,4 @@
+--!strict
 -- GeneralBubbleChat.client.luau
 -- 일반 채팅에만 말풍선 표시
 

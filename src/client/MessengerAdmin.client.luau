@@ -1,259 +1,196 @@
 --!strict
--- Messenger settings overlay. Requests are always re-validated by the server.
-local Players = game:GetService("Players")
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local player = Players.LocalPlayer
-local gui = player:WaitForChild("PlayerGui"):WaitForChild("MilitaryMessenger")
-local window = gui:WaitForChild("MessengerWindow") :: Frame
-local header = window:WaitForChild("Header") :: Frame
-local remote = ReplicatedStorage:WaitForChild("MessengerManage") :: RemoteFunction
-local changed = ReplicatedStorage:WaitForChild("MessengerChannelsChanged") :: RemoteEvent
-
-local BG = Color3.fromRGB(24, 27, 34)
-local PANEL = Color3.fromRGB(39, 45, 55)
-local MUTED = Color3.fromRGB(164, 172, 184)
-local WHITE = Color3.fromRGB(237, 241, 243)
-local GREEN = Color3.fromRGB(109, 159, 122)
-local RED = Color3.fromRGB(167, 76, 82)
-
-local function make(className: string, parent: Instance, props: {[string]: any}): any
-    local obj = Instance.new(className)
-    for key, value in props do (obj :: any)[key] = value end
-    obj.Parent = parent
-    return obj
+-- Discord-like server settings. UI grants no authority; every mutation is a server transaction.
+local Players=game:GetService("Players")
+local ReplicatedStorage=game:GetService("ReplicatedStorage")
+local player=Players.LocalPlayer
+local gui=player:WaitForChild("PlayerGui"):WaitForChild("MilitaryMessenger")
+local window=gui:WaitForChild("MessengerWindow") :: Frame
+local header=window:WaitForChild("Header") :: Frame
+local sidebar=window:WaitForChild("ChannelSidebar") :: Frame
+local remote=ReplicatedStorage:WaitForChild("MessengerManage") :: RemoteFunction
+local changed=ReplicatedStorage:WaitForChild("MessengerChannelsChanged") :: RemoteEvent
+local C={bg=Color3.fromRGB(27,30,37),side=Color3.fromRGB(20,23,29),surface=Color3.fromRGB(37,42,51),white=Color3.fromRGB(241,242,245),muted=Color3.fromRGB(153,162,174),accent=Color3.fromRGB(106,149,113),red=Color3.fromRGB(150,67,75)}
+local function make(class: string,parent: Instance,props: any): any
+    local obj=Instance.new(class)
+    for k,v in props do (obj :: any)[k]=v end
+    obj.Parent=parent;return obj
 end
-local function round(obj: Instance)
-    make("UICorner", obj, {CornerRadius = UDim.new(0, 9)})
+local function corner(o: Instance) make("UICorner",o,{CornerRadius=UDim.new(0,8)}) end
+local function button(parent: Instance,name: string,value: string,color: Color3?): TextButton
+    local b=make("TextButton",parent,{Name=name,Text=value,Font=Enum.Font.GothamMedium,TextSize=13,TextColor3=C.white,
+        BackgroundColor3=color or C.surface,BorderSizePixel=0,Size=UDim2.new(1,-8,0,44),ZIndex=17,Selectable=true})
+    corner(b);return b
 end
-local function button(parent: Instance, title: string, color: Color3?): TextButton
-    local b = make("TextButton", parent, {
-        Text = title, Font = Enum.Font.GothamMedium, TextSize = 13,
-        TextColor3 = WHITE, BackgroundColor3 = color or PANEL,
-        BorderSizePixel = 0, Size = UDim2.fromOffset(110, 34),
-    }) :: TextButton
-    round(b)
-    return b
+local function text(parent: Instance,value: string,height: number): TextLabel
+    return make("TextLabel",parent,{Text=value,Font=Enum.Font.GothamMedium,TextSize=13,TextColor3=C.white,
+        BackgroundTransparency=1,Size=UDim2.new(1,-8,0,height),TextWrapped=true,TextXAlignment=Enum.TextXAlignment.Left,ZIndex=17})
 end
-local function text(parent: Instance, value: string, height: number): TextLabel
-    return make("TextLabel", parent, {
-        Text = value, Font = Enum.Font.GothamMedium,
-        TextSize = 13, TextColor3 = WHITE,
-        BackgroundTransparency = 1, TextXAlignment = Enum.TextXAlignment.Left,
-        Size = UDim2.new(1, 0, 0, height), TextWrapped = true,
-    }) :: TextLabel
+local function input(parent: Instance,placeholder: string): TextBox
+    local box=make("TextBox",parent,{Text="",PlaceholderText=placeholder,ClearTextOnFocus=false,Font=Enum.Font.Gotham,TextSize=14,
+        TextColor3=C.white,PlaceholderColor3=C.muted,BackgroundColor3=C.surface,BorderSizePixel=0,Size=UDim2.new(1,-8,0,44),ZIndex=17})
+    corner(box);return box
 end
-local function input(parent: Instance, placeholder: string): TextBox
-    local box = make("TextBox", parent, {
-        Text = "", PlaceholderText = placeholder, ClearTextOnFocus = false,
-        Font = Enum.Font.Gotham, TextSize = 13, TextColor3 = WHITE,
-        PlaceholderColor3 = MUTED, BackgroundColor3 = PANEL,
-        BorderSizePixel = 0, Size = UDim2.new(1, 0, 0, 36),
-    }) :: TextBox
-    round(box)
-    return box
+local open=button(header,"MessengerSettingsButton","설정")
+open.AnchorPoint=Vector2.new(1,0);open.Position=UDim2.new(1,-60,0,9);open.Size=UDim2.fromOffset(72,40)
+local plus=button(sidebar,"CreateChannelButton","+")
+plus.AnchorPoint=Vector2.new(1,0);plus.Position=UDim2.new(1,-8,0,6);plus.Size=UDim2.fromOffset(40,40);plus.TextSize=25
+local overlay=make("Frame",window,{Name="SettingsOverlay",Position=UDim2.fromOffset(0,60),Size=UDim2.new(1,0,1,-60),BackgroundColor3=C.bg,BorderSizePixel=0,Visible=false,ZIndex=15})
+local nav=make("Frame",overlay,{Name="SettingsSidebar",BackgroundColor3=C.side,BorderSizePixel=0,ZIndex=16})
+local body=make("ScrollingFrame",overlay,{Name="SettingsBody",BackgroundTransparency=1,BorderSizePixel=0,ScrollBarThickness=4,
+    CanvasSize=UDim2.new(),AutomaticCanvasSize=Enum.AutomaticSize.Y,ZIndex=16})
+make("UIListLayout",body,{Padding=UDim.new(0,8),SortOrder=Enum.SortOrder.LayoutOrder})
+make("UIPadding",body,{PaddingRight=UDim.new(0,8),PaddingBottom=UDim.new(0,16)})
+local status=text(overlay,"설정을 불러오는 중…",40)
+status.Position=UDim2.new(0,12,1,-44);status.Size=UDim2.new(1,-24,0,40);status.TextColor3=C.muted
+local back=button(nav,"BackToChannels","← 통신망")
+local state: any={channels={},permissions={roles={},people={}},storage={ready=false},revision=0}
+local page="channels"
+local selectedChannel="general"
+local selectedRole="member"
+local busy=false
+local render: ()->()
+local refresh: ()->()
+local modal=make("Frame",window,{Name="ChannelModal",BackgroundColor3=C.bg,BorderSizePixel=0,Size=UDim2.fromScale(0.9,0.75),
+    AnchorPoint=Vector2.new(0.5,0.5),Position=UDim2.fromScale(0.5,0.5),Visible=false,ZIndex=25})
+corner(modal)
+make("UISizeConstraint",modal,{MaxSize=Vector2.new(420,330)})
+local modalTitle=text(modal,"채널 만들기",36);modalTitle.Position=UDim2.fromOffset(20,16);modalTitle.Size=UDim2.new(1,-40,0,36);modalTitle.TextSize=19;modalTitle.ZIndex=26
+local modalInput=input(modal,"이름 (2~24자)");modalInput.Name="NameInput";modalInput.Position=UDim2.fromOffset(20,66);modalInput.Size=UDim2.new(1,-40,0,44);modalInput.ZIndex=26
+local modalInfo=text(modal,"",90);modalInfo.Position=UDim2.fromOffset(20,118);modalInfo.Size=UDim2.new(1,-40,1,-184);modalInfo.ZIndex=26
+local confirm=button(modal,"Confirm","저장",C.accent);confirm.Position=UDim2.new(0,20,1,-56);confirm.Size=UDim2.new(0.5,-26,0,44);confirm.ZIndex=26
+local cancel=button(modal,"Cancel","취소");cancel.Position=UDim2.new(0.5,6,1,-56);cancel.Size=UDim2.new(0.5,-26,0,44);cancel.ZIndex=26
+local modalAction: ((string)->())?=nil
+cancel.Activated:Connect(function() if not busy then modal.Visible=false;modalInput:ReleaseFocus() end end)
+confirm.Activated:Connect(function() if modalAction and not busy then modalAction(modalInput.Text) end end)
+local function prompt(title: string,initial: string?,fn: (string)->())
+    modalTitle.Text=title;modalInput.Text=initial or "";modalInput.Visible=initial~=nil
+    modalInfo.Text=if initial==nil then "이 작업을 실행할까요? 삭제 후에는 해당 채널·역할이 즉시 제거됩니다." else "이름은 Roblox 필터를 거쳐 표시됩니다. 이름 생성·변경은 1분에 한 번 가능합니다."
+    modalAction=fn;modal.Visible=true
 end
-local open = button(header, "⚙ 설정")
-open.Name = "MessengerSettingsButton"
-open.AnchorPoint = Vector2.new(1, 0)
-open.Position = UDim2.new(1, -60, 0, 12)
-open.Size = UDim2.fromOffset(84, 35)
-
-local overlay = make("Frame", window, {
-    Name = "SettingsOverlay",
-    Position = UDim2.fromOffset(0, 60),
-    Size = UDim2.new(1, 0, 1, -60),
-    BackgroundColor3 = BG,
-    BorderSizePixel = 0, Visible = false,
-    ZIndex = 15,
-}) :: Frame
-local top = make("Frame", overlay, {
-    BackgroundColor3 = PANEL, BorderSizePixel = 0,
-    Size = UDim2.new(1, 0, 0, 44), ZIndex = 15,
-}) :: Frame
-local heading = text(top, "  통신망 설정", 30)
-heading.TextSize = 16
-heading.Position = UDim2.fromOffset(14, 6)
-heading.Size = UDim2.new(1, -90, 0, 30)
-heading.ZIndex = 16
-local dismiss = button(top, "돌아가기")
-dismiss.Position = UDim2.new(1, -96, 0, 5)
-dismiss.Size = UDim2.fromOffset(88, 34)
-dismiss.ZIndex = 16
-dismiss.Activated:Connect(function() overlay.Visible = false end)
-open.Activated:Connect(function()
-    overlay.Visible = not overlay.Visible
-end)
-
-local tabs = make("Frame", overlay, {
-    Position = UDim2.fromOffset(12, 54),
-    Size = UDim2.new(1, -24, 0, 37), BackgroundTransparency = 1,
-    ZIndex = 16,
-}) :: Frame
-local body = make("ScrollingFrame", overlay, {
-    Position = UDim2.fromOffset(16, 101),
-    Size = UDim2.new(1, -32, 1, -138),
-    CanvasSize = UDim2.fromOffset(0, 0),
-    AutomaticCanvasSize = Enum.AutomaticSize.Y,
-    BackgroundTransparency = 1, BorderSizePixel = 0,
-    ScrollBarThickness = 4, ZIndex = 16,
-}) :: ScrollingFrame
-make("UIListLayout", body, {Padding = UDim.new(0, 7), SortOrder = Enum.SortOrder.LayoutOrder})
-make("UIPadding", body, {
-    PaddingLeft = UDim.new(0, 4), PaddingRight = UDim.new(0, 8),
-    PaddingTop = UDim.new(0, 4), PaddingBottom = UDim.new(0, 14),
-})
-local status = text(overlay, "역할과 채널은 현재 서버에서만 유지됩니다.", 25)
-status.Position = UDim2.new(0, 16, 1, -31)
-status.Size = UDim2.new(1, -32, 0, 26)
-status.ZIndex = 16
-status.TextColor3 = MUTED
-
-local page = "channels"
-local selectedRole = "member"
-local state: any = { channels = {}, permissions = {roles = {}, people = {}} }
-local render: () -> ()
-
-local permissions = {
-    {"SEND_MESSAGES", "메시지 쓰기"},
-    {"CREATE_CHANNELS", "채널 개설"},
-    {"DELETE_CHANNELS", "채널 삭제"},
-    {"MANAGE_ROLES", "역할 관리"},
-    {"MANAGE_SETTINGS", "서버 설정"},
-    {"POST_NOTICES", "공지 작성"},
-    {"VIEW_COMMAND", "지휘 채널 읽기"},
-    {"WRITE_COMMAND", "지휘 채널 쓰기"},
-}
-local function call(action: string, payload: any?)
-    local ok, result = pcall(function()
-        return remote:InvokeServer(action, payload)
-    end)
-    if not ok or type(result) ~= "table" then
-        status.Text = "서버 통신 오류: " .. tostring(result)
-        return false
+local function useData(data)
+    if type(data)~="table" then return end
+    state=data;plus.Visible=data.canCreate==true and data.storage.ready
+    render()
+end
+local function call(action: string,payload: any?): boolean
+    if busy then return false end
+    busy=true;confirm.Active=false
+    if payload then payload.revision=state.revision end
+    local ok,result=pcall(function() return remote:InvokeServer(action,payload) end)
+    busy=false;confirm.Active=true
+    if not ok or type(result)~="table" then
+        status.Text="서버 응답을 확인하지 못했습니다. 새로고침 후 확인하세요.";modalInfo.Text=status.Text;return false
     end
-    status.Text = tostring(result.message or (result.ok and "완료" or "요청 실패"))
-    return result.ok == true, result
+    if result.data then useData(result.data) end
+    status.Text=result.message or (state.storage.ready and "모든 변경은 영구 저장 후 반영됩니다." or state.storage.error)
+    if result.ok and action~="snapshot" and action~="refresh" then modal.Visible=false;modalInput:ReleaseFocus(false)
+    else modalInfo.Text=status.Text end
+    return result.ok==true
 end
-local function refresh()
-    local ok, result = call("snapshot")
-    if ok and type(result.data) == "table" then
-        state = result.data
-        render()
+refresh=function() call("snapshot") end
+local function row(value: string,fn: ()->(),color: Color3?): TextButton
+    local b=button(body,value,value,color);b.Activated:Connect(fn);return b
+end
+local function note(value: string,height: number?) text(body,value,height or 36) end
+local tabs={}
+local function layout()
+    local narrow=window.AbsoluteSize.X<600
+    nav.Position=UDim2.fromOffset(0,0);nav.Size=if narrow then UDim2.new(1,0,0,100) else UDim2.new(0,144,1,-48)
+    back.Position=UDim2.fromOffset(8,8);back.Size=UDim2.new(if narrow then 0 else 1,if narrow then 110 else -16,0,40)
+    for i,b in tabs do
+        b.Position=if narrow then UDim2.new((i-1)/4,4,0,54) else UDim2.fromOffset(8,64+(i-1)*50)
+        b.Size=if narrow then UDim2.new(0.25,-8,0,40) else UDim2.new(1,-16,0,44)
     end
+    body.Position=if narrow then UDim2.fromOffset(12,112) else UDim2.fromOffset(160,12)
+    body.Size=if narrow then UDim2.new(1,-24,1,-162) else UDim2.new(1,-172,1,-62)
 end
-local function action(kind: string, payload: any)
-    local ok = call(kind, payload)
-    if ok then
-        task.delay(0.25, refresh)
+for i,spec in {{"channels","채널"},{"roles","역할"},{"people","사용자"},{"settings","저장 상태"}} do
+    local b=button(nav,"Tab_"..spec[1],spec[2]);tabs[i]=b
+    b.Activated:Connect(function() page=spec[1];render() end)
+end
+back.Activated:Connect(function() overlay.Visible=false;modal.Visible=false end)
+window:GetPropertyChangedSignal("AbsoluteSize"):Connect(layout);layout()
+local perms={{"SEND_MESSAGES","메시지 쓰기"},{"CREATE_CHANNELS","채널 생성"},{"DELETE_CHANNELS","채널 삭제"},{"MANAGE_ROLES","역할 관리"},
+    {"MANAGE_SETTINGS","통신망 관리"},{"POST_NOTICES","공지 작성"},{"VIEW_COMMAND","지휘 읽기"},{"WRITE_COMMAND","지휘 쓰기"}}
+local function roleIds()
+    local ids={};for id in state.permissions.roles do table.insert(ids,id) end;table.sort(ids);return ids
+end
+render=function()
+    for _,child in body:GetChildren() do if child:IsA("GuiObject") then child:Destroy() end end
+    for i,spec in {{"channels","채널"},{"roles","역할"},{"people","사용자"},{"settings","저장 상태"}} do tabs[i].BackgroundColor3=if page==spec[1] then C.accent else C.surface end
+    if not state.storage.ready then
+        note(state.storage.error or "저장소 연결 중입니다.",90)
+        row("저장소 다시 연결",function() call("refresh") end)
+        return
     end
-end
-local function clearRows()
-    for _, child in body:GetChildren() do
-        if child:IsA("GuiObject") then child:Destroy() end
-    end
-end
-local function addButton(name: string, fn: () -> (), color: Color3?): TextButton
-    local b = button(body, name, color)
-    b.Size = UDim2.new(1, -4, 0, 36)
-    b.ZIndex = 17
-    b.Activated:Connect(fn)
-    return b
-end
-local function addLabel(name: string, height: number?)
-    local l = text(body, name, height or 30)
-    l.ZIndex = 17
-    return l
-end
-local function addInput(placeholder: string)
-    local field = input(body, placeholder)
-    field.ZIndex = 17
-    return field
-end
-
-render = function()
-    clearRows()
-    for _, child in tabs:GetChildren() do
-        if child:IsA("TextButton") then child:Destroy() end
-    end
-    for index, spec in {{"channels","채널"},{"roles","역할"},{"people","사용자"},{"settings","안내"}} do
-        local b = button(tabs, spec[2], spec[1] == page and GREEN or PANEL)
-        b.Position = UDim2.new((index-1)/4, 0, 0, 0)
-        b.Size = UDim2.new(0.25, -5, 0, 34)
-        b.ZIndex = 17
-        b.Activated:Connect(function() page = spec[1]; render() end)
-    end
-    if page == "channels" then
-        addLabel("채널 관리  ·  최대 8개 추가 채널")
-        local nameBox = addInput("새 채널 이름 (2~24자)")
-        addButton("+ 채널 개설", function()
-            action("create_channel", {name = nameBox.Text})
-        end, GREEN)
-        for _, channel in state.channels or {} do
-            addButton("# " .. channel.name .. "    ✕ 삭제", function()
-                action("delete_channel", {id = channel.id})
-            end, RED)
-        end
-        addLabel("기본 채널(전체·부대·지휘·공지)은 삭제할 수 없습니다.", 36)
-    elseif page == "roles" then
-        addLabel("역할 목록  ·  역할을 선택해 권한을 수정하세요.")
-        local ids = {}
-        for id in state.permissions.roles or {} do table.insert(ids, id) end
-        table.sort(ids)
-        for _, id in ids do
-            addButton((selectedRole == id and "● " or "○ ") .. id, function()
-                selectedRole = id
-                render()
-            end)
-        end
-        addLabel("선택한 역할: " .. selectedRole)
-        local grants = state.permissions.roles[selectedRole]
-        if grants then
-            for _, entry in permissions do
-                local key, title = entry[1], entry[2]
-                addButton((grants[key] and "[✓] " or "[ ] ") .. title, function()
-                    action("set_permission", {
-                        roleId = selectedRole, permission = key,
-                        enabled = not grants[key],
-                    })
-                end)
+    if page=="channels" then
+        note("채널 설정  /  이름 · 접근 권한",40)
+        if state.canCreate then row("+ 채널 만들기",function() prompt("채널 만들기","",function(name) call("create_channel",{name=name}) end) end,C.accent) end
+        local entry=nil
+        for _,channel in state.channels do
+            if channel.canManage then
+                row((if selectedChannel==channel.id then "●  " else "#  ")..channel.name,function() selectedChannel=channel.id;render() end)
+                if channel.id==selectedChannel then entry=channel end
             end
-            addButton("선택한 역할 삭제", function()
-                action("delete_role", {roleId = selectedRole})
-                selectedRole = "member"
-            end, RED)
         end
-        addLabel("새 역할 만들기 (영문 소문자·숫자·밑줄)")
-        local roleInput = addInput("역할 ID 예: medic")
-        addButton("+ 역할 생성", function()
-            action("create_role", {roleId = roleInput.Text, permissions = {}})
-        end, GREEN)
-    elseif page == "people" then
-        addLabel("사용자 역할 배정  ·  역할 탭에서 먼저 역할을 선택하세요.", 45)
-        addLabel("현재 선택한 역할: " .. selectedRole)
-        for _, member in state.permissions.people or {} do
-            local hasRole = table.find(member.roles, selectedRole) ~= nil
-            addButton("@" .. member.name .. (hasRole and "   [제거]" or "   [+ 부여]"), function()
-                action(hasRole and "remove_role" or "assign_role", {
-                    userId = member.userId, roleId = selectedRole,
-                })
-            end)
+        if not entry then note("관리할 채널을 선택하세요.");return end
+        note("# "..entry.name.." 설정",40)
+        row("채널 이름 변경",function() prompt("채널 이름 변경",entry.name,function(name) call("rename_channel",{id=entry.id,name=name}) end) end)
+        if not entry.builtin then row("채널 삭제",function() prompt("채널 삭제",nil,function() call("delete_channel",{id=entry.id}) end) end,C.red) end
+        note("역할 허용은 합산됩니다. 비공개 채널은 member 읽기를 먼저 해제하세요.",46)
+        for _,id in roleIds() do
+            local role=state.permissions.roles[id]
+            note(role.name.."  ("..id..")",32)
+            for _,spec in {{"read","읽기"},{"write","쓰기"},{"manage","관리"}} do
+                local value=entry.acl[spec[1]][id]==true
+                row((if value then "[허용] " else "[미허용] ")..spec[2],function() call("set_channel_access",{id=entry.id,roleId=id,mode=spec[1],enabled=not value}) end)
+            end
         end
+    elseif page=="roles" then
+        if not state.canManageRoles then note("역할 관리 권한이 없습니다.");return end
+        note("역할 관리",40)
+        for _,id in roleIds() do row((if selectedRole==id then "●  " else "○  ")..state.permissions.roles[id].name,function() selectedRole=id;render() end) end
+        local role=state.permissions.roles[selectedRole]
+        if role then
+            note("선택: "..role.name.."  / "..selectedRole,40)
+            if role.protected then note("기본 역할은 수정·삭제할 수 없습니다.",40)
+            else
+                row("역할 이름 변경",function() prompt("역할 이름 변경",role.name,function(name) call("rename_role",{roleId=selectedRole,name=name}) end) end)
+                for _,spec in perms do row((if role.permissions[spec[1]] then "[허용] " else "[미허용] ")..spec[2],function() call("set_permission",{roleId=selectedRole,permission=spec[1],enabled=not role.permissions[spec[1]]}) end) end
+                row("역할 삭제",function() prompt("역할 삭제",nil,function() if call("delete_role",{roleId=selectedRole}) then selectedRole="member";render() end end) end,C.red)
+            end
+        end
+        note("새 역할 · ID는 영문 소문자/숫자/밑줄 3~24자",44)
+        local roleId=input(body,"예: medic")
+        local roleName=input(body,"역할 표시 이름")
+        row("+ 역할 생성",function() call("create_role",{roleId=roleId.Text,name=roleName.Text,permissions={}}) end,C.accent)
+    elseif page=="people" then
+        if not state.canManageRoles then note("역할 배정 권한이 없습니다.");return end
+        note("역할 탭에서 선택한 역할: "..selectedRole,40)
+        for _,person in state.permissions.people do
+            local assigned=table.find(person.roles,selectedRole)~=nil
+            row("@"..person.name.."  · "..(if assigned then "역할 제거" else "역할 부여"),function() call(if assigned then "remove_role" else "assign_role",{userId=person.userId,roleId=selectedRole}) end)
+        end
+        note("오프라인 사용자도 Roblox 숫자 UserId로 배정할 수 있습니다.",46)
+        local userId=input(body,"숫자 UserId")
+        row("선택 역할 부여",function() call("assign_role",{userId=tonumber(userId.Text),roleId=selectedRole}) end,C.accent)
+        row("선택 역할 제거",function() call("remove_role",{userId=tonumber(userId.Text),roleId=selectedRole}) end)
     else
-        addLabel("MILITARY NETWORK  /  SETTINGS", 40)
-        addLabel("채널 생성·삭제와 역할 수정은 서버가 권한을 검사합니다.", 48)
-        addLabel("기본 역할(member·officer·operator·muted)은 보호됩니다.", 50)
-        addLabel("역할 및 사용자 배정은 서버 재시작 후 초기화됩니다.", 50)
-        addLabel("정식 출시 전 DataStore 영구 저장을 추가해야 합니다.", 50)
+        note("저장소 연결 완료 · 리비전 "..state.revision,40)
+        note("저장소: "..state.storage.store,46)
+        note("설정은 서버 재시작 후 복원됩니다. 메시지 내용·채팅 기록은 저장하지 않습니다.",70)
+        note("서버 간 변경은 알림과 주기적 새로고침으로 반영됩니다. 동시 수정은 충돌 시 거부됩니다.",80)
+        row("최신 저장 데이터 새로고침",function() call("refresh") end)
     end
-    body.CanvasPosition = Vector2.zero
 end
-changed.OnClientEvent:Connect(function()
-    task.delay(0.35, function()
-        if overlay.Visible then refresh() end
-    end)
+plus.Activated:Connect(function()
+    if state.canCreate and state.storage.ready then prompt("채널 만들기","",function(name) call("create_channel",{name=name}) end) end
 end)
 open.Activated:Connect(function()
-    if overlay.Visible then task.spawn(refresh) end
+    overlay.Visible=not overlay.Visible
+    if overlay.Visible then selectedChannel=window:GetAttribute("SelectedChannel") or selectedChannel;refresh() end
 end)
-render()
-task.delay(0.4, refresh)
+changed.OnClientEvent:Connect(function() task.delay(0.65,refresh) end)
+window:GetPropertyChangedSignal("Visible"):Connect(function() if not window.Visible then modal.Visible=false;overlay.Visible=false;modalInput:ReleaseFocus(false) end end)
+render();plus.Visible=false
+task.delay(0.6,refresh)
