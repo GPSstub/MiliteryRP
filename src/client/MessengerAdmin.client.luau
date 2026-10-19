@@ -47,9 +47,22 @@ local heading=text(overlay,"통신망 설정",36)
 heading.Name="SettingsHeading";heading.TextSize=22;heading.Font=Enum.Font.GothamBold
 local status=text(overlay,"설정을 불러오는 중…",40)
 status.Position=UDim2.new(0,12,1,-44);status.Size=UDim2.new(1,-24,0,40);status.TextColor3=C.muted
+status.Size=UDim2.new(1,-236,0,40)
+local saveDraft=button(overlay,"SaveChanges","변경 저장",C.accent)
+saveDraft.AnchorPoint=Vector2.new(1,1);saveDraft.Position=UDim2.new(1,-12,1,-6);saveDraft.Size=UDim2.fromOffset(104,40);saveDraft.Visible=false
+local resetDraft=button(overlay,"ResetChanges","초기화")
+resetDraft.AnchorPoint=Vector2.new(1,1);resetDraft.Position=UDim2.new(1,-124,1,-6);resetDraft.Size=UDim2.fromOffset(92,40);resetDraft.Visible=false
 local back=button(nav,"BackToChannels","← 통신망")
 local state: any={channels={},permissions={roles={},people={}},storage={ready=false},revision=0}
-local page="channels"
+local page="user"
+local pendingOperations={}
+local latestSnapshot: any=nil
+local selectedCategory=""
+local function copy(value: any): any
+    if type(value)~="table" then return value end
+    local out={};for key,item in value do out[key]=copy(item) end;return out
+end
+local tabSpecs={{"user","사용자"},{"channels","채널"},{"categories","분류"},{"roles","역할"},{"people","멤버"},{"settings","저장"}}
 local selectedChannel="general"
 local selectedRole="member"
 local busy=false
@@ -73,6 +86,7 @@ scrim.Activated:Connect(function() if not busy then modal.Visible=false;modalInp
 cancel.Activated:Connect(function() if not busy then modal.Visible=false;modalInput:ReleaseFocus() end end)
 confirm.Activated:Connect(function() if modalAction and not busy then modalAction(modalInput.Text) end end)
 local function prompt(title: string,initial: string?,fn: (string)->())
+    if #pendingOperations>0 then status.Text="저장하지 않은 변경이 있습니다. 저장하거나 초기화하세요.";return end
     modalTitle.Text=title;modalInput.Text=initial or "";modalInput.Visible=initial~=nil
     modalInfo.Text=if initial==nil then "이 작업을 실행할까요? 삭제 후에는 해당 채널·역할이 즉시 제거됩니다." else "이름은 Roblox 필터를 거쳐 표시됩니다. 이름 생성·변경은 1분에 한 번 가능합니다."
     modalAction=fn;modal.Visible=true
@@ -82,11 +96,19 @@ local function prompt(title: string,initial: string?,fn: (string)->())
 end
 local function useData(data)
     if type(data)~="table" then return end
+    latestSnapshot=copy(data)
+    if #pendingOperations>0 then
+        if data.revision~=state.revision then status.Text="다른 변경이 있습니다. 임시 변경을 보존했습니다. 초기화 후 다시 편집하세요." end
+        return
+    end
     state=data;plus.Visible=data.canCreate==true and data.storage.ready
     if not game:GetService("UserInputService"):GetFocusedTextBox() then render() end
 end
 local function call(action: string,payload: any?): boolean
     if busy then return false end
+    if #pendingOperations>0 and not table.find({"snapshot","refresh","batch_settings"},action) then
+        status.Text="저장하지 않은 변경이 있습니다. 먼저 저장하거나 초기화하세요.";return false
+    end
     busy=true;confirm.Active=false;status.Text="변경 사항을 확인하고 있습니다…";confirm.Text="처리 중…"
     if payload then payload.revision=state.revision end
     local ok,result=pcall(function() return remote:InvokeServer(action,payload) end)
@@ -94,14 +116,57 @@ local function call(action: string,payload: any?): boolean
     if not ok or type(result)~="table" then
         status.Text="서버 응답을 확인하지 못했습니다. 새로고침 후 확인하세요.";modalInfo.Text=status.Text;return false
     end
+    if action=="batch_settings" and result.ok then pendingOperations={};saveDraft.Visible=false;resetDraft.Visible=false end
     if result.data then useData(result.data) end
     status.Text=result.message or (state.storage.ready and "변경 사항이 안전하게 저장됩니다." or state.storage.error)
+    if #pendingOperations>0 and (action=="snapshot" or action=="refresh") then
+        status.Text=if latestSnapshot and latestSnapshot.revision~=state.revision then "다른 변경이 있습니다. 임시 변경은 유지했습니다. 초기화 후 다시 편집하세요." else "저장하지 않은 변경 "..#pendingOperations.."개"
+    end
     status.TextColor3=if result.ok then C.muted else Color3.fromRGB(244,167,167)
     if result.ok and action~="snapshot" and action~="refresh" then modal.Visible=false;modalInput:ReleaseFocus(false)
     else modalInfo.Text=status.Text end
     return result.ok==true
 end
 refresh=function() call("snapshot") end
+local function queue(op: any)
+    if busy then return end
+    local identity=table.concat({op.action,op.scope or "",op.id or "",op.roleId or "",op.mode or "",op.permission or ""},":")
+    local found=false
+    for i,item in pendingOperations do
+        if item.identity==identity then pendingOperations[i]={identity=identity,op=op};found=true;break end
+    end
+    if not found then
+        if #pendingOperations>=40 then status.Text="최대 40개 변경까지 저장할 수 있습니다.";return end
+        table.insert(pendingOperations,{identity=identity,op=op})
+    end
+    if op.action=="set_overwrite" then
+        local target
+        if op.scope=="channel" then for _,entry in state.channels do if entry.id==op.id then target=entry end end
+        else for _,entry in state.categories do if entry.id==op.id then target=entry end end end
+        if target then target.overwrites=target.overwrites or {read={},write={},manage={}};target.overwrites[op.mode][op.roleId]=if op.value=="inherit" then nil else op.value=="allow" end
+    elseif op.action=="set_permission" then state.permissions.roles[op.roleId].permissions[op.permission]=op.enabled
+    elseif op.action=="place_channel" then
+        for _,entry in state.channels do if entry.id==op.id then
+            if entry.synced and not op.synced then
+                for _,category in state.categories or {} do if category.id==entry.categoryId then entry.acl=copy(category.acl);entry.overwrites=copy(category.overwrites) end end
+            end
+            entry.categoryId=op.categoryId;entry.synced=op.synced;entry.order=op.order
+        end end
+    elseif op.action=="move_category" then for _,entry in state.categories do if entry.id==op.id then entry.order=op.order end end end
+    saveDraft.Visible=true;resetDraft.Visible=true
+    status.Text="저장하지 않은 변경 "..#pendingOperations.."개 · 저장 또는 초기화하세요."
+    render()
+end
+saveDraft.Activated:Connect(function()
+    local operations={};for _,entry in pendingOperations do table.insert(operations,entry.op) end
+    if #operations>0 then call("batch_settings",{operations=operations}) end
+end)
+resetDraft.Activated:Connect(function()
+    if busy then return end
+    pendingOperations={};saveDraft.Visible=false;resetDraft.Visible=false
+    if latestSnapshot then useData(copy(latestSnapshot)) end
+    status.Text="임시 변경을 초기화했습니다."
+end)
 local function row(value: string,fn: ()->(),color: Color3?): TextButton
     local b=button(body,value,value,color);b.Activated:Connect(fn);return b
 end
@@ -109,13 +174,24 @@ local function note(value: string,height: number?)
     local label=text(body,value,height or 36)
     label.TextColor3=C.muted
 end
-local function permissionRow(value: string,enabled: boolean,fn: ()->())
+local function permissionRow(value: string,enabled: boolean,fn: ()->(),personal: boolean?)
     local line=make("Frame",body,{Name="PermissionRow",Size=UDim2.new(1,-8,0,50),BackgroundColor3=C.surface,BorderSizePixel=0,ZIndex=17})
     corner(line)
     local caption=text(line,value,50);caption.Position=UDim2.fromOffset(14,0);caption.Size=UDim2.new(1,-124,1,0)
-    local toggle=button(line,"Toggle",if enabled then "✓ 허용" else "미허용",if enabled then C.accent else C.side)
+    local toggle=button(line,"Toggle",if personal then (if enabled then "켜짐" else "꺼짐") else (if enabled then "✓ 허용" else "미허용"),if enabled then C.accent else C.side)
     toggle.AnchorPoint=Vector2.new(1,0.5);toggle.Position=UDim2.new(1,-8,0.5,0);toggle.Size=UDim2.fromOffset(92,36)
     toggle.TextXAlignment=Enum.TextXAlignment.Center;toggle.ZIndex=18;toggle.Activated:Connect(fn)
+end
+local function overwriteRow(value: string,setting: boolean?,fn: (string)->())
+    local line=make("Frame",body,{Size=UDim2.new(1,-8,0,72),BackgroundColor3=C.surface,BorderSizePixel=0,ZIndex=17})
+    corner(line)
+    local caption=text(line,value,26);caption.Position=UDim2.fromOffset(12,0)
+    for i,spec in {{"deny","× 거부"},{"inherit","/ 상속"},{"allow","✓ 허용"}} do
+        local selected=if spec[1]=="inherit" then setting==nil elseif spec[1]=="allow" then setting==true else setting==false
+        local b=button(line,spec[1],spec[2],if selected then (if spec[1]=="deny" then C.red else C.accent) else C.side)
+        b.Position=UDim2.new((i-1)/3,4,0,28);b.Size=UDim2.new(1/3,-8,0,38);b.TextXAlignment=Enum.TextXAlignment.Center;b.ZIndex=18
+        b.Activated:Connect(function() fn(spec[1]) end)
+    end
 end
 local tabs={}
 local function layout()
@@ -123,17 +199,17 @@ local function layout()
     nav.Position=UDim2.fromOffset(0,0);nav.Size=if narrow then UDim2.new(1,0,0,80) else UDim2.new(0,144,1,-48)
     back.Position=UDim2.fromOffset(8,8);back.Size=UDim2.new(if narrow then 0 else 1,if narrow then 110 else -16,0,if narrow then 32 else 40)
     for i,b in tabs do
-        b.Position=if narrow then UDim2.new((i-1)/4,4,0,40) else UDim2.fromOffset(8,64+(i-1)*50)
-        b.Size=if narrow then UDim2.new(0.25,-8,0,36) else UDim2.new(1,-16,0,44)
+        b.Position=if narrow then UDim2.new((i-1)/6,4,0,40) else UDim2.fromOffset(8,64+(i-1)*50)
+        b.Size=if narrow then UDim2.new(1/6,-6,0,36) else UDim2.new(1,-16,0,44)
     end
     heading.Position=if narrow then UDim2.fromOffset(16,84) else UDim2.fromOffset(176,12)
     heading.Size=if narrow then UDim2.new(1,-32,0,36) else UDim2.new(1,-192,0,36)
     body.Position=if narrow then UDim2.fromOffset(16,120) else UDim2.fromOffset(176,60)
     body.Size=if narrow then UDim2.new(1,-32,1,-170) else UDim2.new(1,-192,1,-110)
 end
-for i,spec in {{"channels","채널"},{"roles","역할"},{"people","사용자"},{"settings","저장 상태"}} do
+for i,spec in tabSpecs do
     local b=button(nav,"Tab_"..spec[1],spec[2]);tabs[i]=b
-    b.Activated:Connect(function() page=spec[1];render() end)
+    b.Activated:Connect(function() page=spec[1];body.CanvasPosition=Vector2.zero;render() end)
 end
 back.Activated:Connect(function() overlay.Visible=false;modal.Visible=false end)
 window:GetPropertyChangedSignal("AbsoluteSize"):Connect(layout);layout()
@@ -143,10 +219,24 @@ local function roleIds()
     local ids={};for id in state.permissions.roles do table.insert(ids,id) end;table.sort(ids);return ids
 end
 render=function()
-    heading.Text=({channels="채널 설정",roles="역할과 권한",people="사용자 역할",settings="저장 및 동기화"})[page]
-    body.CanvasPosition=Vector2.zero
+    heading.Text=({user="내 메신저 설정",categories="서버 · 카테고리",channels="서버 · 채널 설정",roles="서버 · 역할과 권한",people="서버 · 멤버 역할",settings="저장 및 동기화"})[page]
+    local scroll=body.CanvasPosition
     for _,child in body:GetChildren() do if child:IsA("GuiObject") then child:Destroy() end end
-    for i,spec in {{"channels","채널"},{"roles","역할"},{"people","사용자"},{"settings","저장 상태"}} do tabs[i].BackgroundColor3=if page==spec[1] then C.accent else C.surface end
+    for i,spec in tabSpecs do tabs[i].BackgroundColor3=if page==spec[1] then C.accent else C.surface end
+    task.defer(function() if body.Parent then body.CanvasPosition=scroll end end)
+    if page=="user" then
+        if #pendingOperations==0 then status.Text="현재 접속 중 내 화면에 적용됩니다." end
+        note("화면과 알림 설정은 나에게만 적용됩니다. 현재 접속 중 유지됩니다.",46)
+        for _,spec in {{"GroupMessages","연속 메시지 묶기",true},{"CompactMessages","촘촘한 메시지 간격",false},{"ShowAvatars","메시지 아바타 표시",true},{"ShowMembers","접속자 목록 표시",true},{"ShowNotifications","새 메시지 알림 표시",true}} do
+            local value=gui:GetAttribute(spec[1]);if value==nil then value=spec[3] end
+            permissionRow(spec[2],value,function() gui:SetAttribute(spec[1],not value);render() end,true)
+        end
+        note("메시지 글자 크기",36)
+        for _,size in {14,16,18} do row((if (gui:GetAttribute("MessageFontSize") or 16)==size then "● " else "○ ")..tostring(size),function() gui:SetAttribute("MessageFontSize",size);render() end) end
+        note("자동으로 맨 아래로 이동하지 않습니다. 알림을 눌렀을 때만 최신 메시지로 이동합니다.",60)
+        return
+    end
+    if #pendingOperations==0 then status.Text="권한·배치 변경은 변경 저장을 눌러 반영하세요." end
     if not state.storage.ready then
         note(state.storage.error or "저장소 연결 중입니다.",90)
         row("저장소 다시 연결",function() call("refresh") end)
@@ -166,13 +256,42 @@ render=function()
         note("# "..entry.name.." 설정",40)
         row("채널 이름 변경",function() prompt("채널 이름 변경",entry.name,function(name) call("rename_channel",{id=entry.id,name=name}) end) end)
         if not entry.builtin then row("채널 삭제",function() prompt("채널 삭제",nil,function() call("delete_channel",{id=entry.id}) end) end,C.red) end
-        note("역할 허용은 합산됩니다. 비공개 채널은 member 읽기를 먼저 해제하세요.",46)
+        if state.canManageSettings then
+            note("카테고리 배치 · 선택 후 변경 저장을 누르세요.",40)
+            row("분류 없음",function() queue({action="place_channel",id=entry.id,categoryId="",synced=false,order=entry.order or 0}) end)
+            for _,category in state.categories or {} do row((if entry.categoryId==category.id then "● " else "○ ")..category.name,function() queue({action="place_channel",id=entry.id,categoryId=category.id,synced=true,order=entry.order or 0}) end) end
+            if entry.categoryId and entry.categoryId~="" then
+                permissionRow("카테고리 권한 동기화",entry.synced,function() queue({action="place_channel",id=entry.id,categoryId=entry.categoryId,synced=not entry.synced,order=entry.order or 0}) end)
+            end
+            row("채널 위로",function() queue({action="place_channel",id=entry.id,categoryId=entry.categoryId or "",synced=entry.synced==true,order=math.max(0,(entry.order or 0)-1)}) end)
+            row("채널 아래로",function() queue({action="place_channel",id=entry.id,categoryId=entry.categoryId or "",synced=entry.synced==true,order=(entry.order or 0)+1}) end)
+        end
+        note("권한: 허용 / 상속 / 거부. 상속은 기존 기본 권한을 유지합니다. 다른 역할의 명시적 허용이 거부보다 우선합니다.",64)
+        if entry.synced then note("카테고리와 동기화 중입니다. 분류 탭에서 공유 권한을 편집하거나 동기화를 해제하세요.",64);return end
         for _,id in roleIds() do
-            local role=state.permissions.roles[id]
-            note(role.name,32)
+            note(state.permissions.roles[id].name,32)
             for _,spec in {{"read","읽기"},{"write","쓰기"},{"manage","관리"}} do
-                local value=entry.acl[spec[1]][id]==true
-                permissionRow(spec[2],value,function() call("set_channel_access",{id=entry.id,roleId=id,mode=spec[1],enabled=not value}) end)
+                overwriteRow(spec[2],((entry.overwrites or {})[spec[1]] or {})[id],function(value) queue({action="set_overwrite",scope="channel",id=entry.id,roleId=id,mode=spec[1],value=value}) end)
+            end
+        end
+    elseif page=="categories" then
+        if not state.canManageSettings then note("통신망 관리 권한이 없습니다.");return end
+        row("+ 카테고리 만들기",function() prompt("카테고리 만들기","",function(name) call("create_category",{name=name}) end) end,C.accent)
+        local entry=nil
+        for _,category in state.categories or {} do
+            row((if selectedCategory==category.id then "● " else "v ")..category.name,function() selectedCategory=category.id;render() end)
+            if category.id==selectedCategory then entry=category end
+        end
+        if not entry then note("카테고리를 선택하세요. 채널 탭에서 채널을 배치할 수 있습니다.",60);return end
+        row("이름 변경",function() prompt("카테고리 이름 변경",entry.name,function(name) call("rename_category",{id=entry.id,name=name}) end) end)
+        row("위로",function() queue({action="move_category",id=entry.id,order=math.max(0,(entry.order or 0)-1)}) end)
+        row("아래로",function() queue({action="move_category",id=entry.id,order=(entry.order or 0)+1}) end)
+        row("카테고리 삭제 · 채널은 유지",function() prompt("카테고리 삭제",nil,function() call("delete_category",{id=entry.id}) end) end,C.red)
+        note("동기화된 채널에 함께 적용되는 권한입니다.",40)
+        for _,id in roleIds() do
+            note(state.permissions.roles[id].name,32)
+            for _,spec in {{"read","읽기"},{"write","쓰기"},{"manage","관리"}} do
+                overwriteRow(spec[2],((entry.overwrites or {})[spec[1]] or {})[id],function(value) queue({action="set_overwrite",scope="category",id=entry.id,roleId=id,mode=spec[1],value=value}) end)
             end
         end
     elseif page=="roles" then
@@ -185,7 +304,7 @@ render=function()
             if role.protected then note("기본 역할은 수정·삭제할 수 없습니다.",40)
             else
                 row("역할 이름 변경",function() prompt("역할 이름 변경",role.name,function(name) call("rename_role",{roleId=selectedRole,name=name}) end) end)
-                for _,spec in perms do permissionRow(spec[2],role.permissions[spec[1]]==true,function() call("set_permission",{roleId=selectedRole,permission=spec[1],enabled=not role.permissions[spec[1]]}) end) end
+                for _,spec in perms do permissionRow(spec[2],role.permissions[spec[1]]==true,function() queue({action="set_permission",roleId=selectedRole,permission=spec[1],enabled=not role.permissions[spec[1]]}) end) end
                 row("역할 삭제",function() prompt("역할 삭제",nil,function() if call("delete_role",{roleId=selectedRole}) then selectedRole="member";render() end end) end,C.red)
             end
         end

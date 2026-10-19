@@ -65,7 +65,7 @@ local function refreshOnce()
     local data=Store.get()
     -- Metadata filtering is separate from permissions, never inside ShouldDeliverCallback.
     local activeNames={}
-    for _,group in {data.channels,data.roles} do
+    for _,group in {data.channels,data.roles,data.categories or {}} do
         for _,entry in group do
             if entry.authorId~=0 then
                 local key=tostring(entry.authorId)..":"..entry.name;activeNames[key]=true

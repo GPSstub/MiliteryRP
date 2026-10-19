@@ -58,6 +58,27 @@ channelSearch.Text="전체"
 task.wait(.1)
 check(channelButtons.general.Visible and not channelButtons.notice.Visible,"Channel search incorrect")
 channelSearch.Text=""
+gui:SetAttribute("ShowNotifications",false)
+task.wait(.1)
+check(not newMessages.Visible,"Notification preference ignored")
+gui:SetAttribute("ShowNotifications",true)
+gui:SetAttribute("ShowAvatars",false)
+gui:SetAttribute("MessageFontSize",18)
+task.wait(.2)
+local row=feed:FindFirstChild("Message")
+check(row and not row:FindFirstChildOfClass("ImageLabel").Visible,"Avatar preference ignored")
+gui:SetAttribute("ShowMembers",false)
+task.wait(.1)
+check(not members.Visible,"Member list preference ignored")
+gui:SetAttribute("ShowMembers",true)
+categories.cat_test={id="cat_test",name="훈련",order=1}
+for _,info in CHANNELS do if info.id=="general" or info.id=="notice" then info.categoryId="cat_test" end end
+collapsedCategories.cat_test=true
+unread.notice=0
+updateChannelButtons()
+check(categoryHeaders.cat_test.Visible and not channelButtons.notice.Visible,"Category collapse ignored")
+collapsedCategories.cat_test=false;updateChannelButtons()
+check(channelButtons.notice.Visible,"Category expand ignored")
 updateLayout(Vector2.new(390,844))
 task.wait(.2)
 check(channelToggle.Visible and not sidebar.Visible and center.Visible,"Mobile conversation layout incorrect")
