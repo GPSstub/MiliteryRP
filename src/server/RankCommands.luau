@@ -41,7 +41,8 @@ local function handle(actor: Player, text: any): (boolean, string)
         if not match then return false,"현재 서버의 정확한 Roblox 사용자 이름을 입력하세요." end
         target=match
     end
-    if not RankService.set(target,rank.id) then return false,"플레이어가 나갔거나 계급 정보가 준비되지 않았습니다." end
+    local saved,saveError=RankService.set(target,rank.id)
+    if not saved then return false,saveError or "계급을 저장하지 못했습니다." end
     return true,target.Name.." → "..rank.name
 end
 function Commands.handle(actor: Player, text: any): (boolean, string)
