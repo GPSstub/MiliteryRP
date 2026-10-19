@@ -907,6 +907,7 @@ local function updateChannelButtons()
         row.TextColor3 = allowed and C.white or C.muted
 
         local content = "#  " .. info.name
+        if mutedChannels[id] then content ..= "  🔕" end
 
         if not allowed then
             content ..= "  ·"
@@ -949,6 +950,14 @@ local function acknowledgeMessages()
 end
 
 -- New messages never write CanvasPosition. Only this explicit user action jumps.
+muteButton.Activated:Connect(function()
+    mutedChannels[selectedChannel]=not mutedChannels[selectedChannel]
+    muteButton.Text=if mutedChannels[selectedChannel] then "🔕" else "🔔"
+    description.Text=if mutedChannels[selectedChannel] then "이 채널의 일반 알림이 음소거되었습니다." else "알림을 다시 활성화했습니다."
+    updateChannelButtons()
+end)
+markReadButton.Activated:Connect(function() acknowledgeMessages() end)
+
 newMessages.Activated:Connect(function()
     local id = selectedChannel
     task.defer(function()
@@ -1141,7 +1150,7 @@ local function createMessage(entry: any, order: number)
     return row
 end
 
-local function renderMessages()
+renderMessages = function()
     local position = scrollPositions[selectedChannel] or Vector2.zero
     renderGeneration += 1
     local generation = renderGeneration
@@ -1151,14 +1160,15 @@ local function renderMessages()
     local query = string.lower(messageSearch.Text)
     local count = 0
     for _, entry in history[selectedChannel] or {} do
-        if query == "" or string.find(string.lower(entry.message), query, 1, true)
-            or string.find(string.lower(entry.name), query, 1, true) then
-            count += 1
-            createMessage(entry, count)
+        local threadVisible=if threadRoot then (entry.id==threadRoot or entry.threadRoot==threadRoot)
+            else (entry.threadRoot==nil or query~="")
+        if not entry.deleted and threadVisible and searchMatches(entry,query) then
+            count+=1
+            createMessage(entry,count)
         end
     end
     if count == 0 then
-        local empty = label(feed, if query ~= "" then "검색 결과가 없습니다." else "# " .. getChannelInfo(selectedChannel).name .. "에 오신 것을 환영합니다.\n이 채널에서 대화를 시작해 보세요.", 15, C.muted, false)
+        local empty = label(feed, if query ~= "" then "검색 결과가 없습니다." else (if threadRoot then "이 스레드에는 아직 답장이 없습니다." else "# " .. getChannelInfo(selectedChannel).name .. "에 오신 것을 환영합니다.\n이 채널에서 대화를 시작해 보세요."), 15, C.muted, false)
         empty.Name = "EmptyState"
         empty.Size = UDim2.new(1, -12, 0, 100)
         empty.TextWrapped = true
