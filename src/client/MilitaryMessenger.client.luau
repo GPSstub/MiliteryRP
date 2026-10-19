@@ -704,6 +704,14 @@ local HttpService=game:GetService("HttpService")
 local Protocol=require(game:GetService("ReplicatedStorage"):WaitForChild("Shared"):WaitForChild("MessengerActionProtocol"))
 local actionRemote=game:GetService("ReplicatedStorage"):WaitForChild("MessengerActions") :: RemoteFunction
 local actionChanged=game:GetService("ReplicatedStorage"):WaitForChild("MessengerActionsChanged") :: RemoteEvent
+local archiveRemote=game:GetService("ReplicatedStorage"):WaitForChild("MessengerArchive") :: RemoteFunction
+local archiveChanged=game:GetService("ReplicatedStorage"):WaitForChild("MessengerArchiveChanged") :: RemoteEvent
+local archiveLoaded: {[string]: boolean}={}
+local archiveLoading: {[string]: boolean}={}
+local archiveCursor: {[string]: number?}={}
+local archiveLastFetch: {[string]: number}={}
+local archiveDirty: {[string]: boolean}={}
+local loadArchive: (string,number?)->() = function() end
 local mutedChannels: {[string]: boolean} = {}
 local replyTarget: any? = nil
 local editTarget: any? = nil
@@ -744,7 +752,14 @@ local function requestAction(action: string, entry: any, emoji: string?)
     end
     task.spawn(function()
         local ok,result=pcall(function()
-            return actionRemote:InvokeServer(action,{id=entry.id,emoji=emoji})
+            if channelAccess[entry.channelId or selectedChannel]
+            and channelAccess[entry.channelId or selectedChannel].persistent then
+            return archiveRemote:InvokeServer("mutate",{
+                channelId=entry.channelId or selectedChannel,
+                id=entry.id,mode=action,emoji=emoji,
+            })
+        end
+        return actionRemote:InvokeServer(action,{id=entry.id,emoji=emoji})
         end)
         if not ok or type(result)~="table" or result.ok~=true then
             description.Text=(if ok and type(result)=="table" then result.message else nil)
