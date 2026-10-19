@@ -14,6 +14,7 @@ local started = false
 local request: RemoteFunction? = nil
 local changed: RemoteEvent? = nil
 local lastAction: {[Player]: number} = {}
+local lastSnapshot: {[Player]: number} = {}
 
 local function validId(id: any): boolean
     return type(id) == "string" and #id >= 8 and #id <= 90 and id:match("^[%w%-_]+$") ~= nil
@@ -32,12 +33,14 @@ local function publish(entry: any, action: string, extra: any?)
     local event = changed
     if not event then return end
     for _, viewer in Players:GetPlayers() do
-        if Permissions.channel(viewer, entry.channelId, "read")
-            and (entry.channelId ~= "unit" or (
-                (viewer:GetAttribute("Unit") or (viewer.Team and not viewer.Neutral and viewer.Team.Name)) == entry.unit
-                and entry.unit ~= nil
-            )) then
-            event:FireClient(viewer, {action=action, id=entry.id, channelId=entry.channelId, extra=extra})
+        if Permissions.channel(viewer, entry.channelId, "read") then
+            local unit = viewer:GetAttribute("Unit")
+            if type(unit)~="string" or unit=="" then
+                unit=if viewer.Team and not viewer.Neutral then viewer.Team.Name else nil
+            end
+            if entry.channelId ~= "unit" or (entry.unit~=nil and entry.unit==unit) then
+                event:FireClient(viewer, {action=action, id=entry.id, channelId=entry.channelId, extra=extra})
+            end
         end
     end
 end
@@ -113,6 +116,15 @@ function Actions.observe(channelId: string, message: TextChatMessage): boolean
     if kind=="e" or kind=="r" or kind=="t" then
         local reference=find(target)
         if not reference or reference.deleted or reference.channelId~=channelId then return false end
+        if channelId=="unit" then
+            local sender=Players:GetPlayerByUserId(senderId)
+            if not sender then return false end
+            local senderUnit=sender:GetAttribute("Unit")
+            if type(senderUnit)~="string" or senderUnit=="" then
+                senderUnit=if sender.Team and not sender.Neutral then sender.Team.Name else nil
+            end
+            if senderUnit==nil or reference.unit~=senderUnit then return false end
+        end
         if kind=="e" and reference.authorId~=senderId then return false end
         if kind=="e" then
             -- The edit body goes through TextChatService filtering like a normal chat message.
@@ -142,7 +154,14 @@ end
 
 local function invoke(player: Player, action: any, payload: any): any
     if type(action)~="string" or type(payload)~="table" then return {ok=false,message="잘못된 요청"} end
-    if action=="snapshot" then return snapshot(player,payload.channelId) end
+    if action=="snapshot" then
+        local now=os.clock()
+        if now-(lastSnapshot[player] or -100)<0.5 then
+            return {ok=false,message="잠시 후 다시 불러오세요."}
+        end
+        lastSnapshot[player]=now
+        return snapshot(player,payload.channelId)
+    end
     local now=os.clock()
     if now-(lastAction[player] or -100)<0.15 then return {ok=false,message="너무 빠른 요청입니다."} end
     lastAction[player]=now
@@ -185,7 +204,9 @@ function Actions.start()
     request=remote
     changed=event
     remote.OnServerInvoke=invoke
-    Players.PlayerRemoving:Connect(function(player) lastAction[player]=nil end)
+    Players.PlayerRemoving:Connect(function(player)
+        lastAction[player]=nil;lastSnapshot[player]=nil
+    end)
 end
 
 return Actions
