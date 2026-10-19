@@ -239,6 +239,7 @@ local windowScale = create("UIScale", window, {
 -- ==========================================
 
 local header = create("Frame", window, {
+    Name = "Header",
     Size = UDim2.new(1, 0, 0, 60),
     BackgroundColor3 = C.sidebar,
     BorderSizePixel = 0,
@@ -294,9 +295,18 @@ sideTitle.Position = UDim2.fromOffset(14, 18)
 sideTitle.Size = UDim2.new(1, -28, 0, 24)
 
 local channelButtons = {}
-
+local channelsScroll = create("ScrollingFrame", sidebar, {
+    Name = "ChannelList",
+    Position = UDim2.fromOffset(0, 45),
+    Size = UDim2.new(1, 0, 1, -132),
+    BackgroundTransparency = 1,
+    BorderSizePixel = 0,
+    ScrollBarThickness = 2,
+    AutomaticCanvasSize = Enum.AutomaticSize.Y,
+    CanvasSize = UDim2.fromOffset(0, 0),
+})
 for index, info in CHANNELS do
-    local row = button(sidebar, "#  " .. info.name, C.sidebar)
+    local row = button(channelsScroll, "#  " .. info.name, C.sidebar)
 
     row.Name = info.id
     row.TextXAlignment = Enum.TextXAlignment.Left
@@ -304,7 +314,7 @@ for index, info in CHANNELS do
 
     row.Position = UDim2.fromOffset(
         10,
-        54 + (index - 1) * 46
+        10 + (index - 1) * 46
     )
 
     row.Size = UDim2.new(1, -20, 0, 40)
@@ -868,6 +878,66 @@ for _, info in CHANNELS do
         selectChannel(id)
     end)
 end
+
+-- Keep channel listings in sync with the server. Only the server creates/deletes channels.
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local manageRemote = ReplicatedStorage:WaitForChild("MessengerManage") :: RemoteFunction
+local channelsChanged = ReplicatedStorage:WaitForChild("MessengerChannelsChanged") :: RemoteEvent
+local function syncCustomChannels()
+    local ok, result = pcall(function()
+        return manageRemote:InvokeServer("snapshot")
+    end)
+    if not ok or not result or not result.ok or not result.data then return end
+    local incoming = {}
+    for _, item in result.data.channels or {} do
+        if type(item) == "table" and type(item.id) == "string"
+            and type(item.channel) == "string" and type(item.name) == "string" then
+            incoming[item.id] = item
+        end
+    end
+    for index = #CHANNELS, 1, -1 do
+        local info = CHANNELS[index]
+        if info.id:sub(1, 7) == "custom_" and not incoming[info.id] then
+            local row = channelButtons[info.id]
+            if row then row:Destroy() end
+            channelButtons[info.id] = nil
+            channelIds[info.channel] = nil
+            history[info.id] = nil
+            unread[info.id] = nil
+            table.remove(CHANNELS, index)
+            if selectedChannel == info.id then selectedChannel = "general" end
+        end
+    end
+    for _, info in incoming do
+        if not channelButtons[info.id] then
+            table.insert(CHANNELS, info)
+            channelIds[info.channel] = info.id
+            history[info.id] = {}
+            unread[info.id] = 0
+            local row = button(channelsScroll, "#  " .. info.name, C.sidebar)
+            row.Name = info.id
+            row.TextXAlignment = Enum.TextXAlignment.Left
+            row.TextSize = 13
+            channelButtons[info.id] = row
+            local id = info.id
+            row.Activated:Connect(function() selectChannel(id) end)
+        end
+    end
+    for index, info in CHANNELS do
+        local row = channelButtons[info.id]
+        if row then
+            row.Position = UDim2.fromOffset(10, 10 + (index - 1) * 46)
+            row.Size = UDim2.new(1, -20, 0, 40)
+            if info.id:sub(1, 7) == "custom_" then row.Text = "#  " .. info.name end
+        end
+    end
+    channelsScroll.CanvasSize = UDim2.fromOffset(0, 20 + #CHANNELS * 46)
+    selectChannel(selectedChannel)
+end
+channelsChanged.OnClientEvent:Connect(function()
+    task.delay(0.25, syncCustomChannels)
+end)
+task.defer(syncCustomChannels)
 
 -- ==========================================
 -- 플레이어 정보 변화 감지
