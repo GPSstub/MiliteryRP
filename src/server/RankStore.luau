@@ -27,13 +27,14 @@ local function valid(record: any): boolean
 end
 
 function RankStore.load(userId: number): (boolean, string?, string?)
-    if not store then
+    local activeStore = store
+    if not activeStore then
         return false, nil, "계급 저장소에 연결할 수 없습니다."
     end
 
     for attempt = 1, 3 do
         local ok, result = pcall(function()
-            return store:GetAsync(keyFor(userId))
+            return activeStore:GetAsync(keyFor(userId))
         end)
         if ok then
             if result == nil then
@@ -54,7 +55,8 @@ function RankStore.load(userId: number): (boolean, string?, string?)
 end
 
 function RankStore.save(userId: number, rankId: string): (boolean, string?)
-    if not store then
+    local activeStore = store
+    if not activeStore then
         return false, "계급 저장소에 연결할 수 없습니다."
     end
     if not Catalog.find(rankId) then
@@ -70,7 +72,7 @@ function RankStore.save(userId: number, rankId: string): (boolean, string?)
     }
     for attempt = 1, 3 do
         local ok, result = pcall(function()
-            return store:UpdateAsync(keyFor(userId), function(current)
+            return activeStore:UpdateAsync(keyFor(userId), function(current)
                 if current ~= nil and not valid(current) then
                     error("Invalid existing rank record")
                 end
