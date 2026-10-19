@@ -15,7 +15,7 @@ local metadataLast={}
 local function snapshot(actor: Player)
     local data=Store.get()
     local result={channels={},permissions={roles={},people={},ownerId=Rules.OWNER},storage=Store.status(),revision=data.revision,
-        canCreate=Permissions.has(actor,"CREATE_CHANNELS"),canManageRoles=Permissions.has(actor,"MANAGE_ROLES")}
+        canCreate=Permissions.has(actor,"CREATE_CHANNELS"),canManageRoles=Permissions.has(actor,"MANAGE_ROLES"),canManageSettings=Permissions.has(actor,"MANAGE_SETTINGS")}
     if not result.storage.ready then return result end
     for id,entry in data.channels do
         local read=Permissions.channel(actor,id,"read")
