@@ -730,6 +730,8 @@ local function updateMode()
         modeCaption.Text="⌗ 스레드에서 대화 중"
     end
     threadBackButton.Visible=threadRoot~=nil
+    feed.Position=UDim2.fromOffset(12,if threadRoot then 112 else 78)
+    feed.Size=UDim2.new(1,-24,1,if threadRoot then -246 else -212)
 end
 
 local function requestAction(action: string, entry: any, emoji: string?)
@@ -874,6 +876,32 @@ pinsButton.Activated:Connect(function()
     if pinsPanel.Visible then refreshPins() end
 end)
 
+local lastStateSync: {[string]: number} = {}
+local function syncMessageActions(channelId: string)
+    local now=os.clock()
+    if now-(lastStateSync[channelId] or -100)<3 then return end
+    lastStateSync[channelId]=now
+    task.spawn(function()
+        local ok,result=pcall(function()
+            return actionRemote:InvokeServer("snapshot",{channelId=channelId})
+        end)
+        if not ok or type(result)~="table" or not result.ok then return end
+        local updated=false
+        for _,info in result.data or {} do
+            local entry=findEntry(info.id)
+            if entry and entry.channelId==channelId then
+                entry.pinned=info.pinned==true
+                entry.reactions=info.reactions or {}
+                updated=true
+            end
+        end
+        if updated and selectedChannel==channelId then
+            renderMessages()
+            if pinsPanel.Visible then refreshPins() end
+        end
+    end)
+end
+
 local function getChannelInfo(id)
     for _, info in CHANNELS do
         if info.id == id then
@@ -992,7 +1020,8 @@ local function createMessage(entry: any, order: number)
     corner(avatar,18)
     local prefix=(if entry.pinned then "📌  " else "")..
         entry.name.."  ·  "..entry.rank.."  ·  "..entry.time..
-        (if entry.edited then "  (수정됨)" else "")
+        (if entry.edited then "  (수정됨)" else "")..
+        (if (entry.threadCount or 0)>0 then "  ⌗ "..tostring(entry.threadCount) else "")
     local author=label(row,prefix,13,C.accentLight,true)
     author.Position=UDim2.fromOffset(46,0)
     author.Size=UDim2.new(1,-52,0,22)
@@ -1317,6 +1346,7 @@ local function selectChannel(id)
 
     updateChannelButtons()
     if switched or #feed:GetChildren() <= 2 then renderMessages() end
+    syncMessageActions(id)
     updateNotice()
     renderMembers()
 end
@@ -1604,6 +1634,9 @@ local function receiveMessage(message)
     if entry.threadRoot then
         local root=findEntry(entry.threadRoot)
         if root then root.threadCount=(root.threadCount or 0)+1 end
+        if opened and selectedChannel==id and threadRoot==nil then
+            renderMessages()
+        end
     end
     local mentionsMe=string.find(string.lower(entry.message),"@"..string.lower(player.Name),1,true)~=nil
         or string.find(string.lower(entry.message),"@"..string.lower(player.DisplayName),1,true)~=nil
