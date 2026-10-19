@@ -967,64 +967,177 @@ input:GetPropertyChangedSignal("Text"):Connect(function()
 end)
 
 
-local function createMessage(entry, order)
-    local row = create("Frame", feed, {
-        Name = "Message",
-
-        LayoutOrder = order,
-
-        BackgroundTransparency = 1,
-        BorderSizePixel = 0,
-
-        Size = UDim2.new(1, -8, 0, 0),
-        AutomaticSize = Enum.AutomaticSize.Y,
+-- Render the text already filtered by Roblox for this player.
+local function createMessage(entry: any, order: number)
+    local row=create("Frame",feed,{
+        Name="Message",LayoutOrder=order,BackgroundTransparency=1,BorderSizePixel=0,
+        Size=UDim2.new(1,-8,0,0),AutomaticSize=Enum.AutomaticSize.Y,
     })
-
-    create("UISizeConstraint", row, { MinSize = Vector2.new(0, 48) })
-    local avatar = create("ImageLabel", row, {
-        Position = UDim2.fromOffset(0, 2),
-        Size = UDim2.fromOffset(36, 36),
-
-        BackgroundColor3 = C.surface,
-        BorderSizePixel = 0,
-
-        Image = (
-            "rbxthumb://type=AvatarHeadShot&id="
-            .. tostring(entry.userId)
-            .. "&w=100&h=100"
-        ),
+    row:SetAttribute("MessageId",entry.id or "")
+    create("UISizeConstraint",row,{MinSize=Vector2.new(0,58)})
+    local avatar=create("ImageLabel",row,{
+        Position=UDim2.fromOffset(0,2),Size=UDim2.fromOffset(36,36),
+        BackgroundColor3=C.surface,BorderSizePixel=0,
+        Image="rbxthumb://type=AvatarHeadShot&id="..tostring(entry.userId).."&w=100&h=100",
     })
+    corner(avatar,18)
+    local prefix=(if entry.pinned then "📌  " else "")..
+        entry.name.."  ·  "..entry.rank.."  ·  "..entry.time..
+        (if entry.edited then "  (수정됨)" else "")
+    local author=label(row,prefix,13,C.accentLight,true)
+    author.Position=UDim2.fromOffset(46,0)
+    author.Size=UDim2.new(1,-52,0,22)
 
-    corner(avatar, 18)
+    local body=create("Frame",row,{
+        Name="Content",Position=UDim2.fromOffset(46,24),
+        Size=UDim2.new(1,-52,0,0),AutomaticSize=Enum.AutomaticSize.Y,
+        BackgroundTransparency=1,BorderSizePixel=0,
+    })
+    create("UIListLayout",body,{
+        SortOrder=Enum.SortOrder.LayoutOrder,Padding=UDim.new(0,3),
+    })
+    if entry.replyTo then
+        local target=findEntry(entry.replyTo)
+        local preview=button(body,"↩ "..(if target then target.name.." · "..target.message else "이전 답장"),C.sidebar)
+        preview.LayoutOrder=1
+        preview.Size=UDim2.new(1,0,0,25)
+        preview.TextSize=11
+        preview.TextColor3=C.muted
+        preview.TextXAlignment=Enum.TextXAlignment.Left
+        preview.Activated:Connect(function() jumpToMessage(entry.replyTo) end)
+    elseif entry.threadRoot then
+        local line=label(body,"⌗  스레드 답장",11,C.accentLight,false)
+        line.LayoutOrder=1
+        line.Size=UDim2.new(1,0,0,19)
+    end
 
-    local author = label(
-        row,
-        entry.name .. "  ·  " .. entry.rank .. "  ·  " .. entry.time,
-        13,
-        C.accentLight,
-        true
-    )
+    local content=label(body,entry.message,15,C.white,false)
+    content.LayoutOrder=2
+    content.Size=UDim2.new(1,0,0,0)
+    content.AutomaticSize=Enum.AutomaticSize.Y
+    content.TextWrapped=true
+    content.TextTruncate=Enum.TextTruncate.None
+    content.TextYAlignment=Enum.TextYAlignment.Top
+    content.RichText=false
 
-    author.Position = UDim2.fromOffset(46, 0)
-    author.Size = UDim2.new(1, -50, 0, 22)
+    local reactionCount=0
+    for _,emoji in reactionChoices do
+        local value=entry.reactions and entry.reactions[emoji]
+        if value and value.count and value.count>0 then reactionCount+=1 end
+    end
+    if reactionCount>0 then
+        local bar=create("ScrollingFrame",body,{
+            BackgroundTransparency=1,BorderSizePixel=0,LayoutOrder=3,
+            Size=UDim2.new(1,0,0,27),ScrollBarThickness=0,
+            ScrollingDirection=Enum.ScrollingDirection.X,
+            CanvasSize=UDim2.fromOffset(reactionCount*69,0),
+        })
+        create("UIListLayout",bar,{
+            FillDirection=Enum.FillDirection.Horizontal,
+            Padding=UDim.new(0,4),SortOrder=Enum.SortOrder.LayoutOrder,
+        })
+        for _,emoji in reactionChoices do
+            local value=entry.reactions and entry.reactions[emoji]
+            if value and value.count and value.count>0 then
+                local b=button(bar,emoji.." "..tostring(value.count),if value.mine then C.accent else C.surface)
+                b.Size=UDim2.fromOffset(65,26)
+                b.TextSize=12
+                b.Activated:Connect(function() requestAction("react",entry,emoji) end)
+            end
+        end
+    end
 
-    local messageText = label(
-        row,
-        entry.message,
-        15,
-        C.white,
-        false
-    )
+    local actions=create("ScrollingFrame",body,{
+        Name="MessageActions",BackgroundTransparency=1,BorderSizePixel=0,
+        LayoutOrder=4,Size=UDim2.new(1,0,0,28),
+        ScrollingDirection=Enum.ScrollingDirection.X,ScrollBarThickness=0,
+        CanvasSize=UDim2.fromOffset(236,0),
+    })
+    create("UIListLayout",actions,{
+        FillDirection=Enum.FillDirection.Horizontal,
+        Padding=UDim.new(0,4),SortOrder=Enum.SortOrder.LayoutOrder,
+    })
+    local function actionButton(titleText: string,width: number,callback: ()->())
+        local b=button(actions,titleText,C.surface)
+        b.Size=UDim2.fromOffset(width,26)
+        b.TextSize=11
+        b.Activated:Connect(callback)
+    end
+    actionButton("↩ 답장",54,function() beginReply(entry,false) end)
+    actionButton("⌗ 스레드",68,function() beginReply(entry,true) end)
+    actionButton("☺ 반응",60,function()
+        expandedEmoji=if expandedEmoji==entry.id then nil else entry.id
+        expandedMenu=nil
+        renderMessages()
+    end)
+    actionButton("···",34,function()
+        expandedMenu=if expandedMenu==entry.id then nil else entry.id
+        expandedEmoji=nil
+        renderMessages()
+    end)
 
-    messageText.Position = UDim2.fromOffset(46, 24)
-    messageText.Size = UDim2.new(1, -52, 0, 0)
+    if expandedEmoji==entry.id then
+        local palette=create("ScrollingFrame",body,{
+            LayoutOrder=5,Size=UDim2.new(1,0,0,30),BackgroundTransparency=1,
+            BorderSizePixel=0,ScrollingDirection=Enum.ScrollingDirection.X,
+            ScrollBarThickness=0,CanvasSize=UDim2.fromOffset(6*36,0),
+        })
+        create("UIListLayout",palette,{
+            FillDirection=Enum.FillDirection.Horizontal,
+            Padding=UDim.new(0,4),
+        })
+        for _,emoji in reactionChoices do
+            local buttonEmoji=button(palette,emoji,C.surface)
+            buttonEmoji.Size=UDim2.fromOffset(32,28)
+            buttonEmoji.TextSize=17
+            buttonEmoji.Activated:Connect(function()
+                expandedEmoji=nil
+                requestAction("react",entry,emoji)
+                renderMessages()
+            end)
+        end
+    end
 
-    messageText.AutomaticSize = Enum.AutomaticSize.Y
-    messageText.TextWrapped = true
-    messageText.TextTruncate = Enum.TextTruncate.None
-    messageText.TextYAlignment = Enum.TextYAlignment.Top
-    messageText.RichText = false
-
+    if expandedMenu==entry.id then
+        local menu=create("ScrollingFrame",body,{
+            LayoutOrder=6,Size=UDim2.new(1,0,0,32),BackgroundTransparency=1,
+            BorderSizePixel=0,ScrollingDirection=Enum.ScrollingDirection.X,
+            ScrollBarThickness=0,CanvasSize=UDim2.fromOffset(260,0),
+        })
+        create("UIListLayout",menu,{
+            FillDirection=Enum.FillDirection.Horizontal,Padding=UDim.new(0,5),
+        })
+        local function menuButton(textValue: string,fn: ()->())
+            local b=button(menu,textValue,C.hover)
+            b.Size=UDim2.fromOffset(79,30)
+            b.TextSize=12
+            b.Activated:Connect(fn)
+        end
+        if entry.userId==player.UserId and canWrite(selectedChannel) then
+            menuButton("✎ 수정",function()
+                expandedMenu=nil
+                beginEdit(entry)
+                renderMessages()
+            end)
+        end
+        local access=channelAccess[selectedChannel]
+        local moderator=player:GetAttribute("MessengerCanManageSettings")==true
+            and access~=nil and access.canManage==true
+        if entry.userId==player.UserId or moderator then
+            menuButton("🗑 삭제",function()
+                expandedMenu=nil
+                requestAction("delete",entry)
+                renderMessages()
+            end)
+        end
+        if moderator then
+            menuButton(if entry.pinned then "고정 해제" else "📌 고정",function()
+                expandedMenu=nil
+                requestAction("pin",entry)
+                renderMessages()
+            end)
+        end
+    end
     return row
 end
 
