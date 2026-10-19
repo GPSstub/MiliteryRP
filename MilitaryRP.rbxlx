@@ -1,0 +1,3477 @@
+<roblox xmlns:xmime="http://www.w3.org/2005/05/xmlmime" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.roblox.com/roblox.xsd" version="4">
+	<External>null</External>
+	<External>nil</External>
+	<Item class="Workspace" referent="RBX1">
+		<Properties>
+			<float name="AirDensity">0.00120000006</float>
+			<float name="AirTurbulenceIntensity">0</float>
+			<bool name="AllowThirdPartySales">false</bool>
+			<token name="AuthorityMode">1</token>
+			<token name="AvatarUnificationMode">0</token>
+			<token name="ClientAnimatorThrottling">0</token>
+			<Ref name="CurrentCamera">RBX9b271520a10f4bd98dd895278adfa5d8</Ref>
+			<double name="DistributedGameTime">0</double>
+			<token name="EnableSLIMAvatars">0</token>
+			<token name="ExpandedTerrain">0</token>
+			<bool name="ExplicitAutoJoints">true</bool>
+			<bool name="FallHeightEnabled">true</bool>
+			<float name="FallenPartsDestroyHeight">-500</float>
+			<token name="FluidForces">0</token>
+			<Vector3 name="GlobalWind">
+				<X>0</X>
+				<Y>0</Y>
+				<Z>0</Z>
+			</Vector3>
+			<float name="Gravity">196.199997</float>
+			<token name="IKControlConstraintSupport">0</token>
+			<token name="ImprovedAnimationConstraint">0</token>
+			<token name="ImprovedPhysicsReplication">0</token>
+			<token name="LayeredClothingCacheOptimizations">0</token>
+			<token name="LuauTypeCheckMode">0</token>
+			<token name="MapTVRemoteToGamepadKeycodes">0</token>
+			<token name="MeshPartHeadsAndAccessories">0</token>
+			<token name="MeshStreamingAndImprovedLods">0</token>
+			<token name="ModelStreamingBehavior">0</token>
+			<token name="NextGenerationReplication">0</token>
+			<token name="PathfindingUseImprovedSearch">0</token>
+			<token name="PhysicsSteppingMethod">0</token>
+			<token name="PlayerCharacterDestroyBehavior">0</token>
+			<token name="PlayerScriptsUseInputActionSystem">0</token>
+			<token name="PredictiveStreamingMode">0</token>
+			<token name="PrimalPhysicsSolver">0</token>
+			<token name="RejectCharacterDeletions">0</token>
+			<token name="RenderingCacheOptimizations">0</token>
+			<token name="ReplicateInstanceDestroySetting">0</token>
+			<token name="ReplicationFrequency">0</token>
+			<token name="ReplicationThroughput">0</token>
+			<token name="Retargeting">0</token>
+			<token name="SandboxedInstanceMode">0</token>
+			<token name="SignalBehavior2">0</token>
+			<token name="StreamOutBehavior">0</token>
+			<bool name="StreamingAdaptiveRadius">false</bool>
+			<bool name="StreamingEnabled">false</bool>
+			<token name="StreamingIntegrityMode">0</token>
+			<int name="StreamingMinRadius">64</int>
+			<int name="StreamingTargetRadius">1024</int>
+			<bool name="TerrainWeldsFixed">true</bool>
+			<token name="TouchEventsUseCollisionGroups">0</token>
+			<bool name="TouchesUseCollisionGroups">false</bool>
+			<token name="UseFixedSimulation">0</token>
+			<token name="UseInputSink">0</token>
+			<token name="UseNewLuauTypeSolver">1</token>
+			<token name="ValidateEnabledProximityPrompt">0</token>
+			<bool name="AutoSimulate">true</bool>
+			<BinaryString name="CollisionGroupData">AQEABP////8HRGVmYXVsdA==</BinaryString>
+			<Vector3 name="GravityDirection">
+				<X>0</X>
+				<Y>-1</Y>
+				<Z>0</Z>
+			</Vector3>
+			<float name="SimulationRate">1</float>
+			<float name="Wind">0</float>
+			<Vector3 name="WindDirection">
+				<X>0</X>
+				<Y>0</Y>
+				<Z>0</Z>
+			</Vector3>
+			<token name="LevelOfDetail">0</token>
+			<CoordinateFrame name="ModelMeshCFrame">
+				<X>0</X>
+				<Y>0</Y>
+				<Z>0</Z>
+				<R00>1</R00>
+				<R01>0</R01>
+				<R02>0</R02>
+				<R10>0</R10>
+				<R11>1</R11>
+				<R12>0</R12>
+				<R20>0</R20>
+				<R21>0</R21>
+				<R22>1</R22>
+			</CoordinateFrame>
+			<SharedString name="ModelMeshData">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+			<Vector3 name="ModelMeshSize">
+				<X>0</X>
+				<Y>0</Y>
+				<Z>0</Z>
+			</Vector3>
+			<token name="ModelStreamingMode">0</token>
+			<bool name="NeedsPivotMigration">false</bool>
+			<Ref name="PrimaryPart">null</Ref>
+			<float name="ScaleFactor">1</float>
+			<SharedString name="SlimHash">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+			<OptionalCoordinateFrame name="WorldPivotData">
+				<CFrame>
+					<X>0</X>
+					<Y>0</Y>
+					<Z>0</Z>
+					<R00>1</R00>
+					<R01>0</R01>
+					<R02>0</R02>
+					<R10>0</R10>
+					<R11>1</R11>
+					<R12>0</R12>
+					<R20>0</R20>
+					<R21>0</R21>
+					<R22>1</R22>
+				</CFrame>
+			</OptionalCoordinateFrame>
+			<BinaryString name="AttributesSerialize"></BinaryString>
+			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+			<bool name="DefinesCapabilities">false</bool>
+			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
+			<string name="Name">Workspace</string>
+			<BinaryString name="SerializedOverrides"></BinaryString>
+			<int64 name="SourceAssetId">-1</int64>
+			<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+			<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca800000002</UniqueId>
+		</Properties>
+		<Item class="Terrain" referent="RBX5d0bb561d78a430fbe1138a5256ba0d3">
+			<Properties>
+				<token name="AcquisitionMethod">0</token>
+				<bool name="Decoration">false</bool>
+				<float name="GrassLength">0.699999988</float>
+				<BinaryString name="MaterialColors"><![CDATA[AAAAAAAAan8/P39rf2Y/ilY+j35fi21PZmxvZbDqw8faiVpHOi4kHh4lZlw76JxKc3trhHta
+gcLgc4RKxr21zq2UlJSM]]></BinaryString>
+				<SharedString name="Materials">leDEa27wHRPaBssaK0OoqQ==</SharedString>
+				<BinaryString name="PhysicsGrid">AgMAAAAAAAAAAAAAAAA=</BinaryString>
+				<BinaryString name="SmoothGrid">AQU=</BinaryString>
+				<bool name="SmoothVoxelsUpgraded">false</bool>
+				<AssetContentMap name="VoxelGridAssetContentMap">[]</AssetContentMap>
+				<Color3 name="WaterColor">
+					<R>0.0500000007</R>
+					<G>0.330000013</G>
+					<B>0.360000014</B>
+				</Color3>
+				<float name="WaterReflectance">1</float>
+				<float name="WaterTransparency">0.300000012</float>
+				<float name="WaterWaveSize">0.150000006</float>
+				<float name="WaterWaveSpeed">10</float>
+				<bool name="Anchored">true</bool>
+				<bool name="AudioCanCollide">true</bool>
+				<float name="BackParamA">-0.5</float>
+				<float name="BackParamB">0.5</float>
+				<token name="BackSurface">0</token>
+				<token name="BackSurfaceInput">0</token>
+				<float name="BottomParamA">-0.5</float>
+				<float name="BottomParamB">0.5</float>
+				<token name="BottomSurface">4</token>
+				<token name="BottomSurfaceInput">0</token>
+				<CoordinateFrame name="CFrame">
+					<X>0</X>
+					<Y>0</Y>
+					<Z>0</Z>
+					<R00>1</R00>
+					<R01>0</R01>
+					<R02>0</R02>
+					<R10>0</R10>
+					<R11>1</R11>
+					<R12>0</R12>
+					<R20>0</R20>
+					<R21>0</R21>
+					<R22>1</R22>
+				</CoordinateFrame>
+				<bool name="CanCollide">true</bool>
+				<bool name="CanQuery">true</bool>
+				<bool name="CanTouch">true</bool>
+				<bool name="CastShadow">true</bool>
+				<string name="CollisionGroup">Default</string>
+				<int name="CollisionGroupId">0</int>
+				<Color3uint8 name="Color3uint8">4288914085</Color3uint8>
+				<PhysicalProperties name="CustomPhysicalProperties">
+					<CustomPhysics>false</CustomPhysics>
+				</PhysicalProperties>
+				<bool name="EnableFluidForces">true</bool>
+				<float name="FrontParamA">-0.5</float>
+				<float name="FrontParamB">0.5</float>
+				<token name="FrontSurface">0</token>
+				<token name="FrontSurfaceInput">0</token>
+				<float name="LeftParamA">-0.5</float>
+				<float name="LeftParamB">0.5</float>
+				<token name="LeftSurface">0</token>
+				<token name="LeftSurfaceInput">0</token>
+				<bool name="Locked">true</bool>
+				<bool name="Massless">false</bool>
+				<token name="Material">256</token>
+				<string name="MaterialVariantSerialized"></string>
+				<CoordinateFrame name="PivotOffset">
+					<X>0</X>
+					<Y>0</Y>
+					<Z>0</Z>
+					<R00>1</R00>
+					<R01>0</R01>
+					<R02>0</R02>
+					<R10>0</R10>
+					<R11>1</R11>
+					<R12>0</R12>
+					<R20>0</R20>
+					<R21>0</R21>
+					<R22>1</R22>
+				</CoordinateFrame>
+				<float name="Reflectance">0</float>
+				<float name="RightParamA">-0.5</float>
+				<float name="RightParamB">0.5</float>
+				<token name="RightSurface">0</token>
+				<token name="RightSurfaceInput">0</token>
+				<int name="RootPriority">0</int>
+				<Vector3 name="RotVelocity">
+					<X>0</X>
+					<Y>0</Y>
+					<Z>0</Z>
+				</Vector3>
+				<float name="TopParamA">-0.5</float>
+				<float name="TopParamB">0.5</float>
+				<token name="TopSurface">3</token>
+				<token name="TopSurfaceInput">0</token>
+				<float name="Transparency">0</float>
+				<Vector3 name="Velocity">
+					<X>0</X>
+					<Y>0</Y>
+					<Z>0</Z>
+				</Vector3>
+				<Vector3 name="size">
+					<X>2044</X>
+					<Y>252</Y>
+					<Z>2044</Z>
+				</Vector3>
+				<BinaryString name="AttributesSerialize"></BinaryString>
+				<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+				<bool name="DefinesCapabilities">false</bool>
+				<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
+				<string name="Name">Terrain</string>
+				<BinaryString name="SerializedOverrides"></BinaryString>
+				<int64 name="SourceAssetId">-1</int64>
+				<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+				<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca8000003de</UniqueId>
+			</Properties>
+		</Item>
+		<Item class="Camera" referent="RBX9b271520a10f4bd98dd895278adfa5d8">
+			<Properties>
+				<CoordinateFrame name="CFrame">
+					<X>-4.61923981</X>
+					<Y>19.8003464</Y>
+					<Z>23.1380138</Z>
+					<R00>1</R00>
+					<R01>0</R01>
+					<R02>-0</R02>
+					<R10>-0</R10>
+					<R11>0.780869186</R11>
+					<R12>0.624694586</R12>
+					<R20>0</R20>
+					<R21>-0.624694586</R21>
+					<R22>0.780869186</R22>
+				</CoordinateFrame>
+				<Ref name="CameraSubject">null</Ref>
+				<token name="CameraType">0</token>
+				<float name="FieldOfView">70</float>
+				<token name="FieldOfViewMode">0</token>
+				<CoordinateFrame name="Focus">
+					<X>-4.61923981</X>
+					<Y>18.5509567</Y>
+					<Z>21.5762749</Z>
+					<R00>1</R00>
+					<R01>0</R01>
+					<R02>0</R02>
+					<R10>0</R10>
+					<R11>1</R11>
+					<R12>0</R12>
+					<R20>0</R20>
+					<R21>0</R21>
+					<R22>1</R22>
+				</CoordinateFrame>
+				<bool name="HeadLocked">true</bool>
+				<float name="HeadScale">1</float>
+				<token name="OrthographicMode">0</token>
+				<float name="OrthographicSize">300</float>
+				<token name="ProjectionType">0</token>
+				<bool name="VRTiltAndRollEnabled">false</bool>
+				<float name="ViewStretch">1</float>
+				<BinaryString name="AttributesSerialize"></BinaryString>
+				<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+				<bool name="DefinesCapabilities">false</bool>
+				<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
+				<string name="Name">Camera</string>
+				<BinaryString name="SerializedOverrides"></BinaryString>
+				<int64 name="SourceAssetId">-1</int64>
+				<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+				<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca800000915</UniqueId>
+			</Properties>
+		</Item>
+		<Item class="Part" referent="RBXd8ffb7cb28254b83bdf5ddc1ebe272df">
+			<Properties>
+				<token name="shape">1</token>
+				<token name="formFactorRaw">1</token>
+				<bool name="Anchored">true</bool>
+				<bool name="AudioCanCollide">true</bool>
+				<float name="BackParamA">-0.5</float>
+				<float name="BackParamB">0.5</float>
+				<token name="BackSurface">0</token>
+				<token name="BackSurfaceInput">0</token>
+				<float name="BottomParamA">-0.5</float>
+				<float name="BottomParamB">0.5</float>
+				<token name="BottomSurface">4</token>
+				<token name="BottomSurfaceInput">0</token>
+				<CoordinateFrame name="CFrame">
+					<X>0</X>
+					<Y>-0.5</Y>
+					<Z>0</Z>
+					<R00>1</R00>
+					<R01>0</R01>
+					<R02>0</R02>
+					<R10>0</R10>
+					<R11>1</R11>
+					<R12>0</R12>
+					<R20>0</R20>
+					<R21>0</R21>
+					<R22>1</R22>
+				</CoordinateFrame>
+				<bool name="CanCollide">true</bool>
+				<bool name="CanQuery">true</bool>
+				<bool name="CanTouch">true</bool>
+				<bool name="CastShadow">true</bool>
+				<string name="CollisionGroup">Default</string>
+				<int name="CollisionGroupId">0</int>
+				<Color3uint8 name="Color3uint8">4283258184</Color3uint8>
+				<PhysicalProperties name="CustomPhysicalProperties">
+					<CustomPhysics>false</CustomPhysics>
+				</PhysicalProperties>
+				<bool name="EnableFluidForces">true</bool>
+				<float name="FrontParamA">-0.5</float>
+				<float name="FrontParamB">0.5</float>
+				<token name="FrontSurface">0</token>
+				<token name="FrontSurfaceInput">0</token>
+				<float name="LeftParamA">-0.5</float>
+				<float name="LeftParamB">0.5</float>
+				<token name="LeftSurface">0</token>
+				<token name="LeftSurfaceInput">0</token>
+				<bool name="Locked">false</bool>
+				<bool name="Massless">false</bool>
+				<token name="Material">256</token>
+				<string name="MaterialVariantSerialized"></string>
+				<CoordinateFrame name="PivotOffset">
+					<X>0</X>
+					<Y>0</Y>
+					<Z>0</Z>
+					<R00>1</R00>
+					<R01>0</R01>
+					<R02>0</R02>
+					<R10>0</R10>
+					<R11>1</R11>
+					<R12>0</R12>
+					<R20>0</R20>
+					<R21>0</R21>
+					<R22>1</R22>
+				</CoordinateFrame>
+				<float name="Reflectance">0</float>
+				<float name="RightParamA">-0.5</float>
+				<float name="RightParamB">0.5</float>
+				<token name="RightSurface">0</token>
+				<token name="RightSurfaceInput">0</token>
+				<int name="RootPriority">0</int>
+				<Vector3 name="RotVelocity">
+					<X>0</X>
+					<Y>0</Y>
+					<Z>0</Z>
+				</Vector3>
+				<float name="TopParamA">-0.5</float>
+				<float name="TopParamB">0.5</float>
+				<token name="TopSurface">3</token>
+				<token name="TopSurfaceInput">0</token>
+				<float name="Transparency">0</float>
+				<Vector3 name="Velocity">
+					<X>0</X>
+					<Y>0</Y>
+					<Z>0</Z>
+				</Vector3>
+				<Vector3 name="size">
+					<X>120</X>
+					<Y>1</Y>
+					<Z>120</Z>
+				</Vector3>
+				<BinaryString name="AttributesSerialize"></BinaryString>
+				<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+				<bool name="DefinesCapabilities">false</bool>
+				<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
+				<string name="Name">RankTestFloor</string>
+				<BinaryString name="SerializedOverrides"></BinaryString>
+				<int64 name="SourceAssetId">-1</int64>
+				<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+				<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca800000f64</UniqueId>
+			</Properties>
+		</Item>
+		<Item class="SpawnLocation" referent="RBX21d52c9d70484379a8eb70b98d0f90ab">
+			<Properties>
+				<bool name="AllowTeamChangeOnTouch">false</bool>
+				<int name="Duration">0</int>
+				<bool name="Enabled">true</bool>
+				<bool name="Neutral">true</bool>
+				<int name="TeamColor">194</int>
+				<token name="shape">1</token>
+				<token name="formFactorRaw">1</token>
+				<bool name="Anchored">true</bool>
+				<bool name="AudioCanCollide">true</bool>
+				<float name="BackParamA">-0.5</float>
+				<float name="BackParamB">0.5</float>
+				<token name="BackSurface">0</token>
+				<token name="BackSurfaceInput">0</token>
+				<float name="BottomParamA">-0.5</float>
+				<float name="BottomParamB">0.5</float>
+				<token name="BottomSurface">4</token>
+				<token name="BottomSurfaceInput">0</token>
+				<CoordinateFrame name="CFrame">
+					<X>0</X>
+					<Y>0.5</Y>
+					<Z>0</Z>
+					<R00>1</R00>
+					<R01>0</R01>
+					<R02>0</R02>
+					<R10>0</R10>
+					<R11>1</R11>
+					<R12>0</R12>
+					<R20>0</R20>
+					<R21>0</R21>
+					<R22>1</R22>
+				</CoordinateFrame>
+				<bool name="CanCollide">true</bool>
+				<bool name="CanQuery">true</bool>
+				<bool name="CanTouch">true</bool>
+				<bool name="CastShadow">true</bool>
+				<string name="CollisionGroup">Default</string>
+				<int name="CollisionGroupId">0</int>
+				<Color3uint8 name="Color3uint8">4288914085</Color3uint8>
+				<PhysicalProperties name="CustomPhysicalProperties">
+					<CustomPhysics>false</CustomPhysics>
+				</PhysicalProperties>
+				<bool name="EnableFluidForces">true</bool>
+				<float name="FrontParamA">-0.5</float>
+				<float name="FrontParamB">0.5</float>
+				<token name="FrontSurface">0</token>
+				<token name="FrontSurfaceInput">0</token>
+				<float name="LeftParamA">-0.5</float>
+				<float name="LeftParamB">0.5</float>
+				<token name="LeftSurface">0</token>
+				<token name="LeftSurfaceInput">0</token>
+				<bool name="Locked">false</bool>
+				<bool name="Massless">false</bool>
+				<token name="Material">256</token>
+				<string name="MaterialVariantSerialized"></string>
+				<CoordinateFrame name="PivotOffset">
+					<X>0</X>
+					<Y>0</Y>
+					<Z>0</Z>
+					<R00>1</R00>
+					<R01>0</R01>
+					<R02>0</R02>
+					<R10>0</R10>
+					<R11>1</R11>
+					<R12>0</R12>
+					<R20>0</R20>
+					<R21>0</R21>
+					<R22>1</R22>
+				</CoordinateFrame>
+				<float name="Reflectance">0</float>
+				<float name="RightParamA">-0.5</float>
+				<float name="RightParamB">0.5</float>
+				<token name="RightSurface">0</token>
+				<token name="RightSurfaceInput">0</token>
+				<int name="RootPriority">0</int>
+				<Vector3 name="RotVelocity">
+					<X>0</X>
+					<Y>0</Y>
+					<Z>0</Z>
+				</Vector3>
+				<float name="TopParamA">-0.5</float>
+				<float name="TopParamB">0.5</float>
+				<token name="TopSurface">3</token>
+				<token name="TopSurfaceInput">0</token>
+				<float name="Transparency">0</float>
+				<Vector3 name="Velocity">
+					<X>0</X>
+					<Y>0</Y>
+					<Z>0</Z>
+				</Vector3>
+				<Vector3 name="size">
+					<X>8</X>
+					<Y>1</Y>
+					<Z>8</Z>
+				</Vector3>
+				<BinaryString name="AttributesSerialize"></BinaryString>
+				<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+				<bool name="DefinesCapabilities">false</bool>
+				<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
+				<string name="Name">RankSpawn</string>
+				<BinaryString name="SerializedOverrides"></BinaryString>
+				<int64 name="SourceAssetId">-1</int64>
+				<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+				<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca800000f65</UniqueId>
+			</Properties>
+		</Item>
+	</Item>
+	<Item class="TimerService" referent="RBX64770baffa194685a84c3a2ee6d3dc85">
+		<Properties>
+			<BinaryString name="AttributesSerialize"></BinaryString>
+			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+			<bool name="DefinesCapabilities">false</bool>
+			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
+			<string name="Name">TimerService</string>
+			<BinaryString name="SerializedOverrides"></BinaryString>
+			<int64 name="SourceAssetId">-1</int64>
+			<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+			<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca800000360</UniqueId>
+		</Properties>
+	</Item>
+	<Item class="CollectionService" referent="RBX550089b965444e138b07f76e1b1de110">
+		<Properties>
+			<BinaryString name="AttributesSerialize"></BinaryString>
+			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+			<bool name="DefinesCapabilities">false</bool>
+			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
+			<string name="Name">CollectionService</string>
+			<BinaryString name="SerializedOverrides"></BinaryString>
+			<int64 name="SourceAssetId">-1</int64>
+			<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+			<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca800000361</UniqueId>
+		</Properties>
+	</Item>
+	<Item class="SoundService" referent="RBXd4aeba720a084e94ac54e8bf11232b83">
+		<Properties>
+			<bool name="AcousticSimulationEnabled">false</bool>
+			<token name="AmbientReverb">0</token>
+			<token name="AudioApiByDefault">0</token>
+			<token name="CharacterSoundsUseNewApi">0</token>
+			<token name="DefaultListenerLocation">0</token>
+			<bool name="DiffractionEnabled">true</bool>
+			<float name="DistanceFactor">3.32999992</float>
+			<float name="DopplerScale">1</float>
+			<bool name="IsNewExpForAudioApiByDefault">false</bool>
+			<CoordinateFrame name="ListenerCFrame">
+				<X>0</X>
+				<Y>0</Y>
+				<Z>0</Z>
+				<R00>1</R00>
+				<R01>0</R01>
+				<R02>0</R02>
+				<R10>0</R10>
+				<R11>1</R11>
+				<R12>0</R12>
+				<R20>0</R20>
+				<R21>0</R21>
+				<R22>1</R22>
+			</CoordinateFrame>
+			<Ref name="ListenerObject">null</Ref>
+			<token name="ListenerType">0</token>
+			<bool name="OcclusionEnabled">true</bool>
+			<bool name="RespectFilteringEnabled">false</bool>
+			<bool name="ReverbEnabled">true</bool>
+			<float name="RolloffScale">1</float>
+			<token name="VolumetricAudio">1</token>
+			<BinaryString name="AttributesSerialize"></BinaryString>
+			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+			<bool name="DefinesCapabilities">false</bool>
+			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
+			<string name="Name">SoundService</string>
+			<BinaryString name="SerializedOverrides"></BinaryString>
+			<int64 name="SourceAssetId">-1</int64>
+			<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+			<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca800000362</UniqueId>
+		</Properties>
+	</Item>
+	<Item class="VideoCaptureService" referent="RBX6eec6830279249dda4dc3f3c3aeac1f5">
+		<Properties>
+			<BinaryString name="AttributesSerialize"></BinaryString>
+			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+			<bool name="DefinesCapabilities">false</bool>
+			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
+			<string name="Name">VideoCaptureService</string>
+			<BinaryString name="SerializedOverrides"></BinaryString>
+			<int64 name="SourceAssetId">-1</int64>
+			<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+			<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca80000036e</UniqueId>
+		</Properties>
+	</Item>
+	<Item class="NonReplicatedCSGDictionaryService" referent="RBX48ac2d1eea6f4e51bafa9a58e23c81c6">
+		<Properties>
+			<BinaryString name="AttributesSerialize"></BinaryString>
+			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+			<bool name="DefinesCapabilities">false</bool>
+			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
+			<string name="Name">NonReplicatedCSGDictionaryService</string>
+			<BinaryString name="SerializedOverrides"></BinaryString>
+			<int64 name="SourceAssetId">-1</int64>
+			<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+			<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca80000036f</UniqueId>
+		</Properties>
+	</Item>
+	<Item class="CSGDictionaryService" referent="RBX4f1925ceef704515b966a191d055d804">
+		<Properties>
+			<BinaryString name="AttributesSerialize"></BinaryString>
+			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+			<bool name="DefinesCapabilities">false</bool>
+			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
+			<string name="Name">CSGDictionaryService</string>
+			<BinaryString name="SerializedOverrides"></BinaryString>
+			<int64 name="SourceAssetId">-1</int64>
+			<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+			<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca800000370</UniqueId>
+		</Properties>
+	</Item>
+	<Item class="Chat" referent="RBX36051e75d94e4dfa8ee30c73eaf7c796">
+		<Properties>
+			<bool name="BubbleChatEnabled">false</bool>
+			<bool name="IsAutoMigrated">false</bool>
+			<bool name="LoadDefaultChat">true</bool>
+			<BinaryString name="AttributesSerialize"></BinaryString>
+			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+			<bool name="DefinesCapabilities">false</bool>
+			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
+			<string name="Name">Chat</string>
+			<BinaryString name="SerializedOverrides"></BinaryString>
+			<int64 name="SourceAssetId">-1</int64>
+			<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+			<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca800000376</UniqueId>
+		</Properties>
+	</Item>
+	<Item class="Players" referent="RBX300d0dfd37514350833de521f8da73fa">
+		<Properties>
+			<bool name="BanningEnabled">true</bool>
+			<bool name="CharacterAutoLoads">true</bool>
+			<int name="MaxPlayersInternal">12</int>
+			<int name="PreferredPlayersInternal">1</int>
+			<float name="RespawnTime">5</float>
+			<bool name="UseStrafingAnimations">false</bool>
+			<BinaryString name="AttributesSerialize"></BinaryString>
+			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+			<bool name="DefinesCapabilities">false</bool>
+			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
+			<string name="Name">Players</string>
+			<BinaryString name="SerializedOverrides"></BinaryString>
+			<int64 name="SourceAssetId">-1</int64>
+			<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+			<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca800000378</UniqueId>
+		</Properties>
+	</Item>
+	<Item class="ReplicatedFirst" referent="RBXea877b06b59f45dbbf54483d0340e2f5">
+		<Properties>
+			<BinaryString name="AttributesSerialize"></BinaryString>
+			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+			<bool name="DefinesCapabilities">false</bool>
+			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
+			<string name="Name">ReplicatedFirst</string>
+			<BinaryString name="SerializedOverrides"></BinaryString>
+			<int64 name="SourceAssetId">-1</int64>
+			<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+			<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca80000037b</UniqueId>
+		</Properties>
+	</Item>
+	<Item class="TweenService" referent="RBXdfaba2940e374218a384107b5b05e3c5">
+		<Properties>
+			<BinaryString name="AttributesSerialize"></BinaryString>
+			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+			<bool name="DefinesCapabilities">false</bool>
+			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
+			<string name="Name">TweenService</string>
+			<BinaryString name="SerializedOverrides"></BinaryString>
+			<int64 name="SourceAssetId">-1</int64>
+			<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+			<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca80000037d</UniqueId>
+		</Properties>
+	</Item>
+	<Item class="MaterialService" referent="RBX647f9e6121eb41c68c37285106849165">
+		<Properties>
+			<string name="AsphaltName">Asphalt</string>
+			<string name="BasaltName">Basalt</string>
+			<string name="BrickName">Brick</string>
+			<string name="CardboardName">Cardboard</string>
+			<string name="CarpetName">Carpet</string>
+			<string name="CeramicTilesName">CeramicTiles</string>
+			<string name="ClayRoofTilesName">ClayRoofTiles</string>
+			<string name="CobblestoneName">Cobblestone</string>
+			<string name="ConcreteName">Concrete</string>
+			<string name="CorrodedMetalName">CorrodedMetal</string>
+			<string name="CrackedLavaName">CrackedLava</string>
+			<string name="DiamondPlateName">DiamondPlate</string>
+			<string name="FabricName">Fabric</string>
+			<string name="FoilName">Foil</string>
+			<string name="GlacierName">Glacier</string>
+			<string name="GraniteName">Granite</string>
+			<string name="GrassName">Grass</string>
+			<string name="GroundName">Ground</string>
+			<string name="IceName">Ice</string>
+			<string name="LeafyGrassName">LeafyGrass</string>
+			<string name="LeatherName">Leather</string>
+			<string name="LimestoneName">Limestone</string>
+			<string name="MarbleName">Marble</string>
+			<string name="MetalName">Metal</string>
+			<string name="MudName">Mud</string>
+			<string name="PavementName">Pavement</string>
+			<string name="PebbleName">Pebble</string>
+			<string name="PlasterName">Plaster</string>
+			<string name="PlasticName">Plastic</string>
+			<string name="RockName">Rock</string>
+			<string name="RoofShinglesName">RoofShingles</string>
+			<string name="RubberName">Rubber</string>
+			<string name="SaltName">Salt</string>
+			<string name="SandName">Sand</string>
+			<string name="SandstoneName">Sandstone</string>
+			<string name="SlateName">Slate</string>
+			<string name="SmoothPlasticName">SmoothPlastic</string>
+			<string name="SnowName">Snow</string>
+			<bool name="Use2022MaterialsXml">false</bool>
+			<string name="WoodName">Wood</string>
+			<string name="WoodPlanksName">WoodPlanks</string>
+			<BinaryString name="AttributesSerialize"></BinaryString>
+			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+			<bool name="DefinesCapabilities">false</bool>
+			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
+			<string name="Name">MaterialService</string>
+			<BinaryString name="SerializedOverrides"></BinaryString>
+			<int64 name="SourceAssetId">-1</int64>
+			<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+			<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca80000037e</UniqueId>
+		</Properties>
+	</Item>
+	<Item class="TextChatService" referent="RBX0c70058e4081471f8d12c97d96902f1a">
+		<Properties>
+			<bool name="ChatTranslationFTUXShown">true</bool>
+			<bool name="ChatTranslationToggleEnabled">false</bool>
+			<token name="ChatVersion">1</token>
+			<bool name="CreateDefaultCommands">true</bool>
+			<bool name="CreateDefaultTextChannels">true</bool>
+			<bool name="HasSeenDeprecationDialog">false</bool>
+			<bool name="IsLegacyChatDisabled">false</bool>
+			<token name="PlatformIntegratedChat">0</token>
+			<BinaryString name="AttributesSerialize"></BinaryString>
+			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+			<bool name="DefinesCapabilities">false</bool>
+			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
+			<string name="Name">TextChatService</string>
+			<BinaryString name="SerializedOverrides"></BinaryString>
+			<int64 name="SourceAssetId">-1</int64>
+			<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+			<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca80000037f</UniqueId>
+		</Properties>
+		<Item class="ChatWindowConfiguration" referent="RBX77c9a9b45e444b76bf66e956143cc0e0">
+			<Properties>
+				<Color3 name="BackgroundColor3">
+					<R>0.0980392173</R>
+					<G>0.105882354</G>
+					<B>0.113725491</B>
+				</Color3>
+				<double name="BackgroundTransparency">0.2999999999999999889</double>
+				<bool name="Enabled">true</bool>
+				<Font name="FontFace">
+					<Family><url>rbxasset://fonts/families/GothamSSm.json</url></Family>
+					<Weight>500</Weight>
+					<Style>Normal</Style>
+					<CachedFaceId><url>rbxasset://fonts/Montserrat-Medium.ttf</url></CachedFaceId>
+				</Font>
+				<float name="HeightScale">1</float>
+				<token name="HorizontalAlignment">1</token>
+				<token name="TextChannelDisplayMode">0</token>
+				<Color3 name="TextColor3">
+					<R>1</R>
+					<G>1</G>
+					<B>1</B>
+				</Color3>
+				<int64 name="TextSize">14</int64>
+				<Color3 name="TextStrokeColor3">
+					<R>0</R>
+					<G>0</G>
+					<B>0</B>
+				</Color3>
+				<double name="TextStrokeTransparency">0.5</double>
+				<token name="VerticalAlignment">1</token>
+				<float name="WidthScale">1</float>
+				<BinaryString name="AttributesSerialize"></BinaryString>
+				<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+				<bool name="DefinesCapabilities">false</bool>
+				<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
+				<string name="Name">ChatWindowConfiguration</string>
+				<BinaryString name="SerializedOverrides"></BinaryString>
+				<int64 name="SourceAssetId">-1</int64>
+				<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+				<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca8000003e0</UniqueId>
+			</Properties>
+		</Item>
+		<Item class="ChatInputBarConfiguration" referent="RBX70d6da29cf32415691ad2f9ed697e8f5">
+			<Properties>
+				<bool name="AutocompleteEnabled">true</bool>
+				<Color3 name="BackgroundColor3">
+					<R>0.0980392173</R>
+					<G>0.105882354</G>
+					<B>0.113725491</B>
+				</Color3>
+				<double name="BackgroundTransparency">0.2000000000000000111</double>
+				<bool name="Enabled">true</bool>
+				<Font name="FontFace">
+					<Family><url>rbxasset://fonts/families/GothamSSm.json</url></Family>
+					<Weight>500</Weight>
+					<Style>Normal</Style>
+					<CachedFaceId><url>rbxasset://fonts/Montserrat-Medium.ttf</url></CachedFaceId>
+				</Font>
+				<token name="KeyboardKeyCode">47</token>
+				<Color3 name="PlaceholderColor3">
+					<R>0.698039234</R>
+					<G>0.698039234</G>
+					<B>0.698039234</B>
+				</Color3>
+				<Ref name="TargetTextChannel">null</Ref>
+				<Color3 name="TextColor3">
+					<R>1</R>
+					<G>1</G>
+					<B>1</B>
+				</Color3>
+				<int64 name="TextSize">14</int64>
+				<Color3 name="TextStrokeColor3">
+					<R>0</R>
+					<G>0</G>
+					<B>0</B>
+				</Color3>
+				<double name="TextStrokeTransparency">0.5</double>
+				<BinaryString name="AttributesSerialize"></BinaryString>
+				<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+				<bool name="DefinesCapabilities">false</bool>
+				<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
+				<string name="Name">ChatInputBarConfiguration</string>
+				<BinaryString name="SerializedOverrides"></BinaryString>
+				<int64 name="SourceAssetId">-1</int64>
+				<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+				<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca8000003e1</UniqueId>
+			</Properties>
+		</Item>
+		<Item class="BubbleChatConfiguration" referent="RBX3d676148c2664cffa7efa60b0b41d960">
+			<Properties>
+				<string name="AdorneeName">HumanoidRootPart</string>
+				<Color3 name="BackgroundColor3">
+					<R>0.980392158</R>
+					<G>0.980392158</G>
+					<B>0.980392158</B>
+				</Color3>
+				<double name="BackgroundTransparency">0.10000000000000000555</double>
+				<float name="BubbleDuration">15</float>
+				<float name="BubblesSpacing">6</float>
+				<bool name="Enabled">true</bool>
+				<token name="Font">18</token>
+				<Font name="FontFace">
+					<Family><url>rbxasset://fonts/families/GothamSSm.json</url></Family>
+					<Weight>500</Weight>
+					<Style>Normal</Style>
+					<CachedFaceId><url>rbxasset://fonts/Montserrat-Medium.ttf</url></CachedFaceId>
+				</Font>
+				<Vector3 name="LocalPlayerStudsOffset">
+					<X>0</X>
+					<Y>0</Y>
+					<Z>0</Z>
+				</Vector3>
+				<float name="MaxBubbles">3</float>
+				<float name="MaxDistance">100</float>
+				<float name="MinimizeDistance">40</float>
+				<bool name="TailVisible">true</bool>
+				<Color3 name="TextColor3">
+					<R>0.223529413</R>
+					<G>0.23137255</G>
+					<B>0.239215687</B>
+				</Color3>
+				<int64 name="TextSize">16</int64>
+				<float name="VerticalStudsOffset">0</float>
+				<BinaryString name="AttributesSerialize"></BinaryString>
+				<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+				<bool name="DefinesCapabilities">false</bool>
+				<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
+				<string name="Name">BubbleChatConfiguration</string>
+				<BinaryString name="SerializedOverrides"></BinaryString>
+				<int64 name="SourceAssetId">-1</int64>
+				<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+				<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca8000003e2</UniqueId>
+			</Properties>
+		</Item>
+		<Item class="ChannelTabsConfiguration" referent="RBXb5274a4d164e44c4b9b79cb43c35a3b9">
+			<Properties>
+				<Color3 name="BackgroundColor3">
+					<R>0.0980392173</R>
+					<G>0.105882354</G>
+					<B>0.113725491</B>
+				</Color3>
+				<double name="BackgroundTransparency">0</double>
+				<bool name="Enabled">false</bool>
+				<Font name="FontFace">
+					<Family><url>rbxasset://fonts/families/BuilderSans.json</url></Family>
+					<Weight>700</Weight>
+					<Style>Normal</Style>
+					<CachedFaceId><url>rbxasset://fonts/BuilderSans-Bold.otf</url></CachedFaceId>
+				</Font>
+				<Color3 name="HoverBackgroundColor3">
+					<R>0.490196079</R>
+					<G>0.490196079</G>
+					<B>0.490196079</B>
+				</Color3>
+				<Color3 name="SelectedTabTextColor3">
+					<R>1</R>
+					<G>1</G>
+					<B>1</B>
+				</Color3>
+				<Color3 name="TextColor3">
+					<R>0.686274529</R>
+					<G>0.686274529</G>
+					<B>0.686274529</B>
+				</Color3>
+				<int64 name="TextSize">18</int64>
+				<Color3 name="TextStrokeColor3">
+					<R>0</R>
+					<G>0</G>
+					<B>0</B>
+				</Color3>
+				<double name="TextStrokeTransparency">1</double>
+				<BinaryString name="AttributesSerialize"></BinaryString>
+				<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+				<bool name="DefinesCapabilities">false</bool>
+				<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
+				<string name="Name">ChannelTabsConfiguration</string>
+				<BinaryString name="SerializedOverrides"></BinaryString>
+				<int64 name="SourceAssetId">-1</int64>
+				<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+				<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca8000003e3</UniqueId>
+			</Properties>
+		</Item>
+	</Item>
+	<Item class="PermissionsService" referent="RBX3165d294b9234a728a30a5d3b5930b6d">
+		<Properties>
+			<BinaryString name="AttributesSerialize"></BinaryString>
+			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+			<bool name="DefinesCapabilities">false</bool>
+			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
+			<string name="Name">PermissionsService</string>
+			<BinaryString name="SerializedOverrides"></BinaryString>
+			<int64 name="SourceAssetId">-1</int64>
+			<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+			<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca800000381</UniqueId>
+		</Properties>
+	</Item>
+	<Item class="PlayerEmulatorService" referent="RBX67c3818bfd254e3a84d213e4bbf15426">
+		<Properties>
+			<bool name="CustomPoliciesEnabled">false</bool>
+			<string name="EmulatedCountryCode"></string>
+			<string name="EmulatedGameLocale"></string>
+			<bool name="PlayerEmulationEnabled">false</bool>
+			<bool name="PseudolocalizationEnabled">false</bool>
+			<BinaryString name="SerializedEmulatedPolicyInfo"></BinaryString>
+			<int name="TextElongationFactor">0</int>
+			<BinaryString name="AttributesSerialize"></BinaryString>
+			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+			<bool name="DefinesCapabilities">false</bool>
+			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
+			<string name="Name">PlayerEmulatorService</string>
+			<BinaryString name="SerializedOverrides"></BinaryString>
+			<int64 name="SourceAssetId">-1</int64>
+			<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+			<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca800000382</UniqueId>
+		</Properties>
+	</Item>
+	<Item class="StudioData" referent="RBX9ceb49287e914425aa6cd6576407a86f">
+		<Properties>
+			<bool name="EnableScriptCollabByDefaultOnLoad">false</bool>
+			<BinaryString name="AttributesSerialize"></BinaryString>
+			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+			<bool name="DefinesCapabilities">false</bool>
+			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
+			<string name="Name">StudioData</string>
+			<BinaryString name="SerializedOverrides"></BinaryString>
+			<int64 name="SourceAssetId">-1</int64>
+			<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+			<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca800000385</UniqueId>
+		</Properties>
+	</Item>
+	<Item class="StarterPlayer" referent="RBX6">
+		<Properties>
+			<bool name="AllowCustomAnimations">true</bool>
+			<bool name="AutoJumpEnabled">true</bool>
+			<token name="AvatarJointUpgrade_SerializedRollout">0</token>
+			<float name="CameraMaxZoomDistance">400</float>
+			<float name="CameraMinZoomDistance">0.5</float>
+			<token name="CameraMode">0</token>
+			<bool name="CharacterBreakJointsOnDeath">true</bool>
+			<float name="CharacterJumpHeight">7.19999981</float>
+			<float name="CharacterJumpPower">50</float>
+			<float name="CharacterMaxSlopeAngle">89</float>
+			<bool name="CharacterUseJumpPower">true</bool>
+			<float name="CharacterWalkSpeed">16</float>
+			<bool name="ClassicDeath">true</bool>
+			<bool name="CreateDefaultPlayerModule">true</bool>
+			<token name="DevCameraOcclusionMode">0</token>
+			<token name="DevComputerCameraMovementMode">0</token>
+			<token name="DevComputerMovementMode">0</token>
+			<token name="DevTouchCameraMovementMode">0</token>
+			<token name="DevTouchMovementMode">0</token>
+			<token name="EnableDynamicHeads">0</token>
+			<bool name="EnableMouseLockOption">true</bool>
+			<token name="GameSettingsAvatar">1</token>
+			<token name="GameSettingsR15Collision">0</token>
+			<float name="HealthDisplayDistance">100</float>
+			<bool name="LoadCharacterAppearance">true</bool>
+			<token name="LoadCharacterLayeredClothing">0</token>
+			<token name="LuaCharacterController">0</token>
+			<float name="NameDisplayDistance">100</float>
+			<Ref name="PlaceAvatarRules">null</Ref>
+			<int name="PlayerModuleStatus">0</int>
+			<token name="UseImprovedCharacterEvents">0</token>
+			<bool name="UserEmotesEnabled">true</bool>
+			<BinaryString name="AttributesSerialize"></BinaryString>
+			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+			<bool name="DefinesCapabilities">false</bool>
+			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
+			<string name="Name">StarterPlayer</string>
+			<BinaryString name="SerializedOverrides"></BinaryString>
+			<int64 name="SourceAssetId">-1</int64>
+			<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+			<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca800000387</UniqueId>
+		</Properties>
+		<Item class="StarterPlayerScripts" referent="RBX7">
+			<Properties>
+				<BinaryString name="AttributesSerialize"></BinaryString>
+				<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+				<bool name="DefinesCapabilities">false</bool>
+				<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
+				<string name="Name">StarterPlayerScripts</string>
+				<BinaryString name="SerializedOverrides"></BinaryString>
+				<int64 name="SourceAssetId">-1</int64>
+				<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+				<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca8000003dc</UniqueId>
+			</Properties>
+			<Item class="LocalScript" referent="RBX13">
+				<Properties>
+					<ProtectedString name="Source"><![CDATA[--!strict
+local Players=game:GetService("Players")
+local ReplicatedStorage=game:GetService("ReplicatedStorage")
+local ContextActionService=game:GetService("ContextActionService")
+local RunService=game:GetService("RunService")
+local player=Players.LocalPlayer
+local Config=require(ReplicatedStorage:WaitForChild("Shared"):WaitForChild("Config"))
+local remotes=ReplicatedStorage:WaitForChild("Remotes")
+local fire=remotes:WaitForChild("Fire") :: RemoteEvent
+local reload=remotes:WaitForChild("Reload") :: RemoteEvent
+local joinTeam=remotes:WaitForChild("JoinTeam") :: RemoteEvent
+local joinSquad=remotes:WaitForChild("JoinSquad") :: RemoteEvent
+local gui=Instance.new("ScreenGui"); gui.Name="MilitaryHUD"; gui.ResetOnSpawn=false
+local panel=Instance.new("Frame"); panel.Size=UDim2.new(0,340,0,270); panel.Position=UDim2.fromOffset(15,15)
+panel.BackgroundColor3=Color3.fromRGB(25,33,29); panel.BackgroundTransparency=0.1; panel.Parent=gui
+local status=Instance.new("TextLabel"); status.Position=UDim2.fromOffset(10,10); status.Size=UDim2.new(1,-20,0,140)
+status.TextColor3=Color3.new(1,1,1); status.BackgroundTransparency=1; status.TextSize=16
+status.TextXAlignment=Enum.TextXAlignment.Left; status.TextYAlignment=Enum.TextYAlignment.Top; status.Parent=panel
+local message=Instance.new("TextLabel"); message.Position=UDim2.fromOffset(10,225); message.Size=UDim2.new(1,-20,0,40)
+message.BackgroundTransparency=1; message.TextColor3=Color3.fromRGB(255,214,120); message.TextSize=14; message.TextWrapped=true
+message.Text="훈련: 노란 표적 5회 명중 → 팀 선택"; message.Parent=panel
+local function button(text: string, x: number, y: number, callback: () -> ())
+    local b=Instance.new("TextButton"); b.Text=text; b.TextSize=15; b.Size=UDim2.fromOffset(100,30)
+    b.Position=UDim2.fromOffset(x,y); b.BackgroundColor3=Color3.fromRGB(62,82,66); b.TextColor3=Color3.new(1,1,1)
+    b.Parent=panel; b.Activated:Connect(callback)
+end
+button("청군 입대",10,150,function() joinTeam:FireServer("Blue"); message.Text="수료·인원 균형·변경 대기시간 충족 시 배치됩니다." end)
+button("홍군 입대",120,150,function() joinTeam:FireServer("Red"); message.Text="전투 중에는 소속 팀을 변경할 수 없습니다." end)
+for i=1,3 do button(i.."분대",10+(i-1)*110,190,function() joinSquad:FireServer(i) end) end
+local cross=Instance.new("TextLabel"); cross.AnchorPoint=Vector2.new(0.5,0.5); cross.Position=UDim2.fromScale(0.5,0.5)
+cross.Size=UDim2.fromOffset(24,24); cross.BackgroundTransparency=1; cross.Text="+"; cross.TextSize=24
+cross.TextColor3=Color3.new(1,1,1); cross.Parent=gui
+local mouse=player:GetMouse()
+local currentTool: Tool?=nil
+local activatedConnection: RBXScriptConnection?=nil
+local lastLocalShot=-math.huge
+local function shoot()
+    if os.clock()-lastLocalShot < Config.FireInterval then return end
+    if not currentTool or currentTool.Parent ~= player.Character then return end
+    local c=player.Character; local head=if c then c:FindFirstChild("Head") else nil
+    if not head or not head:IsA("BasePart") then return end
+    local delta=mouse.Hit.Position-head.Position
+    if delta.Magnitude < 0.01 then return end
+    lastLocalShot=os.clock(); fire:FireServer(delta.Unit)
+end
+local function bindTool(child: Instance)
+    if not child:IsA("Tool") or child.Name ~= "ServiceRifle" then return end
+    if activatedConnection then activatedConnection:Disconnect() end
+    currentTool=child; activatedConnection=child.Activated:Connect(shoot)
+end
+local function characterAdded(c: Model)
+    if activatedConnection then activatedConnection:Disconnect(); activatedConnection=nil end
+    currentTool=nil
+    c.ChildAdded:Connect(bindTool)
+    for _, child in c:GetChildren() do bindTool(child) end
+end
+player.CharacterAdded:Connect(characterAdded)
+if player.Character then characterAdded(player.Character) end
+ContextActionService:BindAction("ReloadRifle",function(_,state)
+    if state == Enum.UserInputState.Begin then reload:FireServer() end
+    return Enum.ContextActionResult.Sink
+end,true,Enum.KeyCode.R)
+ContextActionService:SetTitle("ReloadRifle","재장전")
+-- Force third-person distance when opening menus so the cursor is available.
+local function setView(firstPerson: boolean)
+    player.CameraMinZoomDistance=if firstPerson then 0.5 else 8
+    player.CameraMode=if firstPerson then Enum.CameraMode.LockFirstPerson else Enum.CameraMode.Classic
+end
+player:GetAttributeChangedSignal("Side"):Connect(function()
+    setView(player:GetAttribute("Side") ~= "Training")
+end)
+ContextActionService:BindAction("ToggleMenu",function(_,state)
+    if state == Enum.UserInputState.Begin then
+        setView(player.CameraMode ~= Enum.CameraMode.LockFirstPerson)
+    end
+    return Enum.ContextActionResult.Sink
+end,false,Enum.KeyCode.M)
+setView(player:GetAttribute("Side") ~= nil and player:GetAttribute("Side") ~= "Training")
+gui.Parent=player:WaitForChild("PlayerGui")
+local sideNames={Training="훈련병",Blue="청군",Red="홍군"}
+local elapsed=0
+RunService.Heartbeat:Connect(function(dt)
+    elapsed+=dt; if elapsed < 0.1 then return end; elapsed=0
+    local remaining=math.max(0,math.ceil((ReplicatedStorage:GetAttribute("RoundEndsAt") or 0)-workspace:GetServerTimeNow()))
+    status.Text=string.format("군대 RP · 시스템 MVP\n%s | XP %d | %s / %d분대\n훈련 %d/%d | 탄약 %d/%d %s\n%s · %d초 | 청군 %d : %d 홍군\n1: 소총 장착 · 클릭: 사격 · R: 재장전\nM: 시점/메뉴 전환 · 재접속 시 초기화",
+        player:GetAttribute("Rank") or "훈련병",player:GetAttribute("XP") or 0,sideNames[player:GetAttribute("Side") or "Training"] or "훈련병",
+        player:GetAttribute("Squad") or 0,player:GetAttribute("TrainingHits") or 0,Config.TrainingHits,
+        player:GetAttribute("Ammo") or 0,Config.Magazine,if player:GetAttribute("Reloading") then "재장전 중" else "",
+        if ReplicatedStorage:GetAttribute("RoundPhase") == "Active" then "전투" else "대기",remaining,
+        ReplicatedStorage:GetAttribute("BlueScore") or 0,ReplicatedStorage:GetAttribute("RedScore") or 0)
+end)
+]]></ProtectedString>
+					<bool name="Disabled">true</bool>
+					<Content name="LinkedSource"><null></null></Content>
+					<token name="RunContext">0</token>
+					<string name="ScriptGuid">{1f3ae39b-86e4-4fa0-99f4-04b63a9bce1d}</string>
+					<BinaryString name="AttributesSerialize"></BinaryString>
+					<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+					<bool name="DefinesCapabilities">false</bool>
+					<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
+					<string name="Name">Main</string>
+					<BinaryString name="SerializedOverrides"></BinaryString>
+					<int64 name="SourceAssetId">-1</int64>
+					<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+					<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca8000003dd</UniqueId>
+				</Properties>
+			</Item>
+			<Item class="LocalScript" referent="RBXa6d5443fcf6747bc92e938803549c726">
+				<Properties>
+					<ProtectedString name="Source"><![CDATA[--!strict
+local ReplicatedStorage=game:GetService("ReplicatedStorage")
+local TextChatService=game:GetService("TextChatService")
+local feedback=ReplicatedStorage:WaitForChild("RankCommandFeedback") :: RemoteEvent
+feedback.OnClientEvent:Connect(function(message: any)
+    if type(message)~="string" or #message>2048 then return end
+    local channels=TextChatService:WaitForChild("TextChannels",5)
+    local channel=if channels then channels:FindFirstChild("RBXGeneral") else nil
+    if channel and channel:IsA("TextChannel") then
+        channel:DisplaySystemMessage("[계급] "..message)
+    end
+end)
+
+-- Subtle local shimmer; each animation ends when its rank image is replaced.
+local TweenService = game:GetService("TweenService")
+local function shimmer(instance: Instance)
+    if not instance:IsA("ImageLabel") or instance.Name ~= "Atlas" then return end
+    local plate = instance.Parent
+    if not plate or plate.Name ~= "Insignia" or not plate.Parent or plate.Parent.Name ~= "RankTag" then return end
+    instance.ImageColor3 = Color3.fromRGB(205, 209, 216)
+    local tween = TweenService:Create(instance, TweenInfo.new(1.6, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut, -1, true, 0.6), {ImageColor3 = Color3.fromRGB(255, 255, 255)})
+    instance.Destroying:Once(function() tween:Cancel() end)
+    tween:Play()
+end
+workspace.DescendantAdded:Connect(shimmer)
+for _, instance in workspace:GetDescendants() do shimmer(instance) end
+]]></ProtectedString>
+					<bool name="Disabled">false</bool>
+					<Content name="LinkedSource"><null></null></Content>
+					<token name="RunContext">0</token>
+					<string name="ScriptGuid">{ef6b0531-b315-417b-9c85-8cad39f43a48}</string>
+					<BinaryString name="AttributesSerialize"></BinaryString>
+					<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+					<bool name="DefinesCapabilities">false</bool>
+					<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
+					<string name="Name">RankFeedback</string>
+					<BinaryString name="SerializedOverrides"></BinaryString>
+					<int64 name="SourceAssetId">-1</int64>
+					<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+					<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca800000f62</UniqueId>
+				</Properties>
+			</Item>
+			<Item class="LocalScript" referent="RBX0e4a68c14ad84cdbb9127293a9e70b2d">
+				<Properties>
+					<ProtectedString name="Source"><![CDATA[--!strict
+local Players = game:GetService("Players")
+local TweenService = game:GetService("TweenService")
+local UserInputService = game:GetService("UserInputService")
+local GuiService = game:GetService("GuiService")
+local player = Players.LocalPlayer
+local isAdmin = player.UserId == 1153125948
+local gui = Instance.new("ScreenGui")
+gui.Name = "MilitaryMenu"
+gui.ResetOnSpawn = false
+gui.ScreenInsets = Enum.ScreenInsets.CoreUISafeInsets
+gui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+gui.DisplayOrder = 10
+local INK = Color3.fromRGB(23, 29, 26)
+local PAPER = Color3.fromRGB(238, 237, 224)
+local MUTED = Color3.fromRGB(163, 174, 157)
+local ACCENT = Color3.fromRGB(192, 210, 150)
+local function corner(object: GuiObject, radius: number)
+    local c = Instance.new("UICorner")
+    c.CornerRadius = UDim.new(0, radius)
+    c.Parent = object
+end
+local function label(parent: Instance, name: string, text: string, size: number, color: Color3): TextLabel
+    local t = Instance.new("TextLabel")
+    t.Name = name; t.Text = text; t.TextSize = size
+    t.Font = Enum.Font.GothamMedium; t.TextColor3 = color
+    t.BackgroundTransparency = 1; t.TextXAlignment = Enum.TextXAlignment.Left
+    t.Parent = parent
+    return t
+end
+local function button(parent: Instance, name: string, text: string): TextButton
+    local b = Instance.new("TextButton")
+    b.Name = name; b.Text = text; b.Font = Enum.Font.GothamBold; b.TextSize = 16
+    b.TextColor3 = PAPER; b.BackgroundColor3 = INK; b.BorderSizePixel = 0
+    b.AutoButtonColor = false; b.Selectable = true
+    corner(b, 12)
+    b.MouseEnter:Connect(function() TweenService:Create(b, TweenInfo.new(0.12), {BackgroundColor3 = Color3.fromRGB(47, 59, 46)}):Play() end)
+    b.MouseLeave:Connect(function() TweenService:Create(b, TweenInfo.new(0.12), {BackgroundColor3 = INK}):Play() end)
+    b.Parent = parent
+    return b
+end
+local toggle = button(gui, "MenuButton", "       메뉴")
+for i = 1, 3 do
+    local bar = Instance.new("Frame")
+    bar.Name = "MenuIcon" .. i
+    bar.Position = UDim2.fromOffset(24, 16 + (i - 1) * 7)
+    bar.Size = UDim2.fromOffset(16, 2)
+    bar.BackgroundColor3 = PAPER; bar.BorderSizePixel = 0; bar.Parent = toggle
+end
+toggle.AnchorPoint = Vector2.new(0, 1)
+toggle.Position = UDim2.new(0, 20, 1, -20)
+toggle.Size = UDim2.fromOffset(132, 48)
+local flyout = Instance.new("Frame")
+flyout.Name = "Navigation"; flyout.AnchorPoint = Vector2.new(0, 1)
+flyout.Position = UDim2.new(0, 20, 1, -80)
+flyout.Size = UDim2.fromOffset(224, if isAdmin then 190 else 134)
+flyout.BackgroundColor3 = INK; flyout.BorderSizePixel = 0; flyout.Visible = false
+corner(flyout, 16); flyout.Parent = gui
+local eyebrow = label(flyout, "Eyebrow", "PERSONAL MENU", 11, MUTED)
+eyebrow.Position = UDim2.fromOffset(18, 14); eyebrow.Size = UDim2.new(1, -36, 0, 20)
+local shop = button(flyout, "ShopButton", "상점                       →")
+shop.Position = UDim2.fromOffset(12, 46); shop.Size = UDim2.new(1, -24, 0, 52)
+local admin: TextButton? = nil
+if isAdmin then
+    admin = button(flyout, "AdminButton", "어드민 패널             →")
+    admin.Position = UDim2.fromOffset(12, 104); admin.Size = UDim2.new(1, -24, 0, 52)
+    local note = label(flyout, "AdminNote", "제작자 전용", 11, MUTED)
+    note.Position = UDim2.fromOffset(18, 163); note.Size = UDim2.new(1, -36, 0, 16)
+end
+local panel = Instance.new("Frame")
+panel.Name = "ContentPanel"; panel.AnchorPoint = Vector2.new(0.5, 0.5)
+panel.Position = UDim2.fromScale(0.5, 0.5); panel.Size = UDim2.fromScale(0.88, 0.72)
+panel.BackgroundColor3 = INK; panel.BorderSizePixel = 0; panel.Visible = false
+corner(panel, 20); panel.Parent = gui
+local cap = Instance.new("UISizeConstraint"); cap.MaxSize = Vector2.new(600, 400); cap.Parent = panel
+local accent = Instance.new("Frame"); accent.Name = "Accent"
+accent.Position = UDim2.fromOffset(24, 25); accent.Size = UDim2.fromOffset(4, 40)
+accent.BackgroundColor3 = ACCENT; accent.BorderSizePixel = 0; corner(accent, 2); accent.Parent = panel
+local section = label(panel, "Section", "SUPPLY STORE", 10, MUTED)
+section.Position = UDim2.fromOffset(40, 23); section.Size = UDim2.new(1, -112, 0, 16)
+local heading = label(panel, "Heading", "상점", 24, PAPER)
+heading.Position = UDim2.fromOffset(40, 42); heading.Size = UDim2.new(1, -112, 0, 32)
+local close = button(panel, "CloseButton", "×")
+close.Position = UDim2.new(1, -62, 0, 18); close.Size = UDim2.fromOffset(44, 44); close.TextSize = 28
+local line = Instance.new("Frame"); line.Position = UDim2.fromOffset(24, 90)
+line.Size = UDim2.new(1, -48, 0, 1); line.BackgroundColor3 = MUTED; line.BackgroundTransparency = 0.8; line.BorderSizePixel = 0; line.Parent = panel
+local empty = label(panel, "EmptyTitle", "아직 진열된 상품이 없어요", 20, PAPER)
+empty.Position = UDim2.new(0, 24, 0.5, -10); empty.Size = UDim2.new(1, -48, 0, 52)
+empty.TextXAlignment = Enum.TextXAlignment.Center; empty.TextWrapped = true
+local subtitle = label(panel, "EmptyDescription", "새로운 보급품을 준비하고 있어요.", 14, MUTED)
+subtitle.Position = UDim2.new(0, 24, 0.5, 48); subtitle.Size = UDim2.new(1, -48, 0, 48)
+subtitle.TextXAlignment = Enum.TextXAlignment.Center; subtitle.TextWrapped = true
+local footer = label(panel, "Footer", "MILITARY RP  /  STORE", 10, MUTED)
+footer.Position = UDim2.new(0, 24, 1, -34); footer.Size = UDim2.new(1, -48, 0, 16)
+local showAdmin = if isAdmin then require(script.Parent:WaitForChild("AdminPanel")).mount(panel) else function(_visible: boolean) end
+local function selectForGamepad(object: GuiObject?)
+    if UserInputService.PreferredInput == Enum.PreferredInput.Gamepad then GuiService.SelectedObject = object end
+end
+local function dismiss()
+    panel.Visible = false; flyout.Visible = false; showAdmin(false)
+    toggle.Text = "       메뉴"
+    selectForGamepad(toggle)
+end
+local function openPage(page: string)
+    if page == "admin" and not isAdmin then return end
+    flyout.Visible = false; panel.Visible = true; toggle.Text = "       메뉴"
+    local management = page == "admin"
+    showAdmin(management)
+    empty.Visible = not management; subtitle.Visible = not management
+    cap.MaxSize = if management then Vector2.new(760, 640) else Vector2.new(600, 400)
+    panel.Size = if management then UDim2.fromScale(0.94, 0.9) else UDim2.fromScale(0.88, 0.72)
+    panel:SetAttribute("Page", page)
+    heading.Text = if management then "어드민 패널" else "상점"
+    section.Text = if management then "ADMINISTRATION" else "SUPPLY STORE"
+    empty.Text = if management then "관리 기능 준비 중" else "아직 진열된 상품이 없어요"
+    subtitle.Text = if management then "필요한 관리 기능을 여기에 추가할 예정이에요." else "새로운 보급품을 준비하고 있어요."
+    footer.Text = if management then "MILITARY RP  /  ADMIN" else "MILITARY RP  /  STORE"
+    selectForGamepad(close)
+end
+toggle.Activated:Connect(function()
+    local opening = not flyout.Visible
+    panel.Visible = false; flyout.Visible = opening; showAdmin(false)
+    toggle.Text = if opening then "×   닫기" else "       메뉴"
+    selectForGamepad(if opening then shop else toggle)
+end)
+shop.Activated:Connect(function() openPage("shop") end)
+if admin then admin.Activated:Connect(function() openPage("admin") end) end
+close.Activated:Connect(dismiss)
+UserInputService.InputBegan:Connect(function(input: InputObject, processed: boolean)
+    if processed then return end
+    if input.KeyCode == Enum.KeyCode.ButtonB and (panel.Visible or flyout.Visible) then dismiss() end
+end)
+-- Admin actions are validated separately by AdminService on the server.
+gui.Parent = player:WaitForChild("PlayerGui")
+]]></ProtectedString>
+					<bool name="Disabled">false</bool>
+					<Content name="LinkedSource"><null></null></Content>
+					<token name="RunContext">0</token>
+					<string name="ScriptGuid">{dfd0c046-4884-409d-b204-754bc8f9b392}</string>
+					<BinaryString name="AttributesSerialize"></BinaryString>
+					<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+					<bool name="DefinesCapabilities">false</bool>
+					<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
+					<string name="Name">MilitaryMenu</string>
+					<BinaryString name="SerializedOverrides"></BinaryString>
+					<int64 name="SourceAssetId">-1</int64>
+					<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+					<UniqueId name="UniqueId">714f218494dedcfd0ae79ad400000c9d</UniqueId>
+				</Properties>
+			</Item>
+			<Item class="ModuleScript" referent="RBXaa272997c07b41bbbc9384584e7c4680">
+				<Properties>
+					<Content name="LinkedSource"><null></null></Content>
+					<ProtectedString name="Source"><![CDATA[--!strict
+local Players=game:GetService("Players")
+local Teams=game:GetService("Teams")
+local ReplicatedStorage=game:GetService("ReplicatedStorage")
+local Panel={}
+local INK=Color3.fromRGB(36,44,38)
+local PAPER=Color3.fromRGB(238,237,224)
+local MUTED=Color3.fromRGB(163,174,157)
+local ACCENT=Color3.fromRGB(192,210,150)
+function Panel.mount(parent: Frame)
+    local root=Instance.new("Frame");root.Name="AdminTools";root.BackgroundTransparency=1
+    root.Position=UDim2.fromOffset(20,104);root.Size=UDim2.new(1,-40,1,-148);root.Visible=false;root.Parent=parent
+    local request=ReplicatedStorage:WaitForChild("AdminRequest") :: RemoteEvent
+    local response=ReplicatedStorage:WaitForChild("AdminResponse") :: RemoteEvent
+    local active="command"
+    local function round(object: GuiObject)
+        local c=Instance.new("UICorner");c.CornerRadius=UDim.new(0,8);c.Parent=object
+    end
+    local function text(parentObject: Instance,name: string,value: string,height: number): TextLabel
+        local t=Instance.new("TextLabel");t.Name=name;t.Text=value;t.Font=Enum.Font.GothamMedium;t.TextSize=14
+        t.BackgroundTransparency=1;t.TextColor3=PAPER;t.TextXAlignment=Enum.TextXAlignment.Left
+        t.Size=UDim2.new(1,0,0,height);t.TextWrapped=true;t.Parent=parentObject
+        return t
+    end
+    local function button(parentObject: Instance,name: string,value: string): TextButton
+        local b=Instance.new("TextButton");b.Name=name;b.Text=value;b.Font=Enum.Font.GothamBold;b.TextSize=14
+        b.Size=UDim2.new(1,0,0,44);b.TextColor3=PAPER;b.BackgroundColor3=INK;b.BorderSizePixel=0
+        b.Selectable=true;round(b);b.Parent=parentObject
+        return b
+    end
+    local function box(parentObject: Instance,name: string,placeholder: string): TextBox
+        local b=Instance.new("TextBox");b.Name=name;b.PlaceholderText=placeholder;b.Text="";b.ClearTextOnFocus=false
+        b.Font=Enum.Font.GothamMedium;b.TextSize=14;b.TextColor3=PAPER;b.PlaceholderColor3=MUTED
+        b.BackgroundColor3=INK;b.BorderSizePixel=0;b.Size=UDim2.new(1,0,0,44);b.TextXAlignment=Enum.TextXAlignment.Left
+        round(b);local pad=Instance.new("UIPadding");pad.PaddingLeft=UDim.new(0,12);pad.PaddingRight=UDim.new(0,12);pad.Parent=b
+        b.Parent=parentObject
+        return b
+    end
+    local tabs=Instance.new("Frame");tabs.Name="Tabs";tabs.Size=UDim2.new(1,0,0,44);tabs.BackgroundTransparency=1;tabs.Parent=root
+    local content=Instance.new("ScrollingFrame");content.Name="Body";content.Position=UDim2.fromOffset(0,54)
+    content.Size=UDim2.new(1,0,1,-54);content.BackgroundTransparency=1;content.BorderSizePixel=0
+    content.ScrollBarThickness=4;content.ScrollBarImageColor3=ACCENT;content.AutomaticCanvasSize=Enum.AutomaticSize.Y
+    content.CanvasSize=UDim2.new();content.Parent=root
+    local layout=Instance.new("UIListLayout");layout.Padding=UDim.new(0,8);layout.SortOrder=Enum.SortOrder.LayoutOrder;layout.Parent=content
+    local padding=Instance.new("UIPadding");padding.PaddingRight=UDim.new(0,8);padding.PaddingBottom=UDim.new(0,8);padding.Parent=content
+    local target=box(content,"TargetName","대상 사용자 이름 (나 / 정확한 Roblox 이름)");target.Text="나";target.LayoutOrder=1
+    local choosePlayer=button(content,"ChoosePlayer","닉네임 목록에서 선택  ▾");choosePlayer.LayoutOrder=2
+    local playerOptions=Instance.new("ScrollingFrame");playerOptions.Name="PlayerOptions";playerOptions.Visible=false
+    playerOptions.Size=UDim2.new(1,0,0,120);playerOptions.BackgroundTransparency=1;playerOptions.BorderSizePixel=0
+    playerOptions.AutomaticCanvasSize=Enum.AutomaticSize.Y;playerOptions.CanvasSize=UDim2.new();playerOptions.ScrollBarThickness=4;playerOptions.LayoutOrder=3;playerOptions.Parent=content
+    local pl=Instance.new("UIListLayout");pl.Padding=UDim.new(0,4);pl.Parent=playerOptions
+    choosePlayer.Activated:Connect(function()
+        playerOptions.Visible=not playerOptions.Visible
+        if not playerOptions.Visible then return end
+        for _,child in playerOptions:GetChildren() do if child:IsA("TextButton") then child:Destroy() end end
+        for _,player in Players:GetPlayers() do
+            local b=button(playerOptions,"Player_"..player.UserId,player.DisplayName.."  @"..player.Name)
+            b.Activated:Connect(function() target.Text=player.Name;playerOptions.Visible=false end)
+        end
+    end)
+    local pages: {[string]: Frame}={}
+    for _,name in {"command","god","fly","team","rank"} do
+        local frame=Instance.new("Frame");frame.Name=name;frame.BackgroundTransparency=1
+        frame.Size=UDim2.new(1,0,0,if name=="team" or name=="rank" then 226 elseif name=="command" then 132 else 118)
+        frame.LayoutOrder=4;frame.Visible=name=="command";frame.Parent=content;pages[name]=frame
+    end
+    local command=box(pages.command,"CommandInput","/계급 대위 · /무적 나 켜기 · /비행 나 끄기")
+    local send=button(pages.command,"RunCommand","명령어 실행");send.Position=UDim2.fromOffset(0,52)
+    local hint=text(pages.command,"Hint","허용된 관리 명령만 실행됩니다. Luau 코드 실행 기능은 없습니다.",28);hint.Position=UDim2.fromOffset(0,102);hint.TextColor3=MUTED;hint.TextSize=12
+    local status=text(content,"Status","명령을 실행하면 여기에 결과가 표시됩니다.",40);status.LayoutOrder=5;status.TextColor3=MUTED
+    local function run(value: string)
+        if #value>256 then status.Text="명령어가 너무 깁니다.";return end
+        status.Text="실행 중…";request:FireServer("command",value)
+    end
+    local function submit()
+        if command.Text:match("%S") then run(command.Text);command:ReleaseFocus(false) end
+    end
+    send.Activated:Connect(submit)
+    command.FocusLost:Connect(function(enterPressed) if enterPressed then submit() end end)
+    local function name(): string
+        return if target.Text:match("%S") then target.Text else "나"
+    end
+    for _,spec in {{"god","무적", "/무적"},{"fly","비행","/비행"}} do
+        local page=pages[spec[1]]
+        local description=text(page,"Description",if spec[1]=="god" then "선택한 플레이어의 무적 모드를 변경합니다." else "WASD 이동 · Space/E 상승 · Q/Ctrl 하강",26)
+        description.TextColor3=MUTED
+        local on=button(page,"Enable","켜기");on.Position=UDim2.fromOffset(0,36);on.Size=UDim2.new(0.5,-4,0,44)
+        local off=button(page,"Disable","끄기");off.Position=UDim2.new(0.5,4,0,36);off.Size=UDim2.new(0.5,-4,0,44)
+        on.Activated:Connect(function() run(spec[3].." "..name().." 켜기") end)
+        off.Activated:Connect(function() run(spec[3].." "..name().." 끄기") end)
+    end
+    local selectedTeam: Team?=nil
+    local teamChoice=button(pages.team,"ChooseTeam","팀 선택  ▾")
+    local teamOptions=Instance.new("ScrollingFrame");teamOptions.Name="TeamOptions";teamOptions.Position=UDim2.fromOffset(0,50)
+    teamOptions.Size=UDim2.new(1,0,0,114);teamOptions.BackgroundTransparency=1;teamOptions.BorderSizePixel=0
+    teamOptions.ScrollBarThickness=4;teamOptions.CanvasSize=UDim2.new();teamOptions.AutomaticCanvasSize=Enum.AutomaticSize.Y
+    teamOptions.Parent=pages.team
+    local tl=Instance.new("UIListLayout");tl.Padding=UDim.new(0,4);tl.Parent=teamOptions
+    local function refreshTeams()
+        for _,child in teamOptions:GetChildren() do if child:IsA("GuiObject") then child:Destroy() end end
+        local teams=Teams:GetTeams()
+        if selectedTeam and selectedTeam.Parent~=Teams then selectedTeam=nil end
+        teamChoice.Text=if selectedTeam then "선택: "..selectedTeam.Name else "팀 선택  ▾"
+        if #teams==0 then local note=text(teamOptions,"NoTeams","등록된 팀이 없습니다.",44);note.TextColor3=MUTED end
+        for _,team in teams do
+            local b=button(teamOptions,"Team_"..team.Name,team.Name)
+            b.Activated:Connect(function() selectedTeam=team;teamChoice.Text="선택: "..team.Name end)
+        end
+    end
+    teamChoice.Activated:Connect(refreshTeams)
+    Teams.ChildAdded:Connect(refreshTeams);Teams.ChildRemoved:Connect(refreshTeams);refreshTeams()
+    local apply=button(pages.team,"ApplyTeam","선택한 플레이어의 팀 변경");apply.Position=UDim2.fromOffset(0,174)
+    apply.Activated:Connect(function()
+        if selectedTeam then run("/팀 "..name().." "..selectedTeam.Name)
+        else status.Text="먼저 등록된 팀을 선택하세요." end
+    end)
+    local Catalog=require(ReplicatedStorage:WaitForChild("Shared"):WaitForChild("RankCatalog"))
+    local selectedRank: string?=nil
+    local rankChoice=button(pages.rank,"ChooseRank","계급 선택  ▾")
+    local rankOptions=Instance.new("ScrollingFrame");rankOptions.Name="RankOptions"
+    rankOptions.Position=UDim2.fromOffset(0,50);rankOptions.Size=UDim2.new(1,0,0,114)
+    rankOptions.BackgroundTransparency=1;rankOptions.BorderSizePixel=0;rankOptions.ScrollBarThickness=4
+    rankOptions.AutomaticCanvasSize=Enum.AutomaticSize.Y;rankOptions.CanvasSize=UDim2.new();rankOptions.Parent=pages.rank
+    local rl=Instance.new("UIListLayout");rl.Padding=UDim.new(0,4);rl.Parent=rankOptions
+    for _,rank in Catalog.All do
+        local b=button(rankOptions,"Rank_"..rank.id,rank.name)
+        b.Activated:Connect(function() selectedRank=rank.name;rankChoice.Text="선택: "..rank.name end)
+    end
+    rankChoice.Activated:Connect(function() rankOptions.CanvasPosition=Vector2.zero end)
+    local applyRank=button(pages.rank,"ApplyRank","선택한 플레이어의 계급 변경");applyRank.Position=UDim2.fromOffset(0,174)
+    applyRank.Activated:Connect(function()
+        if selectedRank then run("/계급 "..name().." "..selectedRank)
+        else status.Text="먼저 계급을 선택하세요." end
+    end)
+    local logTitle=text(content,"LogHeading","명령어 사용 기록  ·  현재 서버 / 최근 60개",14);logTitle.LayoutOrder=6;logTitle.TextColor3=ACCENT;logTitle.TextSize=12
+    local logs=Instance.new("ScrollingFrame");logs.Name="CommandHistory";logs.Size=UDim2.new(1,0,0,180)
+    logs.BackgroundColor3=Color3.fromRGB(17,23,19);logs.BorderSizePixel=0;logs.ScrollBarThickness=4
+    logs.AutomaticCanvasSize=Enum.AutomaticSize.Y;logs.CanvasSize=UDim2.new();logs.LayoutOrder=7;round(logs);logs.Parent=content
+    local ll=Instance.new("UIListLayout");ll.Padding=UDim.new(0,6);ll.SortOrder=Enum.SortOrder.LayoutOrder;ll.Parent=logs
+    local lp=Instance.new("UIPadding");lp.PaddingLeft=UDim.new(0,10);lp.PaddingRight=UDim.new(0,10);lp.PaddingTop=UDim.new(0,8);lp.PaddingBottom=UDim.new(0,8);lp.Parent=logs
+    local placeholder=text(logs,"NoHistory","아직 사용 기록이 없습니다.",38);placeholder.TextColor3=MUTED
+    local rows: {TextLabel}={}
+    local order=0
+    local function append(entry: any)
+        if type(entry)~="table" then return end
+        placeholder.Visible=false;order+=1
+        local row=text(logs,"Entry",os.date("%H:%M:%S",entry.time).."  @"..entry.name.."\n"..entry.command.."\n"..(if entry.ok then "완료 · " else "실패 · ")..entry.message,70)
+        row.TextSize=12;row.TextYAlignment=Enum.TextYAlignment.Top;row.LayoutOrder=order
+        row.TextColor3=if entry.ok then PAPER else Color3.fromRGB(237,177,153)
+        table.insert(rows,row)
+        if #rows>60 then table.remove(rows,1):Destroy() end
+        task.defer(function() logs.CanvasPosition=Vector2.new(0,math.max(0,logs.AbsoluteCanvasSize.Y-logs.AbsoluteWindowSize.Y)) end)
+    end
+    response.OnClientEvent:Connect(function(kind: string,data: any)
+        if kind=="result" then status.Text=data.message;status.TextColor3=if data.ok then ACCENT else Color3.fromRGB(237,177,153)
+        elseif kind=="log" then append(data)
+        elseif kind=="snapshot" then
+            for _,row in rows do row:Destroy() end;table.clear(rows);placeholder.Visible=true
+            for _,entry in data do append(entry) end
+        end
+    end)
+    local tabButtons: {[string]: TextButton}={}
+    for i,spec in {{"command","명령어"},{"god","무적"},{"fly","비행"},{"team","팀 변경"},{"rank","계급"}} do
+        local b=button(tabs,"Tab_"..spec[1],spec[2]);b.Position=UDim2.fromScale((i-1)/5,0);b.Size=UDim2.new(0.2,-4,1,0);tabButtons[spec[1]]=b
+        b.Activated:Connect(function()
+            active=spec[1];root:SetAttribute("Tab",active)
+            for key,page in pages do page.Visible=key==active end
+            for key,tab in tabButtons do tab.TextColor3=if key==active then ACCENT else MUTED end
+            content.CanvasPosition=Vector2.zero
+        end)
+    end
+    tabButtons.command.TextColor3=ACCENT
+    local function show(visible: boolean)
+        root.Visible=visible
+        if visible then request:FireServer("sync") end
+    end
+    return show
+end
+return Panel
+]]></ProtectedString>
+					<string name="ScriptGuid">{e71640fe-e9d7-48a3-8978-c51a6f675f2c}</string>
+					<BinaryString name="AttributesSerialize"></BinaryString>
+					<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+					<bool name="DefinesCapabilities">false</bool>
+					<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
+					<string name="Name">AdminPanel</string>
+					<BinaryString name="SerializedOverrides"></BinaryString>
+					<int64 name="SourceAssetId">-1</int64>
+					<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+					<UniqueId name="UniqueId">714f218494dedcfd0ae79ad4000012e1</UniqueId>
+				</Properties>
+			</Item>
+			<Item class="LocalScript" referent="RBXff13c88be609445492f3e64fdf66a086">
+				<Properties>
+					<ProtectedString name="Source"><![CDATA[--!strict
+local Players=game:GetService("Players")
+local ReplicatedStorage=game:GetService("ReplicatedStorage")
+local RunService=game:GetService("RunService")
+local UserInputService=game:GetService("UserInputService")
+local player=Players.LocalPlayer
+local remote=ReplicatedStorage:WaitForChild("AdminFlightInput") :: RemoteEvent
+local timer=0
+local focused=true
+local gui=Instance.new("ScreenGui");gui.Name="FlightControls";gui.ResetOnSpawn=false;gui.ScreenInsets=Enum.ScreenInsets.CoreUISafeInsets;gui.Parent=player:WaitForChild("PlayerGui")
+local upHeld,downHeld=false,false
+for i,spec in {{"상승",true},{"하강",false}} do
+    local b=Instance.new("TextButton");b.Name=if spec[2] then "Up" else "Down";b.Text=spec[1] :: string
+    b.Size=UDim2.fromOffset(60,48);b.AnchorPoint=Vector2.new(1,1);b.Position=UDim2.new(1,-20,1,-80-i*56)
+    b.BackgroundColor3=Color3.fromRGB(23,29,26);b.TextColor3=Color3.fromRGB(238,237,224);b.TextSize=15
+    local corner=Instance.new("UICorner");corner.CornerRadius=UDim.new(0,10);corner.Parent=b;b.Parent=gui
+    b.InputBegan:Connect(function(input)
+        if input.UserInputType==Enum.UserInputType.Touch or input.UserInputType==Enum.UserInputType.MouseButton1 then
+            if spec[2] then upHeld=true else downHeld=true end
+        end
+    end)
+    b.InputEnded:Connect(function(input)
+        if input.UserInputType==Enum.UserInputType.Touch or input.UserInputType==Enum.UserInputType.MouseButton1 then
+            if spec[2] then upHeld=false else downHeld=false end
+        end
+    end)
+end
+local function updateVisibility()
+    gui.Enabled=player:GetAttribute("AdminFlying")==true
+    upHeld=false;downHeld=false
+end
+player:GetAttributeChangedSignal("AdminFlying"):Connect(updateVisibility);updateVisibility()
+UserInputService.WindowFocusReleased:Connect(function() focused=false;upHeld=false;downHeld=false;remote:FireServer(Vector3.zero,Vector3.new(0,0,-1)) end)
+UserInputService.WindowFocused:Connect(function() focused=true end)
+RunService.Heartbeat:Connect(function(dt)
+    if not player:GetAttribute("AdminFlying") then return end
+    timer+=dt;if timer<1/12 then return end;timer=0
+    local camera=workspace.CurrentCamera
+    local character=player.Character;local humanoid=character and character:FindFirstChildOfClass("Humanoid")
+    if not camera or not humanoid then return end
+    local direction=Vector3.zero
+    if focused and not UserInputService:GetFocusedTextBox() then
+        local function key(code: Enum.KeyCode): number return if UserInputService:IsKeyDown(code) then 1 else 0 end
+        local forward=key(Enum.KeyCode.W)-key(Enum.KeyCode.S)
+        local right=key(Enum.KeyCode.D)-key(Enum.KeyCode.A)
+        direction=camera.CFrame.LookVector*forward+camera.CFrame.RightVector*right
+        if forward==0 and right==0 then direction=humanoid.MoveDirection end
+        local vertical=key(Enum.KeyCode.Space)+key(Enum.KeyCode.E)-key(Enum.KeyCode.Q)-key(Enum.KeyCode.LeftControl)
+        vertical+=if upHeld then 1 else 0;vertical-=if downHeld then 1 else 0
+        direction+=Vector3.yAxis*math.clamp(vertical,-1,1)
+    end
+    if direction.Magnitude>1 then direction=direction.Unit end
+    remote:FireServer(direction,camera.CFrame.LookVector)
+end)
+]]></ProtectedString>
+					<bool name="Disabled">false</bool>
+					<Content name="LinkedSource"><null></null></Content>
+					<token name="RunContext">0</token>
+					<string name="ScriptGuid">{889d7fc2-ad19-4948-b121-b55981ea9350}</string>
+					<BinaryString name="AttributesSerialize"></BinaryString>
+					<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+					<bool name="DefinesCapabilities">false</bool>
+					<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
+					<string name="Name">AdminFlight</string>
+					<BinaryString name="SerializedOverrides"></BinaryString>
+					<int64 name="SourceAssetId">-1</int64>
+					<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+					<UniqueId name="UniqueId">714f218494dedcfd0ae79ad4000012e3</UniqueId>
+				</Properties>
+			</Item>
+		</Item>
+		<Item class="StarterCharacterScripts" referent="RBX280decb0b2774230b3f4a5d109ab505e">
+			<Properties>
+				<BinaryString name="AttributesSerialize"></BinaryString>
+				<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+				<bool name="DefinesCapabilities">false</bool>
+				<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
+				<string name="Name">StarterCharacterScripts</string>
+				<BinaryString name="SerializedOverrides"></BinaryString>
+				<int64 name="SourceAssetId">-1</int64>
+				<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+				<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca8000003df</UniqueId>
+			</Properties>
+		</Item>
+	</Item>
+	<Item class="StarterPack" referent="RBX99998dcfba984e3e98c610b3ddd6df77">
+		<Properties>
+			<BinaryString name="AttributesSerialize"></BinaryString>
+			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+			<bool name="DefinesCapabilities">false</bool>
+			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
+			<string name="Name">StarterPack</string>
+			<BinaryString name="SerializedOverrides"></BinaryString>
+			<int64 name="SourceAssetId">-1</int64>
+			<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+			<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca800000388</UniqueId>
+		</Properties>
+	</Item>
+	<Item class="StarterGui" referent="RBX5df889c585794dde812e478d73316bae">
+		<Properties>
+			<token name="ClipsDescendantsSupportsRotation">0</token>
+			<bool name="ResetPlayerGuiOnSpawn">true</bool>
+			<token name="RtlTextSupport">0</token>
+			<token name="ScreenOrientation">2</token>
+			<bool name="ShowDevelopmentGui">true</bool>
+			<Ref name="StudioDefaultStyleSheet">null</Ref>
+			<Ref name="StudioInsertWidgetLayerCollectorAutoLinkStyleSheet">null</Ref>
+			<token name="VirtualCursorMode">0</token>
+			<BinaryString name="AttributesSerialize"></BinaryString>
+			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+			<bool name="DefinesCapabilities">false</bool>
+			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
+			<string name="Name">StarterGui</string>
+			<BinaryString name="SerializedOverrides"></BinaryString>
+			<int64 name="SourceAssetId">-1</int64>
+			<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+			<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca800000389</UniqueId>
+		</Properties>
+	</Item>
+	<Item class="LocalizationService" referent="RBXfa499faab4ad4323b2d756d45c907316">
+		<Properties>
+			<BinaryString name="AttributesSerialize"></BinaryString>
+			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+			<bool name="DefinesCapabilities">false</bool>
+			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
+			<string name="Name">LocalizationService</string>
+			<BinaryString name="SerializedOverrides"></BinaryString>
+			<int64 name="SourceAssetId">-1</int64>
+			<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+			<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca80000038b</UniqueId>
+		</Properties>
+	</Item>
+	<Item class="TeleportService" referent="RBXb67beacc3a054323b41f64e8d158fba6">
+		<Properties>
+			<BinaryString name="AttributesSerialize"></BinaryString>
+			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+			<bool name="DefinesCapabilities">false</bool>
+			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
+			<string name="Name">Teleport Service</string>
+			<BinaryString name="SerializedOverrides"></BinaryString>
+			<int64 name="SourceAssetId">-1</int64>
+			<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+			<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca80000038f</UniqueId>
+		</Properties>
+	</Item>
+	<Item class="PhysicsService" referent="RBX771ca5482cd44079a3cdfbfb1a75d8c5">
+		<Properties>
+			<BinaryString name="AttributesSerialize"></BinaryString>
+			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+			<bool name="DefinesCapabilities">false</bool>
+			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
+			<string name="Name">PhysicsService</string>
+			<BinaryString name="SerializedOverrides"></BinaryString>
+			<int64 name="SourceAssetId">-1</int64>
+			<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+			<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca800000391</UniqueId>
+		</Properties>
+	</Item>
+	<Item class="InsertService" referent="RBXa1415e8ad7804372a5da0f6ae8073421">
+		<Properties>
+			<bool name="AllowInsertFreeModels">false</bool>
+			<BinaryString name="AttributesSerialize"></BinaryString>
+			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+			<bool name="DefinesCapabilities">false</bool>
+			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
+			<string name="Name">InsertService</string>
+			<BinaryString name="SerializedOverrides"></BinaryString>
+			<int64 name="SourceAssetId">-1</int64>
+			<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+			<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca800000394</UniqueId>
+		</Properties>
+		<Item class="StringValue" referent="RBXf0b9704b4e0843d3947137b562e250f1">
+			<Properties>
+				<string name="Value">{85d7605a-f7b8-4a9d-99d1-82e69e01f512}</string>
+				<BinaryString name="AttributesSerialize"></BinaryString>
+				<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+				<bool name="DefinesCapabilities">false</bool>
+				<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
+				<string name="Name">InsertionHash</string>
+				<BinaryString name="SerializedOverrides"></BinaryString>
+				<int64 name="SourceAssetId">-1</int64>
+				<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+				<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca800001258</UniqueId>
+			</Properties>
+		</Item>
+	</Item>
+	<Item class="GamePassService" referent="RBX9e96af3b9c384a17ac6e27247aa228e3">
+		<Properties>
+			<BinaryString name="AttributesSerialize"></BinaryString>
+			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+			<bool name="DefinesCapabilities">false</bool>
+			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
+			<string name="Name">GamePassService</string>
+			<BinaryString name="SerializedOverrides"></BinaryString>
+			<int64 name="SourceAssetId">-1</int64>
+			<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+			<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca800000395</UniqueId>
+		</Properties>
+	</Item>
+	<Item class="Debris" referent="RBXa22694bbe4df4975b793a35a5016c287">
+		<Properties>
+			<int name="MaxItems">1000</int>
+			<BinaryString name="AttributesSerialize"></BinaryString>
+			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+			<bool name="DefinesCapabilities">false</bool>
+			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
+			<string name="Name">Debris</string>
+			<BinaryString name="SerializedOverrides"></BinaryString>
+			<int64 name="SourceAssetId">-1</int64>
+			<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+			<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca800000396</UniqueId>
+		</Properties>
+	</Item>
+	<Item class="CookiesService" referent="RBXd3bbd216072045ea8c1a75d4e6b6879d">
+		<Properties>
+			<BinaryString name="AttributesSerialize"></BinaryString>
+			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+			<bool name="DefinesCapabilities">false</bool>
+			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
+			<string name="Name">CookiesService</string>
+			<BinaryString name="SerializedOverrides"></BinaryString>
+			<int64 name="SourceAssetId">-1</int64>
+			<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+			<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca800000397</UniqueId>
+		</Properties>
+	</Item>
+	<Item class="Selection" referent="RBX568f8a3460dd42de9dd689fb7880bb35">
+		<Properties>
+			<BinaryString name="AttributesSerialize"></BinaryString>
+			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+			<bool name="DefinesCapabilities">false</bool>
+			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
+			<string name="Name">Selection</string>
+			<BinaryString name="SerializedOverrides"></BinaryString>
+			<int64 name="SourceAssetId">-1</int64>
+			<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+			<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca800000398</UniqueId>
+		</Properties>
+	</Item>
+	<Item class="VRService" referent="RBXef4a711400614c9bb1642c7eeea5f94d">
+		<Properties>
+			<token name="AutomaticScaling">0</token>
+			<bool name="AvatarGestures">false</bool>
+			<token name="ControllerModels">1</token>
+			<bool name="FadeOutViewOnCollision">true</bool>
+			<token name="LaserPointer">1</token>
+			<BinaryString name="AttributesSerialize"></BinaryString>
+			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+			<bool name="DefinesCapabilities">false</bool>
+			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
+			<string name="Name">VRService</string>
+			<BinaryString name="SerializedOverrides"></BinaryString>
+			<int64 name="SourceAssetId">-1</int64>
+			<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+			<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca80000039c</UniqueId>
+		</Properties>
+	</Item>
+	<Item class="ContextActionService" referent="RBX59a20db6d85c42f4929b659747991432">
+		<Properties>
+			<BinaryString name="AttributesSerialize"></BinaryString>
+			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+			<bool name="DefinesCapabilities">false</bool>
+			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
+			<string name="Name">ContextActionService</string>
+			<BinaryString name="SerializedOverrides"></BinaryString>
+			<int64 name="SourceAssetId">-1</int64>
+			<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+			<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca80000039d</UniqueId>
+		</Properties>
+	</Item>
+	<Item class="ScriptService" referent="RBX674b5482c581459cb6e2419dc4ae3ae4">
+		<Properties>
+			<BinaryString name="AttributesSerialize"></BinaryString>
+			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+			<bool name="DefinesCapabilities">false</bool>
+			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
+			<string name="Name">ScriptService</string>
+			<BinaryString name="SerializedOverrides"></BinaryString>
+			<int64 name="SourceAssetId">-1</int64>
+			<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+			<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca80000039e</UniqueId>
+		</Properties>
+	</Item>
+	<Item class="AssetService" referent="RBXe355d96fee9340c49202b2e2b74c0748">
+		<Properties>
+			<bool name="AllowInsertFreeAssets">false</bool>
+			<BinaryString name="AttributesSerialize"></BinaryString>
+			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+			<bool name="DefinesCapabilities">false</bool>
+			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
+			<string name="Name">AssetService</string>
+			<BinaryString name="SerializedOverrides"></BinaryString>
+			<int64 name="SourceAssetId">-1</int64>
+			<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+			<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca80000039f</UniqueId>
+		</Properties>
+	</Item>
+	<Item class="TouchInputService" referent="RBX835dbdc6536844a38910e36c508a2311">
+		<Properties>
+			<BinaryString name="AttributesSerialize"></BinaryString>
+			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+			<bool name="DefinesCapabilities">false</bool>
+			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
+			<string name="Name">TouchInputService</string>
+			<BinaryString name="SerializedOverrides"></BinaryString>
+			<int64 name="SourceAssetId">-1</int64>
+			<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+			<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca8000003a1</UniqueId>
+		</Properties>
+	</Item>
+	<Item class="AvatarSettings" referent="RBXe85f74be2a53460888208fd77a64ec35">
+		<Properties>
+			<int name="RulesSchemaVersion">0</int>
+			<BinaryString name="AttributesSerialize"></BinaryString>
+			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+			<bool name="DefinesCapabilities">false</bool>
+			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
+			<string name="Name">AvatarSettings</string>
+			<BinaryString name="SerializedOverrides"></BinaryString>
+			<int64 name="SourceAssetId">-1</int64>
+			<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+			<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca8000003a7</UniqueId>
+		</Properties>
+		<Item class="AvatarRules" referent="RBX76dc2a26a63646afa61c5002815dc406">
+			<Properties>
+				<token name="AvatarType">1</token>
+				<BinaryString name="AttributesSerialize"></BinaryString>
+				<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+				<bool name="DefinesCapabilities">false</bool>
+				<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
+				<string name="Name">DefaultAvatarRules</string>
+				<BinaryString name="SerializedOverrides"></BinaryString>
+				<int64 name="SourceAssetId">-1</int64>
+				<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+				<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca800000d4f</UniqueId>
+			</Properties>
+			<Item class="AvatarBodyRules" referent="RBXa12c0bde78ad4857ab2655e2f3065b95">
+				<Properties>
+					<token name="AppearanceMode">0</token>
+					<token name="AvatarType">1</token>
+					<token name="BuildMode">0</token>
+					<int64 name="CustomBodyBundleId">0</int64>
+					<token name="CustomBodyType">0</token>
+					<NumberRange name="CustomBodyTypeScale">0 1 </NumberRange>
+					<NumberRange name="CustomBuildBodyType">0 1 </NumberRange>
+					<NumberRange name="CustomBuildHead">0.95 1 </NumberRange>
+					<NumberRange name="CustomBuildHeight">0.9 1.05 </NumberRange>
+					<NumberRange name="CustomBuildProportions">0 1 </NumberRange>
+					<NumberRange name="CustomBuildWidth">0.7 1 </NumberRange>
+					<bool name="CustomEyebrowEnabled">false</bool>
+					<int64 name="CustomEyebrowId">0</int64>
+					<bool name="CustomEyelashEnabled">false</bool>
+					<int64 name="CustomEyelashId">0</int64>
+					<bool name="CustomFaceEnabled">false</bool>
+					<int64 name="CustomFaceId">0</int64>
+					<bool name="CustomHeadEnabled">false</bool>
+					<int64 name="CustomHeadId">0</int64>
+					<NumberRange name="CustomHeadScale">0.95 1 </NumberRange>
+					<NumberRange name="CustomHeight">5.5 5.5 </NumberRange>
+					<NumberRange name="CustomHeightScale">0.9 1.05 </NumberRange>
+					<bool name="CustomLeftArmEnabled">false</bool>
+					<int64 name="CustomLeftArmId">0</int64>
+					<bool name="CustomLeftLegEnabled">false</bool>
+					<int64 name="CustomLeftLegId">0</int64>
+					<bool name="CustomMoodEnabled">false</bool>
+					<int64 name="CustomMoodId">0</int64>
+					<NumberRange name="CustomProportionsScale">0 1 </NumberRange>
+					<bool name="CustomRightArmEnabled">false</bool>
+					<int64 name="CustomRightArmId">0</int64>
+					<bool name="CustomRightLegEnabled">false</bool>
+					<int64 name="CustomRightLegId">0</int64>
+					<bool name="CustomTorsoEnabled">false</bool>
+					<int64 name="CustomTorsoId">0</int64>
+					<NumberRange name="CustomWidthScale">0.7 1 </NumberRange>
+					<NumberRange name="CustomWorldHeight">5.5 5.5 </NumberRange>
+					<int64 name="HeadOverride">0</int64>
+					<bool name="KeepPlayerHead">true</bool>
+					<int64 name="LeftArmOverride">0</int64>
+					<int64 name="LeftLegOverride">0</int64>
+					<int64 name="RightArmOverride">0</int64>
+					<int64 name="RightLegOverride">0</int64>
+					<token name="ScaleMode">0</token>
+					<int64 name="TorsoOverride">0</int64>
+					<BinaryString name="AttributesSerialize"></BinaryString>
+					<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+					<bool name="DefinesCapabilities">false</bool>
+					<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
+					<string name="Name">AvatarBodyRules</string>
+					<BinaryString name="SerializedOverrides"></BinaryString>
+					<int64 name="SourceAssetId">-1</int64>
+					<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+					<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca800000d50</UniqueId>
+				</Properties>
+			</Item>
+			<Item class="AvatarCollisionRules" referent="RBXae9d2a536f94492e88de57ddddb693f2">
+				<Properties>
+					<token name="CollisionMode">0</token>
+					<token name="HitAndTouchDetectionMode">0</token>
+					<token name="LegacyCollisionMode">1</token>
+					<Vector3 name="SingleColliderSize">
+						<X>2</X>
+						<Y>3</Y>
+						<Z>1</Z>
+					</Vector3>
+					<BinaryString name="AttributesSerialize"></BinaryString>
+					<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+					<bool name="DefinesCapabilities">false</bool>
+					<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
+					<string name="Name">AvatarCollisionRules</string>
+					<BinaryString name="SerializedOverrides"></BinaryString>
+					<int64 name="SourceAssetId">-1</int64>
+					<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+					<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca800000d51</UniqueId>
+				</Properties>
+			</Item>
+			<Item class="AvatarAbilityRules" referent="RBX5c379811a18d4f86b4b5c867fb868eae">
+				<Properties>
+					<token name="CharacterControllerMode">0</token>
+					<bool name="EnableClimbing">true</bool>
+					<bool name="EnableCrouching">true</bool>
+					<bool name="EnableFallingDown">true</bool>
+					<bool name="EnableGettingUp">true</bool>
+					<bool name="EnableHolding">true</bool>
+					<bool name="EnableJumping">true</bool>
+					<bool name="EnableReaching">true</bool>
+					<bool name="EnableRunning">true</bool>
+					<bool name="EnableSitting">true</bool>
+					<bool name="EnableSprinting">true</bool>
+					<bool name="EnableSwimming">true</bool>
+					<bool name="EnableTurning">true</bool>
+					<BinaryString name="AttributesSerialize"></BinaryString>
+					<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+					<bool name="DefinesCapabilities">false</bool>
+					<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
+					<string name="Name">AvatarAbilityRules</string>
+					<BinaryString name="SerializedOverrides"></BinaryString>
+					<int64 name="SourceAssetId">-1</int64>
+					<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+					<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca800000d52</UniqueId>
+				</Properties>
+			</Item>
+			<Item class="AvatarAnimationRules" referent="RBXe167bebd3ca143b39b65bfd87671a4ad">
+				<Properties>
+					<token name="AnimationClipsMode">0</token>
+					<token name="AnimationPacksMode">0</token>
+					<int64 name="ClimbAnimationOverride">0</int64>
+					<bool name="CustomClimbAnimationEnabled">false</bool>
+					<int64 name="CustomClimbAnimationId">0</int64>
+					<bool name="CustomFallAnimationEnabled">false</bool>
+					<int64 name="CustomFallAnimationId">0</int64>
+					<bool name="CustomIdleAlt1AnimationEnabled">false</bool>
+					<int64 name="CustomIdleAlt1AnimationId">0</int64>
+					<bool name="CustomIdleAlt2AnimationEnabled">false</bool>
+					<int64 name="CustomIdleAlt2AnimationId">0</int64>
+					<bool name="CustomIdleAnimationEnabled">false</bool>
+					<int64 name="CustomIdleAnimationId">0</int64>
+					<bool name="CustomJumpAnimationEnabled">false</bool>
+					<int64 name="CustomJumpAnimationId">0</int64>
+					<bool name="CustomRunAnimationEnabled">false</bool>
+					<int64 name="CustomRunAnimationId">0</int64>
+					<bool name="CustomSwimAnimationEnabled">false</bool>
+					<int64 name="CustomSwimAnimationId">0</int64>
+					<bool name="CustomSwimIdleAnimationEnabled">false</bool>
+					<int64 name="CustomSwimIdleAnimationId">0</int64>
+					<bool name="CustomWalkAnimationEnabled">false</bool>
+					<int64 name="CustomWalkAnimationId">0</int64>
+					<int64 name="FallAnimationOverride">0</int64>
+					<int64 name="IdleAltAnimationOverride">0</int64>
+					<int64 name="IdleAnimationOverride">0</int64>
+					<int64 name="JumpAnimationOverride">0</int64>
+					<int64 name="MoodAnimationOverride">0</int64>
+					<int64 name="RunAnimationOverride">0</int64>
+					<int64 name="SwimAnimationOverride">0</int64>
+					<int64 name="SwimIdleAnimationOverride">0</int64>
+					<int64 name="WalkAnimationOverride">0</int64>
+					<BinaryString name="AttributesSerialize"></BinaryString>
+					<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+					<bool name="DefinesCapabilities">false</bool>
+					<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
+					<string name="Name">AvatarAnimationRules</string>
+					<BinaryString name="SerializedOverrides"></BinaryString>
+					<int64 name="SourceAssetId">-1</int64>
+					<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+					<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca800000d53</UniqueId>
+				</Properties>
+			</Item>
+			<Item class="AvatarAccessoryRules" referent="RBXd6cf61689a1847e5bfa3627e477a793e">
+				<Properties>
+					<token name="AccessoryMode">0</token>
+					<int64 name="BackAccessoryOverride">0</int64>
+					<token name="CustomAccessoryMode">0</token>
+					<bool name="CustomBackAccessoryEnabled">false</bool>
+					<int64 name="CustomBackAccessoryId">0</int64>
+					<bool name="CustomFaceAccessoryEnabled">false</bool>
+					<int64 name="CustomFaceAccessoryId">0</int64>
+					<bool name="CustomFrontAccessoryEnabled">false</bool>
+					<int64 name="CustomFrontAccessoryId">0</int64>
+					<bool name="CustomHairAccessoryEnabled">false</bool>
+					<int64 name="CustomHairAccessoryId">0</int64>
+					<bool name="CustomHeadAccessoryEnabled">false</bool>
+					<int64 name="CustomHeadAccessoryId">0</int64>
+					<bool name="CustomNeckAccessoryEnabled">false</bool>
+					<int64 name="CustomNeckAccessoryId">0</int64>
+					<bool name="CustomShoulderAccessoryEnabled">false</bool>
+					<int64 name="CustomShoulderAccessoryId">0</int64>
+					<bool name="CustomWaistAccessoryEnabled">false</bool>
+					<int64 name="CustomWaistAccessoryId">0</int64>
+					<bool name="EnableEmissives">true</bool>
+					<bool name="EnableSound">true</bool>
+					<bool name="EnableVFX">true</bool>
+					<int64 name="FaceAccessoryOverride">0</int64>
+					<int64 name="FrontAccessoryOverride">0</int64>
+					<int64 name="HairAccessoryOverride">0</int64>
+					<int64 name="HeadAccessoryOverride">0</int64>
+					<Vector3 name="LimitBounds">
+						<X>0</X>
+						<Y>0</Y>
+						<Z>0</Z>
+					</Vector3>
+					<token name="LimitMethod">1</token>
+					<int64 name="NeckAccessoryOverride">0</int64>
+					<int64 name="ShoulderAccessoryOverride">0</int64>
+					<int64 name="WaistAccessoryOverride">0</int64>
+					<BinaryString name="AttributesSerialize"></BinaryString>
+					<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+					<bool name="DefinesCapabilities">false</bool>
+					<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
+					<string name="Name">AvatarAccessoryRules</string>
+					<BinaryString name="SerializedOverrides"></BinaryString>
+					<int64 name="SourceAssetId">-1</int64>
+					<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+					<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca800000d54</UniqueId>
+				</Properties>
+			</Item>
+			<Item class="AvatarClothingRules" referent="RBX6a78d42b993f426194f901caec117db8">
+				<Properties>
+					<int64 name="ClassicPantsAccessoryOverride">0</int64>
+					<int64 name="ClassicShirtsAccessoryOverride">0</int64>
+					<int64 name="ClassicTShirtsAccessoryOverride">0</int64>
+					<token name="ClothingMode">0</token>
+					<bool name="CustomClassicPantsAccessoryEnabled">false</bool>
+					<int64 name="CustomClassicPantsAccessoryId">0</int64>
+					<bool name="CustomClassicShirtsAccessoryEnabled">false</bool>
+					<int64 name="CustomClassicShirtsAccessoryId">0</int64>
+					<bool name="CustomClassicTShirtsAccessoryEnabled">false</bool>
+					<int64 name="CustomClassicTShirtsAccessoryId">0</int64>
+					<token name="CustomClothingMode">0</token>
+					<bool name="CustomDressSkirtAccessoryEnabled">false</bool>
+					<int64 name="CustomDressSkirtAccessoryId">0</int64>
+					<bool name="CustomJacketAccessoryEnabled">false</bool>
+					<int64 name="CustomJacketAccessoryId">0</int64>
+					<bool name="CustomLeftShoesAccessoryEnabled">false</bool>
+					<int64 name="CustomLeftShoesAccessoryId">0</int64>
+					<bool name="CustomPantsAccessoryEnabled">false</bool>
+					<int64 name="CustomPantsAccessoryId">0</int64>
+					<bool name="CustomRightShoesAccessoryEnabled">false</bool>
+					<int64 name="CustomRightShoesAccessoryId">0</int64>
+					<bool name="CustomShirtAccessoryEnabled">false</bool>
+					<int64 name="CustomShirtAccessoryId">0</int64>
+					<bool name="CustomShortsAccessoryEnabled">false</bool>
+					<int64 name="CustomShortsAccessoryId">0</int64>
+					<bool name="CustomSweaterAccessoryEnabled">false</bool>
+					<int64 name="CustomSweaterAccessoryId">0</int64>
+					<bool name="CustomTShirtAccessoryEnabled">false</bool>
+					<int64 name="CustomTShirtAccessoryId">0</int64>
+					<int64 name="DressSkirtAccessoryOverride">0</int64>
+					<int64 name="JacketAccessoryOverride">0</int64>
+					<int64 name="LeftShoesAccessoryOverride">0</int64>
+					<Vector3 name="LimitBounds">
+						<X>0</X>
+						<Y>0</Y>
+						<Z>0</Z>
+					</Vector3>
+					<int64 name="PantsAccessoryOverride">0</int64>
+					<int64 name="RightShoesAccessoryOverride">0</int64>
+					<int64 name="ShirtAccessoryOverride">0</int64>
+					<int64 name="ShortsAccessoryOverride">0</int64>
+					<int64 name="SweaterAccessoryOverride">0</int64>
+					<int64 name="TShirtAccessoryOverride">0</int64>
+					<BinaryString name="AttributesSerialize"></BinaryString>
+					<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+					<bool name="DefinesCapabilities">false</bool>
+					<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
+					<string name="Name">AvatarClothingRules</string>
+					<BinaryString name="SerializedOverrides"></BinaryString>
+					<int64 name="SourceAssetId">-1</int64>
+					<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+					<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca800000d55</UniqueId>
+				</Properties>
+			</Item>
+		</Item>
+	</Item>
+	<Item class="Packages" referent="RBX7eadd2eba7824135a7fd21b8f4736377">
+		<Properties>
+			<bool name="IsDehydrated">false</bool>
+			<bool name="OverridesRecalculated">false</bool>
+			<int name="ShellPackagesCount">0</int>
+			<int name="SkippedInstancesCount">0</int>
+			<BinaryString name="AttributesSerialize"></BinaryString>
+			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+			<bool name="DefinesCapabilities">false</bool>
+			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
+			<string name="Name">Packages</string>
+			<BinaryString name="SerializedOverrides"></BinaryString>
+			<int64 name="SourceAssetId">-1</int64>
+			<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+			<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca8000003ab</UniqueId>
+		</Properties>
+	</Item>
+	<Item class="GuidRegistryService" referent="RBXd7a9b709851148b1befb61f87b5dd775">
+		<Properties>
+			<BinaryString name="AttributesSerialize"></BinaryString>
+			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+			<bool name="DefinesCapabilities">false</bool>
+			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
+			<string name="Name">GuidRegistryService</string>
+			<BinaryString name="SerializedOverrides"></BinaryString>
+			<int64 name="SourceAssetId">-1</int64>
+			<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+			<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca8000003ac</UniqueId>
+		</Properties>
+	</Item>
+	<Item class="LuaWebService" referent="RBX0a615d46358a4027bfb59cf8201dd1cf">
+		<Properties>
+			<BinaryString name="AttributesSerialize"></BinaryString>
+			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+			<bool name="DefinesCapabilities">false</bool>
+			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
+			<string name="Name">LuaWebService</string>
+			<BinaryString name="SerializedOverrides"></BinaryString>
+			<int64 name="SourceAssetId">-1</int64>
+			<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+			<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca8000003b3</UniqueId>
+		</Properties>
+	</Item>
+	<Item class="ProcessInstancePhysicsService" referent="RBXad668361a3dc40af9a17384530a0d0b0">
+		<Properties>
+			<BinaryString name="AttributesSerialize"></BinaryString>
+			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+			<bool name="DefinesCapabilities">false</bool>
+			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
+			<string name="Name">ProcessInstancePhysicsService</string>
+			<BinaryString name="SerializedOverrides"></BinaryString>
+			<int64 name="SourceAssetId">-1</int64>
+			<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+			<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca8000003b4</UniqueId>
+		</Properties>
+	</Item>
+	<Item class="ReplicatedStorage" referent="RBX3">
+		<Properties>
+			<BinaryString name="AttributesSerialize"></BinaryString>
+			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+			<bool name="DefinesCapabilities">false</bool>
+			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
+			<string name="Name">ReplicatedStorage</string>
+			<BinaryString name="SerializedOverrides"></BinaryString>
+			<int64 name="SourceAssetId">-1</int64>
+			<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+			<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca8000003b5</UniqueId>
+		</Properties>
+		<Item class="Folder" referent="RBX4">
+			<Properties>
+				<Color3 name="IconTint">
+					<R>0</R>
+					<G>0</G>
+					<B>0</B>
+				</Color3>
+				<BinaryString name="AttributesSerialize"></BinaryString>
+				<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+				<bool name="DefinesCapabilities">false</bool>
+				<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
+				<string name="Name">Shared</string>
+				<BinaryString name="SerializedOverrides"></BinaryString>
+				<int64 name="SourceAssetId">-1</int64>
+				<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+				<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca8000003d5</UniqueId>
+			</Properties>
+			<Item class="ModuleScript" referent="RBX8">
+				<Properties>
+					<Content name="LinkedSource"><null></null></Content>
+					<ProtectedString name="Source"><![CDATA[--!strict
+return table.freeze({
+    Magazine = 30, FireInterval = 0.12, ReloadSeconds = 2.2,
+    Damage = 25, Range = 400, TrainingHits = 5,
+    RoundSeconds = 180, IntermissionSeconds = 15, ScoreLimit = 10,
+    SquadCapacity = 4, TeamChangeCooldown = 10,
+    RankNames = {"훈련병", "이병", "일병", "상병", "병장"},
+    RankXP = {0, 100, 250, 500, 900},
+})
+]]></ProtectedString>
+					<string name="ScriptGuid">{bcb2fcc2-3a9f-43de-96c5-7c80bcf49161}</string>
+					<BinaryString name="AttributesSerialize"></BinaryString>
+					<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+					<bool name="DefinesCapabilities">false</bool>
+					<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
+					<string name="Name">Config</string>
+					<BinaryString name="SerializedOverrides"></BinaryString>
+					<int64 name="SourceAssetId">-1</int64>
+					<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+					<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca8000003d6</UniqueId>
+				</Properties>
+			</Item>
+			<Item class="ModuleScript" referent="RBX9">
+				<Properties>
+					<Content name="LinkedSource"><null></null></Content>
+					<ProtectedString name="Source"><![CDATA[--!strict
+local Rules = {}
+function Rules.finite(n: any): boolean
+    return type(n) == "number" and n == n and math.abs(n) < math.huge
+end
+function Rules.rank(xp: number, trained: boolean): number
+    if not trained then return 1 end
+    if xp >= 900 then return 5 end
+    if xp >= 500 then return 4 end
+    if xp >= 250 then return 3 end
+    return 2
+end
+function Rules.canJoin(trained: boolean, requested: any, ownCount: number, otherCount: number): boolean
+    return trained and (requested == "Blue" or requested == "Red") and ownCount <= otherCount
+end
+function Rules.canDamage(phase: string, attacker: string, victim: string, protected: boolean): boolean
+    return phase == "Active" and not protected
+        and (attacker == "Blue" or attacker == "Red")
+        and (victim == "Blue" or victim == "Red") and attacker ~= victim
+end
+function Rules.canFire(now: number, lastShot: number, interval: number, ammo: number, reloading: boolean): boolean
+    return ammo > 0 and not reloading and now - lastShot >= interval
+end
+return table.freeze(Rules)
+]]></ProtectedString>
+					<string name="ScriptGuid">{b9cfcaf2-7b95-4549-acf7-286fd1edf64a}</string>
+					<BinaryString name="AttributesSerialize"></BinaryString>
+					<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+					<bool name="DefinesCapabilities">false</bool>
+					<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
+					<string name="Name">Rules</string>
+					<BinaryString name="SerializedOverrides"></BinaryString>
+					<int64 name="SourceAssetId">-1</int64>
+					<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+					<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca8000003d7</UniqueId>
+				</Properties>
+			</Item>
+			<Item class="ModuleScript" referent="RBX39fe3772a6d744ea87e572aa954223dd">
+				<Properties>
+					<Content name="LinkedSource"><null></null></Content>
+					<ProtectedString name="Source"><![CDATA[--!strict
+export type Rank = {read id: string, read name: string, read category: string, read order: number, read color: {number}, read symbol: string, read marks: number}
+local definitions: {{string}} = {
+    {"trainee", "훈련병", "훈련병"},
+    {"private", "이병", "병"},
+    {"private_first_class", "일병", "병"},
+    {"corporal", "상병", "병"},
+    {"sergeant", "병장", "병"},
+    {"staff_sergeant", "하사", "부사관"},
+    {"sergeant_first_class", "중사", "부사관"},
+    {"master_sergeant", "상사", "부사관"},
+    {"sergeant_major", "원사", "부사관"},
+    {"warrant_officer", "준위", "준사관"},
+    {"second_lieutenant", "소위", "위관"},
+    {"first_lieutenant", "중위", "위관"},
+    {"captain", "대위", "위관"},
+    {"major", "소령", "영관"},
+    {"lieutenant_colonel", "중령", "영관"},
+    {"colonel", "대령", "영관"},
+    {"brigadier_general", "준장", "장관"},
+    {"major_general", "소장", "장관"},
+    {"lieutenant_general", "중장", "장관"},
+    {"general", "대장", "장관"},
+}
+local colors: {[string]: {number}} = {
+    ["훈련병"]={190,198,190}, ["병"]={212,225,204}, ["부사관"]={235,199,110},
+    ["준사관"]={237,214,158}, ["위관"]={217,224,234},
+    ["영관"]={210,220,235}, ["장관"]={246,221,137},
+}
+local ordered: {Rank} = {}
+local byId: {[string]: Rank} = {}
+for order, entry in definitions do
+    local symbol="training"
+    local marks=0
+    if order >= 2 and order <= 5 then symbol="bars"; marks=order-1
+    elseif order >= 6 and order <= 9 then symbol="chevrons"; marks=math.min(3,order-5)
+    elseif order == 10 then symbol="diamond"; marks=1
+    elseif order <= 13 and order >= 11 then symbol="diamond"; marks=order-10
+    elseif order <= 16 and order >= 14 then symbol="flower"; marks=order-13
+    elseif order >= 17 then symbol="star"; marks=order-16 end
+    local rank: Rank = {id=entry[1], name=entry[2], category=entry[3],
+        order=order, color=table.clone(colors[entry[3]]), symbol=symbol, marks=marks}
+    table.freeze(rank.color)
+    table.freeze(rank)
+    table.insert(ordered,rank)
+    byId[rank.id]=rank
+end
+local Catalog = {
+    DefaultId="trainee", All=table.freeze(ordered),
+}
+function Catalog.find(id: any): Rank?
+    if type(id) ~= "string" then return nil end
+    return byId[id]
+end
+return table.freeze(Catalog)
+]]></ProtectedString>
+					<string name="ScriptGuid">{46995774-7e9d-48db-8bc6-b5573bee2b0f}</string>
+					<BinaryString name="AttributesSerialize"></BinaryString>
+					<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+					<bool name="DefinesCapabilities">false</bool>
+					<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
+					<string name="Name">RankCatalog</string>
+					<BinaryString name="SerializedOverrides"></BinaryString>
+					<int64 name="SourceAssetId">-1</int64>
+					<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+					<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca800000f55</UniqueId>
+				</Properties>
+			</Item>
+		</Item>
+	</Item>
+	<Item class="ServerScriptService" referent="RBX5">
+		<Properties>
+			<bool name="LoadStringEnabled">false</bool>
+			<BinaryString name="AttributesSerialize"></BinaryString>
+			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+			<bool name="DefinesCapabilities">false</bool>
+			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
+			<string name="Name">ServerScriptService</string>
+			<BinaryString name="SerializedOverrides"></BinaryString>
+			<int64 name="SourceAssetId">-1</int64>
+			<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+			<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca8000003b6</UniqueId>
+		</Properties>
+		<Item class="ModuleScript" referent="RBX10">
+			<Properties>
+				<Content name="LinkedSource"><null></null></Content>
+				<ProtectedString name="Source"><![CDATA[--!strict
+local Players = game:GetService("Players")
+local Shared = game:GetService("ReplicatedStorage"):WaitForChild("Shared")
+local Config = require(Shared:WaitForChild("Config"))
+local Rules = require(Shared:WaitForChild("Rules"))
+local Sessions = require(script.Parent:WaitForChild("Sessions"))
+local Combat = {}
+local function living(player: Player): (Model?, Humanoid?, BasePart?)
+    local c = player.Character
+    if not c or c:FindFirstChildOfClass("ForceField") then return nil,nil,nil end
+    local h = c:FindFirstChildOfClass("Humanoid")
+    local head = c:FindFirstChild("Head")
+    local tool = c:FindFirstChild("ServiceRifle")
+    if not h or h.Health <= 0 or not head or not head:IsA("BasePart")
+        or not tool or not tool:IsA("Tool") or tool:GetAttribute("ServerIssued") ~= true then
+        return nil,nil,nil
+    end
+    return c,h,head
+end
+function Combat.reload(player: Player)
+    if not Sessions.allow(player,"reload",2,2) then return end
+    local s = Sessions.get(player)
+    if not s or s.reloading or s.ammo == Config.Magazine or not living(player) then return end
+    s.reloading = true
+    local generation = s.generation
+    Sessions.publish(player)
+    task.delay(Config.ReloadSeconds,function()
+        if Sessions.get(player) ~= s or s.generation ~= generation then return end
+        s.reloading = false
+        if living(player) then s.ammo = Config.Magazine end
+        Sessions.publish(player)
+    end)
+end
+function Combat.fire(player: Player, direction: any, round: any, targets: Folder)
+    if not Sessions.allow(player,"fire",12,3) then return end
+    if typeof(direction) ~= "Vector3" or not Rules.finite(direction.X)
+        or not Rules.finite(direction.Y) or not Rules.finite(direction.Z) then return end
+    if math.abs(direction.Magnitude - 1) > 0.01 then return end
+    local s = Sessions.get(player)
+    if not s then return end
+    if s.team ~= "Training" and round.phase ~= "Active" then return end
+    local c, _, head = living(player)
+    if not c or not head then return end
+    local now = os.clock()
+    if not Rules.canFire(now,s.lastShot,Config.FireInterval,s.ammo,s.reloading) then return end
+    s.lastShot = now
+    s.ammo -= 1
+    Sessions.publish(player)
+    local params = RaycastParams.new()
+    params.FilterType = Enum.RaycastFilterType.Exclude
+    params.FilterDescendantsInstances = {c}
+    -- No client origin, hit part, damage or target identity is accepted.
+    local result = workspace:Raycast(head.Position,direction.Unit*Config.Range,params)
+    if not result then return end
+    if s.team == "Training" and result.Instance.Parent == targets and not s.trained then
+        s.hits += 1
+        if s.hits >= Config.TrainingHits then s.trained=true; s.xp=100 end
+        Sessions.publish(player)
+        return
+    end
+    local model = result.Instance:FindFirstAncestorOfClass("Model")
+    if not model then return end
+    local victim = Players:GetPlayerFromCharacter(model)
+    local targetSession = if victim then Sessions.get(victim) else nil
+    local humanoid = model:FindFirstChildOfClass("Humanoid")
+    if not victim or not targetSession or not humanoid or humanoid.Health <= 0 then return end
+    if not Rules.canDamage(round.phase,s.team,targetSession.team,model:FindFirstChildOfClass("ForceField") ~= nil) then return end
+    local before = humanoid.Health
+    humanoid:TakeDamage(Config.Damage)
+    if before > 0 and humanoid.Health <= 0 then
+        round.scores[s.team] += 1
+        s.xp += 25
+        Sessions.publish(player)
+        round.publish()
+    end
+end
+return Combat
+]]></ProtectedString>
+				<string name="ScriptGuid">{23f343b1-6395-419f-a67a-b80aaa2121d7}</string>
+				<BinaryString name="AttributesSerialize"></BinaryString>
+				<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+				<bool name="DefinesCapabilities">false</bool>
+				<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
+				<string name="Name">Combat</string>
+				<BinaryString name="SerializedOverrides"></BinaryString>
+				<int64 name="SourceAssetId">-1</int64>
+				<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+				<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca8000003d8</UniqueId>
+			</Properties>
+		</Item>
+		<Item class="Script" referent="RBX11">
+			<Properties>
+				<ProtectedString name="Source"><![CDATA[--!strict
+local Players = game:GetService("Players")
+local Teams = game:GetService("Teams")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Config = require(ReplicatedStorage:WaitForChild("Shared"):WaitForChild("Config"))
+local Rules = require(ReplicatedStorage.Shared:WaitForChild("Rules"))
+local Sessions = require(script.Parent:WaitForChild("Sessions"))
+local Combat = require(script.Parent:WaitForChild("Combat"))
+Players.RespawnTime = 4
+local remotes = Instance.new("Folder")
+remotes.Name = "Remotes"
+local events: {[string]: RemoteEvent} = {}
+for _, name in {"Fire", "Reload", "JoinTeam", "JoinSquad"} do
+    local event = Instance.new("RemoteEvent")
+    event.Name = name; event.Parent = remotes; events[name] = event
+end
+local teamObjects: {[string]: Team} = {}
+local spawns: {[string]: SpawnLocation} = {}
+local fixture = Instance.new("Folder")
+fixture.Name = "MVPFixtures"; fixture.Parent = workspace
+local function part(name: string, size: Vector3, position: Vector3, color: Color3): Part
+    local p = Instance.new("Part")
+    p.Name=name; p.Anchored=true; p.Size=size; p.Position=position; p.Color=color; p.Parent=fixture
+    return p
+end
+part("TestFloor",Vector3.new(200,1,240),Vector3.new(0,-0.5,0),Color3.fromRGB(65,76,64))
+-- Temporary test fixtures only; these can be replaced by a map later.
+for _, spec in {
+    {"Training","훈련병","Bright green",Vector3.new(0,1,90)},
+    {"Blue","청군","Bright blue",Vector3.new(-50,1,-45)},
+    {"Red","홍군","Bright red",Vector3.new(50,1,-45)},
+} do
+    local t=Instance.new("Team")
+    t.Name=spec[2] :: string; t.TeamColor=BrickColor.new(spec[3] :: string); t.AutoAssignable=false; t.Parent=Teams
+    teamObjects[spec[1] :: string]=t
+    local spawn=Instance.new("SpawnLocation")
+    spawn.Name=spec[1] :: string; spawn.Anchored=true; spawn.Size=Vector3.new(10,1,10)
+    spawn.Position=spec[4] :: Vector3; spawn.Neutral=false; spawn.TeamColor=t.TeamColor
+    spawn.AllowTeamChangeOnTouch=false; spawn.Duration=3; spawn.Parent=fixture
+    spawns[spec[1] :: string]=spawn
+end
+local targets=Instance.new("Folder"); targets.Name="TrainingTargets"; targets.Parent=fixture
+for i=1,5 do
+    local p=part("Target"..i,Vector3.new(4,6,1),Vector3.new((i-3)*10,4,60),Color3.fromRGB(245,193,63))
+    p.Parent=targets
+end
+-- Separate range from combat; prevents shooting range targets from the combat area.
+part("RangeDivider",Vector3.new(200,18,2),Vector3.new(0,9,30),Color3.fromRGB(91,97,90))
+local round: any = {phase="Intermission",scores={Blue=0,Red=0},endsAt=0}
+round.publish=function()
+    ReplicatedStorage:SetAttribute("RoundPhase",round.phase)
+    ReplicatedStorage:SetAttribute("BlueScore",round.scores.Blue)
+    ReplicatedStorage:SetAttribute("RedScore",round.scores.Red)
+    ReplicatedStorage:SetAttribute("RoundEndsAt",round.endsAt)
+end
+local function characterReady(player: Player, character: Model)
+    Sessions.resetWeapon(player)
+    local humanoid=character:WaitForChild("Humanoid",10)
+    if player.Character ~= character or not humanoid or not humanoid:IsA("Humanoid") then return end
+    humanoid.Died:Connect(function()
+        if player.Character == character then Sessions.resetWeapon(player) end
+    end)
+    local backpack=player:WaitForChild("Backpack",10)
+    if player.Character ~= character or humanoid.Health <= 0 or not backpack then return end
+    local tool=Instance.new("Tool")
+    tool.Name="ServiceRifle"; tool.ToolTip="제식소총 · 클릭 사격 / R 재장전"
+    tool.RequiresHandle=false; tool.CanBeDropped=false; tool:SetAttribute("ServerIssued",true)
+    tool.Parent=backpack
+end
+local function addPlayer(player: Player)
+    if Sessions.get(player) then return end
+    Sessions.add(player)
+    player.Team=teamObjects.Training; player.Neutral=false; player.RespawnLocation=spawns.Training
+    player.CharacterAdded:Connect(function(c) characterReady(player,c) end)
+    if player.Character then task.spawn(characterReady,player,player.Character) end
+end
+Players.PlayerAdded:Connect(addPlayer)
+Players.PlayerRemoving:Connect(Sessions.remove)
+for _, player in Players:GetPlayers() do addPlayer(player) end
+local function respawn(player: Player)
+    task.spawn(function()
+        local ok, err=pcall(function() player:LoadCharacterAsync() end)
+        if not ok and player.Parent == Players then warn("Respawn failed",err) end
+    end)
+end
+local function alive(player: Player): boolean
+    local c=player.Character
+    local h=if c then c:FindFirstChildOfClass("Humanoid") else nil
+    return h ~= nil and h.Health > 0
+end
+events.JoinTeam.OnServerEvent:Connect(function(player: Player, requested: any)
+    if not Sessions.allow(player,"team",1,2) then return end
+    local s=Sessions.get(player)
+    if not s or requested == s.team or not alive(player) then return end
+    if os.clock()-s.lastTeamChange < Config.TeamChangeCooldown then return end
+    -- Battle allegiance is locked during a round; trainees can deploy once.
+    if s.team ~= "Training" and round.phase == "Active" then return end
+    if requested ~= "Blue" and requested ~= "Red" then return end
+    local other=if requested == "Blue" then "Red" else "Blue"
+    local otherCount=Sessions.count(other)-(if s.team == other then 1 else 0)
+    if not Rules.canJoin(s.trained,requested,Sessions.count(requested),otherCount) then return end
+    s.team=requested; s.squad=0; s.lastTeamChange=os.clock()
+    player.Team=teamObjects[requested]; player.RespawnLocation=spawns[requested]
+    Sessions.publish(player); respawn(player)
+end)
+events.JoinSquad.OnServerEvent:Connect(function(player: Player, requested: any)
+    if not Sessions.allow(player,"squad",1,2) then return end
+    local s=Sessions.get(player)
+    if not s or s.team == "Training" or type(requested) ~= "number" then return end
+    if requested ~= 1 and requested ~= 2 and requested ~= 3 then return end
+    if s.squad == requested or Sessions.count(s.team,requested) >= Config.SquadCapacity then return end
+    s.squad=requested; Sessions.publish(player)
+end)
+events.Fire.OnServerEvent:Connect(function(player: Player, direction: any) Combat.fire(player,direction,round,targets) end)
+events.Reload.OnServerEvent:Connect(Combat.reload)
+remotes.Parent=ReplicatedStorage -- Expose only after all handlers are connected.
+task.spawn(function()
+    while true do
+        round.phase="Intermission"; round.endsAt=workspace:GetServerTimeNow()+Config.IntermissionSeconds
+        round.publish()
+        task.wait(Config.IntermissionSeconds)
+        round.scores={Blue=0,Red=0}; round.phase="Active"
+        round.endsAt=workspace:GetServerTimeNow()+Config.RoundSeconds
+        for _, player in Players:GetPlayers() do
+            local s=Sessions.get(player)
+            if s and s.team ~= "Training" then respawn(player) end
+        end
+        round.publish()
+        repeat task.wait(0.25) until workspace:GetServerTimeNow() >= round.endsAt
+            or round.scores.Blue >= Config.ScoreLimit or round.scores.Red >= Config.ScoreLimit
+        local winner=if round.scores.Blue == round.scores.Red then "Draw"
+            elseif round.scores.Blue > round.scores.Red then "Blue" else "Red"
+        ReplicatedStorage:SetAttribute("LastWinner",winner)
+    end
+end)
+]]></ProtectedString>
+				<bool name="Disabled">true</bool>
+				<Content name="LinkedSource"><null></null></Content>
+				<token name="RunContext">0</token>
+				<string name="ScriptGuid">{01e0c560-b0a9-42e2-b9c6-4a45547cafb2}</string>
+				<BinaryString name="AttributesSerialize"></BinaryString>
+				<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+				<bool name="DefinesCapabilities">false</bool>
+				<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
+				<string name="Name">Main</string>
+				<BinaryString name="SerializedOverrides"></BinaryString>
+				<int64 name="SourceAssetId">-1</int64>
+				<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+				<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca8000003d9</UniqueId>
+			</Properties>
+		</Item>
+		<Item class="ModuleScript" referent="RBX12">
+			<Properties>
+				<Content name="LinkedSource"><null></null></Content>
+				<ProtectedString name="Source"><![CDATA[--!strict
+local Players = game:GetService("Players")
+local Shared = game:GetService("ReplicatedStorage"):WaitForChild("Shared")
+local Config = require(Shared:WaitForChild("Config"))
+local Rules = require(Shared:WaitForChild("Rules"))
+export type Session = {
+    xp: number, trained: boolean, hits: number, team: string, squad: number,
+    ammo: number, reloading: boolean, lastShot: number, generation: number,
+    lastTeamChange: number, buckets: {[string]: {tokens: number, updated: number}},
+}
+local Sessions = {}
+local data: {[Player]: Session} = {}
+function Sessions.get(player: Player): Session?
+    return data[player]
+end
+function Sessions.publish(player: Player)
+    local s = data[player]
+    if not s then return end
+    player:SetAttribute("XP", s.xp)
+    player:SetAttribute("Rank", Config.RankNames[Rules.rank(s.xp, s.trained)])
+    player:SetAttribute("Trained", s.trained)
+    player:SetAttribute("TrainingHits", s.hits)
+    player:SetAttribute("Side", s.team)
+    player:SetAttribute("Squad", s.squad)
+    player:SetAttribute("Ammo", s.ammo)
+    player:SetAttribute("Reloading", s.reloading)
+end
+function Sessions.add(player: Player)
+    data[player] = {xp=0, trained=false, hits=0, team="Training", squad=0,
+        ammo=Config.Magazine, reloading=false, lastShot=-math.huge, generation=0,
+        lastTeamChange=-math.huge, buckets={}}
+    Sessions.publish(player)
+end
+function Sessions.remove(player: Player) data[player] = nil end
+function Sessions.resetWeapon(player: Player)
+    local s = data[player]
+    if not s then return end
+    s.generation += 1
+    s.ammo = Config.Magazine
+    s.reloading = false
+    s.lastShot = -math.huge
+    Sessions.publish(player)
+end
+-- Separate token buckets prevent malformed remote spam from reaching expensive raycasts.
+function Sessions.allow(player: Player, key: string, rate: number, burst: number): boolean
+    local s = data[player]
+    if not s then return false end
+    local now = os.clock()
+    local b = s.buckets[key]
+    if not b then b = {tokens=burst, updated=now}; s.buckets[key] = b end
+    b.tokens = math.min(burst, b.tokens + (now-b.updated)*rate)
+    b.updated = now
+    if b.tokens < 1 then return false end
+    b.tokens -= 1
+    return true
+end
+function Sessions.count(team: string, squad: number?): number
+    local count = 0
+    for player, s in data do
+        if player.Parent == Players and s.team == team and (squad == nil or s.squad == squad) then count += 1 end
+    end
+    return count
+end
+return Sessions
+]]></ProtectedString>
+				<string name="ScriptGuid">{3147749d-4a86-414a-ab9c-a190440bb13b}</string>
+				<BinaryString name="AttributesSerialize"></BinaryString>
+				<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+				<bool name="DefinesCapabilities">false</bool>
+				<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
+				<string name="Name">Sessions</string>
+				<BinaryString name="SerializedOverrides"></BinaryString>
+				<int64 name="SourceAssetId">-1</int64>
+				<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+				<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca8000003db</UniqueId>
+			</Properties>
+		</Item>
+		<Item class="ModuleScript" referent="RBXd0c6c12386eb4d1abf75f7b2d176f056">
+			<Properties>
+				<Content name="LinkedSource"><null></null></Content>
+				<ProtectedString name="Source"><![CDATA[--!strict
+local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Catalog = require(ReplicatedStorage:WaitForChild("Shared"):WaitForChild("RankCatalog"))
+local Insignia=require(script.Parent:WaitForChild("RankInsignia"))
+type Rank = Catalog.Rank
+local RankService = {}
+local states: {[Player]: string} = {}
+local connections: {[Player]: {RBXScriptConnection}} = {}
+local function renderCharacter(player: Player, character: Model)
+    local head=character:WaitForChild("Head",10)
+    if player.Character ~= character or not states[player] or not head or not head:IsA("BasePart") then return end
+    local previous=head:FindFirstChild("RankTag")
+    if previous then previous:Destroy() end
+    local humanoid=character:FindFirstChildOfClass("Humanoid")
+    if humanoid then humanoid.DisplayDistanceType=Enum.HumanoidDisplayDistanceType.None end
+    local tag=Instance.new("BillboardGui")
+    tag.Name="RankTag"; tag.Adornee=head; tag.Size=UDim2.fromOffset(180,88)
+    tag.StudsOffsetWorldSpace=Vector3.new(0,2.7,0); tag.MaxDistance=25; tag.AlwaysOnTop=false
+    tag.Parent=head
+    local identity=Instance.new("TextLabel")
+    identity.Name="Identity"; identity.Size=UDim2.new(1,0,0,26); identity.Position=UDim2.fromOffset(0,0)
+    identity.BackgroundTransparency=1; identity.TextColor3=Color3.fromRGB(244,245,240)
+    identity.TextStrokeTransparency=0.35; identity.Font=Enum.Font.GothamMedium; identity.TextSize=16
+    identity.Text=player.DisplayName; identity.Parent=tag
+    local rankLabel=Instance.new("TextLabel")
+    rankLabel.Name="Rank"; rankLabel.Size=UDim2.new(1,0,0,28); rankLabel.Position=UDim2.fromOffset(0,62)
+    rankLabel.BackgroundTransparency=1; rankLabel.TextStrokeTransparency=0.3
+    rankLabel.Font=Enum.Font.GothamBold; rankLabel.TextSize=17; rankLabel.Parent=tag
+    local rank=Catalog.find(states[player])
+    if rank then
+        rankLabel.Text=rank.name
+        rankLabel.TextColor3=Color3.fromRGB(rank.color[1],rank.color[2],rank.color[3])
+        Insignia.render(tag,rank)
+    end
+end
+local function publish(player: Player, rank: Rank)
+    player:SetAttribute("RankId",rank.id)
+    player:SetAttribute("Rank",rank.name)
+    player:SetAttribute("RankCategory",rank.category)
+    player:SetAttribute("RankOrder",rank.order)
+    local stats=player:FindFirstChild("leaderstats")
+    local value=if stats then stats:FindFirstChild("계급") else nil
+    if value and value:IsA("StringValue") then value.Value=rank.name end
+    local character=player.Character
+    if character then
+        local head=character:FindFirstChild("Head")
+        local tag=if head then head:FindFirstChild("RankTag") else nil
+        local label=if tag then tag:FindFirstChild("Rank") else nil
+        if label and label:IsA("TextLabel") then
+            label.Text=rank.name
+            label.TextColor3=Color3.fromRGB(rank.color[1],rank.color[2],rank.color[3])
+            Insignia.render(tag,rank)
+        end
+    end
+end
+-- Server-only assignment API for later gameplay systems; no permission or promotion policy yet.
+-- Rank commands call this API on the server; clients cannot assign ranks directly.
+function RankService.set(player: Player, rankId: any): boolean
+    local rank=Catalog.find(rankId)
+    if not states[player] or player.Parent ~= Players or not rank then return false end
+    states[player]=rank.id
+    publish(player,rank)
+    return true
+end
+function RankService.get(player: Player): Rank?
+    local id=states[player]
+    return if id then Catalog.find(id) else nil
+end
+function RankService.add(player: Player)
+    if states[player] then return end
+    states[player]=Catalog.DefaultId
+    local stats=Instance.new("Folder"); stats.Name="leaderstats"; stats.Parent=player
+    local value=Instance.new("StringValue"); value.Name="계급"; value.Parent=stats
+    local rank=Catalog.find(Catalog.DefaultId)
+    assert(rank,"Default rank must exist")
+    publish(player,rank)
+    connections[player]={
+        player.CharacterAdded:Connect(function(character: Model)
+            renderCharacter(player,character)
+        end),
+        player.CharacterAppearanceLoaded:Connect(function(character: Model)
+            renderCharacter(player,character)
+        end),
+    }
+    if player.Character then task.spawn(renderCharacter,player,player.Character) end
+end
+function RankService.remove(player: Player)
+    local playerConnections=connections[player]
+    if playerConnections then
+        for _,connection in playerConnections do connection:Disconnect() end
+        connections[player]=nil
+    end
+    states[player]=nil
+end
+return RankService
+]]></ProtectedString>
+				<string name="ScriptGuid">{cce76092-d590-4c61-be59-c471ec534c8f}</string>
+				<BinaryString name="AttributesSerialize"></BinaryString>
+				<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+				<bool name="DefinesCapabilities">false</bool>
+				<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
+				<string name="Name">RankService</string>
+				<BinaryString name="SerializedOverrides"></BinaryString>
+				<int64 name="SourceAssetId">-1</int64>
+				<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+				<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca800000f58</UniqueId>
+			</Properties>
+		</Item>
+		<Item class="ModuleScript" referent="RBXc964fa98844d4e58a27bb6060e918a13">
+			<Properties>
+				<Content name="LinkedSource"><null></null></Content>
+				<ProtectedString name="Source"><![CDATA[--!strict
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Catalog = require(ReplicatedStorage:WaitForChild("Shared"):WaitForChild("RankCatalog"))
+type Rank = Catalog.Rank
+local Insignia = {}
+local ATLAS = "rbxassetid://97383962049559"
+local COLUMNS, ROWS = 4, 5
+function Insignia.render(tag: Instance, rank: Rank)
+    local previous = tag:FindFirstChild("Insignia")
+    if previous then previous:Destroy() end
+    local plate = Instance.new("Frame")
+    plate.Name = "Insignia"
+    plate.AnchorPoint = Vector2.new(0.5, 0)
+    plate.Position = UDim2.new(0.5, 0, 0, 24)
+    plate.Size = UDim2.fromOffset(38, 38)
+    plate.BackgroundTransparency = 1
+    plate.BorderSizePixel = 0
+    plate.ClipsDescendants = true
+    plate:SetAttribute("RankId", rank.id)
+    plate:SetAttribute("Symbol", rank.symbol)
+    plate:SetAttribute("Marks", rank.marks)
+    plate.Parent = tag
+    if rank.symbol == "training" then return end
+    local index = rank.order - 1
+    local column, row = index % COLUMNS, math.floor(index / COLUMNS)
+    -- Normalized clipping remains correct if Roblox resizes the uploaded texture.
+    local image = Instance.new("ImageLabel")
+    image.Name = "Atlas"
+    image.BackgroundTransparency = 1
+    image.BorderSizePixel = 0
+    image.Image = ATLAS
+    image.ScaleType = Enum.ScaleType.Stretch
+    image.Size = UDim2.fromScale(COLUMNS, ROWS)
+    image.Position = UDim2.fromScale(-column, -row)
+    image.Parent = plate
+end
+return Insignia
+]]></ProtectedString>
+				<string name="ScriptGuid">{6b7b055f-7876-4d3a-9563-21e6b1ea6d00}</string>
+				<BinaryString name="AttributesSerialize"></BinaryString>
+				<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+				<bool name="DefinesCapabilities">false</bool>
+				<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
+				<string name="Name">RankInsignia</string>
+				<BinaryString name="SerializedOverrides"></BinaryString>
+				<int64 name="SourceAssetId">-1</int64>
+				<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+				<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca800000f5a</UniqueId>
+			</Properties>
+		</Item>
+		<Item class="ModuleScript" referent="RBX8d14c6b162fe493695e5f9f861e5f7c4">
+			<Properties>
+				<Content name="LinkedSource"><null></null></Content>
+				<ProtectedString name="Source"><![CDATA[--!strict
+export type Command = {kind: string, target: string?, rank: string?}
+local Parser={}
+function Parser.parse(message: any): Command?
+    if type(message) ~= "string" or #message > 256 then return nil end
+    local words: {string}={}
+    for word in string.gmatch(message,"%S+") do
+        table.insert(words,word)
+        if #words > 3 then return nil end
+    end
+    local alias=string.lower(words[1] or "")
+    if alias=="/계급목록" or alias=="/ranks" then
+        return if #words==1 then {kind="list"} else nil
+    end
+    if alias~="/계급" and alias~="/rank" then return nil end
+    if #words==2 then return {kind="set",rank=words[2]} end
+    if #words==3 then return {kind="set",target=words[2],rank=words[3]} end
+    return nil
+end
+return table.freeze(Parser)
+]]></ProtectedString>
+				<string name="ScriptGuid">{9a72c432-67a1-4a78-85fb-272afd6b0d86}</string>
+				<BinaryString name="AttributesSerialize"></BinaryString>
+				<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+				<bool name="DefinesCapabilities">false</bool>
+				<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
+				<string name="Name">RankCommandParser</string>
+				<BinaryString name="SerializedOverrides"></BinaryString>
+				<int64 name="SourceAssetId">-1</int64>
+				<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+				<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca800000f5c</UniqueId>
+			</Properties>
+		</Item>
+		<Item class="ModuleScript" referent="RBX7c6bbcabd7e84de78922065eae2df9a0">
+			<Properties>
+				<Content name="LinkedSource"><null></null></Content>
+				<ProtectedString name="Source"><![CDATA[--!strict
+local Players=game:GetService("Players")
+local TextChatService=game:GetService("TextChatService")
+local ReplicatedStorage=game:GetService("ReplicatedStorage")
+local Catalog=require(ReplicatedStorage:WaitForChild("Shared"):WaitForChild("RankCatalog"))
+local RankService=require(script.Parent:WaitForChild("RankService"))
+local Parser=require(script.Parent:WaitForChild("RankCommandParser"))
+-- Current user's Roblox account, confirmed from their local Studio playtest.
+-- This restricts only these edit commands; military ranks confer no permissions.
+local COMMAND_OWNER_USER_ID=1153125948
+local lastCommand: {[Player]: number}={}
+local started=false
+local Commands={}
+local Audit=require(script.Parent:WaitForChild("AdminAudit"))
+local function handle(actor: Player, text: any): (boolean, string)
+    if typeof(actor)~="Instance" or not actor:IsA("Player") or actor.Parent~=Players
+        or actor.UserId~=COMMAND_OWNER_USER_ID then
+        return false,"계급 변경 명령어는 제작자 전용입니다."
+    end
+    local now=os.clock()
+    if now-(lastCommand[actor] or -math.huge)<0.5 then return false,"잠시 후 다시 입력하세요." end
+    lastCommand[actor]=now
+    local command=Parser.parse(text)
+    if not command then return false,"사용법: /계급 대위 또는 /계급 플레이어명 병장 · /계급목록" end
+    if command.kind=="list" then
+        local names: {string}={}
+        for _,rank in Catalog.All do table.insert(names,rank.name) end
+        return true,table.concat(names," · ")
+    end
+    local rank=nil
+    for _,candidate in Catalog.All do
+        if candidate.name==command.rank or candidate.id==command.rank then rank=candidate;break end
+    end
+    if not rank then return false,"없는 계급입니다. /계급목록으로 확인하세요." end
+    local target=actor
+    if command.target and command.target~="me" and command.target~="나" then
+        local match=nil
+        for _,player in Players:GetPlayers() do
+            if string.lower(player.Name)==string.lower(command.target) then match=player;break end
+        end
+        if not match then return false,"현재 서버의 정확한 Roblox 사용자 이름을 입력하세요." end
+        target=match
+    end
+    if not RankService.set(target,rank.id) then return false,"플레이어가 나갔거나 계급 정보가 준비되지 않았습니다." end
+    return true,target.Name.." → "..rank.name
+end
+function Commands.handle(actor: Player, text: any): (boolean, string)
+    local ok,message=handle(actor,text)
+    if typeof(actor)=="Instance" and actor:IsA("Player") and actor.Parent==Players and actor.UserId==COMMAND_OWNER_USER_ID and type(text)=="string" then
+        Audit.record(actor,text,ok,message)
+    end
+    return ok,message
+end
+function Commands.start()
+    if started then return end
+    started=true
+    local feedback=Instance.new("RemoteEvent")
+    feedback.Name="RankCommandFeedback";feedback.Parent=ReplicatedStorage
+    for _,spec in {{"SetMilitaryRank","/계급","/rank"},{"ListMilitaryRanks","/계급목록","/ranks"}} do
+        local command=Instance.new("TextChatCommand")
+        command.Name=spec[1];command.PrimaryAlias=spec[2];command.SecondaryAlias=spec[3]
+        command.Triggered:Connect(function(source: TextSource, text: string)
+            if not source then return end
+            local actor=Players:GetPlayerByUserId(source.UserId)
+            if not actor then return end
+            local _,message=Commands.handle(actor,text)
+            feedback:FireClient(actor,message)
+        end)
+        command.Parent=TextChatService
+    end
+    Players.PlayerRemoving:Connect(function(player: Player) lastCommand[player]=nil end)
+end
+return Commands
+]]></ProtectedString>
+				<string name="ScriptGuid">{14aa79a6-2a24-4a94-9d39-7e01204858d8}</string>
+				<BinaryString name="AttributesSerialize"></BinaryString>
+				<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+				<bool name="DefinesCapabilities">false</bool>
+				<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
+				<string name="Name">RankCommands</string>
+				<BinaryString name="SerializedOverrides"></BinaryString>
+				<int64 name="SourceAssetId">-1</int64>
+				<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+				<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca800000f5e</UniqueId>
+			</Properties>
+		</Item>
+		<Item class="Script" referent="RBXc028ffd2196c45a5bdaf00f78bf4116f">
+			<Properties>
+				<ProtectedString name="Source"><![CDATA[--!strict
+local Players=game:GetService("Players")
+local RankService=require(script.Parent:WaitForChild("RankService"))
+-- Rank metadata is independent of Roblox Teams; no units or team selection yet.
+Players.PlayerAdded:Connect(RankService.add)
+Players.PlayerRemoving:Connect(RankService.remove)
+for _,player in Players:GetPlayers() do RankService.add(player) end
+
+require(script.Parent:WaitForChild("RankCommands")).start()
+]]></ProtectedString>
+				<bool name="Disabled">false</bool>
+				<Content name="LinkedSource"><null></null></Content>
+				<token name="RunContext">0</token>
+				<string name="ScriptGuid">{35c9b3c9-5e14-46cf-9f05-898532d64063}</string>
+				<BinaryString name="AttributesSerialize"></BinaryString>
+				<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+				<bool name="DefinesCapabilities">false</bool>
+				<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
+				<string name="Name">RankBootstrap</string>
+				<BinaryString name="SerializedOverrides"></BinaryString>
+				<int64 name="SourceAssetId">-1</int64>
+				<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+				<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca800000f60</UniqueId>
+			</Properties>
+		</Item>
+		<Item class="ModuleScript" referent="RBX15cc9104ec8e46d6a65f7e1bb4b1dc87">
+			<Properties>
+				<Content name="LinkedSource"><null></null></Content>
+				<ProtectedString name="Source"><![CDATA[--!strict
+local Audit = {}
+local entries = {}
+Audit.Changed = Instance.new("BindableEvent")
+function Audit.record(actor: Player, command: string, ok: boolean, message: string)
+    local entry = {name = actor.Name, command = string.sub(command, 1, 256), ok = ok, message = message, time = os.time()}
+    table.insert(entries, entry)
+    if #entries > 60 then table.remove(entries, 1) end
+    Audit.Changed:Fire(entry)
+end
+function Audit.snapshot()
+    return table.clone(entries)
+end
+return Audit
+]]></ProtectedString>
+				<string name="ScriptGuid">{84af9630-8985-4dd7-9e92-bef1f3f072ae}</string>
+				<BinaryString name="AttributesSerialize"></BinaryString>
+				<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+				<bool name="DefinesCapabilities">false</bool>
+				<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
+				<string name="Name">AdminAudit</string>
+				<BinaryString name="SerializedOverrides"></BinaryString>
+				<int64 name="SourceAssetId">-1</int64>
+				<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+				<UniqueId name="UniqueId">714f218494dedcfd0ae79ad4000012db</UniqueId>
+			</Properties>
+		</Item>
+		<Item class="ModuleScript" referent="RBX2f3718c02ea641958aec8a03bf73a5d7">
+			<Properties>
+				<Content name="LinkedSource"><null></null></Content>
+				<ProtectedString name="Source"><![CDATA[--!strict
+local Players = game:GetService("Players")
+local Teams = game:GetService("Teams")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local RunService = game:GetService("RunService")
+local Audit = require(script.Parent:WaitForChild("AdminAudit"))
+local RankCommands = require(script.Parent:WaitForChild("RankCommands"))
+local Service = {}
+local OWNER = 1153125948
+local started = false
+local requests: {[Player]: number} = {}
+local inputs: {[Player]: number} = {}
+local flying: {[Player]: any} = {}
+local healthConnections: {[Player]: RBXScriptConnection} = {}
+local function authorized(actor: Player): boolean
+    return actor.Parent == Players and actor.UserId == OWNER
+end
+local function targetFor(actor: Player, name: string): Player?
+    if name == "나" or name == "me" then return actor end
+    for _, p in Players:GetPlayers() do
+        if string.lower(p.Name) == string.lower(name) then return p end
+    end
+    return nil
+end
+local function stopFlight(player: Player)
+    local state = flying[player]
+    flying[player] = nil
+    player:SetAttribute("AdminFlying", false)
+    if not state then return end
+    for _, instance in {state.velocity, state.orientation, state.attachment} do instance:Destroy() end
+    if state.humanoid.Parent then
+        state.humanoid.PlatformStand = state.platformStand
+        state.humanoid.AutoRotate = state.autoRotate
+    end
+    if state.root.Parent then
+        state.root.AssemblyLinearVelocity = Vector3.zero
+        pcall(function() state.root:SetNetworkOwnershipAuto() end)
+    end
+end
+local function setFlight(player: Player, enabled: boolean): (boolean, string)
+    stopFlight(player)
+    if not enabled then return true, player.Name .. " 비행 끄기" end
+    local character = player.Character
+    local root = character and character:FindFirstChild("HumanoidRootPart")
+    local humanoid = character and character:FindFirstChildOfClass("Humanoid")
+    if not root or not root:IsA("BasePart") or not humanoid or humanoid.Health <= 0 or root.Anchored or humanoid.SeatPart then
+        return false, "살아 있고 앉아 있지 않은 캐릭터가 필요합니다."
+    end
+    local attachment = Instance.new("Attachment"); attachment.Name = "AdminFlightAttachment"; attachment.Parent = root
+    local velocity = Instance.new("LinearVelocity")
+    velocity.Name = "AdminFlightVelocity"; velocity.Attachment0 = attachment
+    velocity.RelativeTo = Enum.ActuatorRelativeTo.World
+    velocity.MaxForce = math.max(100000, root.AssemblyMass * workspace.Gravity * 8)
+    velocity.VectorVelocity = Vector3.zero; velocity.Parent = root
+    local orientation = Instance.new("AlignOrientation")
+    orientation.Name = "AdminFlightOrientation"; orientation.Mode = Enum.OrientationAlignmentMode.OneAttachment
+    orientation.Attachment0 = attachment; orientation.MaxTorque = 100000; orientation.Responsiveness = 15
+    orientation.CFrame = root.CFrame.Rotation; orientation.Parent = root
+    flying[player] = {root=root, humanoid=humanoid, attachment=attachment, velocity=velocity, orientation=orientation,
+        autoRotate=humanoid.AutoRotate, platformStand=humanoid.PlatformStand, direction=Vector3.zero, lastInput=os.clock()}
+    humanoid.AutoRotate = false; humanoid.PlatformStand = true
+    root:SetNetworkOwner(nil)
+    player:SetAttribute("AdminFlying", true)
+    return true, player.Name .. " 비행 켜기"
+end
+local function applyGod(player: Player)
+    local previous = healthConnections[player]
+    if previous then previous:Disconnect(); healthConnections[player] = nil end
+    local character = player.Character
+    if not character then return end
+    local previousField = character:FindFirstChild("AdminGodForceField")
+    if previousField then previousField:Destroy() end
+    if not player:GetAttribute("AdminGod") then return end
+    local humanoid = character:FindFirstChildOfClass("Humanoid")
+    if not humanoid or humanoid.Health <= 0 then return end
+    local field = Instance.new("ForceField"); field.Name="AdminGodForceField"; field.Visible=false; field.Parent=character
+    humanoid.Health = humanoid.MaxHealth
+    healthConnections[player] = humanoid.HealthChanged:Connect(function(health)
+        if health > 0 and health < humanoid.MaxHealth and player:GetAttribute("AdminGod") then humanoid.Health=humanoid.MaxHealth end
+    end)
+end
+function Service.execute(actor: Player, text: any): (boolean, string)
+    if typeof(actor) ~= "Instance" or not actor:IsA("Player") or not authorized(actor) then return false, "제작자 전용 기능입니다." end
+    if type(text) ~= "string" or #text > 256 or not utf8.len(text) then return false, "명령어는 256바이트 이내로 입력하세요." end
+    local words: {string} = {}
+    for word in string.gmatch(text, "%S+") do table.insert(words, word) end
+    local verb = words[1]
+    if verb == "/계급" or verb == "/rank" or verb == "/계급목록" or verb == "/ranks" then
+        return RankCommands.handle(actor, text) -- RankCommands records its own audit entry.
+    end
+    local ok, message = false, "사용법: /무적 나 켜기 · /비행 나 끄기 · /팀 사용자이름 팀이름 · /계급 대위"
+    local target = if words[2] then targetFor(actor, words[2]) else actor
+    if not target then
+        message = "서버에 있는 정확한 Roblox 사용자 이름을 선택하세요."
+    elseif verb == "/무적" or verb == "/god" or verb == "/비행" or verb == "/fly" then
+        local mode = words[3]
+        local enabled = mode == "켜기" or mode == "on"
+        if #words == 3 and (enabled or mode == "끄기" or mode == "off") then
+            if verb == "/무적" or verb == "/god" then
+                target:SetAttribute("AdminGod", enabled); applyGod(target)
+                ok=true; message=target.Name .. (if enabled then " 무적 켜기" else " 무적 끄기")
+            else ok, message = setFlight(target, enabled) end
+        end
+    elseif verb == "/팀" or verb == "/team" then
+        local name = table.concat(words, " ", 3)
+        local team = Teams:FindFirstChild(name)
+        if team and team:IsA("Team") then
+            target.Team = team; target.Neutral = false
+            ok=true; message=target.Name .. " → " .. team.Name
+        else message="등록된 팀을 선택하세요. 현재 팀이 없으면 변경할 수 없습니다." end
+    end
+    Audit.record(actor, text, ok, message)
+    return ok, message
+end
+function Service.start()
+    if started then return end
+    started=true
+    local request=Instance.new("RemoteEvent"); request.Name="AdminRequest"; request.Parent=ReplicatedStorage
+    local response=Instance.new("RemoteEvent"); response.Name="AdminResponse"; response.Parent=ReplicatedStorage
+    local flightInput=Instance.new("RemoteEvent"); flightInput.Name="AdminFlightInput"; flightInput.Parent=ReplicatedStorage
+    Audit.Changed.Event:Connect(function(entry)
+        for _, p in Players:GetPlayers() do if authorized(p) then response:FireClient(p, "log", entry) end end
+    end)
+    request.OnServerEvent:Connect(function(actor: Player, action: any, text: any)
+        if not authorized(actor) then return end
+        local now=os.clock()
+        if now-(requests[actor] or -math.huge)<0.25 then return end
+        requests[actor]=now
+        if action=="sync" then response:FireClient(actor,"snapshot",Audit.snapshot())
+        elseif action=="command" then
+            local ok,message=Service.execute(actor,text)
+            response:FireClient(actor,"result",{ok=ok,message=message})
+        end
+    end)
+    local function finiteVector(value: any): boolean
+        return typeof(value)=="Vector3" and value.X==value.X and value.Y==value.Y and value.Z==value.Z
+            and math.abs(value.X)<=1.01 and math.abs(value.Y)<=1.01 and math.abs(value.Z)<=1.01 and value.Magnitude<=1.01
+    end
+    flightInput.OnServerEvent:Connect(function(player: Player, direction: any, facing: any)
+        local state=flying[player]
+        if not state then return end
+        local now=os.clock()
+        if now-(inputs[player] or -math.huge)<0.04 then return end
+        inputs[player]=now
+        if not finiteVector(direction) or not finiteVector(facing) then return end
+        state.direction=direction; state.lastInput=now
+        local flat=Vector3.new(facing.X,0,facing.Z)
+        if flat.Magnitude>0.01 then state.orientation.CFrame=CFrame.lookAt(Vector3.zero,flat) end
+    end)
+    RunService.Heartbeat:Connect(function()
+        for player,state in flying do
+            if not state.root.Parent or state.humanoid.Health<=0 then stopFlight(player)
+            else state.velocity.VectorVelocity=if os.clock()-state.lastInput<0.4 then state.direction*32 else Vector3.zero end
+        end
+    end)
+    local function added(player: Player)
+        player:SetAttribute("AdminGod",false); player:SetAttribute("AdminFlying",false)
+        player.CharacterAdded:Connect(function(character)
+            stopFlight(player)
+            local humanoid=character:WaitForChild("Humanoid",10)
+            if humanoid and player.Character==character then applyGod(player) end
+        end)
+    end
+    Players.PlayerAdded:Connect(added)
+    for _,p in Players:GetPlayers() do added(p) end
+    Players.PlayerRemoving:Connect(function(p)
+        stopFlight(p); requests[p]=nil; inputs[p]=nil
+        if healthConnections[p] then healthConnections[p]:Disconnect();healthConnections[p]=nil end
+    end)
+end
+return Service
+]]></ProtectedString>
+				<string name="ScriptGuid">{a83397b3-bf02-4907-9822-edc308ac2cf7}</string>
+				<BinaryString name="AttributesSerialize"></BinaryString>
+				<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+				<bool name="DefinesCapabilities">false</bool>
+				<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
+				<string name="Name">AdminService</string>
+				<BinaryString name="SerializedOverrides"></BinaryString>
+				<int64 name="SourceAssetId">-1</int64>
+				<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+				<UniqueId name="UniqueId">714f218494dedcfd0ae79ad4000012dd</UniqueId>
+			</Properties>
+		</Item>
+		<Item class="Script" referent="RBX62c59e0f047a4ef0935106707c912864">
+			<Properties>
+				<ProtectedString name="Source"><![CDATA[--!strict
+require(script.Parent:WaitForChild("AdminService")).start()
+]]></ProtectedString>
+				<bool name="Disabled">false</bool>
+				<Content name="LinkedSource"><null></null></Content>
+				<token name="RunContext">0</token>
+				<string name="ScriptGuid">{74c742a9-deff-4a70-b2e8-e59489eb9ee3}</string>
+				<BinaryString name="AttributesSerialize"></BinaryString>
+				<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+				<bool name="DefinesCapabilities">false</bool>
+				<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
+				<string name="Name">AdminBootstrap</string>
+				<BinaryString name="SerializedOverrides"></BinaryString>
+				<int64 name="SourceAssetId">-1</int64>
+				<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+				<UniqueId name="UniqueId">714f218494dedcfd0ae79ad4000012df</UniqueId>
+			</Properties>
+		</Item>
+	</Item>
+	<Item class="ServerStorage" referent="RBX145d135019bc473e8e27cb539e78a4e9">
+		<Properties>
+			<BinaryString name="AttributesSerialize"></BinaryString>
+			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+			<bool name="DefinesCapabilities">false</bool>
+			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
+			<string name="Name">ServerStorage</string>
+			<BinaryString name="SerializedOverrides"></BinaryString>
+			<int64 name="SourceAssetId">-1</int64>
+			<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+			<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca8000003b7</UniqueId>
+		</Properties>
+	</Item>
+	<Item class="ServiceVisibilityService" referent="RBX48dd5b6f08b84b4e997b30e9c07c8f72">
+		<Properties>
+			<BinaryString name="HiddenServices">AAAAAA==</BinaryString>
+			<BinaryString name="VisibleServices">AAAAAA==</BinaryString>
+			<BinaryString name="AttributesSerialize"></BinaryString>
+			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+			<bool name="DefinesCapabilities">false</bool>
+			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
+			<string name="Name">ServiceVisibilityService</string>
+			<BinaryString name="SerializedOverrides"></BinaryString>
+			<int64 name="SourceAssetId">-1</int64>
+			<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+			<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca8000003cc</UniqueId>
+		</Properties>
+	</Item>
+	<Item class="VideoService" referent="RBXd933080a29b146e49460110a4f1d42fa">
+		<Properties>
+			<BinaryString name="AttributesSerialize"></BinaryString>
+			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+			<bool name="DefinesCapabilities">false</bool>
+			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
+			<string name="Name">VideoService</string>
+			<BinaryString name="SerializedOverrides"></BinaryString>
+			<int64 name="SourceAssetId">-1</int64>
+			<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+			<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca8000003d0</UniqueId>
+		</Properties>
+	</Item>
+	<Item class="HttpService" referent="RBXc04c70efe85a48bfa4f6e3e9d5a53c10">
+		<Properties>
+			<bool name="HttpEnabled">false</bool>
+			<BinaryString name="AttributesSerialize"></BinaryString>
+			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+			<bool name="DefinesCapabilities">false</bool>
+			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
+			<string name="Name">HttpService</string>
+			<BinaryString name="SerializedOverrides"></BinaryString>
+			<int64 name="SourceAssetId">-1</int64>
+			<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+			<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca8000003d1</UniqueId>
+		</Properties>
+	</Item>
+	<Item class="Teams" referent="RBX2">
+		<Properties>
+			<BinaryString name="AttributesSerialize"></BinaryString>
+			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+			<bool name="DefinesCapabilities">false</bool>
+			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
+			<string name="Name">Teams</string>
+			<BinaryString name="SerializedOverrides"></BinaryString>
+			<int64 name="SourceAssetId">-1</int64>
+			<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+			<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca8000003d4</UniqueId>
+		</Properties>
+	</Item>
+	<Item class="Lighting" referent="RBX15bcd90d0ae142dbb64fcb44c2e20156">
+		<Properties>
+			<Color3 name="Ambient">
+				<R>0.5</R>
+				<G>0.5</G>
+				<B>0.5</B>
+			</Color3>
+			<float name="Brightness">1.98124921</float>
+			<Color3 name="ColorShift_Bottom">
+				<R>0</R>
+				<G>0</G>
+				<B>0</B>
+			</Color3>
+			<Color3 name="ColorShift_Top">
+				<R>0</R>
+				<G>0</G>
+				<B>0</B>
+			</Color3>
+			<float name="EnvironmentDiffuseScale">0</float>
+			<float name="EnvironmentSpecularScale">0</float>
+			<float name="ExposureCompensation">0</float>
+			<token name="ExtendLightRangeTo120">0</token>
+			<Color3 name="FogColor">
+				<R>0.75</R>
+				<G>0.75</G>
+				<B>0.75</B>
+			</Color3>
+			<float name="FogEnd">100000</float>
+			<float name="FogStart">0</float>
+			<float name="GeographicLatitude">41.7332993</float>
+			<bool name="GlobalShadows">false</bool>
+			<token name="LightingStyle">1</token>
+			<Color3 name="OutdoorAmbient">
+				<R>0.5</R>
+				<G>0.5</G>
+				<B>0.5</B>
+			</Color3>
+			<bool name="Outlines">true</bool>
+			<bool name="PrioritizeLightingQuality">false</bool>
+			<float name="ShadowSoftness">0.5</float>
+			<token name="Technology">1</token>
+			<string name="TimeOfDay">14:00:00</string>
+			<BinaryString name="AttributesSerialize"><![CDATA[BQAAABQAAABSQlhfQmFja3VwQnJpZ2h0bmVzcwUAAIA/HgAAAFJCWF9CYWNrdXBFeHBvc3Vy
+ZUNvbXBlbnNhdGlvbgUAAAAAIQAAAFJCWF9MaWdodGluZ0NvbXBhdGliaWxpdHlNaWdyYXRl
+ZAMBJgAAAFJCWF9MaWdodGluZ1RlY2hub2xvZ3lVbmlmaWVkTWlncmF0aW9uAwEgAAAAUkJY
+X09yaWdpbmFsVGVjaG5vbG9neU9uRmlsZUxvYWQEAgAAAA==]]></BinaryString>
+			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+			<bool name="DefinesCapabilities">false</bool>
+			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
+			<string name="Name">Lighting</string>
+			<BinaryString name="SerializedOverrides"></BinaryString>
+			<int64 name="SourceAssetId">-1</int64>
+			<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+			<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca8000003fe</UniqueId>
+		</Properties>
+		<Item class="ColorGradingEffect" referent="RBX341755deeb5941c09130b9601a3cfcab">
+			<Properties>
+				<token name="TonemapperPreset">1</token>
+				<bool name="Enabled">true</bool>
+				<BinaryString name="AttributesSerialize"></BinaryString>
+				<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+				<bool name="DefinesCapabilities">false</bool>
+				<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
+				<string name="Name">ColorGrading</string>
+				<BinaryString name="SerializedOverrides"></BinaryString>
+				<int64 name="SourceAssetId">-1</int64>
+				<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+				<UniqueId name="UniqueId">714f218494dedcfd0ae79ad4000003e0</UniqueId>
+			</Properties>
+		</Item>
+		<Item class="BloomEffect" referent="RBX6a5cb6129e704c29a2864e42309d129f">
+			<Properties>
+				<float name="Intensity">0</float>
+				<float name="Size">24</float>
+				<float name="Threshold">0.949999988</float>
+				<bool name="Enabled">true</bool>
+				<BinaryString name="AttributesSerialize"></BinaryString>
+				<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+				<bool name="DefinesCapabilities">false</bool>
+				<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
+				<string name="Name">Bloom</string>
+				<BinaryString name="SerializedOverrides"></BinaryString>
+				<int64 name="SourceAssetId">-1</int64>
+				<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+				<UniqueId name="UniqueId">714f218494dedcfd0ae79ad4000003e1</UniqueId>
+			</Properties>
+		</Item>
+	</Item>
+	<Item class="LodDataService" referent="RBX496f331deb0e49c7be56657fdb8437c0">
+		<Properties>
+			<BinaryString name="AttributesSerialize"></BinaryString>
+			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+			<bool name="DefinesCapabilities">false</bool>
+			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
+			<string name="Name">LodDataService</string>
+			<BinaryString name="SerializedOverrides"></BinaryString>
+			<int64 name="SourceAssetId">-1</int64>
+			<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+			<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca800000401</UniqueId>
+		</Properties>
+	</Item>
+	<Item class="TestService" referent="RBXc345baf41ae94b19aaef0fe495fa885f">
+		<Properties>
+			<bool name="AutoRuns">true</bool>
+			<string name="Description"></string>
+			<bool name="ExecuteWithStudioRun">false</bool>
+			<bool name="IsPhysicsEnvironmentalThrottled">true</bool>
+			<bool name="IsSleepAllowed">true</bool>
+			<int name="NumberOfPlayers">0</int>
+			<double name="SimulateSecondsLag">0</double>
+			<bool name="ThrottlePhysicsToRealtime">true</bool>
+			<double name="Timeout">10</double>
+			<BinaryString name="AttributesSerialize"></BinaryString>
+			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+			<bool name="DefinesCapabilities">false</bool>
+			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
+			<string name="Name">TestService</string>
+			<BinaryString name="SerializedOverrides"></BinaryString>
+			<int64 name="SourceAssetId">-1</int64>
+			<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+			<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca80000047b</UniqueId>
+		</Properties>
+	</Item>
+	<Item class="SerializationService" referent="RBX2cfee31c9fe04b25af6adb7c985de287">
+		<Properties>
+			<BinaryString name="AttributesSerialize"></BinaryString>
+			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+			<bool name="DefinesCapabilities">false</bool>
+			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
+			<string name="Name">SerializationService</string>
+			<BinaryString name="SerializedOverrides"></BinaryString>
+			<int64 name="SourceAssetId">-1</int64>
+			<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+			<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca80000047f</UniqueId>
+		</Properties>
+	</Item>
+	<Item class="VirtualInputManager" referent="RBX436032b2373341118aa985f2e38af6b9">
+		<Properties>
+			<BinaryString name="AttributesSerialize"></BinaryString>
+			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+			<bool name="DefinesCapabilities">false</bool>
+			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
+			<string name="Name">VirtualInputManager</string>
+			<BinaryString name="SerializedOverrides"></BinaryString>
+			<int64 name="SourceAssetId">-1</int64>
+			<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+			<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca800000648</UniqueId>
+		</Properties>
+	</Item>
+	<SharedStrings>
+		<SharedString md5="leDEa27wHRPaBssaK0OoqQ==">AQAAABUAAAACAAAAan8/AAUAAAAAAAADAAAAP39rIAMAAAAAAAAEAAAAf2Y/MAMAAAAAAAAF
+AAAAilY+UAMAAAAAAAAGAAAAj35fEAUAAAAAAAAHAAAAi21PEAIAAAAAAAAIAAAAZmxvgAMA
+AAAAAAAJAAAAZbDqEAYAAAAAAAAKAAAAw8faMAUAAAAAAAALAAAAiVpHkAMAAAAAAAAMAAAA
+Oi4kQAUAAAAAAAANAAAAHh4lFAMAAAAAAAAOAAAAZlw7UAUAAAAAAAAPAAAA6JxKJAMAAAAA
+AAAQAAAAc3trYAUAAAAAAAARAAAAhHtacAMAAAAAAAASAAAAgcLgAAYAAAAAAAATAAAAc4RK
+BAUAAAAAAAAUAAAAxr21cAUAAAAAAAAVAAAAzq2UNAMAAAAAAAAWAAAAlJSMRAMAAAAAAAA=</SharedString>
+		<SharedString md5="yuZpQdnvvUBOTYh1jqZ2cA=="></SharedString>
+	</SharedStrings>
+</roblox>

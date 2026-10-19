@@ -1,0 +1,8 @@
+.DS_Store
+*.rbxl
+*.rbxlx.lock
+*.rbxl.lock
+.env
+.env.*
+!.env.example
+__pycache__/

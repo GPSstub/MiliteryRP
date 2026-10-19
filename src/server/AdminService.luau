@@ -1,0 +1,171 @@
+--!strict
+local Players = game:GetService("Players")
+local Teams = game:GetService("Teams")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local RunService = game:GetService("RunService")
+local Audit = require(script.Parent:WaitForChild("AdminAudit"))
+local RankCommands = require(script.Parent:WaitForChild("RankCommands"))
+local Service = {}
+local OWNER = 1153125948
+local started = false
+local requests: {[Player]: number} = {}
+local inputs: {[Player]: number} = {}
+local flying: {[Player]: any} = {}
+local healthConnections: {[Player]: RBXScriptConnection} = {}
+local function authorized(actor: Player): boolean
+    return actor.Parent == Players and actor.UserId == OWNER
+end
+local function targetFor(actor: Player, name: string): Player?
+    if name == "나" or name == "me" then return actor end
+    for _, p in Players:GetPlayers() do
+        if string.lower(p.Name) == string.lower(name) then return p end
+    end
+    return nil
+end
+local function stopFlight(player: Player)
+    local state = flying[player]
+    flying[player] = nil
+    player:SetAttribute("AdminFlying", false)
+    if not state then return end
+    for _, instance in {state.velocity, state.orientation, state.attachment} do instance:Destroy() end
+    if state.humanoid.Parent then
+        state.humanoid.PlatformStand = state.platformStand
+        state.humanoid.AutoRotate = state.autoRotate
+    end
+    if state.root.Parent then
+        state.root.AssemblyLinearVelocity = Vector3.zero
+        pcall(function() state.root:SetNetworkOwnershipAuto() end)
+    end
+end
+local function setFlight(player: Player, enabled: boolean): (boolean, string)
+    stopFlight(player)
+    if not enabled then return true, player.Name .. " 비행 끄기" end
+    local character = player.Character
+    local root = character and character:FindFirstChild("HumanoidRootPart")
+    local humanoid = character and character:FindFirstChildOfClass("Humanoid")
+    if not root or not root:IsA("BasePart") or not humanoid or humanoid.Health <= 0 or root.Anchored or humanoid.SeatPart then
+        return false, "살아 있고 앉아 있지 않은 캐릭터가 필요합니다."
+    end
+    local attachment = Instance.new("Attachment"); attachment.Name = "AdminFlightAttachment"; attachment.Parent = root
+    local velocity = Instance.new("LinearVelocity")
+    velocity.Name = "AdminFlightVelocity"; velocity.Attachment0 = attachment
+    velocity.RelativeTo = Enum.ActuatorRelativeTo.World
+    velocity.MaxForce = math.max(100000, root.AssemblyMass * workspace.Gravity * 8)
+    velocity.VectorVelocity = Vector3.zero; velocity.Parent = root
+    local orientation = Instance.new("AlignOrientation")
+    orientation.Name = "AdminFlightOrientation"; orientation.Mode = Enum.OrientationAlignmentMode.OneAttachment
+    orientation.Attachment0 = attachment; orientation.MaxTorque = 100000; orientation.Responsiveness = 15
+    orientation.CFrame = root.CFrame.Rotation; orientation.Parent = root
+    flying[player] = {root=root, humanoid=humanoid, attachment=attachment, velocity=velocity, orientation=orientation,
+        autoRotate=humanoid.AutoRotate, platformStand=humanoid.PlatformStand, direction=Vector3.zero, lastInput=os.clock()}
+    humanoid.AutoRotate = false; humanoid.PlatformStand = true
+    root:SetNetworkOwner(nil)
+    player:SetAttribute("AdminFlying", true)
+    return true, player.Name .. " 비행 켜기"
+end
+local function applyGod(player: Player)
+    local previous = healthConnections[player]
+    if previous then previous:Disconnect(); healthConnections[player] = nil end
+    local character = player.Character
+    if not character then return end
+    local previousField = character:FindFirstChild("AdminGodForceField")
+    if previousField then previousField:Destroy() end
+    if not player:GetAttribute("AdminGod") then return end
+    local humanoid = character:FindFirstChildOfClass("Humanoid")
+    if not humanoid or humanoid.Health <= 0 then return end
+    local field = Instance.new("ForceField"); field.Name="AdminGodForceField"; field.Visible=false; field.Parent=character
+    humanoid.Health = humanoid.MaxHealth
+    healthConnections[player] = humanoid.HealthChanged:Connect(function(health)
+        if health > 0 and health < humanoid.MaxHealth and player:GetAttribute("AdminGod") then humanoid.Health=humanoid.MaxHealth end
+    end)
+end
+function Service.execute(actor: Player, text: any): (boolean, string)
+    if typeof(actor) ~= "Instance" or not actor:IsA("Player") or not authorized(actor) then return false, "제작자 전용 기능입니다." end
+    if type(text) ~= "string" or #text > 256 or not utf8.len(text) then return false, "명령어는 256바이트 이내로 입력하세요." end
+    local words: {string} = {}
+    for word in string.gmatch(text, "%S+") do table.insert(words, word) end
+    local verb = words[1]
+    if verb == "/계급" or verb == "/rank" or verb == "/계급목록" or verb == "/ranks" then
+        return RankCommands.handle(actor, text) -- RankCommands records its own audit entry.
+    end
+    local ok, message = false, "사용법: /무적 나 켜기 · /비행 나 끄기 · /팀 사용자이름 팀이름 · /계급 대위"
+    local target = if words[2] then targetFor(actor, words[2]) else actor
+    if not target then
+        message = "서버에 있는 정확한 Roblox 사용자 이름을 선택하세요."
+    elseif verb == "/무적" or verb == "/god" or verb == "/비행" or verb == "/fly" then
+        local mode = words[3]
+        local enabled = mode == "켜기" or mode == "on"
+        if #words == 3 and (enabled or mode == "끄기" or mode == "off") then
+            if verb == "/무적" or verb == "/god" then
+                target:SetAttribute("AdminGod", enabled); applyGod(target)
+                ok=true; message=target.Name .. (if enabled then " 무적 켜기" else " 무적 끄기")
+            else ok, message = setFlight(target, enabled) end
+        end
+    elseif verb == "/팀" or verb == "/team" then
+        local name = table.concat(words, " ", 3)
+        local team = Teams:FindFirstChild(name)
+        if team and team:IsA("Team") then
+            target.Team = team; target.Neutral = false
+            ok=true; message=target.Name .. " → " .. team.Name
+        else message="등록된 팀을 선택하세요. 현재 팀이 없으면 변경할 수 없습니다." end
+    end
+    Audit.record(actor, text, ok, message)
+    return ok, message
+end
+function Service.start()
+    if started then return end
+    started=true
+    local request=Instance.new("RemoteEvent"); request.Name="AdminRequest"; request.Parent=ReplicatedStorage
+    local response=Instance.new("RemoteEvent"); response.Name="AdminResponse"; response.Parent=ReplicatedStorage
+    local flightInput=Instance.new("RemoteEvent"); flightInput.Name="AdminFlightInput"; flightInput.Parent=ReplicatedStorage
+    Audit.Changed.Event:Connect(function(entry)
+        for _, p in Players:GetPlayers() do if authorized(p) then response:FireClient(p, "log", entry) end end
+    end)
+    request.OnServerEvent:Connect(function(actor: Player, action: any, text: any)
+        if not authorized(actor) then return end
+        local now=os.clock()
+        if now-(requests[actor] or -math.huge)<0.25 then return end
+        requests[actor]=now
+        if action=="sync" then response:FireClient(actor,"snapshot",Audit.snapshot())
+        elseif action=="command" then
+            local ok,message=Service.execute(actor,text)
+            response:FireClient(actor,"result",{ok=ok,message=message})
+        end
+    end)
+    local function finiteVector(value: any): boolean
+        return typeof(value)=="Vector3" and value.X==value.X and value.Y==value.Y and value.Z==value.Z
+            and math.abs(value.X)<=1.01 and math.abs(value.Y)<=1.01 and math.abs(value.Z)<=1.01 and value.Magnitude<=1.01
+    end
+    flightInput.OnServerEvent:Connect(function(player: Player, direction: any, facing: any)
+        local state=flying[player]
+        if not state then return end
+        local now=os.clock()
+        if now-(inputs[player] or -math.huge)<0.04 then return end
+        inputs[player]=now
+        if not finiteVector(direction) or not finiteVector(facing) then return end
+        state.direction=direction; state.lastInput=now
+        local flat=Vector3.new(facing.X,0,facing.Z)
+        if flat.Magnitude>0.01 then state.orientation.CFrame=CFrame.lookAt(Vector3.zero,flat) end
+    end)
+    RunService.Heartbeat:Connect(function()
+        for player,state in flying do
+            if not state.root.Parent or state.humanoid.Health<=0 then stopFlight(player)
+            else state.velocity.VectorVelocity=if os.clock()-state.lastInput<0.4 then state.direction*32 else Vector3.zero end
+        end
+    end)
+    local function added(player: Player)
+        player:SetAttribute("AdminGod",false); player:SetAttribute("AdminFlying",false)
+        player.CharacterAdded:Connect(function(character)
+            stopFlight(player)
+            local humanoid=character:WaitForChild("Humanoid",10)
+            if humanoid and player.Character==character then applyGod(player) end
+        end)
+    end
+    Players.PlayerAdded:Connect(added)
+    for _,p in Players:GetPlayers() do added(p) end
+    Players.PlayerRemoving:Connect(function(p)
+        stopFlight(p); requests[p]=nil; inputs[p]=nil
+        if healthConnections[p] then healthConnections[p]:Disconnect();healthConnections[p]=nil end
+    end)
+end
+return Service
