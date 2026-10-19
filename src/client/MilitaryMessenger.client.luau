@@ -1004,6 +1004,18 @@ input:GetPropertyChangedSignal("Text"):Connect(function()
 end)
 
 
+-- Only format text after Roblox has already filtered it for this recipient.
+-- Escape RichText tags before applying the limited Discord markdown subset.
+local function formatMarkdown(message: string): string
+    local safe=message:gsub("&","&amp;"):gsub("<","&lt;"):gsub(">","&gt;")
+    safe=safe:gsub("%*%*(.-)%*%*","<b>%1</b>")
+    safe=safe:gsub("__(.-)__","<u>%1</u>")
+    safe=safe:gsub("~~(.-)~~","<s>%1</s>")
+    safe=safe:gsub("%*([^*]-)%*","<i>%1</i>")
+    safe=safe:gsub("`([^`]-)`","<font color=\"#C7D8C9\">%1</font>")
+    return safe
+end
+
 -- Render the text already filtered by Roblox for this player.
 local function createMessage(entry: any, order: number)
     local row=create("Frame",feed,{
@@ -1049,14 +1061,14 @@ local function createMessage(entry: any, order: number)
         line.Size=UDim2.new(1,0,0,19)
     end
 
-    local content=label(body,entry.message,15,C.white,false)
+    local content=label(body,formatMarkdown(entry.message),15,C.white,false)
     content.LayoutOrder=2
     content.Size=UDim2.new(1,0,0,0)
     content.AutomaticSize=Enum.AutomaticSize.Y
     content.TextWrapped=true
     content.TextTruncate=Enum.TextTruncate.None
     content.TextYAlignment=Enum.TextYAlignment.Top
-    content.RichText=false
+    content.RichText=true
 
     local reactionCount=0
     for _,emoji in reactionChoices do
