@@ -65,6 +65,17 @@ make("UISizeConstraint",modal,{MaxSize=Vector2.new(420,330)})
 local modalTitle=text(modal,"채널 만들기",36);modalTitle.Position=UDim2.fromOffset(20,16);modalTitle.Size=UDim2.new(1,-40,0,36);modalTitle.TextSize=19;modalTitle.ZIndex=26
 local modalInput=input(modal,"이름 (2~24자)");modalInput.Name="NameInput";modalInput.Position=UDim2.fromOffset(20,66);modalInput.Size=UDim2.new(1,-40,0,44);modalInput.ZIndex=26
 local modalInfo=text(modal,"",90);modalInfo.Position=UDim2.fromOffset(20,118);modalInfo.Size=UDim2.new(1,-40,1,-184);modalInfo.ZIndex=26
+local persistentSelected=false
+local persistentChoice=button(modal,"PersistentChoice","○  일반 채널 · 기록 저장 안 함",C.surface)
+persistentChoice.Position=UDim2.fromOffset(20,116)
+persistentChoice.Size=UDim2.new(1,-40,0,38)
+persistentChoice.ZIndex=26
+persistentChoice.Visible=false
+persistentChoice.Activated:Connect(function()
+    persistentSelected=not persistentSelected
+    persistentChoice.Text=if persistentSelected then "✓  영구 보관 · 기록 저장" else "○  일반 채널 · 기록 저장 안 함"
+    persistentChoice.BackgroundColor3=if persistentSelected then C.accent else C.surface
+end)
 local confirm=button(modal,"Confirm","저장",C.accent);confirm.Position=UDim2.new(0,20,1,-56);confirm.Size=UDim2.new(0.5,-26,0,44);confirm.ZIndex=26
 local cancel=button(modal,"Cancel","취소");cancel.Position=UDim2.new(0.5,6,1,-56);cancel.Size=UDim2.new(0.5,-26,0,44);cancel.ZIndex=26
 local modalAction: ((string)->())?=nil
@@ -74,7 +85,14 @@ cancel.Activated:Connect(function() if not busy then modal.Visible=false;modalIn
 confirm.Activated:Connect(function() if modalAction and not busy then modalAction(modalInput.Text) end end)
 local function prompt(title: string,initial: string?,fn: (string)->())
     modalTitle.Text=title;modalInput.Text=initial or "";modalInput.Visible=initial~=nil
-    modalInfo.Text=if initial==nil then "이 작업을 실행할까요? 삭제 후에는 해당 채널·역할이 즉시 제거됩니다." else "이름은 Roblox 필터를 거쳐 표시됩니다. 이름 생성·변경은 1분에 한 번 가능합니다."
+    persistentSelected=false
+    persistentChoice.Visible=title=="채널 만들기"
+    persistentChoice.Text="○  일반 채널 · 기록 저장 안 함"
+    persistentChoice.BackgroundColor3=C.surface
+    modalInfo.Position=UDim2.fromOffset(20,if persistentChoice.Visible then 165 else 118)
+    modalInfo.Size=UDim2.new(1,-40,1,if persistentChoice.Visible then -230 else -184)
+    modalInfo.Text=if persistentChoice.Visible then "영구 보관 채널은 공지·규칙처럼 재접속 후에도 글이 남습니다. 저장된 글은 최대 300개이며, 한도 도달 시 새 글을 저장할 수 없습니다."
+        elseif initial==nil then "이 작업을 실행할까요? 삭제 후에는 해당 채널·역할이 즉시 제거됩니다." else "이름은 Roblox 필터를 거쳐 표시됩니다. 이름 생성·변경은 1분에 한 번 가능합니다."
     modalAction=fn;modal.Visible=true
     confirm.Text=if initial==nil then "확인" else "저장"
     confirm.BackgroundColor3=if initial==nil then C.red else C.accent
@@ -154,7 +172,9 @@ render=function()
     end
     if page=="channels" then
         note("채널 설정  /  이름 · 접근 권한",40)
-        if state.canCreate then row("+ 채널 만들기",function() prompt("채널 만들기","",function(name) call("create_channel",{name=name}) end) end,C.accent) end
+        if state.canCreate then row("+ 채널 만들기",function() prompt("채널 만들기","",function(name)
+            call("create_channel",{name=name,persistent=persistentSelected})
+        end) end,C.accent) end
         local entry=nil
         for _,channel in state.channels do
             if channel.canManage then
@@ -164,6 +184,12 @@ render=function()
         end
         if not entry then note("관리할 채널을 선택하세요.");return end
         note("# "..entry.name.." 설정",40)
+        note("채팅 기록: "..(if entry.persistent then "영구 저장 (최대 300개)" else "일시적 · 재접속 시 소멸"),32)
+        if state.canManageSettings then
+            row(if entry.persistent then "영구 저장 끄기" else "영구 저장 켜기",function()
+                call("set_channel_persistence",{id=entry.id,persistent=not entry.persistent})
+            end)
+        end
         row("채널 이름 변경",function() prompt("채널 이름 변경",entry.name,function(name) call("rename_channel",{id=entry.id,name=name}) end) end)
         if not entry.builtin then row("채널 삭제",function() prompt("채널 삭제",nil,function() call("delete_channel",{id=entry.id}) end) end,C.red) end
         note("역할 허용은 합산됩니다. 비공개 채널은 member 읽기를 먼저 해제하세요.",46)
@@ -216,13 +242,15 @@ render=function()
     else
         note("저장소 연결 완료 · 리비전 "..state.revision,40)
         note("저장소: "..state.storage.store,46)
-        note("설정은 서버 재시작 후 복원됩니다. 메시지 내용·채팅 기록은 저장하지 않습니다.",70)
+        note("채널·권한 설정은 영구 저장됩니다. 영구 보관을 켠 채널의 글만 별도 DataStore에 저장되며, 일반 채팅 기록은 저장하지 않습니다.",76)
         note("서버 간 변경은 알림과 주기적 새로고침으로 반영됩니다. 동시 수정은 충돌 시 거부됩니다.",80)
         row("최신 저장 데이터 새로고침",function() call("refresh") end)
     end
 end
 plus.Activated:Connect(function()
-    if state.canCreate and state.storage.ready then prompt("채널 만들기","",function(name) call("create_channel",{name=name}) end) end
+    if state.canCreate and state.storage.ready then prompt("채널 만들기","",function(name)
+        call("create_channel",{name=name,persistent=persistentSelected})
+    end) end
 end)
 open.Activated:Connect(function()
     overlay.Visible=not overlay.Visible
