@@ -696,6 +696,184 @@ local seenQueue = {}
 
 local previousUnit = getUnit(player)
 
+-- Message bodies remain in TextChatService/local client memory. Only session metadata
+-- (IDs, emoji reactions, pin/delete state) goes through the authorized server API.
+local HttpService=game:GetService("HttpService")
+local actionRemote=game:GetService("ReplicatedStorage"):WaitForChild("MessengerActions") :: RemoteFunction
+local actionChanged=game:GetService("ReplicatedStorage"):WaitForChild("MessengerActionsChanged") :: RemoteEvent
+local mutedChannels: {[string]: boolean} = {}
+local replyTarget: any? = nil
+local editTarget: any? = nil
+local threadRoot: string? = nil
+local expandedMenu: string? = nil
+local expandedEmoji: string? = nil
+local renderMessages: () -> () = function() end
+local reactionChoices={"👍","❤️","😂","🔥","✅","🎉"}
+
+local function findEntry(messageId: any): any?
+    if type(messageId)~="string" or messageId=="" then return nil end
+    for _, messages in history do
+        for _, item in messages do
+            if item.id==messageId then return item end
+        end
+    end
+    return nil
+end
+
+local function updateMode()
+    modeBar.Visible = editTarget~=nil or replyTarget~=nil or threadRoot~=nil
+    if editTarget then
+        modeCaption.Text="수정 중 · "..editTarget.name.."의 메시지"
+    elseif replyTarget then
+        modeCaption.Text="↩ "..replyTarget.name.."에게 답장"
+    elseif threadRoot then
+        modeCaption.Text="⌗ 스레드에서 대화 중"
+    end
+    threadBackButton.Visible=threadRoot~=nil
+end
+
+local function requestAction(action: string, entry: any, emoji: string?)
+    if not entry.id or entry.id=="" then
+        description.Text="이 메시지는 반응 기능을 사용할 수 없습니다."
+        return
+    end
+    task.spawn(function()
+        local ok,result=pcall(function()
+            return actionRemote:InvokeServer(action,{id=entry.id,emoji=emoji})
+        end)
+        if not ok or type(result)~="table" or result.ok~=true then
+            description.Text=(if ok and type(result)=="table" then result.message else nil)
+                or "요청을 처리할 수 없습니다."
+        end
+    end)
+end
+
+local function beginReply(entry: any, inThread: boolean)
+    if not canWrite(selectedChannel) then
+        description.Text="답장 권한이 없습니다."
+        return
+    end
+    editTarget=nil
+    if inThread then
+        threadRoot=entry.threadRoot or entry.id
+        replyTarget=nil
+        renderMessages()
+    else
+        replyTarget=entry
+    end
+    updateMode()
+    input:CaptureFocus()
+end
+
+local function beginEdit(entry: any)
+    if entry.userId~=player.UserId or not canWrite(selectedChannel) then return end
+    replyTarget=nil
+    editTarget=entry
+    input.Text=entry.message
+    updateMode()
+    input:CaptureFocus()
+end
+
+local function jumpToMessage(messageId: string)
+    renderMessages()
+    task.delay(0.08,function()
+        for _, child in feed:GetChildren() do
+            if child:IsA("Frame") and child:GetAttribute("MessageId")==messageId then
+                local y=child.AbsolutePosition.Y-feed.AbsolutePosition.Y+feed.CanvasPosition.Y
+                feed.CanvasPosition=Vector2.new(0,math.max(0,y-12))
+                return
+            end
+        end
+        description.Text="이 메시지는 현재 화면에 없습니다."
+    end)
+end
+
+local function refreshPins()
+    for _, obj in pinsList:GetChildren() do
+        if obj:IsA("GuiObject") then obj:Destroy() end
+    end
+    local count=0
+    for index=#(history[selectedChannel] or {}),1,-1 do
+        local item=history[selectedChannel][index]
+        if item.pinned and not item.deleted then
+            count+=1
+            local b=button(pinsList,item.name.."  ·  "..item.message,C.surface)
+            b.Size=UDim2.new(1,-8,0,50)
+            b.LayoutOrder=count
+            b.TextSize=12
+            b.TextWrapped=true
+            b.TextXAlignment=Enum.TextXAlignment.Left
+            b.ZIndex=11
+            b.Activated:Connect(function()
+                pinsPanel.Visible=false
+                threadRoot=nil
+                updateMode()
+                jumpToMessage(item.id)
+            end)
+        end
+    end
+    if count==0 then
+        local empty=label(pinsList,"현재 접속 중 확인한 고정 메시지가 없습니다.",13,C.muted,false)
+        empty.Size=UDim2.new(1,-8,0,45)
+        empty.ZIndex=11
+    end
+end
+
+local function searchMatches(entry: any, query: string): boolean
+    local terms={}
+    local filters={}
+    for token in query:gmatch("%S+") do
+        local key,value=token:match("^(%w+):(.+)$")
+        if key and table.find({"from","in","before","after","has","is"},key) then
+            filters[key]=string.lower(value)
+        else
+            table.insert(terms,string.lower(token))
+        end
+    end
+    if filters["in"] then
+        local info=channelAccess[selectedChannel]
+        local channelName=if info then string.lower(info.name) else selectedChannel
+        if filters["in"]~=string.lower(selectedChannel) and
+            not string.find(channelName,filters["in"],1,true) then return false end
+    end
+    if filters["from"] then
+        local sender=string.lower(entry.name)
+        if not string.find(sender,filters["from"],1,true) and
+            tostring(entry.userId)~=filters["from"] then return false end
+    end
+    if filters["has"]=="pin" and not entry.pinned then return false end
+    if filters["is"]=="thread" and not entry.threadRoot then return false end
+    if filters["before"] and (not entry.date or entry.date>=filters["before"]) then return false end
+    if filters["after"] and (not entry.date or entry.date<=filters["after"]) then return false end
+    local haystack=string.lower(entry.name.." "..entry.message)
+    for _,term in terms do
+        if not string.find(haystack,term,1,true) then return false end
+    end
+    return true
+end
+
+modeCancel.Activated:Connect(function()
+    editTarget=nil
+    replyTarget=nil
+    if threadRoot then
+        threadRoot=nil
+        renderMessages()
+    end
+    updateMode()
+end)
+threadBackButton.Activated:Connect(function()
+    threadRoot=nil
+    replyTarget=nil
+    editTarget=nil
+    updateMode()
+    renderMessages()
+end)
+pinsClose.Activated:Connect(function() pinsPanel.Visible=false end)
+pinsButton.Activated:Connect(function()
+    pinsPanel.Visible=not pinsPanel.Visible
+    if pinsPanel.Visible then refreshPins() end
+end)
+
 local function getChannelInfo(id)
     for _, info in CHANNELS do
         if info.id == id then
