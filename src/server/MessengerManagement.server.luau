@@ -22,6 +22,7 @@ local function snapshot(actor: Player)
         local manage=Permissions.channel(actor,id,"manage")
         if read or manage then
             table.insert(result.channels,{id=id,name=Runtime.name(entry),channel=entry.channel,builtin=entry.builtin,
+                persistent=Rules.isPersistent(data,id),
                 canRead=read,canWrite=Permissions.channel(actor,id,"write"),canManage=manage,acl=if manage then Rules.copy(entry.acl) else nil,
                 description=if read then "서버 권한이 적용된 통신 채널입니다." else "채널 관리 전용"})
         end
@@ -44,7 +45,7 @@ local function snapshot(actor: Player)
     end
     return result
 end
-local actions={create_channel=true,rename_channel=true,delete_channel=true,set_channel_access=true,create_role=true,rename_role=true,
+local actions={create_channel=true,rename_channel=true,delete_channel=true,set_channel_access=true,set_channel_persistence=true,create_role=true,rename_role=true,
     delete_role=true,set_permission=true,assign_role=true,remove_role=true}
 Store.Changed:Connect(function() changed:FireAllClients() end)
 local function incoming(actor: Player,action: any,payload: any)
@@ -65,7 +66,8 @@ local function incoming(actor: Player,action: any,payload: any)
             if value~=nil and (type(value)~="string" or #value>96 or not utf8.len(value)) then return {ok=false,message="입력 형식 오류"} end
             op[key]=value
         end
-        op.enabled=payload.enabled;op.userId=payload.userId
+        op.enabled=payload.enabled;op.userId=payload.userId;op.persistent=payload.persistent
+        if op.persistent~=nil and type(op.persistent)~="boolean" then return {ok=false,message="영구 저장 설정 형식 오류"} end
         if op.enabled~=nil and type(op.enabled)~="boolean" then return {ok=false,message="입력 형식 오류"} end
         if op.userId~=nil and type(op.userId)~="number" then return {ok=false,message="입력 형식 오류"} end
         op.permissions={}
