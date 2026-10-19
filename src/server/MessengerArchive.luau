@@ -81,18 +81,20 @@ local function rate(player: Player,nameOfAction: string,seconds: number): boolea
     return true
 end
 
-local function announce(channelId: string,revision: number)
+local function announce(channelId: string,revision: number,operation: any)
     cache[channelId]=nil
     if changed then
         for _,player in Players:GetPlayers() do
             if allowed(player,channelId,"read") then
-                changed:FireClient(player,{channelId=channelId,revision=revision})
+                changed:FireClient(player,{channelId=channelId,revision=revision,
+                    id=operation.id,action=operation.action})
             end
         end
     end
     task.spawn(function()
         pcall(function()
-            MessagingService:PublishAsync(TOPIC,{channelId=channelId,revision=revision})
+            MessagingService:PublishAsync(TOPIC,{channelId=channelId,revision=revision,
+                id=operation.id,action=operation.action})
         end)
     end)
 end
@@ -113,7 +115,7 @@ local function update(channelId: string,op: any): (boolean,string,any?)
         return false,if ok then lastReason else "저장 응답을 확인하지 못했습니다. 잠시 후 기록을 새로고침해 주세요.",nil
     end
     cache[channelId]=nil
-    announce(channelId,updated.revision)
+    announce(channelId,updated.revision,op)
     return true,lastReason,updated
 end
 
@@ -168,6 +170,19 @@ local function request(player: Player,action: any,payload: any): any
         local data,errorMessage=read(channelId,false)
         if not data then return {ok=false,message=errorMessage} end
         return output(player,channelId,data,before)
+    end
+
+    if action=="lookup" then
+        if not allowed(player,channelId,"read") then return {ok=false,message="열람 권한이 없습니다."} end
+        if not rate(player,"lookup",0.2) then return {ok=false,message="잠시 후 다시 조회하세요."} end
+        local id=replyId(payload.id)
+        if not id then return {ok=false,message="잘못된 메시지 ID입니다."} end
+        local data,errorMessage=read(channelId,false)
+        if not data then return {ok=false,message=errorMessage} end
+        local item=Core.find(data,id)
+        if not item then return {ok=true,entry=nil,missing=true} end
+        local page=Core.page(data,player.UserId,item.seq+1,1)
+        return {ok=true,entry=page.entries[1]}
     end
 
     if action=="post" or action=="edit" then
@@ -259,7 +274,8 @@ function Archive.start()
                     if changed then
                         for _,player in Players:GetPlayers() do
                             if allowed(player,id,"read") then
-                                changed:FireClient(player,{channelId=id,revision=data.revision})
+                                changed:FireClient(player,{channelId=id,revision=data.revision,
+                                    id=data.id,action=data.action})
                             end
                         end
                     end
