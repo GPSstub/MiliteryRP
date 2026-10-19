@@ -1577,6 +1577,7 @@ local function receiveMessage(message)
     end
 
     local entry = {
+        channelId=id,
         id=plainToken or token or message.MessageId,
         replyTo=if mode=="r" then reference else nil,
         threadRoot=if mode=="t" then reference else nil,
@@ -1636,6 +1637,37 @@ local function receiveMessage(message)
     updateChannelButtons()
 end
 TextChatService.MessageReceived:Connect(receiveMessage)
+
+-- Only channel-scoped metadata is broadcast here, never unfiltered message text.
+actionChanged.OnClientEvent:Connect(function(update: any)
+    if type(update)~="table" or type(update.id)~="string" or type(update.channelId)~="string"
+        or not canView(update.channelId) then return end
+    local entry=findEntry(update.id)
+    if not entry then return end
+    if update.action=="pin" and type(update.extra)=="table" then
+        entry.pinned=update.extra.pinned==true
+    elseif update.action=="delete" then
+        entry.deleted=true
+        if editTarget==entry then editTarget=nil end
+        if replyTarget==entry then replyTarget=nil end
+        updateMode()
+    elseif update.action=="reaction" and type(update.extra)=="table" then
+        local extra=update.extra
+        if type(extra.emoji)~="string" or type(extra.userId)~="number" then return end
+        entry.reactions=entry.reactions or {}
+        local reaction=entry.reactions[extra.emoji] or {count=0,mine=false}
+        reaction.count=math.max(0,(reaction.count or 0)+(if extra.active then 1 else -1))
+        if extra.userId==player.UserId then reaction.mine=extra.active==true end
+        entry.reactions[extra.emoji]=reaction
+    else
+        return
+    end
+    if update.channelId==selectedChannel then
+        renderMessages()
+        if pinsPanel.Visible then refreshPins() end
+    end
+end)
+
 
 -- ==========================================
 -- 메시지 전송
