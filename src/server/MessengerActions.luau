@@ -3,6 +3,7 @@
 -- Message bodies only travel through Roblox TextChannel:SendAsync, including edits.
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local TextChatService = game:GetService("TextChatService")
 local Permissions = require(script.Parent.MessengerPermissions)
 local Protocol = require(ReplicatedStorage:WaitForChild("Shared"):WaitForChild("MessengerActionProtocol"))
 
@@ -16,6 +17,18 @@ local request: RemoteFunction? = nil
 local changed: RemoteEvent? = nil
 local lastAction: {[Player]: number} = {}
 local lastSnapshot: {[Player]: number} = {}
+local chatEligibility: {[Player]: {allowed: boolean, expires: number}} = {}
+local function mayChat(player: Player): boolean
+    local now=os.clock()
+    local cached=chatEligibility[player]
+    if cached and cached.expires>now then return cached.allowed end
+    local ok,allowed=pcall(function()
+        return TextChatService:CanUserChatAsync(player.UserId)
+    end)
+    local can=ok and allowed==true
+    chatEligibility[player]={allowed=can,expires=now+60}
+    return can
+end
 
 local validId=Protocol.validId
 
@@ -161,6 +174,9 @@ local function invoke(player: Player, action: any, payload: any): any
     if not entry then return {ok=false,message="메시지를 찾지 못했거나 접근 권한이 없습니다."} end
 
     if action=="react" then
+        if not mayChat(player) or not Permissions.channel(player,entry.channelId,"write") then
+            return {ok=false,message="이 채널에서 반응할 권한이 없습니다."}
+        end
         local emoji=payload.emoji
         if not EMOJI[emoji] then return {ok=false,message="지원하지 않는 이모지입니다."} end
         local users=entry.reactions[emoji] or {}
@@ -197,7 +213,7 @@ function Actions.start()
     changed=event
     remote.OnServerInvoke=invoke
     Players.PlayerRemoving:Connect(function(player)
-        lastAction[player]=nil;lastSnapshot[player]=nil
+        lastAction[player]=nil;lastSnapshot[player]=nil;chatEligibility[player]=nil
     end)
 end
 
