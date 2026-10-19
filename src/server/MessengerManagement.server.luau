@@ -144,7 +144,8 @@ remote.OnServerInvoke = function(actor: Player, action: any, data: any)
     lastRequest[actor] = now
     if action == "snapshot" then return {ok = true, data = snapshot()} end
     if type(data) ~= "table" then return {ok = false, message = "잘못된 입력입니다."} end
-    local ok, message: boolean, string
+    local ok = false
+    local message = ""
     if action == "create_channel" then
         ok, message = createChannel(actor, data.name)
     elseif action == "delete_channel" then
