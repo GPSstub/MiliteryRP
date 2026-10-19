@@ -6,7 +6,7 @@ local function check(value, message)
     assertions += 1
 end
 local function fakeMessage(index)
-    return {TextChannel={Name="RP_General"},TextSource={UserId=player.UserId},
+    return {TextChannel={Name="RP_General"},TextSource={UserId=player.UserId+1},
         Status=Enum.TextChatMessageStatus.Success,MessageId="ui-regression-"..index,
         Text="통신 상태 확인 "..index}
 end
@@ -48,12 +48,12 @@ receiveMessage(fakeMessage(47))
 setOpen(true)
 task.wait(.3)
 check(#history.general==47 and newMessages.Visible,"Closed-window delivery lost")
-for i=48,100 do receiveMessage(fakeMessage(i)) end
+for i=48,310 do receiveMessage(fakeMessage(i)) end
 task.wait(.3)
-check(#history.general==80,"History memory cap exceeded")
+check(#history.general==300,"History memory cap exceeded")
 count=0
 for _,child in feed:GetChildren() do if child:IsA("Frame") and child.Name=="Message" then count+=1 end end
-check(count==80,"Visible message memory cap exceeded")
+check(count==300,"Visible message memory cap exceeded")
 channelSearch.Text="전체"
 task.wait(.1)
 check(channelButtons.general.Visible and not channelButtons.notice.Visible,"Channel search incorrect")
