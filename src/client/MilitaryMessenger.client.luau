@@ -711,6 +711,7 @@ local archiveLoading: {[string]: boolean}={}
 local archiveCursor: {[string]: number?}={}
 local archiveLastFetch: {[string]: number}={}
 local archiveDirty: {[string]: boolean}={}
+local archiveWantedRevision: {[string]: number}={}
 local loadArchive: (string,number?)->() = function() end
 local mutedChannels: {[string]: boolean} = {}
 local replyTarget: any? = nil
@@ -1013,7 +1014,17 @@ loadArchive = function(channelId: string,before: number?)
         history[channelId]=merged
         archiveCursor[channelId]=result.cursor
         archiveLoaded[channelId]=true
-        archiveDirty[channelId]=false
+        local wanted=archiveWantedRevision[channelId] or 0
+        local received=if type(result.revision)=="number" then result.revision else 0
+        archiveDirty[channelId]=received<wanted
+        if archiveDirty[channelId] and channelId==selectedChannel then
+            task.delay(0.8,function()
+                if archiveDirty[channelId] and not archiveLoading[channelId]
+                    and channelId==selectedChannel then
+                    loadArchive(channelId)
+                end
+            end)
+        end
         if channelId==selectedChannel then
             renderMessages()
             if pinsPanel.Visible then refreshPins() end
@@ -1026,6 +1037,9 @@ archiveChanged.OnClientEvent:Connect(function(data: any)
     if type(data)~="table" or type(data.channelId)~="string" then return end
     local id=data.channelId
     archiveDirty[id]=true
+    if type(data.revision)=="number" then
+        archiveWantedRevision[id]=math.max(archiveWantedRevision[id] or 0,data.revision)
+    end
     local messageId=data.id
     if type(messageId)=="string" and canView(id) then
         if data.action=="delete" then
