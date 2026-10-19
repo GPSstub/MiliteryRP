@@ -640,6 +640,7 @@ local function updateLayout(viewportOverride: Vector2?)
     pinsButton.Position=UDim2.new(1,-88,0,40)
     muteButton.Position=UDim2.new(1,-48,0,40)
     threadBackButton.Size=UDim2.new(1,-24,0,30)
+    description.Size=UDim2.new(1,if centerWidth<390 then -114 else -154,0,20)
 
 end
 
@@ -1112,8 +1113,11 @@ local function createMessage(entry: any, order: number)
         FillDirection=Enum.FillDirection.Horizontal,
         Padding=UDim.new(0,4),SortOrder=Enum.SortOrder.LayoutOrder,
     })
+    local actionIndex=0
     local function actionButton(titleText: string,width: number,callback: ()->())
+        actionIndex+=1
         local b=button(actions,titleText,C.surface)
+        b.LayoutOrder=actionIndex
         b.Size=UDim2.fromOffset(width,26)
         b.TextSize=11
         b.Activated:Connect(callback)
@@ -1141,8 +1145,9 @@ local function createMessage(entry: any, order: number)
             FillDirection=Enum.FillDirection.Horizontal,
             Padding=UDim.new(0,4),
         })
-        for _,emoji in reactionChoices do
+        for index,emoji in reactionChoices do
             local buttonEmoji=button(palette,emoji,C.surface)
+            buttonEmoji.LayoutOrder=index
             buttonEmoji.Size=UDim2.fromOffset(32,28)
             buttonEmoji.TextSize=17
             buttonEmoji.Activated:Connect(function()
@@ -1162,8 +1167,11 @@ local function createMessage(entry: any, order: number)
         create("UIListLayout",menu,{
             FillDirection=Enum.FillDirection.Horizontal,Padding=UDim.new(0,5),
         })
+        local menuIndex=0
         local function menuButton(textValue: string,fn: ()->())
+            menuIndex+=1
             local b=button(menu,textValue,C.hover)
+            b.LayoutOrder=menuIndex
             b.Size=UDim2.fromOffset(79,30)
             b.TextSize=12
             b.Activated:Connect(fn)
