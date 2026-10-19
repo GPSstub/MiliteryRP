@@ -1923,6 +1923,43 @@ local function sendMessage()
     input.Text = ""
     drafts[id] = ""
 
+    -- Permanent channels are filtered bulletin boards, not regular TextChat
+    -- conversations. The server validates rights, filters the post, commits it
+    -- to DataStore and then asks every authorized client to refresh history.
+    if channelAccess[id] and channelAccess[id].persistent then
+        local operation=if editTarget then "edit" else "post"
+        local args: any={channelId=id,text=content}
+        if editTarget then
+            args.id=editTarget.id
+        elseif threadRoot then
+            args.threadRoot=threadRoot
+        elseif replyTarget then
+            args.replyTo=replyTarget.id
+        end
+        task.spawn(function()
+            local ok,result=pcall(function()
+                return archiveRemote:InvokeServer(operation,args)
+            end)
+            sending=false
+            if selectedChannel==id then sendButton.Text=if canWrite(id) then "전송" else "읽기 전용" end
+            if not ok or type(result)~="table" or not result.ok then
+                local failure=if ok and type(result)=="table" then result.message else "영구 보관 서버의 응답을 받지 못했습니다."
+                if selectedChannel==id then
+                    description.Text=failure or "영구 기록 저장에 실패했습니다."
+                    if input.Text=="" then input.Text=content end
+                end
+                return
+            end
+            if selectedChannel==id then
+                editTarget=nil;replyTarget=nil;updateMode()
+                loadArchive(id)
+            else
+                archiveDirty[id]=true
+            end
+        end)
+        return
+    end
+
     task.spawn(function()
         local success, result = pcall(function()
         local channel = TextChatService:WaitForChild(info.channel, 10)
