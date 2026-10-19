@@ -506,6 +506,127 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 				<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca800000f65</UniqueId>
 			</Properties>
 		</Item>
+		<Item class="Part" referent="RBXa21ee1cb591b4457a97df8c0da8714c6">
+			<Properties>
+				<token name="shape">1</token>
+				<token name="formFactorRaw">1</token>
+				<bool name="Anchored">true</bool>
+				<bool name="AudioCanCollide">true</bool>
+				<float name="BackParamA">-0.5</float>
+				<float name="BackParamB">0.5</float>
+				<token name="BackSurface">0</token>
+				<token name="BackSurfaceInput">0</token>
+				<float name="BottomParamA">-0.5</float>
+				<float name="BottomParamB">0.5</float>
+				<token name="BottomSurface">4</token>
+				<token name="BottomSurfaceInput">0</token>
+				<CoordinateFrame name="CFrame">
+					<X>0</X>
+					<Y>-0.5</Y>
+					<Z>0</Z>
+					<R00>1</R00>
+					<R01>0</R01>
+					<R02>0</R02>
+					<R10>0</R10>
+					<R11>1</R11>
+					<R12>0</R12>
+					<R20>0</R20>
+					<R21>0</R21>
+					<R22>1</R22>
+				</CoordinateFrame>
+				<bool name="CanCollide">true</bool>
+				<bool name="CanQuery">true</bool>
+				<bool name="CanTouch">true</bool>
+				<bool name="CastShadow">true</bool>
+				<string name="CollisionGroup">Default</string>
+				<int name="CollisionGroupId">0</int>
+				<Color3uint8 name="Color3uint8">4288914085</Color3uint8>
+				<PhysicalProperties name="CustomPhysicalProperties">
+					<CustomPhysics>false</CustomPhysics>
+				</PhysicalProperties>
+				<bool name="EnableFluidForces">true</bool>
+				<float name="FrontParamA">-0.5</float>
+				<float name="FrontParamB">0.5</float>
+				<token name="FrontSurface">0</token>
+				<token name="FrontSurfaceInput">0</token>
+				<float name="LeftParamA">-0.5</float>
+				<float name="LeftParamB">0.5</float>
+				<token name="LeftSurface">0</token>
+				<token name="LeftSurfaceInput">0</token>
+				<bool name="Locked">false</bool>
+				<bool name="Massless">false</bool>
+				<token name="Material">256</token>
+				<string name="MaterialVariantSerialized"></string>
+				<CoordinateFrame name="PivotOffset">
+					<X>0</X>
+					<Y>0</Y>
+					<Z>0</Z>
+					<R00>1</R00>
+					<R01>0</R01>
+					<R02>0</R02>
+					<R10>0</R10>
+					<R11>1</R11>
+					<R12>0</R12>
+					<R20>0</R20>
+					<R21>0</R21>
+					<R22>1</R22>
+				</CoordinateFrame>
+				<float name="Reflectance">0</float>
+				<float name="RightParamA">-0.5</float>
+				<float name="RightParamB">0.5</float>
+				<token name="RightSurface">0</token>
+				<token name="RightSurfaceInput">0</token>
+				<int name="RootPriority">0</int>
+				<Vector3 name="RotVelocity">
+					<X>0</X>
+					<Y>0</Y>
+					<Z>0</Z>
+				</Vector3>
+				<float name="TopParamA">-0.5</float>
+				<float name="TopParamB">0.5</float>
+				<token name="TopSurface">3</token>
+				<token name="TopSurfaceInput">0</token>
+				<float name="Transparency">0</float>
+				<Vector3 name="Velocity">
+					<X>0</X>
+					<Y>0</Y>
+					<Z>0</Z>
+				</Vector3>
+				<Vector3 name="size">
+					<X>120</X>
+					<Y>1</Y>
+					<Z>120</Z>
+				</Vector3>
+				<BinaryString name="AttributesSerialize"></BinaryString>
+				<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+				<bool name="DefinesCapabilities">false</bool>
+				<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
+				<string name="Name">TestFloor</string>
+				<BinaryString name="SerializedOverrides"></BinaryString>
+				<int64 name="SourceAssetId">-1</int64>
+				<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+				<UniqueId name="UniqueId">01d403e696a9a5530ae7b2b000001575</UniqueId>
+			</Properties>
+		</Item>
+		<Item class="LocalScript" referent="RBXda52c6c149ff4376a04f96c9f26bfc60">
+			<Properties>
+				<ProtectedString name="Source"><![CDATA[print("Hello world!")
+]]></ProtectedString>
+				<bool name="Disabled">false</bool>
+				<Content name="LinkedSource"><null></null></Content>
+				<token name="RunContext">0</token>
+				<string name="ScriptGuid">{faecfa26-a6fc-48eb-a336-022fa07af56b}</string>
+				<BinaryString name="AttributesSerialize"></BinaryString>
+				<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+				<bool name="DefinesCapabilities">false</bool>
+				<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
+				<string name="Name">LocalScript</string>
+				<BinaryString name="SerializedOverrides"></BinaryString>
+				<int64 name="SourceAssetId">-1</int64>
+				<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+				<UniqueId name="UniqueId">01d403e696a9a5530ae7b2b00000190e</UniqueId>
+			</Properties>
+		</Item>
 	</Item>
 	<Item class="TimerService" referent="RBX64770baffa194685a84c3a2ee6d3dc85">
 		<Properties>
@@ -1037,115 +1158,6 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 				<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 				<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca8000003dc</UniqueId>
 			</Properties>
-			<Item class="LocalScript" referent="RBX13">
-				<Properties>
-					<ProtectedString name="Source"><![CDATA[--!strict
-local Players=game:GetService("Players")
-local ReplicatedStorage=game:GetService("ReplicatedStorage")
-local ContextActionService=game:GetService("ContextActionService")
-local RunService=game:GetService("RunService")
-local player=Players.LocalPlayer
-local Config=require(ReplicatedStorage:WaitForChild("Shared"):WaitForChild("Config"))
-local remotes=ReplicatedStorage:WaitForChild("Remotes")
-local fire=remotes:WaitForChild("Fire") :: RemoteEvent
-local reload=remotes:WaitForChild("Reload") :: RemoteEvent
-local joinTeam=remotes:WaitForChild("JoinTeam") :: RemoteEvent
-local joinSquad=remotes:WaitForChild("JoinSquad") :: RemoteEvent
-local gui=Instance.new("ScreenGui"); gui.Name="MilitaryHUD"; gui.ResetOnSpawn=false
-local panel=Instance.new("Frame"); panel.Size=UDim2.new(0,340,0,270); panel.Position=UDim2.fromOffset(15,15)
-panel.BackgroundColor3=Color3.fromRGB(25,33,29); panel.BackgroundTransparency=0.1; panel.Parent=gui
-local status=Instance.new("TextLabel"); status.Position=UDim2.fromOffset(10,10); status.Size=UDim2.new(1,-20,0,140)
-status.TextColor3=Color3.new(1,1,1); status.BackgroundTransparency=1; status.TextSize=16
-status.TextXAlignment=Enum.TextXAlignment.Left; status.TextYAlignment=Enum.TextYAlignment.Top; status.Parent=panel
-local message=Instance.new("TextLabel"); message.Position=UDim2.fromOffset(10,225); message.Size=UDim2.new(1,-20,0,40)
-message.BackgroundTransparency=1; message.TextColor3=Color3.fromRGB(255,214,120); message.TextSize=14; message.TextWrapped=true
-message.Text="훈련: 노란 표적 5회 명중 → 팀 선택"; message.Parent=panel
-local function button(text: string, x: number, y: number, callback: () -> ())
-    local b=Instance.new("TextButton"); b.Text=text; b.TextSize=15; b.Size=UDim2.fromOffset(100,30)
-    b.Position=UDim2.fromOffset(x,y); b.BackgroundColor3=Color3.fromRGB(62,82,66); b.TextColor3=Color3.new(1,1,1)
-    b.Parent=panel; b.Activated:Connect(callback)
-end
-button("청군 입대",10,150,function() joinTeam:FireServer("Blue"); message.Text="수료·인원 균형·변경 대기시간 충족 시 배치됩니다." end)
-button("홍군 입대",120,150,function() joinTeam:FireServer("Red"); message.Text="전투 중에는 소속 팀을 변경할 수 없습니다." end)
-for i=1,3 do button(i.."분대",10+(i-1)*110,190,function() joinSquad:FireServer(i) end) end
-local cross=Instance.new("TextLabel"); cross.AnchorPoint=Vector2.new(0.5,0.5); cross.Position=UDim2.fromScale(0.5,0.5)
-cross.Size=UDim2.fromOffset(24,24); cross.BackgroundTransparency=1; cross.Text="+"; cross.TextSize=24
-cross.TextColor3=Color3.new(1,1,1); cross.Parent=gui
-local mouse=player:GetMouse()
-local currentTool: Tool?=nil
-local activatedConnection: RBXScriptConnection?=nil
-local lastLocalShot=-math.huge
-local function shoot()
-    if os.clock()-lastLocalShot < Config.FireInterval then return end
-    if not currentTool or currentTool.Parent ~= player.Character then return end
-    local c=player.Character; local head=if c then c:FindFirstChild("Head") else nil
-    if not head or not head:IsA("BasePart") then return end
-    local delta=mouse.Hit.Position-head.Position
-    if delta.Magnitude < 0.01 then return end
-    lastLocalShot=os.clock(); fire:FireServer(delta.Unit)
-end
-local function bindTool(child: Instance)
-    if not child:IsA("Tool") or child.Name ~= "ServiceRifle" then return end
-    if activatedConnection then activatedConnection:Disconnect() end
-    currentTool=child; activatedConnection=child.Activated:Connect(shoot)
-end
-local function characterAdded(c: Model)
-    if activatedConnection then activatedConnection:Disconnect(); activatedConnection=nil end
-    currentTool=nil
-    c.ChildAdded:Connect(bindTool)
-    for _, child in c:GetChildren() do bindTool(child) end
-end
-player.CharacterAdded:Connect(characterAdded)
-if player.Character then characterAdded(player.Character) end
-ContextActionService:BindAction("ReloadRifle",function(_,state)
-    if state == Enum.UserInputState.Begin then reload:FireServer() end
-    return Enum.ContextActionResult.Sink
-end,true,Enum.KeyCode.R)
-ContextActionService:SetTitle("ReloadRifle","재장전")
--- Force third-person distance when opening menus so the cursor is available.
-local function setView(firstPerson: boolean)
-    player.CameraMinZoomDistance=if firstPerson then 0.5 else 8
-    player.CameraMode=if firstPerson then Enum.CameraMode.LockFirstPerson else Enum.CameraMode.Classic
-end
-player:GetAttributeChangedSignal("Side"):Connect(function()
-    setView(player:GetAttribute("Side") ~= "Training")
-end)
-ContextActionService:BindAction("ToggleMenu",function(_,state)
-    if state == Enum.UserInputState.Begin then
-        setView(player.CameraMode ~= Enum.CameraMode.LockFirstPerson)
-    end
-    return Enum.ContextActionResult.Sink
-end,false,Enum.KeyCode.M)
-setView(player:GetAttribute("Side") ~= nil and player:GetAttribute("Side") ~= "Training")
-gui.Parent=player:WaitForChild("PlayerGui")
-local sideNames={Training="훈련병",Blue="청군",Red="홍군"}
-local elapsed=0
-RunService.Heartbeat:Connect(function(dt)
-    elapsed+=dt; if elapsed < 0.1 then return end; elapsed=0
-    local remaining=math.max(0,math.ceil((ReplicatedStorage:GetAttribute("RoundEndsAt") or 0)-workspace:GetServerTimeNow()))
-    status.Text=string.format("군대 RP · 시스템 MVP\n%s | XP %d | %s / %d분대\n훈련 %d/%d | 탄약 %d/%d %s\n%s · %d초 | 청군 %d : %d 홍군\n1: 소총 장착 · 클릭: 사격 · R: 재장전\nM: 시점/메뉴 전환 · 재접속 시 초기화",
-        player:GetAttribute("Rank") or "훈련병",player:GetAttribute("XP") or 0,sideNames[player:GetAttribute("Side") or "Training"] or "훈련병",
-        player:GetAttribute("Squad") or 0,player:GetAttribute("TrainingHits") or 0,Config.TrainingHits,
-        player:GetAttribute("Ammo") or 0,Config.Magazine,if player:GetAttribute("Reloading") then "재장전 중" else "",
-        if ReplicatedStorage:GetAttribute("RoundPhase") == "Active" then "전투" else "대기",remaining,
-        ReplicatedStorage:GetAttribute("BlueScore") or 0,ReplicatedStorage:GetAttribute("RedScore") or 0)
-end)
-]]></ProtectedString>
-					<bool name="Disabled">true</bool>
-					<Content name="LinkedSource"><null></null></Content>
-					<token name="RunContext">0</token>
-					<string name="ScriptGuid">{1f3ae39b-86e4-4fa0-99f4-04b63a9bce1d}</string>
-					<BinaryString name="AttributesSerialize"></BinaryString>
-					<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
-					<bool name="DefinesCapabilities">false</bool>
-					<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
-					<string name="Name">Main</string>
-					<BinaryString name="SerializedOverrides"></BinaryString>
-					<int64 name="SourceAssetId">-1</int64>
-					<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
-					<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca8000003dd</UniqueId>
-				</Properties>
-			</Item>
 			<Item class="LocalScript" referent="RBXa6d5443fcf6747bc92e938803549c726">
 				<Properties>
 					<ProtectedString name="Source"><![CDATA[--!strict
@@ -1607,6 +1619,1204 @@ end)
 					<int64 name="SourceAssetId">-1</int64>
 					<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 					<UniqueId name="UniqueId">714f218494dedcfd0ae79ad4000012e3</UniqueId>
+				</Properties>
+			</Item>
+			<Item class="LocalScript" referent="RBXe0f751ecfd9c4a0882748e23b6c11a34">
+				<Properties>
+					<ProtectedString name="Source"><![CDATA[-- MilitaryMessenger.client.luau
+-- Discord 스타일 군용 메신저 UI
+
+local Players = game:GetService("Players")
+local TextChatService = game:GetService("TextChatService")
+local TweenService = game:GetService("TweenService")
+local UserInputService = game:GetService("UserInputService")
+
+local player = Players.LocalPlayer
+
+-- ==========================================
+-- 테마
+-- ==========================================
+
+local C = {
+	bg = Color3.fromRGB(27, 30, 37),
+	sidebar = Color3.fromRGB(20, 23, 29),
+	surface = Color3.fromRGB(37, 42, 51),
+	hover = Color3.fromRGB(49, 56, 66),
+
+	accent = Color3.fromRGB(106, 149, 113),
+	accentLight = Color3.fromRGB(166, 207, 166),
+
+	white = Color3.fromRGB(241, 242, 245),
+	muted = Color3.fromRGB(153, 162, 174),
+	border = Color3.fromRGB(58, 66, 76),
+
+	warning = Color3.fromRGB(235, 185, 105),
+}
+
+-- ==========================================
+-- 채널
+-- ==========================================
+
+local CHANNELS = {
+	{
+		id = "general",
+		name = "전체 채팅",
+		channel = "RBXGeneral",
+		description = "현재 서버의 모든 병사가 참여하는 채팅입니다.",
+	},
+
+	{
+		id = "unit",
+		name = "부대 채팅",
+		channel = "RP_Unit",
+		description = "같은 소속 부대의 병사끼리 통신합니다.",
+	},
+
+	{
+		id = "command",
+		name = "지휘 채팅",
+		channel = "RP_Command",
+		description = "소위 이상 지휘관 전용 통신입니다.",
+	},
+
+	{
+		id = "notice",
+		name = "공지사항",
+		channel = "RP_Notice",
+		description = "군 주요 공지사항을 확인합니다.",
+	},
+}
+
+local channelIds = {}
+
+for _, info in CHANNELS do
+	channelIds[info.channel] = info.id
+end
+
+local function getRankOrder(target)
+	return tonumber(target:GetAttribute("RankOrder")) or 0
+end
+
+local function getUnit(target)
+	local unit = target:GetAttribute("Unit")
+
+	if type(unit) == "string" and unit ~= "" then
+		return unit
+	end
+
+	if target.Team and not target.Neutral then
+		return target.Team.Name
+	end
+
+	return nil
+end
+
+local function canView(id)
+	if id == "command" then
+		return getRankOrder(player) >= 11
+	end
+
+	if id == "unit" then
+		return getUnit(player) ~= nil
+	end
+
+	return true
+end
+
+local function canWrite(id)
+	if id == "command" or id == "notice" then
+		return getRankOrder(player) >= 11
+	end
+
+	if id == "unit" then
+		return getUnit(player) ~= nil
+	end
+
+	return true
+end
+
+-- ==========================================
+-- UI 생성 도우미
+-- ==========================================
+
+local function create(className, parent, properties)
+	local object = Instance.new(className)
+
+	for property, value in pairs(properties or {}) do
+		object[property] = value
+	end
+
+	object.Parent = parent
+
+	return object
+end
+
+local function corner(object, radius)
+	create("UICorner", object, {
+		CornerRadius = UDim.new(0, radius),
+	})
+end
+
+local function outline(object)
+	create("UIStroke", object, {
+		Color = C.border,
+		Thickness = 1,
+		Transparency = 0.3,
+	})
+end
+
+local function label(parent, content, size, color, bold)
+	return create("TextLabel", parent, {
+		BackgroundTransparency = 1,
+		BorderSizePixel = 0,
+
+		Text = content,
+		TextSize = size,
+		TextColor3 = color,
+
+		Font = bold and Enum.Font.GothamBold or Enum.Font.Gotham,
+
+		TextXAlignment = Enum.TextXAlignment.Left,
+		TextYAlignment = Enum.TextYAlignment.Center,
+
+		TextTruncate = Enum.TextTruncate.AtEnd,
+	})
+end
+
+local function button(parent, content, color)
+	local object = create("TextButton", parent, {
+		BackgroundColor3 = color or C.surface,
+		BorderSizePixel = 0,
+
+		Text = content,
+		TextColor3 = C.white,
+		TextSize = 14,
+		Font = Enum.Font.GothamBold,
+
+		AutoButtonColor = true,
+	})
+
+	corner(object, 10)
+
+	return object
+end
+
+-- ==========================================
+-- GUI 루트
+-- ==========================================
+
+local gui = create("ScreenGui", player:WaitForChild("PlayerGui"), {
+	Name = "MilitaryMessenger",
+	ResetOnSpawn = false,
+	DisplayOrder = 30,
+	ZIndexBehavior = Enum.ZIndexBehavior.Sibling,
+	ScreenInsets = Enum.ScreenInsets.CoreUISafeInsets,
+})
+
+-- 오른쪽 중앙 버튼
+local launcher = button(gui, "●  통신", C.sidebar)
+
+launcher.Name = "CommunicationButton"
+launcher.AnchorPoint = Vector2.new(1, 0.5)
+launcher.Position = UDim2.new(1, -16, 0.5, 0)
+launcher.Size = UDim2.fromOffset(112, 50)
+launcher.TextSize = 16
+
+corner(launcher, 12)
+outline(launcher)
+
+-- ==========================================
+-- 메신저 창
+-- ==========================================
+
+local window = create("Frame", gui, {
+	Name = "MessengerWindow",
+
+	AnchorPoint = Vector2.new(1, 0.5),
+	Position = UDim2.new(1, -12, 0.5, 0),
+
+	Size = UDim2.fromOffset(820, 550),
+
+	BackgroundColor3 = C.bg,
+	BorderSizePixel = 0,
+
+	ClipsDescendants = true,
+	Visible = false,
+})
+
+corner(window, 16)
+outline(window)
+
+local windowScale = create("UIScale", window, {
+	Scale = 1,
+})
+
+-- ==========================================
+-- 상단 헤더
+-- ==========================================
+
+local header = create("Frame", window, {
+	Size = UDim2.new(1, 0, 0, 60),
+	BackgroundColor3 = C.sidebar,
+	BorderSizePixel = 0,
+})
+
+local title = label(
+	header,
+	"●  MILITARY NETWORK",
+	17,
+	C.white,
+	true
+)
+
+title.Position = UDim2.fromOffset(18, 7)
+title.Size = UDim2.new(1, -90, 0, 30)
+
+local subtitle = label(
+	header,
+	"SECURE COMMUNICATION  /  RP NETWORK",
+	10,
+	C.muted,
+	false
+)
+
+subtitle.Position = UDim2.fromOffset(39, 35)
+subtitle.Size = UDim2.new(1, -100, 0, 14)
+
+local closeButton = button(header, "×", C.surface)
+
+closeButton.AnchorPoint = Vector2.new(1, 0)
+closeButton.Position = UDim2.new(1, -12, 0, 9)
+closeButton.Size = UDim2.fromOffset(40, 40)
+closeButton.TextSize = 26
+
+-- ==========================================
+-- 왼쪽 채널 사이드바
+-- ==========================================
+
+local sidebar = create("Frame", window, {
+	BackgroundColor3 = C.sidebar,
+	BorderSizePixel = 0,
+})
+
+local sideTitle = label(
+	sidebar,
+	"TEXT CHANNELS",
+	11,
+	C.muted,
+	true
+)
+
+sideTitle.Position = UDim2.fromOffset(14, 18)
+sideTitle.Size = UDim2.new(1, -28, 0, 24)
+
+local channelButtons = {}
+
+for index, info in CHANNELS do
+	local row = button(sidebar, "#  " .. info.name, C.sidebar)
+
+	row.Name = info.id
+	row.TextXAlignment = Enum.TextXAlignment.Left
+	row.TextSize = 13
+
+	row.Position = UDim2.fromOffset(
+		10,
+		54 + (index - 1) * 46
+	)
+
+	row.Size = UDim2.new(1, -20, 0, 40)
+
+	channelButtons[info.id] = row
+end
+
+-- 내 프로필
+local profile = create("Frame", sidebar, {
+	AnchorPoint = Vector2.new(0, 1),
+	Position = UDim2.new(0, 10, 1, -12),
+	Size = UDim2.new(1, -20, 0, 62),
+
+	BackgroundColor3 = C.surface,
+	BorderSizePixel = 0,
+})
+
+corner(profile, 10)
+
+local myName = label(
+	profile,
+	player.DisplayName,
+	13,
+	C.white,
+	true
+)
+
+myName.Position = UDim2.fromOffset(12, 7)
+myName.Size = UDim2.new(1, -24, 0, 24)
+
+local myRank = label(
+	profile,
+	"훈련병",
+	11,
+	C.accentLight,
+	false
+)
+
+myRank.Position = UDim2.fromOffset(12, 31)
+myRank.Size = UDim2.new(1, -24, 0, 20)
+
+-- ==========================================
+-- 중앙 채팅 영역
+-- ==========================================
+
+local center = create("Frame", window, {
+	BackgroundColor3 = C.bg,
+	BorderSizePixel = 0,
+})
+
+local channelTitle = label(
+	center,
+	"#  전체 채팅",
+	18,
+	C.white,
+	true
+)
+
+channelTitle.Position = UDim2.fromOffset(16, 10)
+channelTitle.Size = UDim2.new(1, -32, 0, 30)
+
+local description = label(
+	center,
+	"현재 서버의 모든 병사가 참여하는 채팅입니다.",
+	11,
+	C.muted,
+	false
+)
+
+description.Position = UDim2.fromOffset(17, 40)
+description.Size = UDim2.new(1, -34, 0, 20)
+
+create("Frame", center, {
+	Position = UDim2.fromOffset(0, 68),
+	Size = UDim2.new(1, 0, 0, 1),
+
+	BackgroundColor3 = C.border,
+	BorderSizePixel = 0,
+})
+
+-- 메시지 스크롤
+local feed = create("ScrollingFrame", center, {
+	Name = "Messages",
+
+	Position = UDim2.fromOffset(12, 78),
+	Size = UDim2.new(1, -24, 1, -159),
+
+	BackgroundTransparency = 1,
+	BorderSizePixel = 0,
+
+	ScrollBarThickness = 3,
+	ScrollBarImageColor3 = C.muted,
+
+	AutomaticCanvasSize = Enum.AutomaticSize.Y,
+	CanvasSize = UDim2.fromOffset(0, 0),
+	ScrollingDirection = Enum.ScrollingDirection.Y,
+})
+
+create("UIListLayout", feed, {
+	SortOrder = Enum.SortOrder.LayoutOrder,
+	Padding = UDim.new(0, 12),
+})
+
+create("UIPadding", feed, {
+	PaddingTop = UDim.new(0, 8),
+	PaddingBottom = UDim.new(0, 8),
+})
+
+-- ==========================================
+-- 메시지 입력창
+-- ==========================================
+
+local composer = create("Frame", center, {
+	AnchorPoint = Vector2.new(0, 1),
+	Position = UDim2.new(0, 12, 1, -12),
+	Size = UDim2.new(1, -24, 0, 54),
+
+	BackgroundColor3 = C.surface,
+	BorderSizePixel = 0,
+})
+
+corner(composer, 10)
+
+local input = create("TextBox", composer, {
+	Name = "MessageInput",
+
+	Position = UDim2.fromOffset(14, 5),
+	Size = UDim2.new(1, -108, 1, -10),
+
+	BackgroundTransparency = 1,
+	BorderSizePixel = 0,
+
+	Font = Enum.Font.Gotham,
+	TextSize = 14,
+	TextColor3 = C.white,
+	PlaceholderColor3 = C.muted,
+
+	PlaceholderText = "메시지 보내기...",
+	Text = "",
+
+	TextXAlignment = Enum.TextXAlignment.Left,
+	ClearTextOnFocus = false,
+	MultiLine = false,
+})
+
+local sendButton = button(composer, "전송", C.accent)
+
+sendButton.AnchorPoint = Vector2.new(1, 0.5)
+sendButton.Position = UDim2.new(1, -6, 0.5, 0)
+sendButton.Size = UDim2.fromOffset(78, 42)
+
+-- ==========================================
+-- 오른쪽 접속자 목록
+-- ==========================================
+
+local members = create("Frame", window, {
+	BackgroundColor3 = C.sidebar,
+	BorderSizePixel = 0,
+})
+
+local membersTitle = label(
+	members,
+	"ONLINE",
+	12,
+	C.muted,
+	true
+)
+
+membersTitle.Position = UDim2.fromOffset(14, 18)
+membersTitle.Size = UDim2.new(1, -28, 0, 24)
+
+local membersFeed = create("ScrollingFrame", members, {
+	Position = UDim2.fromOffset(8, 52),
+	Size = UDim2.new(1, -16, 1, -64),
+
+	BackgroundTransparency = 1,
+	BorderSizePixel = 0,
+
+	ScrollBarThickness = 0,
+	AutomaticCanvasSize = Enum.AutomaticSize.Y,
+	CanvasSize = UDim2.fromOffset(0, 0),
+})
+
+create("UIListLayout", membersFeed, {
+	SortOrder = Enum.SortOrder.LayoutOrder,
+	Padding = UDim.new(0, 7),
+})
+
+-- ==========================================
+-- 반응형 레이아웃
+-- ==========================================
+
+local function updateLayout()
+	local camera = workspace.CurrentCamera
+
+	if not camera then
+		return
+	end
+
+	local viewport = camera.ViewportSize
+
+	local width = math.min(820, math.max(290, viewport.X - 24))
+	local height = math.min(580, math.max(280, viewport.Y - 24))
+
+	local sidebarWidth
+
+	if width < 520 then
+		sidebarWidth = 112
+	elseif width < 720 then
+		sidebarWidth = 155
+	else
+		sidebarWidth = 185
+	end
+
+	local memberWidth = width >= 740 and 160 or 0
+	local centerWidth = width - sidebarWidth - memberWidth
+
+	window.Size = UDim2.fromOffset(width, height)
+
+	sidebar.Position = UDim2.fromOffset(0, 60)
+	sidebar.Size = UDim2.fromOffset(sidebarWidth, height - 60)
+
+	center.Position = UDim2.fromOffset(sidebarWidth, 60)
+	center.Size = UDim2.fromOffset(centerWidth, height - 60)
+
+	members.Position = UDim2.fromOffset(
+		width - memberWidth,
+		60
+	)
+
+	members.Size = UDim2.fromOffset(memberWidth, height - 60)
+	members.Visible = memberWidth > 0
+end
+
+updateLayout()
+
+local function connectCamera(camera)
+	if camera then
+		camera:GetPropertyChangedSignal("ViewportSize"):Connect(
+			updateLayout
+		)
+
+		updateLayout()
+	end
+end
+
+connectCamera(workspace.CurrentCamera)
+
+workspace:GetPropertyChangedSignal("CurrentCamera"):Connect(function()
+	connectCamera(workspace.CurrentCamera)
+end)
+
+-- ==========================================
+-- 채팅 상태
+-- ==========================================
+
+local selectedChannel = "general"
+local opened = false
+local sending = false
+
+local history = {
+	general = {},
+	unit = {},
+	command = {},
+	notice = {},
+}
+
+local unread = {
+	general = 0,
+	unit = 0,
+	command = 0,
+	notice = 0,
+}
+
+local seenMessages = {}
+local seenQueue = {}
+
+local previousUnit = getUnit(player)
+
+local function getChannelInfo(id)
+	for _, info in CHANNELS do
+		if info.id == id then
+			return info
+		end
+	end
+
+	return CHANNELS[1]
+end
+
+local function updateChannelButtons()
+	local totalUnread = 0
+
+	for _, info in CHANNELS do
+		local id = info.id
+		local row = channelButtons[id]
+
+		local allowed = canView(id)
+
+		row.BackgroundColor3 = (
+			selectedChannel == id and C.hover or C.sidebar
+		)
+
+		row.TextColor3 = allowed and C.white or C.muted
+
+		local content = "#  " .. info.name
+
+		if not allowed then
+			content ..= "  ·"
+		elseif unread[id] > 0 then
+			content ..= "  •" .. tostring(unread[id])
+		end
+
+		row.Text = content
+
+		if allowed then
+			totalUnread += unread[id]
+		end
+	end
+
+	launcher.Text = totalUnread > 0
+		and ("●  통신  " .. tostring(totalUnread))
+		or "●  통신"
+
+	myRank.Text = tostring(
+		player:GetAttribute("Rank") or "훈련병"
+	)
+end
+
+-- ==========================================
+-- 메시지 표시
+-- ==========================================
+
+local function scrollToBottom()
+	task.delay(0.05, function()
+		if not feed.Parent then
+			return
+		end
+
+		feed.CanvasPosition = Vector2.new(
+			0,
+			math.max(
+				0,
+				feed.AbsoluteCanvasSize.Y - feed.AbsoluteWindowSize.Y
+			)
+		)
+	end)
+end
+
+local function createMessage(entry, order)
+	local row = create("Frame", feed, {
+		Name = "Message",
+
+		LayoutOrder = order,
+
+		BackgroundTransparency = 1,
+		BorderSizePixel = 0,
+
+		Size = UDim2.new(1, -8, 0, 0),
+		AutomaticSize = Enum.AutomaticSize.Y,
+	})
+
+	local avatar = create("ImageLabel", row, {
+		Position = UDim2.fromOffset(0, 2),
+		Size = UDim2.fromOffset(36, 36),
+
+		BackgroundColor3 = C.surface,
+		BorderSizePixel = 0,
+
+		Image = (
+			"rbxthumb://type=AvatarHeadShot&id="
+				.. tostring(entry.userId)
+				.. "&w=100&h=100"
+		),
+	})
+
+	corner(avatar, 18)
+
+	local author = label(
+		row,
+		"[" .. entry.rank .. "] " .. entry.name .. "   " .. entry.time,
+		13,
+		C.accentLight,
+		true
+	)
+
+	author.Position = UDim2.fromOffset(46, 0)
+	author.Size = UDim2.new(1, -50, 0, 22)
+
+	local messageText = label(
+		row,
+		entry.message,
+		14,
+		C.white,
+		false
+	)
+
+	messageText.Position = UDim2.fromOffset(46, 24)
+	messageText.Size = UDim2.new(1, -52, 0, 0)
+
+	messageText.AutomaticSize = Enum.AutomaticSize.Y
+	messageText.TextWrapped = true
+	messageText.TextTruncate = Enum.TextTruncate.None
+	messageText.TextYAlignment = Enum.TextYAlignment.Top
+	messageText.RichText = false
+
+	return row
+end
+
+local function renderMessages()
+	for _, child in feed:GetChildren() do
+		if child:IsA("GuiObject") then
+			child:Destroy()
+		end
+	end
+
+	local messages = history[selectedChannel]
+
+	if #messages == 0 then
+		local empty = label(
+			feed,
+			"아직 메시지가 없습니다.\n첫 번째 메시지를 보내 보세요.",
+			14,
+			C.muted,
+			false
+		)
+
+		empty.Size = UDim2.new(1, -12, 0, 100)
+		empty.TextWrapped = true
+		empty.TextXAlignment = Enum.TextXAlignment.Center
+	else
+		for index, entry in messages do
+			createMessage(entry, index)
+		end
+	end
+
+	scrollToBottom()
+end
+
+-- ==========================================
+-- 접속자 목록
+-- ==========================================
+
+local function renderMembers()
+	for _, child in membersFeed:GetChildren() do
+		if child:IsA("GuiObject") then
+			child:Destroy()
+		end
+	end
+
+	local count = 0
+
+	for _, target in Players:GetPlayers() do
+		local allowed = true
+
+		if selectedChannel == "unit" then
+			allowed = getUnit(player) ~= nil
+				and getUnit(player) == getUnit(target)
+
+		elseif selectedChannel == "command" then
+			allowed = getRankOrder(target) >= 11
+		end
+
+		if allowed then
+			count += 1
+
+			local row = create("Frame", membersFeed, {
+				LayoutOrder = count,
+
+				Size = UDim2.new(1, 0, 0, 46),
+				BackgroundTransparency = 1,
+			})
+
+			local avatar = create("ImageLabel", row, {
+				Position = UDim2.fromOffset(2, 6),
+				Size = UDim2.fromOffset(34, 34),
+
+				BackgroundColor3 = C.surface,
+				BorderSizePixel = 0,
+
+				Image = (
+					"rbxthumb://type=AvatarHeadShot&id="
+						.. tostring(target.UserId)
+						.. "&w=100&h=100"
+				),
+			})
+
+			corner(avatar, 17)
+
+			local name = label(
+				row,
+				target.DisplayName,
+				12,
+				C.white,
+				true
+			)
+
+			name.Position = UDim2.fromOffset(44, 4)
+			name.Size = UDim2.new(1, -47, 0, 20)
+
+			local rank = label(
+				row,
+				tostring(target:GetAttribute("Rank") or "훈련병"),
+				10,
+				C.muted,
+				false
+			)
+
+			rank.Position = UDim2.fromOffset(44, 24)
+			rank.Size = UDim2.new(1, -47, 0, 17)
+		end
+	end
+
+	membersTitle.Text = "ONLINE  ·  " .. tostring(count)
+end
+
+-- ==========================================
+-- 채널 선택
+-- ==========================================
+
+local function selectChannel(id)
+	if not canView(id) then
+		description.Text = "이 채널에 접근할 권한이 없습니다."
+		return
+	end
+
+	selectedChannel = id
+	unread[id] = 0
+
+	local info = getChannelInfo(id)
+
+	channelTitle.Text = "#  " .. info.name
+	description.Text = info.description
+
+	if id == "unit" then
+		description.Text = "소속 부대: " .. tostring(getUnit(player))
+	end
+
+	local writable = canWrite(id)
+
+	input.TextEditable = writable
+
+	input.PlaceholderText = writable
+		and "메시지 보내기..."
+		or "읽기 전용 채널입니다."
+
+	sendButton.Text = writable and "전송" or "읽기 전용"
+
+	sendButton.BackgroundColor3 = writable
+		and C.accent
+		or C.hover
+
+	updateChannelButtons()
+	renderMessages()
+	renderMembers()
+end
+
+for _, info in CHANNELS do
+	local id = info.id
+
+	channelButtons[id].Activated:Connect(function()
+		selectChannel(id)
+	end)
+end
+
+-- ==========================================
+-- 플레이어 정보 변화 감지
+-- ==========================================
+
+local function updateAccess()
+	local currentUnit = getUnit(player)
+
+	-- 소속 부대 변경 시 이전 부대의 채팅 기록 제거
+	if currentUnit ~= previousUnit then
+		previousUnit = currentUnit
+		history.unit = {}
+		unread.unit = 0
+	end
+
+	-- 지휘관 권한 상실 시 이전 지휘 채팅 기록 제거
+	if getRankOrder(player) < 11 then
+		history.command = {}
+		unread.command = 0
+	end
+
+	if not canView(selectedChannel) then
+		selectedChannel = "general"
+	end
+
+	selectChannel(selectedChannel)
+end
+
+local playerConnections = {}
+
+local function watchPlayer(target)
+	if playerConnections[target] then
+		return
+	end
+
+	playerConnections[target] = {
+		target:GetAttributeChangedSignal("Rank"):Connect(
+			updateAccess
+		),
+
+		target:GetAttributeChangedSignal("RankOrder"):Connect(
+			updateAccess
+		),
+
+		target:GetAttributeChangedSignal("Unit"):Connect(
+			updateAccess
+		),
+
+		target:GetPropertyChangedSignal("Team"):Connect(
+			updateAccess
+		),
+
+		target:GetPropertyChangedSignal("Neutral"):Connect(
+			updateAccess
+		),
+	}
+end
+
+for _, target in Players:GetPlayers() do
+	watchPlayer(target)
+end
+
+Players.PlayerAdded:Connect(function(target)
+	watchPlayer(target)
+	renderMembers()
+end)
+
+Players.PlayerRemoving:Connect(function(target)
+	local connections = playerConnections[target]
+
+	if connections then
+		for _, connection in connections do
+			connection:Disconnect()
+		end
+	end
+
+	playerConnections[target] = nil
+
+	task.defer(renderMembers)
+end)
+
+-- ==========================================
+-- 메시지 수신
+-- ==========================================
+
+TextChatService.MessageReceived:Connect(function(message)
+	if not message.TextChannel then
+		return
+	end
+
+	if not message.TextSource then
+		return
+	end
+
+	-- 처리 중인 로컬 메시지는 표시하지 않음
+	if message.Status ~= Enum.TextChatMessageStatus.Success then
+		return
+	end
+
+	local channelName = message.TextChannel.Name
+	local id = channelIds[channelName]
+
+	if not id then
+		return
+	end
+
+	if not canView(id) then
+		return
+	end
+
+	-- 중복 메시지 방지
+	local messageId = message.MessageId
+
+	if messageId and messageId ~= "" then
+		if seenMessages[messageId] then
+			return
+		end
+
+		seenMessages[messageId] = true
+		table.insert(seenQueue, messageId)
+
+		if #seenQueue > 250 then
+			local oldest = table.remove(seenQueue, 1)
+			seenMessages[oldest] = nil
+		end
+	end
+
+	local userId = message.TextSource.UserId
+	local sender = Players:GetPlayerByUserId(userId)
+
+	local entry = {
+		userId = userId,
+
+		name = sender
+			and sender.DisplayName
+			or "Unknown",
+
+		rank = sender
+			and tostring(sender:GetAttribute("Rank") or "훈련병")
+			or "알 수 없음",
+
+		message = message.Text,
+		time = os.date("%H:%M"),
+	}
+
+	table.insert(history[id], entry)
+
+	-- 채널당 최근 80개 메시지만 메모리에 보관
+	if #history[id] > 80 then
+		table.remove(history[id], 1)
+	end
+
+	if opened and selectedChannel == id then
+		renderMessages()
+	else
+		unread[id] += 1
+	end
+
+	updateChannelButtons()
+end)
+
+-- ==========================================
+-- 메시지 전송
+-- ==========================================
+
+local function sendMessage()
+	if sending then
+		return
+	end
+
+	if not canWrite(selectedChannel) then
+		description.Text = "메시지 작성 권한이 없습니다."
+		return
+	end
+
+	local content = input.Text:match("^%s*(.-)%s*$")
+
+	if not content or content == "" then
+		return
+	end
+
+	local characterCount = utf8.len(content)
+
+	if not characterCount or characterCount > 180 then
+		description.Text = "메시지는 180자 이내로 작성해 주세요."
+		return
+	end
+
+	local id = selectedChannel
+	local info = getChannelInfo(id)
+
+	sending = true
+	sendButton.Text = "..."
+
+	input.Text = ""
+
+	task.spawn(function()
+		local success, result = pcall(function()
+			local channel
+
+			-- 기본 채널과 커스텀 채널은 위치가 다름
+			if id == "general" then
+				local folder = TextChatService:WaitForChild(
+					"TextChannels",
+					10
+				)
+
+				if not folder then
+					error("기본 채팅 폴더가 없습니다.")
+				end
+
+				channel = folder:WaitForChild(
+					"RBXGeneral",
+					10
+				)
+			else
+				channel = TextChatService:WaitForChild(
+					info.channel,
+					10
+				)
+			end
+
+			if not channel or not channel:IsA("TextChannel") then
+				error("채팅 채널을 찾을 수 없습니다.")
+			end
+
+			return channel:SendAsync(content)
+		end)
+
+		sending = false
+
+		if selectedChannel == id then
+			sendButton.Text = canWrite(id)
+				and "전송"
+				or "읽기 전용"
+		end
+
+		if not success then
+			warn("[Messenger] 메시지 전송 실패:", result)
+
+			description.Text = "전송 실패. Output 창을 확인해 주세요."
+
+			if input.Text == "" then
+				input.Text = content
+			end
+
+		elseif result.Status ~= Enum.TextChatMessageStatus.Success then
+			description.Text = "메시지 전송 제한: "
+				.. result.Status.Name
+		end
+	end)
+end
+
+sendButton.Activated:Connect(sendMessage)
+
+input.FocusLost:Connect(function(enterPressed)
+	if enterPressed then
+		sendMessage()
+	end
+end)
+
+-- ==========================================
+-- 메신저 열기 / 닫기
+-- ==========================================
+
+local function setOpen(state)
+	opened = state
+
+	launcher.Visible = not state
+	window.Visible = state
+
+	if state then
+		windowScale.Scale = 0.94
+
+		TweenService:Create(
+			windowScale,
+			TweenInfo.new(
+				0.18,
+				Enum.EasingStyle.Quint,
+				Enum.EasingDirection.Out
+			),
+			{
+				Scale = 1,
+			}
+		):Play()
+
+		selectChannel(selectedChannel)
+	else
+		input:ReleaseFocus()
+	end
+end
+
+launcher.Activated:Connect(function()
+	setOpen(true)
+end)
+
+closeButton.Activated:Connect(function()
+	setOpen(false)
+end)
+
+-- M키로 열기 / 닫기
+UserInputService.InputBegan:Connect(function(key, processed)
+	if processed then
+		return
+	end
+
+	if key.KeyCode == Enum.KeyCode.M then
+		setOpen(not opened)
+	end
+end)
+
+-- ==========================================
+-- 초기화
+-- ==========================================
+
+selectChannel("general")
+updateChannelButtons()
+
+print("[MilitaryMessenger] 클라이언트 UI 시작 완료")]]></ProtectedString>
+					<bool name="Disabled">false</bool>
+					<Content name="LinkedSource"><null></null></Content>
+					<token name="RunContext">0</token>
+					<string name="ScriptGuid">{166a23bf-dd7a-46b1-8631-5f73c6baa52c}</string>
+					<BinaryString name="AttributesSerialize"></BinaryString>
+					<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+					<bool name="DefinesCapabilities">false</bool>
+					<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
+					<string name="Name">MilitaryMessenger</string>
+					<BinaryString name="SerializedOverrides"></BinaryString>
+					<int64 name="SourceAssetId">-1</int64>
+					<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+					<UniqueId name="UniqueId">01d403e696a9a5530ae7b2b000001920</UniqueId>
 				</Properties>
 			</Item>
 		</Item>
@@ -2216,71 +3426,6 @@ end)
 				<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 				<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca8000003d5</UniqueId>
 			</Properties>
-			<Item class="ModuleScript" referent="RBX8">
-				<Properties>
-					<Content name="LinkedSource"><null></null></Content>
-					<ProtectedString name="Source"><![CDATA[--!strict
-return table.freeze({
-    Magazine = 30, FireInterval = 0.12, ReloadSeconds = 2.2,
-    Damage = 25, Range = 400, TrainingHits = 5,
-    RoundSeconds = 180, IntermissionSeconds = 15, ScoreLimit = 10,
-    SquadCapacity = 4, TeamChangeCooldown = 10,
-    RankNames = {"훈련병", "이병", "일병", "상병", "병장"},
-    RankXP = {0, 100, 250, 500, 900},
-})
-]]></ProtectedString>
-					<string name="ScriptGuid">{bcb2fcc2-3a9f-43de-96c5-7c80bcf49161}</string>
-					<BinaryString name="AttributesSerialize"></BinaryString>
-					<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
-					<bool name="DefinesCapabilities">false</bool>
-					<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
-					<string name="Name">Config</string>
-					<BinaryString name="SerializedOverrides"></BinaryString>
-					<int64 name="SourceAssetId">-1</int64>
-					<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
-					<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca8000003d6</UniqueId>
-				</Properties>
-			</Item>
-			<Item class="ModuleScript" referent="RBX9">
-				<Properties>
-					<Content name="LinkedSource"><null></null></Content>
-					<ProtectedString name="Source"><![CDATA[--!strict
-local Rules = {}
-function Rules.finite(n: any): boolean
-    return type(n) == "number" and n == n and math.abs(n) < math.huge
-end
-function Rules.rank(xp: number, trained: boolean): number
-    if not trained then return 1 end
-    if xp >= 900 then return 5 end
-    if xp >= 500 then return 4 end
-    if xp >= 250 then return 3 end
-    return 2
-end
-function Rules.canJoin(trained: boolean, requested: any, ownCount: number, otherCount: number): boolean
-    return trained and (requested == "Blue" or requested == "Red") and ownCount <= otherCount
-end
-function Rules.canDamage(phase: string, attacker: string, victim: string, protected: boolean): boolean
-    return phase == "Active" and not protected
-        and (attacker == "Blue" or attacker == "Red")
-        and (victim == "Blue" or victim == "Red") and attacker ~= victim
-end
-function Rules.canFire(now: number, lastShot: number, interval: number, ammo: number, reloading: boolean): boolean
-    return ammo > 0 and not reloading and now - lastShot >= interval
-end
-return table.freeze(Rules)
-]]></ProtectedString>
-					<string name="ScriptGuid">{b9cfcaf2-7b95-4549-acf7-286fd1edf64a}</string>
-					<BinaryString name="AttributesSerialize"></BinaryString>
-					<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
-					<bool name="DefinesCapabilities">false</bool>
-					<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
-					<string name="Name">Rules</string>
-					<BinaryString name="SerializedOverrides"></BinaryString>
-					<int64 name="SourceAssetId">-1</int64>
-					<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
-					<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca8000003d7</UniqueId>
-				</Properties>
-			</Item>
 			<Item class="ModuleScript" referent="RBX39fe3772a6d744ea87e572aa954223dd">
 				<Properties>
 					<Content name="LinkedSource"><null></null></Content>
@@ -2367,236 +3512,17 @@ return table.freeze(Catalog)
 			<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 			<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca8000003b6</UniqueId>
 		</Properties>
-		<Item class="ModuleScript" referent="RBX10">
-			<Properties>
-				<Content name="LinkedSource"><null></null></Content>
-				<ProtectedString name="Source"><![CDATA[--!strict
-local Players = game:GetService("Players")
-local Shared = game:GetService("ReplicatedStorage"):WaitForChild("Shared")
-local Config = require(Shared:WaitForChild("Config"))
-local Rules = require(Shared:WaitForChild("Rules"))
-local Sessions = require(script.Parent:WaitForChild("Sessions"))
-local Combat = {}
-local function living(player: Player): (Model?, Humanoid?, BasePart?)
-    local c = player.Character
-    if not c or c:FindFirstChildOfClass("ForceField") then return nil,nil,nil end
-    local h = c:FindFirstChildOfClass("Humanoid")
-    local head = c:FindFirstChild("Head")
-    local tool = c:FindFirstChild("ServiceRifle")
-    if not h or h.Health <= 0 or not head or not head:IsA("BasePart")
-        or not tool or not tool:IsA("Tool") or tool:GetAttribute("ServerIssued") ~= true then
-        return nil,nil,nil
-    end
-    return c,h,head
-end
-function Combat.reload(player: Player)
-    if not Sessions.allow(player,"reload",2,2) then return end
-    local s = Sessions.get(player)
-    if not s or s.reloading or s.ammo == Config.Magazine or not living(player) then return end
-    s.reloading = true
-    local generation = s.generation
-    Sessions.publish(player)
-    task.delay(Config.ReloadSeconds,function()
-        if Sessions.get(player) ~= s or s.generation ~= generation then return end
-        s.reloading = false
-        if living(player) then s.ammo = Config.Magazine end
-        Sessions.publish(player)
-    end)
-end
-function Combat.fire(player: Player, direction: any, round: any, targets: Folder)
-    if not Sessions.allow(player,"fire",12,3) then return end
-    if typeof(direction) ~= "Vector3" or not Rules.finite(direction.X)
-        or not Rules.finite(direction.Y) or not Rules.finite(direction.Z) then return end
-    if math.abs(direction.Magnitude - 1) > 0.01 then return end
-    local s = Sessions.get(player)
-    if not s then return end
-    if s.team ~= "Training" and round.phase ~= "Active" then return end
-    local c, _, head = living(player)
-    if not c or not head then return end
-    local now = os.clock()
-    if not Rules.canFire(now,s.lastShot,Config.FireInterval,s.ammo,s.reloading) then return end
-    s.lastShot = now
-    s.ammo -= 1
-    Sessions.publish(player)
-    local params = RaycastParams.new()
-    params.FilterType = Enum.RaycastFilterType.Exclude
-    params.FilterDescendantsInstances = {c}
-    -- No client origin, hit part, damage or target identity is accepted.
-    local result = workspace:Raycast(head.Position,direction.Unit*Config.Range,params)
-    if not result then return end
-    if s.team == "Training" and result.Instance.Parent == targets and not s.trained then
-        s.hits += 1
-        if s.hits >= Config.TrainingHits then s.trained=true; s.xp=100 end
-        Sessions.publish(player)
-        return
-    end
-    local model = result.Instance:FindFirstAncestorOfClass("Model")
-    if not model then return end
-    local victim = Players:GetPlayerFromCharacter(model)
-    local targetSession = if victim then Sessions.get(victim) else nil
-    local humanoid = model:FindFirstChildOfClass("Humanoid")
-    if not victim or not targetSession or not humanoid or humanoid.Health <= 0 then return end
-    if not Rules.canDamage(round.phase,s.team,targetSession.team,model:FindFirstChildOfClass("ForceField") ~= nil) then return end
-    local before = humanoid.Health
-    humanoid:TakeDamage(Config.Damage)
-    if before > 0 and humanoid.Health <= 0 then
-        round.scores[s.team] += 1
-        s.xp += 25
-        Sessions.publish(player)
-        round.publish()
-    end
-end
-return Combat
-]]></ProtectedString>
-				<string name="ScriptGuid">{23f343b1-6395-419f-a67a-b80aaa2121d7}</string>
-				<BinaryString name="AttributesSerialize"></BinaryString>
-				<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
-				<bool name="DefinesCapabilities">false</bool>
-				<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
-				<string name="Name">Combat</string>
-				<BinaryString name="SerializedOverrides"></BinaryString>
-				<int64 name="SourceAssetId">-1</int64>
-				<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
-				<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca8000003d8</UniqueId>
-			</Properties>
-		</Item>
 		<Item class="Script" referent="RBX11">
 			<Properties>
 				<ProtectedString name="Source"><![CDATA[--!strict
-local Players = game:GetService("Players")
-local Teams = game:GetService("Teams")
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local Config = require(ReplicatedStorage:WaitForChild("Shared"):WaitForChild("Config"))
-local Rules = require(ReplicatedStorage.Shared:WaitForChild("Rules"))
-local Sessions = require(script.Parent:WaitForChild("Sessions"))
-local Combat = require(script.Parent:WaitForChild("Combat"))
-Players.RespawnTime = 4
-local remotes = Instance.new("Folder")
-remotes.Name = "Remotes"
-local events: {[string]: RemoteEvent} = {}
-for _, name in {"Fire", "Reload", "JoinTeam", "JoinSquad"} do
-    local event = Instance.new("RemoteEvent")
-    event.Name = name; event.Parent = remotes; events[name] = event
-end
-local teamObjects: {[string]: Team} = {}
-local spawns: {[string]: SpawnLocation} = {}
-local fixture = Instance.new("Folder")
-fixture.Name = "MVPFixtures"; fixture.Parent = workspace
-local function part(name: string, size: Vector3, position: Vector3, color: Color3): Part
-    local p = Instance.new("Part")
-    p.Name=name; p.Anchored=true; p.Size=size; p.Position=position; p.Color=color; p.Parent=fixture
-    return p
-end
-part("TestFloor",Vector3.new(200,1,240),Vector3.new(0,-0.5,0),Color3.fromRGB(65,76,64))
--- Temporary test fixtures only; these can be replaced by a map later.
-for _, spec in {
-    {"Training","훈련병","Bright green",Vector3.new(0,1,90)},
-    {"Blue","청군","Bright blue",Vector3.new(-50,1,-45)},
-    {"Red","홍군","Bright red",Vector3.new(50,1,-45)},
-} do
-    local t=Instance.new("Team")
-    t.Name=spec[2] :: string; t.TeamColor=BrickColor.new(spec[3] :: string); t.AutoAssignable=false; t.Parent=Teams
-    teamObjects[spec[1] :: string]=t
-    local spawn=Instance.new("SpawnLocation")
-    spawn.Name=spec[1] :: string; spawn.Anchored=true; spawn.Size=Vector3.new(10,1,10)
-    spawn.Position=spec[4] :: Vector3; spawn.Neutral=false; spawn.TeamColor=t.TeamColor
-    spawn.AllowTeamChangeOnTouch=false; spawn.Duration=3; spawn.Parent=fixture
-    spawns[spec[1] :: string]=spawn
-end
-local targets=Instance.new("Folder"); targets.Name="TrainingTargets"; targets.Parent=fixture
-for i=1,5 do
-    local p=part("Target"..i,Vector3.new(4,6,1),Vector3.new((i-3)*10,4,60),Color3.fromRGB(245,193,63))
-    p.Parent=targets
-end
--- Separate range from combat; prevents shooting range targets from the combat area.
-part("RangeDivider",Vector3.new(200,18,2),Vector3.new(0,9,30),Color3.fromRGB(91,97,90))
-local round: any = {phase="Intermission",scores={Blue=0,Red=0},endsAt=0}
-round.publish=function()
-    ReplicatedStorage:SetAttribute("RoundPhase",round.phase)
-    ReplicatedStorage:SetAttribute("BlueScore",round.scores.Blue)
-    ReplicatedStorage:SetAttribute("RedScore",round.scores.Red)
-    ReplicatedStorage:SetAttribute("RoundEndsAt",round.endsAt)
-end
-local function characterReady(player: Player, character: Model)
-    Sessions.resetWeapon(player)
-    local humanoid=character:WaitForChild("Humanoid",10)
-    if player.Character ~= character or not humanoid or not humanoid:IsA("Humanoid") then return end
-    humanoid.Died:Connect(function()
-        if player.Character == character then Sessions.resetWeapon(player) end
-    end)
-    local backpack=player:WaitForChild("Backpack",10)
-    if player.Character ~= character or humanoid.Health <= 0 or not backpack then return end
-    local tool=Instance.new("Tool")
-    tool.Name="ServiceRifle"; tool.ToolTip="제식소총 · 클릭 사격 / R 재장전"
-    tool.RequiresHandle=false; tool.CanBeDropped=false; tool:SetAttribute("ServerIssued",true)
-    tool.Parent=backpack
-end
-local function addPlayer(player: Player)
-    if Sessions.get(player) then return end
-    Sessions.add(player)
-    player.Team=teamObjects.Training; player.Neutral=false; player.RespawnLocation=spawns.Training
-    player.CharacterAdded:Connect(function(c) characterReady(player,c) end)
-    if player.Character then task.spawn(characterReady,player,player.Character) end
-end
-Players.PlayerAdded:Connect(addPlayer)
-Players.PlayerRemoving:Connect(Sessions.remove)
-for _, player in Players:GetPlayers() do addPlayer(player) end
-local function respawn(player: Player)
-    task.spawn(function()
-        local ok, err=pcall(function() player:LoadCharacterAsync() end)
-        if not ok and player.Parent == Players then warn("Respawn failed",err) end
-    end)
-end
-local function alive(player: Player): boolean
-    local c=player.Character
-    local h=if c then c:FindFirstChildOfClass("Humanoid") else nil
-    return h ~= nil and h.Health > 0
-end
-events.JoinTeam.OnServerEvent:Connect(function(player: Player, requested: any)
-    if not Sessions.allow(player,"team",1,2) then return end
-    local s=Sessions.get(player)
-    if not s or requested == s.team or not alive(player) then return end
-    if os.clock()-s.lastTeamChange < Config.TeamChangeCooldown then return end
-    -- Battle allegiance is locked during a round; trainees can deploy once.
-    if s.team ~= "Training" and round.phase == "Active" then return end
-    if requested ~= "Blue" and requested ~= "Red" then return end
-    local other=if requested == "Blue" then "Red" else "Blue"
-    local otherCount=Sessions.count(other)-(if s.team == other then 1 else 0)
-    if not Rules.canJoin(s.trained,requested,Sessions.count(requested),otherCount) then return end
-    s.team=requested; s.squad=0; s.lastTeamChange=os.clock()
-    player.Team=teamObjects[requested]; player.RespawnLocation=spawns[requested]
-    Sessions.publish(player); respawn(player)
-end)
-events.JoinSquad.OnServerEvent:Connect(function(player: Player, requested: any)
-    if not Sessions.allow(player,"squad",1,2) then return end
-    local s=Sessions.get(player)
-    if not s or s.team == "Training" or type(requested) ~= "number" then return end
-    if requested ~= 1 and requested ~= 2 and requested ~= 3 then return end
-    if s.squad == requested or Sessions.count(s.team,requested) >= Config.SquadCapacity then return end
-    s.squad=requested; Sessions.publish(player)
-end)
-events.Fire.OnServerEvent:Connect(function(player: Player, direction: any) Combat.fire(player,direction,round,targets) end)
-events.Reload.OnServerEvent:Connect(Combat.reload)
-remotes.Parent=ReplicatedStorage -- Expose only after all handlers are connected.
-task.spawn(function()
-    while true do
-        round.phase="Intermission"; round.endsAt=workspace:GetServerTimeNow()+Config.IntermissionSeconds
-        round.publish()
-        task.wait(Config.IntermissionSeconds)
-        round.scores={Blue=0,Red=0}; round.phase="Active"
-        round.endsAt=workspace:GetServerTimeNow()+Config.RoundSeconds
-        for _, player in Players:GetPlayers() do
-            local s=Sessions.get(player)
-            if s and s.team ~= "Training" then respawn(player) end
-        end
-        round.publish()
-        repeat task.wait(0.25) until workspace:GetServerTimeNow() >= round.endsAt
-            or round.scores.Blue >= Config.ScoreLimit or round.scores.Red >= Config.ScoreLimit
-        local winner=if round.scores.Blue == round.scores.Red then "Draw"
-            elseif round.scores.Blue > round.scores.Red then "Blue" else "Red"
-        ReplicatedStorage:SetAttribute("LastWinner",winner)
-    end
-end)
+local Players=game:GetService("Players")
+local RankService=require(script.Parent:WaitForChild("RankService"))
+-- Rank metadata is independent of Roblox Teams; no units or team selection yet.
+Players.PlayerAdded:Connect(RankService.add)
+Players.PlayerRemoving:Connect(RankService.remove)
+for _,player in Players:GetPlayers() do RankService.add(player) end
+
+require(script.Parent:WaitForChild("RankCommands")).start()
 ]]></ProtectedString>
 				<bool name="Disabled">true</bool>
 				<Content name="LinkedSource"><null></null></Content>
@@ -2611,86 +3537,6 @@ end)
 				<int64 name="SourceAssetId">-1</int64>
 				<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 				<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca8000003d9</UniqueId>
-			</Properties>
-		</Item>
-		<Item class="ModuleScript" referent="RBX12">
-			<Properties>
-				<Content name="LinkedSource"><null></null></Content>
-				<ProtectedString name="Source"><![CDATA[--!strict
-local Players = game:GetService("Players")
-local Shared = game:GetService("ReplicatedStorage"):WaitForChild("Shared")
-local Config = require(Shared:WaitForChild("Config"))
-local Rules = require(Shared:WaitForChild("Rules"))
-export type Session = {
-    xp: number, trained: boolean, hits: number, team: string, squad: number,
-    ammo: number, reloading: boolean, lastShot: number, generation: number,
-    lastTeamChange: number, buckets: {[string]: {tokens: number, updated: number}},
-}
-local Sessions = {}
-local data: {[Player]: Session} = {}
-function Sessions.get(player: Player): Session?
-    return data[player]
-end
-function Sessions.publish(player: Player)
-    local s = data[player]
-    if not s then return end
-    player:SetAttribute("XP", s.xp)
-    player:SetAttribute("Rank", Config.RankNames[Rules.rank(s.xp, s.trained)])
-    player:SetAttribute("Trained", s.trained)
-    player:SetAttribute("TrainingHits", s.hits)
-    player:SetAttribute("Side", s.team)
-    player:SetAttribute("Squad", s.squad)
-    player:SetAttribute("Ammo", s.ammo)
-    player:SetAttribute("Reloading", s.reloading)
-end
-function Sessions.add(player: Player)
-    data[player] = {xp=0, trained=false, hits=0, team="Training", squad=0,
-        ammo=Config.Magazine, reloading=false, lastShot=-math.huge, generation=0,
-        lastTeamChange=-math.huge, buckets={}}
-    Sessions.publish(player)
-end
-function Sessions.remove(player: Player) data[player] = nil end
-function Sessions.resetWeapon(player: Player)
-    local s = data[player]
-    if not s then return end
-    s.generation += 1
-    s.ammo = Config.Magazine
-    s.reloading = false
-    s.lastShot = -math.huge
-    Sessions.publish(player)
-end
--- Separate token buckets prevent malformed remote spam from reaching expensive raycasts.
-function Sessions.allow(player: Player, key: string, rate: number, burst: number): boolean
-    local s = data[player]
-    if not s then return false end
-    local now = os.clock()
-    local b = s.buckets[key]
-    if not b then b = {tokens=burst, updated=now}; s.buckets[key] = b end
-    b.tokens = math.min(burst, b.tokens + (now-b.updated)*rate)
-    b.updated = now
-    if b.tokens < 1 then return false end
-    b.tokens -= 1
-    return true
-end
-function Sessions.count(team: string, squad: number?): number
-    local count = 0
-    for player, s in data do
-        if player.Parent == Players and s.team == team and (squad == nil or s.squad == squad) then count += 1 end
-    end
-    return count
-end
-return Sessions
-]]></ProtectedString>
-				<string name="ScriptGuid">{3147749d-4a86-414a-ab9c-a190440bb13b}</string>
-				<BinaryString name="AttributesSerialize"></BinaryString>
-				<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
-				<bool name="DefinesCapabilities">false</bool>
-				<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
-				<string name="Name">Sessions</string>
-				<BinaryString name="SerializedOverrides"></BinaryString>
-				<int64 name="SourceAssetId">-1</int64>
-				<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
-				<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca8000003db</UniqueId>
 			</Properties>
 		</Item>
 		<Item class="ModuleScript" referent="RBXd0c6c12386eb4d1abf75f7b2d176f056">
@@ -2755,11 +3601,25 @@ end
 -- Server-only assignment API for later gameplay systems; no permission or promotion policy yet.
 -- Rank commands call this API on the server; clients cannot assign ranks directly.
 function RankService.set(player: Player, rankId: any): boolean
-    local rank=Catalog.find(rankId)
-    if not states[player] or player.Parent ~= Players or not rank then return false end
-    states[player]=rank.id
-    publish(player,rank)
-    return true
+	local rank = Catalog.find(rankId)
+
+	if player.Parent ~= Players or not rank then
+		return false
+	end
+
+	-- 계급 정보가 없다면 자동 초기화
+	if not states[player] then
+		RankService.add(player)
+	end
+
+	if not states[player] then
+		return false
+	end
+
+	states[player] = rank.id
+	publish(player, rank)
+
+	return true
 end
 function RankService.get(player: Player): Rank?
     local id=states[player]
@@ -2981,33 +3841,6 @@ return Commands
 				<int64 name="SourceAssetId">-1</int64>
 				<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 				<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca800000f5e</UniqueId>
-			</Properties>
-		</Item>
-		<Item class="Script" referent="RBXc028ffd2196c45a5bdaf00f78bf4116f">
-			<Properties>
-				<ProtectedString name="Source"><![CDATA[--!strict
-local Players=game:GetService("Players")
-local RankService=require(script.Parent:WaitForChild("RankService"))
--- Rank metadata is independent of Roblox Teams; no units or team selection yet.
-Players.PlayerAdded:Connect(RankService.add)
-Players.PlayerRemoving:Connect(RankService.remove)
-for _,player in Players:GetPlayers() do RankService.add(player) end
-
-require(script.Parent:WaitForChild("RankCommands")).start()
-]]></ProtectedString>
-				<bool name="Disabled">false</bool>
-				<Content name="LinkedSource"><null></null></Content>
-				<token name="RunContext">0</token>
-				<string name="ScriptGuid">{35c9b3c9-5e14-46cf-9f05-898532d64063}</string>
-				<BinaryString name="AttributesSerialize"></BinaryString>
-				<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
-				<bool name="DefinesCapabilities">false</bool>
-				<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
-				<string name="Name">RankBootstrap</string>
-				<BinaryString name="SerializedOverrides"></BinaryString>
-				<int64 name="SourceAssetId">-1</int64>
-				<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
-				<UniqueId name="UniqueId">08c4e9987925be9f0ae78ca800000f60</UniqueId>
 			</Properties>
 		</Item>
 		<Item class="ModuleScript" referent="RBX15cc9104ec8e46d6a65f7e1bb4b1dc87">
@@ -3247,6 +4080,215 @@ require(script.Parent:WaitForChild("AdminService")).start()
 				<UniqueId name="UniqueId">714f218494dedcfd0ae79ad4000012df</UniqueId>
 			</Properties>
 		</Item>
+		<Item class="Script" referent="RBX08dfc125aed2494b8c5c2890eff2e4b9">
+			<Properties>
+				<ProtectedString name="Source"><![CDATA[-- MilitaryMessenger.server.luau
+-- 군대 RP 실시간 채팅 서버
+
+local Players = game:GetService("Players")
+local TextChatService = game:GetService("TextChatService")
+
+-- RankCatalog 기준 소위 = 11
+local OFFICER_RANK = 11
+
+local function getRank(player)
+	return tonumber(player:GetAttribute("RankOrder")) or 0
+end
+
+local function getUnit(player)
+	local unit = player:GetAttribute("Unit")
+
+	if type(unit) == "string" and unit ~= "" then
+		return unit
+	end
+
+	if player.Team and not player.Neutral then
+		return player.Team.Name
+	end
+
+	return nil
+end
+
+local function getPlayer(textSource)
+	if not textSource then
+		return nil
+	end
+
+	return Players:GetPlayerByUserId(textSource.UserId)
+end
+
+-- Roblox 공식 채팅 채널 생성
+-- 커스텀 TextChannel은 TextChatService 바로 아래에 둔다.
+local function createChannel(name)
+	local existing = TextChatService:FindFirstChild(name)
+
+	if existing then
+		assert(existing:IsA("TextChannel"), name .. " 이름 충돌")
+		return existing
+	end
+
+	local channel = Instance.new("TextChannel")
+	channel.Name = name
+	channel.Parent = TextChatService
+
+	return channel
+end
+
+local unitChannel = createChannel("RP_Unit")
+local commandChannel = createChannel("RP_Command")
+local noticeChannel = createChannel("RP_Notice")
+
+-- 부대 채팅:
+-- 같은 소속 부대의 플레이어에게만 메시지 전달
+unitChannel.ShouldDeliverCallback = function(message, recipientSource)
+	local sender = getPlayer(message.TextSource)
+	local recipient = getPlayer(recipientSource)
+
+	if not sender or not recipient then
+		return false
+	end
+
+	local senderUnit = getUnit(sender)
+	local recipientUnit = getUnit(recipient)
+
+	return senderUnit ~= nil and senderUnit == recipientUnit
+end
+
+-- 지휘 채팅:
+-- 소위 이상만 메시지 발신 및 수신
+commandChannel.ShouldDeliverCallback = function(message, recipientSource)
+	local sender = getPlayer(message.TextSource)
+	local recipient = getPlayer(recipientSource)
+
+	if not sender or not recipient then
+		return false
+	end
+
+	return getRank(sender) >= OFFICER_RANK
+		and getRank(recipient) >= OFFICER_RANK
+end
+
+-- 공지사항:
+-- 소위 이상 작성, 모든 플레이어 수신
+noticeChannel.ShouldDeliverCallback = function(message, recipientSource)
+	local sender = getPlayer(message.TextSource)
+	local recipient = getPlayer(recipientSource)
+
+	if not sender or not recipient then
+		return false
+	end
+
+	return getRank(sender) >= OFFICER_RANK
+end
+
+local function findSource(channel, player)
+	for _, child in channel:GetChildren() do
+		if child:IsA("TextSource")
+			and child.UserId == player.UserId then
+			return child
+		end
+	end
+
+	return nil
+end
+
+local function ensureSource(channel, player)
+	local existing = findSource(channel, player)
+
+	if existing then
+		return existing
+	end
+
+	local success, source = pcall(function()
+		return channel:AddUserAsync(player.UserId)
+	end)
+
+	if not success then
+		warn("[Messenger] 채널 참가 실패:", channel.Name, source)
+		return nil
+	end
+
+	-- 채팅이 제한된 이용자는 nil이 반환될 수 있다.
+	return source
+end
+
+-- 계급 또는 소속 변경 시 채널 권한 업데이트
+local function refreshPlayer(player)
+	if player.Parent ~= Players then
+		return
+	end
+
+	local unitSource = ensureSource(unitChannel, player)
+	local noticeSource = ensureSource(noticeChannel, player)
+
+	if player.Parent ~= Players then
+		return
+	end
+
+	if unitSource then
+		unitSource.CanSend = getUnit(player) ~= nil
+	end
+
+	if noticeSource then
+		noticeSource.CanSend = getRank(player) >= OFFICER_RANK
+	end
+
+	-- 지휘관만 지휘 채널에 가입
+	local commandSource = findSource(commandChannel, player)
+
+	if getRank(player) >= OFFICER_RANK then
+		commandSource = commandSource or ensureSource(commandChannel, player)
+
+		if commandSource then
+			commandSource.CanSend = true
+		end
+	elseif commandSource then
+		commandSource:Destroy()
+	end
+end
+
+local function onPlayerAdded(player)
+	player:GetAttributeChangedSignal("RankOrder"):Connect(function()
+		task.spawn(refreshPlayer, player)
+	end)
+
+	player:GetAttributeChangedSignal("Unit"):Connect(function()
+		task.spawn(refreshPlayer, player)
+	end)
+
+	player:GetPropertyChangedSignal("Team"):Connect(function()
+		task.spawn(refreshPlayer, player)
+	end)
+
+	player:GetPropertyChangedSignal("Neutral"):Connect(function()
+		task.spawn(refreshPlayer, player)
+	end)
+
+	task.spawn(refreshPlayer, player)
+end
+
+Players.PlayerAdded:Connect(onPlayerAdded)
+
+for _, player in Players:GetPlayers() do
+	onPlayerAdded(player)
+end
+
+print("[MilitaryMessenger] 서버 시작 완료")]]></ProtectedString>
+				<bool name="Disabled">false</bool>
+				<Content name="LinkedSource"><null></null></Content>
+				<token name="RunContext">0</token>
+				<string name="ScriptGuid">{0e92c435-763e-4e60-8673-85d29f3c39ed}</string>
+				<BinaryString name="AttributesSerialize"></BinaryString>
+				<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+				<bool name="DefinesCapabilities">false</bool>
+				<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
+				<string name="Name">MilitaryMessenger</string>
+				<BinaryString name="SerializedOverrides"></BinaryString>
+				<int64 name="SourceAssetId">-1</int64>
+				<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+				<UniqueId name="UniqueId">01d403e696a9a5530ae7b2b000001929</UniqueId>
+			</Properties>
+		</Item>
 	</Item>
 	<Item class="ServerStorage" referent="RBX145d135019bc473e8e27cb539e78a4e9">
 		<Properties>
@@ -3361,7 +4403,7 @@ require(script.Parent:WaitForChild("AdminService")).start()
 			<BinaryString name="AttributesSerialize"><![CDATA[BQAAABQAAABSQlhfQmFja3VwQnJpZ2h0bmVzcwUAAIA/HgAAAFJCWF9CYWNrdXBFeHBvc3Vy
 ZUNvbXBlbnNhdGlvbgUAAAAAIQAAAFJCWF9MaWdodGluZ0NvbXBhdGliaWxpdHlNaWdyYXRl
 ZAMBJgAAAFJCWF9MaWdodGluZ1RlY2hub2xvZ3lVbmlmaWVkTWlncmF0aW9uAwEgAAAAUkJY
-X09yaWdpbmFsVGVjaG5vbG9neU9uRmlsZUxvYWQEAgAAAA==]]></BinaryString>
+X09yaWdpbmFsVGVjaG5vbG9neU9uRmlsZUxvYWQEAQAAAA==]]></BinaryString>
 			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 			<bool name="DefinesCapabilities">false</bool>
 			<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
