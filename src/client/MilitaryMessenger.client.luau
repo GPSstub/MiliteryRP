@@ -1333,6 +1333,18 @@ renderMessages = function()
     end
     local query = string.lower(messageSearch.Text)
     local count = 0
+    if channelAccess[selectedChannel] and channelAccess[selectedChannel].persistent then
+        if archiveCursor[selectedChannel] and query=="" then
+            local older=button(feed,if archiveLoading[selectedChannel] then "불러오는 중…" else "↑ 이전 영구 기록 불러오기",C.surface)
+            older.Name="LoadOlderArchive"
+            older.LayoutOrder=-100
+            older.Size=UDim2.new(1,-12,0,36)
+            older.Activated:Connect(function()
+                local cursor=archiveCursor[selectedChannel]
+                if cursor then loadArchive(selectedChannel,cursor) end
+            end)
+        end
+    end
     for _, entry in history[selectedChannel] or {} do
         local threadVisible=if threadRoot then (entry.id==threadRoot or entry.threadRoot==threadRoot)
             else (entry.threadRoot==nil or query~="")
@@ -1342,7 +1354,12 @@ renderMessages = function()
         end
     end
     if count == 0 then
-        local empty = label(feed, if query ~= "" then "검색 결과가 없습니다." else (if threadRoot then "이 스레드에는 아직 답장이 없습니다." else "# " .. getChannelInfo(selectedChannel).name .. "에 오신 것을 환영합니다.\n이 채널에서 대화를 시작해 보세요."), 15, C.muted, false)
+        local empty=label(feed,if query~="" then "검색 결과가 없습니다."
+            elseif threadRoot then "이 스레드에는 아직 답장이 없습니다."
+            elseif channelAccess[selectedChannel] and channelAccess[selectedChannel].persistent then
+                (if archiveLoading[selectedChannel] then "영구 기록을 불러오는 중입니다…" else "이 채널에는 보관된 글이 없습니다.")
+            else "# "..getChannelInfo(selectedChannel).name.."에 오신 것을 환영합니다.\n이 채널에서 대화를 시작해 보세요.",
+            15,C.muted,false)
         empty.Name = "EmptyState"
         empty.Size = UDim2.new(1, -12, 0, 100)
         empty.TextWrapped = true
@@ -1467,8 +1484,9 @@ local function selectChannel(id)
 
     local info = getChannelInfo(id)
 
-    channelTitle.Text = "#  " .. info.name
-    description.Text = info.description
+    local persistent=channelAccess[id] and channelAccess[id].persistent
+    channelTitle.Text=(if persistent then "▣  " else "#  ")..info.name
+    description.Text=if persistent then "영구 보관 채널 · 최대 300개까지 기록됩니다." else info.description
     muteButton.Text=if mutedChannels[id] then "🔕" else "🔔"
 
     if id == "unit" then
@@ -1491,7 +1509,13 @@ local function selectChannel(id)
 
     updateChannelButtons()
     if switched or #feed:GetChildren() <= 2 then renderMessages() end
-    syncMessageActions(id)
+    if persistent then
+        if not archiveLoaded[id] or archiveDirty[id] or os.clock()-(archiveLastFetch[id] or -math.huge)>10 then
+            loadArchive(id)
+        end
+    else
+        syncMessageActions(id)
+    end
     updateNotice()
     renderMembers()
 end
@@ -1533,6 +1557,7 @@ local function syncCustomChannels()
             history[info.id] = nil
             unread[info.id] = nil
             drafts[info.id] = nil; scrollPositions[info.id] = nil; pendingMessages[info.id] = nil
+            archiveLoaded[info.id]=nil;archiveCursor[info.id]=nil;archiveDirty[info.id]=nil
             table.remove(CHANNELS, index)
             if selectedChannel == info.id then selectedChannel = "general"; input.Text = drafts.general or "" end
         end
@@ -1540,7 +1565,7 @@ local function syncCustomChannels()
     for _, info in incoming do
         for _, existing in CHANNELS do
             if existing.id == info.id then
-                existing.name = info.name; existing.description = info.description
+                existing.name = info.name;existing.description=info.description;existing.persistent=info.persistent==true
             end
         end
         if not channelButtons[info.id] then
@@ -1567,7 +1592,10 @@ local function syncCustomChannels()
     end
     channelsScroll.CanvasSize = UDim2.fromOffset(0, 20 + #CHANNELS * 46)
     for id in history do
-        if not canView(id) then history[id] = {}; unread[id] = 0; drafts[id] = nil; pendingMessages[id] = nil; scrollPositions[id] = nil end
+        if not canView(id) then
+            history[id]={};unread[id]=0;drafts[id]=nil;pendingMessages[id]=nil;scrollPositions[id]=nil
+            archiveLoaded[id]=nil;archiveCursor[id]=nil;archiveDirty[id]=nil
+        end
     end
     if not canView(selectedChannel) then
         selectedChannel = "general"
