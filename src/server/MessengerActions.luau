@@ -4,6 +4,7 @@
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local TextChatService = game:GetService("TextChatService")
+local RunService = game:GetService("RunService")
 local Permissions = require(script.Parent.MessengerPermissions)
 local Protocol = require(ReplicatedStorage:WaitForChild("Shared"):WaitForChild("MessengerActionProtocol"))
 
@@ -19,6 +20,8 @@ local lastAction: {[Player]: number} = {}
 local lastSnapshot: {[Player]: number} = {}
 local chatEligibility: {[Player]: {allowed: boolean, expires: number}} = {}
 local function mayChat(player: Player): boolean
+    -- Studio dummy test clients use synthetic UserIds; never apply this bypass live.
+    if RunService:IsStudio() and player.UserId<=0 then return true end
     local now=os.clock()
     local cached=chatEligibility[player]
     if cached and cached.expires>now then return cached.allowed end
