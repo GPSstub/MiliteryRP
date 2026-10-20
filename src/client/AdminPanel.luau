@@ -323,7 +323,7 @@ function Panel.mount(parent: Frame): (boolean)->()
         actionPair(quick,"계급 조정","팀 배정",function() jump("rank") end,function() jump("team") end,88)
         local second=card("QuickActions",105)
         description(second,"기타 작업","무적·비행 제어와 기록 확인")
-        actionPair(second,"무적/비행", "명령 기록",
+        actionPair(second,"무적;비행", "명령 기록",
             function() jump("god") end,function() jump("logs") end,56)
     end
     local function drawGodOrFlight(kind: string)
@@ -333,7 +333,7 @@ function Panel.mount(parent: Frame): (boolean)->()
         description(frame,if flight then "비행 제어" else "무적 제어",
             if flight then "캐릭터의 자유 비행을 켜거나 끕니다. W/A/S/D 및 상승·하강 입력을 지원합니다."
             else "선택한 캐릭터의 피해 방지 상태를 변경합니다.")
-        local verb=if flight then "/비행" else "/무적"
+        local verb=if flight then ";비행" else ";무적"
         actionPair(frame,"●  활성화","○  비활성화",
             function() run(verb.." "..currentTarget().." 켜기") end,
             function() run(verb.." "..currentTarget().." 끄기") end,92)
@@ -362,7 +362,7 @@ function Panel.mount(parent: Frame): (boolean)->()
                 confirmDetail.Text="@"..pendingHQTarget.."에게 모든 관리자 명령어 및 관리 패널 사용 권한을 부여합니다."
                 dialog.Visible=true
             else
-                run("/팀 "..currentTarget().." "..selectedTeam)
+                run(";팀 "..currentTarget().." "..selectedTeam)
             end
         end)
         local note=card("TeamNote",92)
@@ -403,13 +403,13 @@ function Panel.mount(parent: Frame): (boolean)->()
         commit.Position=UDim2.fromOffset(14,65)
         commit.Activated:Connect(function()
             local rank=Catalog.find(selectedRank)
-            if rank then run("/계급 "..currentTarget().." "..rank.name) end
+            if rank then run(";계급 "..currentTarget().." "..rank.name) end
         end)
     end
     local function drawCommand()
         local frame=card("DirectCommand",219)
         description(frame,"직접 명령어","서버의 승인된 관리 명령만 실행됩니다. Lua 코드 실행은 지원하지 않습니다.")
-        local value=input(frame,"","예: /계급 사용자이름 대위")
+        local value=input(frame,"","예: ;계급 사용자이름 대위")
         value.Name="CommandInput"
         value.Position=UDim2.fromOffset(14,93)
         value.Size=UDim2.new(1,-28,0,44)
@@ -425,11 +425,11 @@ function Panel.mount(parent: Frame): (boolean)->()
         local help=card("CommandExamples",230)
         description(help,"사용 가능한 명령","명령어를 눌러 입력창에 복사하세요.")
         local examples={
-            "/계급 나 대위",
-            "/계급목록",
-            "/무적 나 켜기",
-            "/비행 나 끄기",
-            "/팀 나 HQ",
+            ";계급 나 대위",
+            ";계급목록",
+            ";무적 나 켜기",
+            ";비행 나 끄기",
+            ";팀 나 HQ",
         }
         for i,command in examples do
             local b=button(help,command,UDim2.new(1,-28,0,29),C.raised)
@@ -649,7 +649,7 @@ function Panel.mount(parent: Frame): (boolean)->()
         local username=pendingHQTarget
         pendingHQTarget=nil
         dialog.Visible=false
-        run("/팀 "..username.." HQ")
+        run(";팀 "..username.." HQ")
     end)
     response.OnClientEvent:Connect(function(kind: string,data: any)
         if not isHQ(player) then return end
