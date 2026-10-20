@@ -79,6 +79,7 @@ function Panel.mount(parent: Frame): (boolean)->()
     local player=Players.LocalPlayer
     local request=ReplicatedStorage:WaitForChild("AdminRequest") :: RemoteEvent
     local response=ReplicatedStorage:WaitForChild("AdminResponse") :: RemoteEvent
+    local logRemote=ReplicatedStorage:WaitForChild("AdminLogRequest") :: RemoteFunction
 
     local root=make("Frame",parent,{
         Name="AdminTools",BackgroundColor3=C.background,BorderSizePixel=0,
@@ -142,7 +143,13 @@ function Panel.mount(parent: Frame): (boolean)->()
     local selectedTeam="위관급"
     local selectedRank="second_lieutenant"
     local pickerVisible=false
-    local activity: {any}={}
+    local logKind="chat"
+    local logHistory: {[string]: {any}}={chat={},command={}}
+    local logLoaded: {[string]: boolean}={chat=false,command=false}
+    local logMore: {[string]: boolean}={chat=false,command=false}
+    local logLoading: {[string]: boolean}={chat=false,command=false}
+    local logErrors: {[string]: string}={chat="",command=""}
+    local logStats: any={}
     local navButtons: {[string]: TextButton}={}
     local lastSent=0
     local pendingHQTarget: string?=nil
@@ -431,33 +438,127 @@ function Panel.mount(parent: Frame): (boolean)->()
         end
         help.Size=UDim2.new(1,-3,0,240)
     end
-    local function drawLogs()
-        local header=card("AuditHeader",108)
-        description(header,"관리 기록","현재 서버의 최근 60개 관리 명령 기록. 서버 재시작 시 초기화됩니다.")
-        local reload=button(header,"↻  최신 기록",UDim2.new(1,-28,0,34))
-        reload.Position=UDim2.fromOffset(14,70)
-        reload.Activated:Connect(function() request:FireServer("sync") end)
-        if #activity==0 then
-            local empty=card("NoHistory",78)
-            local note=text(empty,"아직 기록이 없습니다.",13,C.muted)
-            note.Position=UDim2.fromOffset(14,20)
-        else
-            local start=math.max(1,#activity-49)
-            for index=#activity,start,-1 do
-                local item=activity[index]
-                local entry=card("Audit_"..index,100)
-                local dateText=os.date("%H:%M:%S",tonumber(item.time) or os.time())
-                local heading=text(entry,(if item.ok then "✓  완료" else "×  실패").."   ·   "..dateText.."  @"..tostring(item.name),12,
-                    if item.ok then C.accent else C.red,true)
-                heading.Position=UDim2.fromOffset(12,10)
-                heading.Size=UDim2.new(1,-24,0,24)
-                local commandText=text(entry,tostring(item.command),13,C.text,true)
-                commandText.Position=UDim2.fromOffset(12,35)
-                commandText.Size=UDim2.new(1,-24,0,25)
-                local detail=text(entry,tostring(item.message),12,C.muted)
-                detail.Position=UDim2.fromOffset(12,63)
-                detail.Size=UDim2.new(1,-24,0,28)
+    local function fetchLogs(kind: string,action: string)
+        if not isHQ(player) or logLoading[kind] then return end
+        logLoading[kind]=true
+        logErrors[kind]=""
+        if active and currentTab=="logs" and logKind==kind then render() end
+        task.spawn(function()
+            local ok,result=pcall(function()
+                return logRemote:InvokeServer(kind,action)
+            end)
+            logLoading[kind]=false
+            if not ok or type(result)~="table" or result.ok~=true then
+                logErrors[kind]=if ok and type(result)=="table" then
+                    tostring(result.message or "요청이 거부되었습니다.") else
+                    "로그 서버에 연결하지 못했습니다."
+            else
+                logLoaded[kind]=true
+                logMore[kind]=result.hasMore==true
+                logStats=result.status or {}
+                local target=logHistory[kind]
+                if action=="latest" then
+                    table.clear(target)
+                end
+                local byId={}
+                for _,item in target do
+                    if type(item)=="table" and type(item.id)=="string" then byId[item.id]=true end
+                end
+                for _,item in result.entries or {} do
+                    if type(item)=="table" and type(item.id)=="string" and not byId[item.id] then
+                        table.insert(target,item)
+                        byId[item.id]=true
+                    end
+                end
+                if result.incomplete then
+                    logErrors[kind]="일부 기록을 불러오지 못했습니다. 새로고침하면 다시 시도합니다."
+                end
             end
+            if active and isHQ(player) and currentTab=="logs" and logKind==kind then render() end
+        end)
+    end
+    local function drawLogs()
+        local tabs=card("LogTypes",144)
+        description(tabs,"서버 영구 기록","로그는 채팅과 관리 명령을 별도로 저장합니다. HQ 전용 · 서버 재시작 후에도 유지")
+        local chat=button(tabs,"채팅 로그",UDim2.new(0.5,-21,0,41),
+            if logKind=="chat" then C.hover else C.raised)
+        chat.Position=UDim2.fromOffset(14,91)
+        chat.TextColor3=if logKind=="chat" then C.accent else C.text
+        chat.Activated:Connect(function()
+            logKind="chat"
+            render()
+            if not logLoaded.chat then fetchLogs("chat","latest") end
+        end)
+        local commands=button(tabs,"명령어 로그",UDim2.new(0.5,-21,0,41),
+            if logKind=="command" then C.hover else C.raised)
+        commands.Position=UDim2.new(0.5,7,0,91)
+        commands.TextColor3=if logKind=="command" then C.accent else C.text
+        commands.Activated:Connect(function()
+            logKind="command"
+            render()
+            if not logLoaded.command then fetchLogs("command","latest") end
+        end)
+        local header=card("HistoryControls",120)
+        local label=if logKind=="chat" then "메신저 채팅 기록" else "관리자 명령 실행 기록"
+        description(header,label,"재접속 시 최신 기록부터 불러옵니다. 아래쪽에서 과거 기록을 이어 볼 수 있습니다.")
+        local reload=button(header,if logLoading[logKind] then "조회 중…" else "↻  최신 기록 새로고침",
+            UDim2.new(1,-28,0,37))
+        reload.Position=UDim2.fromOffset(14,73)
+        reload.Activated:Connect(function()
+            if not logLoading[logKind] then fetchLogs(logKind,"latest") end
+        end)
+        local details=card("HistoryStatus",103)
+        local total=#logHistory[logKind]
+        local desc=if logLoading[logKind] then "기록을 조회 중입니다…"
+            elseif not logLoaded[logKind] then "기록을 아직 불러오지 않았습니다."
+            elseif total==0 then "저장된 로그가 없거나 아직 색인되지 않았습니다."
+            else tostring(total).."개 불러옴"..(if logMore[logKind] then " · 과거 기록 더 있음" else " · 마지막 기록까지 불러옴")
+        description(details,"조회 상태",desc)
+        local queueSize=tonumber(logStats.queued) or 0
+        local errors=tonumber(logStats.failed) or 0
+        local lost=tonumber(logStats.dropped) or 0
+        local queueText=text(details,"대기 "..queueSize.."개  ·  저장 실패 "..errors.."개  ·  한도 초과 "..lost.."개",11,
+            if errors>0 or lost>0 then C.red else C.muted)
+        queueText.Position=UDim2.fromOffset(14,78)
+        queueText.Size=UDim2.new(1,-28,0,22)
+        if logErrors[logKind]~="" then
+            local errorBox=card("HistoryError",74)
+            local errorText=text(errorBox,logErrors[logKind],12,C.red)
+            errorText.Position=UDim2.fromOffset(12,10)
+            errorText.Size=UDim2.new(1,-24,1,-20)
+        end
+        local list=logHistory[logKind]
+        for index,item in list do
+            local entry=card("PersistentLog_"..tostring(index),134)
+            local timeStamp=os.date("%Y-%m-%d  %H:%M:%S",
+                tonumber(item.time) or os.time())
+            local headline=if logKind=="command" then
+                (if item.ok then "✓  성공" else "×  실패").."  ·  @"..tostring(item.name)
+            else "◉  @"..tostring(item.name)
+            local tag=text(entry,headline,13,
+                if logKind=="command" then (if item.ok then C.accent else C.red) else C.accent,true)
+            tag.Position=UDim2.fromOffset(12,9)
+            tag.Size=UDim2.new(1,-24,0,26)
+            local when=text(entry,timeStamp.."  ·  "..tostring(item.source or "서버")..
+                (if logKind=="chat" then "  ·  #"..tostring(item.channelId or "unknown") else ""),
+                11,C.muted)
+            when.Position=UDim2.fromOffset(12,35)
+            when.Size=UDim2.new(1,-24,0,24)
+            local message=text(entry,tostring(item.text or ""),13,
+                if item.redacted then C.red else C.text)
+            message.Position=UDim2.fromOffset(12,65)
+            message.Size=UDim2.new(1,-24,0,59)
+            message.TextWrapped=true
+            message.TextYAlignment=Enum.TextYAlignment.Top
+            message.RichText=false
+        end
+        if logLoaded[logKind] and logMore[logKind] then
+            local more=button(body,if logLoading[logKind] then "조회 중…" else "↑  더 오래된 기록 15개 불러오기",
+                UDim2.new(1,-3,0,44),C.raised)
+            more.Name="MoreOldLogs"
+            more.Activated:Connect(function()
+                if not logLoading[logKind] then fetchLogs(logKind,"more") end
+            end)
         end
     end
     render=function()
@@ -482,7 +583,12 @@ function Panel.mount(parent: Frame): (boolean)->()
         local b=button(nav,spec[2],UDim2.new(1,-4,0,39),C.card)
         b.Name="Tab_"..spec[1]
         b.LayoutOrder=index
-        b.Activated:Connect(function() jump(spec[1]) end)
+        b.Activated:Connect(function()
+            jump(spec[1])
+            if spec[1]=="logs" and not logLoaded[logKind] then
+                fetchLogs(logKind,"latest")
+            end
+        end)
         navButtons[spec[1]]=b
     end
     local function updateLayout()
@@ -527,16 +633,6 @@ function Panel.mount(parent: Frame): (boolean)->()
         if not isHQ(player) then return end
         if kind=="result" and type(data)=="table" then
             status(tostring(data.message or "응답 없음"),data.ok==true)
-        elseif kind=="log" and type(data)=="table" then
-            table.insert(activity,data)
-            if #activity>60 then table.remove(activity,1) end
-            if active and currentTab=="logs" then render() end
-        elseif kind=="snapshot" and type(data)=="table" then
-            table.clear(activity)
-            for _,entry in data do
-                if type(entry)=="table" then table.insert(activity,entry) end
-            end
-            if active and currentTab=="logs" then render() end
         end
     end)
     Players.PlayerAdded:Connect(function() if active and currentTab=="overview" then render() end end)
