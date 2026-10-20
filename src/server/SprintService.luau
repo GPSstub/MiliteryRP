@@ -9,7 +9,6 @@ local Rules=require(ReplicatedStorage:WaitForChild("Shared"):WaitForChild("Sprin
 local Sprint={}
 local started=false
 local requestRemote: RemoteEvent?=nil
-local lastEnable: {[Player]: number}={}
 local playerConnections: {[Player]: {RBXScriptConnection}}={}
 local humanoidConnections: {[Player]: {RBXScriptConnection}}={}
 
@@ -95,15 +94,11 @@ function Sprint.start()
 
     remote.OnServerEvent:Connect(function(player: Player,requested: any)
         if player.Parent~=Players or type(requested)~="boolean" then return end
-        if requested then
-            local now=os.clock()
-            if now-(lastEnable[player] or -math.huge)<Config.EnableCooldownSeconds then
-                return
-            end
-            lastEnable[player]=now
-        end
-        -- Disabling is never throttled: releasing Shift must always restore
-        -- walking speed, even when clients send Begin/End in quick succession.
+        -- Accept immediate reversals, especially rapid mobile toggles and
+        -- keyboard Begin/End pairs. Do not leave clients desynchronized by
+        -- silently dropping a new sprint request behind a cooldown.
+        -- Repeated matching requests need no work.
+        if player:GetAttribute("IsSprinting")==requested then return end
         apply(player,requested)
     end)
 
@@ -115,7 +110,6 @@ function Sprint.start()
             for _,connection in list do connection:Disconnect() end
         end
         playerConnections[player]=nil
-        lastEnable[player]=nil
     end)
     for _,player in Players:GetPlayers() do add(player) end
 end
