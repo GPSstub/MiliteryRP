@@ -222,10 +222,17 @@ render=function()
                 row("역할 삭제",function() prompt("역할 삭제",nil,function() if call("delete_role",{roleId=selectedRole}) then selectedRole="member";render() end end) end,C.red)
             end
         end
-        note("새 역할 · ID는 영문 소문자/숫자/밑줄 3~24자",44)
-        local roleId=input(body,"예: medic")
-        local roleName=input(body,"역할 표시 이름")
-        row("+ 역할 생성",function() call("create_role",{roleId=roleId.Text,name=roleName.Text,permissions={}}) end,C.accent)
+        note("새 역할 · 표시 이름만 입력하면 ID가 자동으로 만들어집니다.",48)
+        local roleName=input(body,"새 역할 이름 (예: 의무병)")
+        roleName.Name="NewRoleName"
+        row("+ 역할 생성",function()
+            if roleName.Text:match("%S") then
+                call("create_role",{name=roleName.Text,permissions={}})
+            else
+                status.Text="역할 이름을 입력하세요."
+                status.TextColor3=Color3.fromRGB(244,167,167)
+            end
+        end,C.accent)
     elseif page=="people" then
         if not state.canManageRoles then
             note("역할을 관리할 권한이 없습니다.",60)
