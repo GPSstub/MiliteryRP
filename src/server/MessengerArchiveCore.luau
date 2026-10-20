@@ -27,14 +27,17 @@ function Core.valid(value: any): boolean
             or type(item.authorId)~="number" or type(item.seq)~="number"
             or item.seq<=lastSeq or item.seq%1~=0 or item.seq>=value.nextSeq
             or type(item.reactions)~="table" or type(item.pinned)~="boolean"
-            or type(item.time)~="number" or #item.id>90 or #item.text>1200 then return false end
+            or type(item.time)~="number" or #item.id>90 or #item.text>1200
+            or (item.unit~=nil and (type(item.unit)~="string" or item.unit=="" or #item.unit>90)) then return false end
         lastSeq=item.seq
     end
     return true
 end
 
-function Core.find(data: any,id: string): (any?,number?)
-    for index,item in data.entries do if item.id==id then return item,index end end
+function Core.find(data: any,id: string,unitScope: string?): (any?,number?)
+    for index,item in data.entries do
+        if item.id==id and (unitScope==nil or item.unit==unitScope) then return item,index end
+    end
     return nil,nil
 end
 
@@ -43,8 +46,11 @@ function Core.apply(source: any,operation: any): (any?,string)
     if not Core.valid(data) then return nil,"손상되었거나 지원하지 않는 기록입니다." end
     local change=operation.action
     local updated=copy(data)
-    local target,index=Core.find(updated,operation.id)
+    local target,index=Core.find(updated,operation.id,operation.scope)
     if change=="append" then
+        if operation.scope~=nil and operation.entry.unit~=operation.scope then
+            return nil,"부대가 다른 게시글은 저장할 수 없습니다."
+        end
         if target then
             if target.authorId==operation.entry.authorId then return updated,"이미 저장된 글입니다." end
             return nil,"메시지 ID가 중복되었습니다."
@@ -54,7 +60,7 @@ function Core.apply(source: any,operation: any): (any?,string)
         end
         local entry=copy(operation.entry)
         if entry.replyTo or entry.threadRoot then
-            local reference=Core.find(updated,entry.replyTo or entry.threadRoot)
+            local reference=Core.find(updated,entry.replyTo or entry.threadRoot,operation.scope)
             if not reference then return nil,"답장할 원본 글을 찾을 수 없습니다." end
         end
         entry.seq=updated.nextSeq
@@ -98,7 +104,7 @@ function Core.apply(source: any,operation: any): (any?,string)
     return updated,"영구 저장 완료"
 end
 
-function Core.page(data: any,viewerId: number,before: number?,limit: number?): any
+function Core.page(data: any,viewerId: number,before: number?,limit: number?,unitScope: string?): any
     if not Core.valid(data) then return {entries={},cursor=nil} end
     local maximum=math.clamp(tonumber(limit) or Core.PAGE_SIZE,1,Core.PAGE_SIZE)
     local untilSeq=if type(before)=="number" and before>0 then before else math.huge
@@ -107,7 +113,7 @@ function Core.page(data: any,viewerId: number,before: number?,limit: number?): a
     local hasMore=false
     for index=#data.entries,1,-1 do
         local item=data.entries[index]
-        if item.seq<untilSeq then
+        if item.seq<untilSeq and (unitScope==nil or item.unit==unitScope) then
             if #chosen>=maximum then hasMore=true;break end
             oldest=item.seq
             local reactions={}

@@ -19,6 +19,6 @@ Studio에서 18동의 각 위층까지 총 19개 이동 경로 검사가 성공�
 
 제작 도구의 초기 좌표와 현재 Studio에서 이동한 맵 좌표는 다릅니다. **현재 배치를 그대로 복원하려면 MilitaryRP.rbxlx를 사용하세요.**
 
-`tools/build_place.py`와 현재 Rojo 기본 프로젝트는 기본 테스트 맵을 생성하므로 완성 맵 파일을 덮어쓰는 용도로 사용하지 마세요. 소스만 갱신하려면 기존 맵을 보존하는 `tools/sync_place.py`를 사용하세요.
+`tools/build_place.py`와 현재 Rojo 기본 프로젝트는 기본 테스트 맵만 만듭니다. 이제 `tools/build_place.py`는 `MilitaryRP.test.rbxlx`에 출력하며, 완성 맵 `MilitaryRP.rbxlx`를 지정해도 명시적으로 거부합니다. 테스트 출력 파일을 다시 만들려면 `--overwrite` 옵션을 사용하세요. 기존 완성 맵의 스크립트만 갱신하려면 `tools/sync_place.py`를 사용하세요. 영구 `unit` 기록은 신규 작성분부터 서버가 검증한 부대 스코프를 부여하며, 부대가 기록되지 않은 과거 항목은 모든 부대에 비공개로 남습니다.
 
 Git 업로드는 Roblox 게시와 별개입니다.

@@ -59,8 +59,22 @@ local function read(id: string,useCache: boolean?): (any?,string?)
     return data,nil
 end
 
+local function unitFor(player: Player): string?
+    local value=player:GetAttribute("Unit")
+    if type(value)~="string" or value=="" then
+        value=if player.Team and not player.Neutral then player.Team.Name else nil
+    end
+    return if type(value)=="string" and value~="" and #value<=90 then value else nil
+end
+
+local function scopeFor(player: Player,channelId: string): string?
+    return if channelId=="unit" then unitFor(player) else nil
+end
+
 local function allowed(player: Player,channelId: any,mode: string): boolean
-    return player.Parent==Players and enabled(channelId) and Permissions.channel(player,channelId,mode)
+    return player.Parent==Players and enabled(channelId)
+        and (channelId~="unit" or unitFor(player)~=nil)
+        and Permissions.channel(player,channelId,mode)
 end
 
 local function moderator(player: Player,channelId: string): boolean
@@ -86,7 +100,8 @@ local function announce(channelId: string,revision: number,operation: any)
     cache[channelId]=nil
     if changed then
         for _,player in Players:GetPlayers() do
-            if allowed(player,channelId,"read") then
+            if allowed(player,channelId,"read")
+                and (channelId~="unit" or (operation.scope~=nil and unitFor(player)==operation.scope)) then
                 changed:FireClient(player,{channelId=channelId,revision=revision,
                     id=operation.id,action=operation.action})
             end
@@ -95,7 +110,7 @@ local function announce(channelId: string,revision: number,operation: any)
     task.spawn(function()
         pcall(function()
             MessagingService:PublishAsync(TOPIC,{channelId=channelId,revision=revision,
-                id=operation.id,action=operation.action})
+                id=operation.id,action=operation.action,scope=operation.scope})
         end)
     end)
 end
@@ -147,7 +162,7 @@ local function output(player: Player,channelId: string,data: any,before: number?
     if not allowed(player,channelId,"read") then
         return {ok=false,message="채널 기록을 읽을 권한이 없습니다."}
     end
-    local page=Core.page(data,player.UserId,before,Core.PAGE_SIZE)
+    local page=Core.page(data,player.UserId,before,Core.PAGE_SIZE,scopeFor(player,channelId))
     return {ok=true,channelId=channelId,entries=page.entries,cursor=page.cursor,
         revision=page.revision,maxEntries=Core.MAX_ENTRIES}
 end
@@ -180,9 +195,10 @@ local function request(player: Player,action: any,payload: any): any
         if not id then return {ok=false,message="잘못된 메시지 ID입니다."} end
         local data,errorMessage=read(channelId,false)
         if not data then return {ok=false,message=errorMessage} end
-        local item=Core.find(data,id)
+        local unitScope=scopeFor(player,channelId)
+        local item=Core.find(data,id,unitScope)
         if not item then return {ok=true,entry=nil,missing=true} end
-        local page=Core.page(data,player.UserId,item.seq+1,1)
+        local page=Core.page(data,player.UserId,item.seq+1,1,unitScope)
         return {ok=true,entry=page.entries[1]}
     end
 
@@ -204,25 +220,28 @@ local function request(player: Player,action: any,payload: any): any
             end
             local entry={
                 id="p_"..HttpService:GenerateGUID(false):gsub("-",""),
-                authorId=player.UserId,name=player.DisplayName,
+                authorId=player.UserId,name=player.DisplayName,unit=scopeFor(player,channelId),
                 rank=tostring(player:GetAttribute("Rank") or "훈련병"),
                 text=body,time=now,timeLabel=os.date("%H:%M"),date=os.date("%Y-%m-%d"),
                 replyTo=payload.replyTo,threadRoot=payload.threadRoot,
             }
-            op={action="append",id=entry.id,entry=entry}
+            op={action="append",id=entry.id,entry=entry,scope=scopeFor(player,channelId)}
         else
             local id=replyId(payload.id)
             if not id then return {ok=false,message="수정할 글 ID가 올바르지 않습니다."} end
-            op={action="edit",id=id,text=body,authorId=player.UserId,time=now}
+            op={action="edit",id=id,text=body,authorId=player.UserId,time=now,
+                scope=scopeFor(player,channelId)}
         end
-        if not allowed(player,channelId,"write") then return {ok=false,message="작성 권한이 변경되었습니다."} end
+        if not allowed(player,channelId,"write") or (channelId=="unit" and scopeFor(player,channelId)~=op.scope) then
+            return {ok=false,message="작성 권한 또는 소속 부대가 변경되었습니다."}
+        end
         local ok,message,updated=update(channelId,op)
         if not ok then return {ok=false,message=message} end
         -- Archive posts are filtered by sanitizeText before UpdateAsync commits.
         AdminLogService.captureBulletin(channelId,player,body,action)
         local id=op.id
-        local entry=Core.find(updated,id)
-        return {ok=true,message=message,entry=entry and Core.page(updated,player.UserId,(entry.seq or 0)+1,1).entries[1]}
+        local entry=Core.find(updated,id,op.scope)
+        return {ok=true,message=message,entry=entry and Core.page(updated,player.UserId,(entry.seq or 0)+1,1,op.scope).entries[1]}
     end
 
     if action=="mutate" then
@@ -243,7 +262,8 @@ local function request(player: Player,action: any,payload: any): any
             return {ok=false,message="메시지 고정 관리 권한이 없습니다."}
         end
         local op={action=mode,id=id,authorId=player.UserId,
-            moderator=moderator(player,channelId),emoji=payload.emoji}
+            moderator=moderator(player,channelId),emoji=payload.emoji,
+            scope=scopeFor(player,channelId)}
         local ok,message=update(channelId,op)
         if ok and (mode=="delete" or mode=="pin") then
             AdminLogService.captureModeration(channelId,player,id,mode)
@@ -279,7 +299,8 @@ function Archive.start()
                     cache[id]=nil
                     if changed then
                         for _,player in Players:GetPlayers() do
-                            if allowed(player,id,"read") then
+                            if allowed(player,id,"read")
+                                and (id~="unit" or (type(data.scope)=="string" and unitFor(player)==data.scope)) then
                                 changed:FireClient(player,{channelId=id,revision=data.revision,
                                     id=data.id,action=data.action})
                             end

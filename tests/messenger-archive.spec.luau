@@ -104,4 +104,31 @@ check(not post(302),"Archive must reject overflow without eviction")
 check(Core.find(record,"persistent_1")~=nil,"Overflow silently evicted oldest post")
 local lastPage=Core.page(record,123,nil,40)
 check(#lastPage.entries==40,"Pagination should remain usable after capacity reached")
+-- Unit archives remain available, but entries are never readable or writable
+-- from another unit; legacy entries with no unit have no verified scope.
+local scoped=Core.empty()
+local function scopedPost(id: string, unit: string)
+    local entry={id=id,authorId=123,name="작성자",rank="병장",
+        text="부대 기록",unit=unit,time=1700001000,timeLabel="12:00",date="2026-10-20"}
+    scoped=assert(Core.apply(scoped,{action="append",id=id,entry=entry,scope=unit}))
+end
+scopedPost("unit_a_01","A")
+scopedPost("unit_b_01","B")
+check(#Core.page(scoped,123,nil,40,"A").entries==1,"A should see only A entries")
+check(#Core.page(scoped,123,nil,40,"B").entries==1,"B should see only B entries")
+check(Core.find(scoped,"unit_b_01","A")==nil,"Foreign unit lookup must be hidden")
+check(not Core.apply(scoped,{action="edit",id="unit_b_01",text="wrong",authorId=123,scope="A"}),
+    "Foreign unit edit must fail even if the author is the same")
+check(not Core.apply(scoped,{action="delete",id="unit_b_01",authorId=123,moderator=true,scope="A"}),
+    "Foreign unit delete must fail even for moderators")
+check(not Core.apply(scoped,{action="append",id="unit_bad",scope="B",entry={
+    id="unit_bad",authorId=123,name="작성자",rank="병장",unit="A",
+    text="위장 기록",time=1700001000,timeLabel="12:00",date="2026-10-20",
+}}),"Forged unit scope must fail")
+local legacy=assert(Core.apply(scoped,{action="append",id="legacy_nil",entry={
+    id="legacy_nil",authorId=123,name="작성자",rank="병장",
+    text="구버전 기록",time=1700001000,timeLabel="12:00",date="2026-10-20",
+}}))
+check(Core.find(legacy,"legacy_nil","A")==nil,"Unscoped legacy unit records must remain private")
+check(Core.valid(scoped),"Scoped unit archives must validate")
 print("Permanent messenger archive tests passed: "..assertions.." assertions")

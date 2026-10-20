@@ -79,8 +79,10 @@ Studio에서 `;계급 대위`를 실행하고 성공 메시지가 표시되면 S
 - `src/client/RankFeedback.client.luau`: Roblox 기본 채팅에 명령 결과 표시. 별도 창을 만들지 않는다.
 
 ```sh
-python3 tools/build_place.py
+python3 tools/build_place.py  # MilitaryRP.test.rbxlx (새 테스트 맵만 생성)
 ```
+
+**주의:** 완성된 `MilitaryRP.rbxlx`의 18개 건물 맵은 이 명령으로 재생성되지 않습니다. 기존 맵의 Luau 스크립트만 갱신하려면 `python3 tools/sync_place.py`를 사용하세요. 빌드 스크립트는 완성 맵 덮어쓰기를 거부합니다.
 
 생성 파일은 현대 TextChatService를 사용하도록 설정되어 있다. 오래된 Roblox XML 파일은 기본값이 LegacyChatService일 수 있으므로 명령어가 안 되면 Edit 모드에서 TextChatService의 ChatVersion이 TextChatService인지 확인한다. 일반 게임 스크립트에서 이 보호된 설정을 바꾸지 않는다.
 

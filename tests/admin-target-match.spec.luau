@@ -48,7 +48,7 @@ local explicit=Match.find(collision,"@Hello")
 check(#explicit==1 and explicit[1].UserId==11,
     "@username must bypass ambiguous display-name collisions")
 
-for _,invalid in {""," ","  ","all","ALL","everyone","모두","전체","\n","\t"} do
+for _,invalid in {""," ","  ","@"," @ ","all","ALL","everyone","모두","전체","\n","\t"} do
     check(not Match.validQuery(invalid),"Mass, empty and control queries must be rejected")
     check(#Match.find(players,invalid)==0,"Invalid queries must return no results")
 end
