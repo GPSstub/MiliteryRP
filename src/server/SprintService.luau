@@ -23,7 +23,10 @@ local function currentHumanoid(player: Player): Humanoid?
     local character=player.Character
     if not character then return nil end
     local humanoid=character:FindFirstChildOfClass("Humanoid")
-    return humanoid
+    if humanoid and humanoid:IsA("Humanoid") then
+        return humanoid
+    end
+    return nil
 end
 
 local function apply(player: Player,requested: boolean): boolean
