@@ -21,7 +21,7 @@ local function handle(actor: Player, text: any): (boolean, string)
     if now-(lastCommand[actor] or -math.huge)<0.5 then return false,"잠시 후 다시 입력하세요." end
     lastCommand[actor]=now
     local command=Parser.parse(text)
-    if not command then return false,"사용법: /계급 대위 또는 /계급 플레이어명 병장 · /계급목록" end
+    if not command then return false,"사용법: ;계급 대위 또는 ;계급 플레이어명 병장 · ;계급목록" end
     if command.kind=="list" then
         local names: {string}={}
         for _,rank in Catalog.All do table.insert(names,rank.name) end
@@ -31,7 +31,7 @@ local function handle(actor: Player, text: any): (boolean, string)
     for _,candidate in Catalog.All do
         if candidate.name==command.rank or candidate.id==command.rank then rank=candidate;break end
     end
-    if not rank then return false,"없는 계급입니다. /계급목록으로 확인하세요." end
+    if not rank then return false,"없는 계급입니다. ;계급목록으로 확인하세요." end
     local target=actor
     if command.target and command.target~="me" and command.target~="나" then
         local match=nil
@@ -58,7 +58,10 @@ function Commands.start()
     TeamService.start()
     local feedback=Instance.new("RemoteEvent")
     feedback.Name="RankCommandFeedback";feedback.Parent=ReplicatedStorage
-    for _,spec in {{"SetMilitaryRank","/계급","/rank"},{"ListMilitaryRanks","/계급목록","/ranks"}} do
+    -- TextChatCommand supports non-slash aliases (such as ';') in Roblox's
+    -- current TextChatService. The command is consumed by the engine rather
+    -- than being sent as a normal message to other players.
+    for _,spec in {{"SetMilitaryRank",";계급",";rank"},{"ListMilitaryRanks",";계급목록",";ranks"}} do
         local command=Instance.new("TextChatCommand")
         command.Name=spec[1];command.PrimaryAlias=spec[2];command.SecondaryAlias=spec[3]
         command.Triggered:Connect(function(source: TextSource, text: string)
