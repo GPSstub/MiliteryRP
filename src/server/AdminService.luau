@@ -6,6 +6,8 @@ local RunService = game:GetService("RunService")
 local Audit = require(script.Parent:WaitForChild("AdminAudit"))
 local RankCommands = require(script.Parent:WaitForChild("RankCommands"))
 local TeamService = require(script.Parent:WaitForChild("TeamService"))
+local PlayerCommandParser = require(script.Parent:WaitForChild("AdminPlayerCommandParser"))
+local PlayerActions = require(script.Parent:WaitForChild("AdminPlayerActions"))
 local AdminLogService = require(script.Parent:WaitForChild("AdminLogService"))
 local Service = {}
 local started = false
@@ -92,7 +94,7 @@ function Service.execute(actor: Player, text: any): (boolean, string)
     if verb == ";계급" or verb == ";rank" or verb == ";계급목록" or verb == ";ranks" then
         return RankCommands.handle(actor, text) -- RankCommands records its own audit entry.
     end
-    local ok, message = false, "사용법: ;무적 나 켜기 · ;비행 나 끄기 · ;팀 사용자이름 팀이름 · ;계급 대위"
+    local ok, message = false, "사용법: ;to 대상 · ;here 대상 · ;kill 대상 · ;폭발 대상 · ;계급 대위"
     local target = if words[2] then targetFor(actor, words[2]) else actor
     if not target then
         message = "서버에 있는 정확한 Roblox 사용자 이름을 선택하세요."
@@ -108,6 +110,18 @@ function Service.execute(actor: Player, text: any): (boolean, string)
     elseif verb == ";팀" or verb == ";team" then
         local name = table.concat(words, " ", 3)
         ok,message=TeamService.assign(actor,target,name)
+    elseif PlayerCommandParser.isVerb(verb) then
+        local action=PlayerCommandParser.parse(text)
+        if not action then
+            message="사용법: ;to 대상 · ;here 대상 · ;kill 대상 · ;폭발 대상 (정확한 사용자 이름)"
+        else
+            local recipient=targetFor(actor,action.target)
+            if not recipient then
+                message="현재 서버에 있는 정확한 Roblox 사용자 이름을 입력하세요."
+            else
+                ok,message=PlayerActions.run(actor,recipient,action.kind,stopFlight)
+            end
+        end
     end
     Audit.record(actor, text, ok, message)
     return ok, message
@@ -148,11 +162,15 @@ function Service.start()
         {"HQGodCommand",";무적",";god"},
         {"HQFlightCommand",";비행",";fly"},
         {"HQTeamCommand",";팀",";team"},
+        {"HQTeleportToCommand",";to"},
+        {"HQTeleportHereCommand",";here"},
+        {"HQKillCommand",";kill"},
+        {"HQExplosionCommand",";폭발",";explode"},
     } do
         local command=Instance.new("TextChatCommand")
         command.Name=spec[1]
         command.PrimaryAlias=spec[2]
-        command.SecondaryAlias=spec[3]
+        if spec[3] then command.SecondaryAlias=spec[3] end
         command.Enabled=true
         command.Triggered:Connect(function(source: TextSource,text: string)
             if not source then return end
