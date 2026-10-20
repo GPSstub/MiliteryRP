@@ -92,7 +92,7 @@ local function nameAndTail(raw: string): (string?,string?)
     return trim(name),tail
 end
 
-function Service.execute(actor: Player, text: any): (boolean, string)
+function Service.execute(actor: Player, text: any): (boolean, string, boolean?)
     if typeof(actor)~="Instance" or not actor:IsA("Player")
         or not authorized(actor) then
         return false,"설정된 Roblox 그룹 운영진 등급이어야 관리자 명령어를 사용할 수 있습니다."
@@ -172,7 +172,7 @@ function Service.execute(actor: Player, text: any): (boolean, string)
     if not target then
         local message=reason or "대상 플레이어를 찾을 수 없습니다."
         if not isPending then Audit.record(actor,text,false,message) end
-        return false,message
+        return false,message,isPending
     end
     return complete(target)
 end
@@ -202,8 +202,10 @@ function Service.start()
                 return
             end
             requests[actor]=now
-            local ok,message=Service.execute(actor,text)
-            response:FireClient(actor,"result",{ok=ok,message=message})
+            local ok,message,pending=Service.execute(actor,text)
+            response:FireClient(actor,"result",{
+                ok=ok,message=message,pending=pending==true,
+            })
         end
     end)
     -- Chat bar commands: the engine intercepts ';...' before broadcasting
