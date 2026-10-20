@@ -177,6 +177,20 @@ function Service.captureBulletin(channelId: string,author: Player,filtered: stri
     }))
 end
 
+-- These events contain only server-generated action labels and validated IDs,
+-- never player-submitted chat text or an unfiltered message body.
+function Service.captureModeration(channelId: string,actor: Player,messageId: string,action: string)
+    if not started or actor.Parent~=Players or type(channelId)~="string"
+        or #channelId>48 or not Core.keyValid(messageId)
+        or (action~="delete" and action~="pin") then return end
+    local word=if action=="delete" then "삭제" else "고정 상태 변경"
+    enqueue(createEntry("chat",{
+        name=actor.Name,userId=actor.UserId,channelId=channelId,
+        text="[관리 이벤트] 메시지 "..word.." · ID "..messageId,
+        source="관리 이벤트",
+    }))
+end
+
 local function captureCommand(item: any)
     if not started or type(item)~="table" or type(item.userId)~="number"
         or type(item.command)~="string" then return end
