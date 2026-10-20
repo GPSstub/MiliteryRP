@@ -5,6 +5,7 @@ local Players=game:GetService("Players")
 local Teams=game:GetService("Teams")
 local ReplicatedStorage=game:GetService("ReplicatedStorage")
 local Catalog=require(ReplicatedStorage:WaitForChild("Shared"):WaitForChild("RankCatalog"))
+local TextService=game:GetService("TextService")
 local Panel={}
 
 local C={
@@ -533,7 +534,12 @@ function Panel.mount(parent: Frame): (boolean)->()
         end
         local list=logHistory[logKind]
         for index,item in list do
-            local entry=card("PersistentLog_"..tostring(index),134)
+            local bodyText=tostring(item.text or "")
+            local wrapWidth=math.max(145,body.AbsoluteSize.X-65)
+            local measured=TextService:GetTextSize(bodyText,13,Enum.Font.GothamMedium,
+                Vector2.new(wrapWidth,5000))
+            local lineHeight=math.max(42,math.ceil(measured.Y)+8)
+            local entry=card("PersistentLog_"..tostring(index),74+lineHeight)
             local timeStamp=os.date("%Y-%m-%d  %H:%M:%S",
                 tonumber(item.time) or os.time())
             local headline=if logKind=="command" then
@@ -548,10 +554,10 @@ function Panel.mount(parent: Frame): (boolean)->()
                 11,C.muted)
             when.Position=UDim2.fromOffset(12,35)
             when.Size=UDim2.new(1,-24,0,24)
-            local message=text(entry,tostring(item.text or ""),13,
+            local message=text(entry,bodyText,13,
                 if item.redacted then C.red else C.text)
             message.Position=UDim2.fromOffset(12,65)
-            message.Size=UDim2.new(1,-24,0,59)
+            message.Size=UDim2.new(1,-24,0,lineHeight)
             message.TextWrapped=true
             message.TextYAlignment=Enum.TextYAlignment.Top
             message.RichText=false
@@ -622,7 +628,10 @@ function Panel.mount(parent: Frame): (boolean)->()
             body.Size=UDim2.new(1,-174,1,-112)
         end
     end
-    root:GetPropertyChangedSignal("AbsoluteSize"):Connect(updateLayout)
+    root:GetPropertyChangedSignal("AbsoluteSize"):Connect(function()
+        updateLayout()
+        if active and currentTab=="logs" then render() end
+    end)
     updateLayout()
 
     confirmNo.Activated:Connect(function() pendingHQTarget=nil;dialog.Visible=false end)
