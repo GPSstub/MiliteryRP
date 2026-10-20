@@ -48,6 +48,11 @@ end
 local actions={create_channel=true,rename_channel=true,delete_channel=true,set_channel_access=true,set_channel_persistence=true,create_role=true,rename_role=true,
     delete_role=true,set_permission=true,assign_role=true,remove_role=true}
 Store.Changed:Connect(function() changed:FireAllClients() end)
+Runtime.NamesChanged:Connect(function()
+    -- Legacy channel/role names may be filtered after the first snapshot.
+    -- Refresh client labels whenever that asynchronous migration succeeds.
+    changed:FireAllClients()
+end)
 local function incoming(actor: Player,action: any,payload: any)
     if actor.Parent~=Players or type(action)~="string" then return {ok=false,message="잘못된 요청입니다."} end
     local now=os.clock()
