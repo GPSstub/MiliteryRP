@@ -1,10 +1,10 @@
 --!strict
--- HQ-only nameplate. Replace LogoAssetId after uploading your HQ turtle-cat
--- image through Roblox Studio Asset Manager / Creator Dashboard.
--- Set LogoAssetId to 0 to use Asset Manager's game-local image named HQLogo.
+-- HQ-only nameplate. Approved Roblox image asset supplied by the game owner.
+-- LogoAssetId takes priority over the optional game-local HQLogo image.
+-- If it is not yet approved or accessible to this experience, a GUI fallback remains.
 -- A PNG path, sandbox URL or GitHub URL is not an ImageLabel texture.
 local Branding = {
-    LogoAssetId = 0,
+    LogoAssetId = 115201559367134,
     -- Alternative to entering an ID: import HQLogo.png under Asset Manager
     -- > Images in this Roblox experience. ImageLabel accepts rbxgameasset URIs.
     LogoGameAssetName = "HQLogo",
