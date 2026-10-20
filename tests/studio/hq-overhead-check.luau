@@ -32,7 +32,8 @@ for _,player in Players:GetPlayers() do
     local isHQ=TeamService.isAdmin(player)
     check(isHQ==(player.Team==hq and not player.Neutral),
         player.Name.." HQ membership is inconsistent")
-    check(tag:GetAttribute("DisplayMode")==if isHQ then "HQ" else "Rank",
+    local expectedMode=if isHQ then "HQ" else "Rank"
+    check(tag:GetAttribute("DisplayMode")==expectedMode,
         player.Name.." overhead mode is wrong")
     if isHQ then
         local label=tag:FindFirstChild("HQLabel")
