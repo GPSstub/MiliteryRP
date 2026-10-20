@@ -52,6 +52,8 @@ local state: any={channels={},permissions={roles={},people={}},storage={ready=fa
 local page="channels"
 local selectedChannel="general"
 local selectedRole="member"
+local selectedPersonUserId: number?=nil
+local personSearch=""
 local busy=false
 local render: ()->()
 local refresh: ()->()
@@ -220,25 +222,94 @@ render=function()
         local roleName=input(body,"역할 표시 이름")
         row("+ 역할 생성",function() call("create_role",{roleId=roleId.Text,name=roleName.Text,permissions={}}) end,C.accent)
     elseif page=="people" then
-        if not state.canManageRoles then note("역할 배정 권한이 없습니다.");return end
-        note("부여할 역할을 먼저 선택하세요.",32)
-        for _,id in roleIds() do
-            if id~="member" and id~="officer" then
-                row((if selectedRole==id then "●  " else "○  ")..state.permissions.roles[id].name,function() selectedRole=id;render() end,if selectedRole==id then C.accent else nil)
+        if not state.canManageRoles then
+            note("역할을 관리할 권한이 없습니다.",60)
+            return
+        end
+        note("사용자를 먼저 선택하고 역할을 눌러 즉시 부여하거나 제거할 수 있습니다.",52)
+        local search=input(body,"사용자 이름 / @아이디 / UserId 검색")
+        search.Name="RolePersonSearch"
+        search.Text=personSearch
+        search.FocusLost:Connect(function()
+            local value=search.Text:match("^%s*(.-)%s*$") or ""
+            if personSearch~=value then
+                personSearch=value
+                render()
+            end
+        end)
+        local people=state.permissions.people or {}
+        local found=0
+        local matched=0
+        local lower=string.lower(personSearch)
+        for _,person in people do
+            local username=tostring(person.name or "")
+            local display=tostring(person.displayName or "")
+            local userId=tonumber(person.userId)
+            if userId and (lower=="" or string.find(string.lower(username),lower,1,true)
+                or string.find(string.lower(display),lower,1,true)
+                or string.find(tostring(userId),lower,1,true)) then
+                matched+=1
+                if found<35 then
+                    found+=1
+                    local chosen=selectedPersonUserId==userId
+                    local roleNames={}
+                    for _,roleId in person.roles or {} do
+                        local role=state.permissions.roles[roleId]
+                        if role then table.insert(roleNames,role.name) end
+                    end
+                    table.sort(roleNames)
+                    local activeRoles=if #roleNames>0 then table.concat(roleNames,", ") else "수동 역할 없음"
+                    local buttonText=(if chosen then "●  " else "○  ").."@"..username..
+                        (if display~=username and display~="오프라인" then "  ·  "..display else "")..
+                        "  ["..activeRoles.."]"
+                    row(buttonText,function()
+                        selectedPersonUserId=userId
+                        render()
+                    end,if chosen then C.accent else nil)
+                end
             end
         end
-        if selectedRole=="member" or selectedRole=="officer" or not state.permissions.roles[selectedRole] then
-            note("일반 사용자·장교 역할은 자동으로 적용됩니다. 위에서 수동 역할을 선택하세요.",64);return
+        if matched>35 then note("검색 결과 중 첫 35명만 표시했습니다. 검색어를 입력해 좁혀주세요.",42) end
+        if matched==0 then note("검색된 사용자가 없습니다. 아래에서 숫자 UserId로 선택할 수도 있습니다.",52) end
+        local offline=input(body,"오프라인 사용자 UserId")
+        offline.Name="OfflineRoleUserId"
+        row("UserId로 대상 선택",function()
+            local id=tonumber(offline.Text)
+            if not id or id<1 or id%1~=0 or id>2^53 then
+                status.Text="유효한 Roblox 숫자 UserId를 입력하세요."
+                return
+            end
+            selectedPersonUserId=id
+            personSearch=""
+            render()
+        end)
+        local selected: any=nil
+        for _,person in people do
+            if person.userId==selectedPersonUserId then selected=person;break end
         end
-        note("선택한 역할: "..state.permissions.roles[selectedRole].name,40)
-        for _,person in state.permissions.people do
-            local assigned=table.find(person.roles,selectedRole)~=nil
-            row("@"..person.name.."  · "..(if assigned then "역할 제거" else "역할 부여"),function() call(if assigned then "remove_role" else "assign_role",{userId=person.userId,roleId=selectedRole}) end)
+        if not selectedPersonUserId then
+            note("위 목록에서 역할을 부여할 사용자를 선택하세요.",58)
+            return
         end
-        note("오프라인 사용자도 Roblox 숫자 UserId로 배정할 수 있습니다.",46)
-        local userId=input(body,"숫자 UserId")
-        row("선택 역할 부여",function() call("assign_role",{userId=tonumber(userId.Text),roleId=selectedRole}) end,C.accent)
-        row("선택 역할 제거",function() call("remove_role",{userId=tonumber(userId.Text),roleId=selectedRole}) end)
+        local identifier=if selected then "@"..tostring(selected.name) else "UserId "..tostring(selectedPersonUserId)
+        note("선택한 사용자: "..identifier,36)
+        note("역할을 누르면 바로 적용됩니다. ✓ 표시된 역할은 이미 부여된 역할입니다.",52)
+        for _,roleId in roleIds() do
+            local role=state.permissions.roles[roleId]
+            if roleId~="member" and roleId~="officer" then
+                local assigned=selected~=nil and table.find(selected.roles or {},roleId)~=nil
+                local title=(if assigned then "✓  " else "+  ")..role.name..
+                    (if assigned then "   · 부여됨 (누르면 제거)" else "   · 누르면 부여")
+                row(title,function()
+                    call(if assigned then "remove_role" else "assign_role",{
+                        userId=selectedPersonUserId,roleId=roleId,
+                    })
+                end,if assigned then C.accent else nil)
+            end
+        end
+        if #roleIds()<=2 then
+            note("부여할 역할이 없습니다. '역할' 메뉴에서 먼저 역할을 만들어주세요.",55)
+        end
     else
         note("저장소 연결 완료 · 리비전 "..state.revision,40)
         note("저장소: "..state.storage.store,46)
