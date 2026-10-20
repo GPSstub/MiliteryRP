@@ -1,6 +1,6 @@
 --!strict
--- Pure team membership policy. HQ is a deliberate administration assignment,
--- never earned automatically through a military rank.
+-- Pure team membership and HQ visual-branding rules. Team assignment is NOT
+-- administrator permission: command authority comes from AdminGroupPolicy.
 local Policy={}
 Policy.HQ="HQ"
 Policy.OWNER_USER_ID=1153125948
@@ -27,7 +27,7 @@ function Policy.isDefined(name: any): boolean
     return false
 end
 
-function Policy.isAdmin(teamName: any,neutral: any): boolean
+function Policy.isHQ(teamName: any,neutral: any): boolean
     return teamName==Policy.HQ and neutral==false
 end
 
