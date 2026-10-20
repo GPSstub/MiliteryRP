@@ -69,12 +69,23 @@ function Picker.start()
     end)
 end
 
+function Picker.clear(actor: Player)
+    if pending[actor] then
+        pending[actor]=nil
+        reply(actor,"dismiss",{})
+    end
+end
+
 function Picker.resolve(actor: Player,query: string,
         completion: (Player)->(boolean,string)): (Player?,string?)
+    -- Starting a new command cancels the earlier selection. This prevents
+    -- stale kill/teleport confirmations from executing after another command.
+    Picker.clear(actor)
     if not Matcher.validQuery(query) then
         return nil,"대상 이름이나 표시 닉네임을 입력하세요. 'all' 같은 전체 지정은 지원하지 않습니다."
     end
-    if query=="나" or string.lower(query)=="me" then
+    local selfAlias=query:match("^%s*(.-)%s*$") or ""
+    if selfAlias=="나" or string.lower(selfAlias)=="me" then
         return actor,nil
     end
     local options=Matcher.find(Players:GetPlayers(),query)
