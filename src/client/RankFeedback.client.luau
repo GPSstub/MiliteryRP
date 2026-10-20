@@ -2,13 +2,28 @@
 local ReplicatedStorage=game:GetService("ReplicatedStorage")
 local TextChatService=game:GetService("TextChatService")
 local feedback=ReplicatedStorage:WaitForChild("RankCommandFeedback") :: RemoteEvent
-feedback.OnClientEvent:Connect(function(message: any)
+
+local function showResult(prefix: string,message: any)
     if type(message)~="string" or #message>2048 then return end
     local channels=TextChatService:WaitForChild("TextChannels",5)
     local channel=if channels then channels:FindFirstChild("RBXGeneral") else nil
     if channel and channel:IsA("TextChannel") then
-        channel:DisplaySystemMessage("[계급] "..message)
+        -- Display only to the invoking client, not as a public message.
+        channel:DisplaySystemMessage(prefix.." "..message)
     end
+end
+
+feedback.OnClientEvent:Connect(function(message: any)
+    showResult("[계급]",message)
+end)
+task.spawn(function()
+    local adminResponse=ReplicatedStorage:WaitForChild("AdminResponse",15)
+    if not adminResponse or not adminResponse:IsA("RemoteEvent") then return end
+    adminResponse.OnClientEvent:Connect(function(kind: any,data: any)
+        if kind=="chat_result" and type(data)=="table" then
+            showResult("[HQ]",data.message)
+        end
+    end)
 end)
 
 -- Subtle local shimmer; each animation ends when its rank image is replaced.
