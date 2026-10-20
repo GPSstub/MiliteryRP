@@ -8,7 +8,6 @@ local Rules=require(ReplicatedStorage:WaitForChild("Shared"):WaitForChild("Sprin
 
 local Sprint={}
 local started=false
-local requestRemote: RemoteEvent?=nil
 local playerConnections: {[Player]: {RBXScriptConnection}}={}
 local humanoidConnections: {[Player]: {RBXScriptConnection}}={}
 
