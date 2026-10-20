@@ -1,81 +1,109 @@
 --!strict
--- HQ-only overhead insignia; called by RankService instead of the normal
--- nickname/rank/insignia UI when the player currently belongs to HQ.
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local Branding = require(ReplicatedStorage:WaitForChild("Shared"):WaitForChild("HQLogoConfig"))
+-- HQ team overhead identity: emblem + HQ only; no character name or rank.
+-- Shows a Roblox-approved turtle-cat PNG when configured. Until then, a
+-- blue vector-style turtle-cat badge renders using Roblox GUI primitives.
+local ReplicatedStorage=game:GetService("ReplicatedStorage")
+local Branding=require(ReplicatedStorage:WaitForChild("Shared"):WaitForChild("HQLogoConfig"))
+local Badge={}
 
-local Badge = {}
-
-local function make(className: string, parent: Instance, props: {[string]: any}): Instance
-    local item = Instance.new(className)
-    for key,value in props do
-        (item :: any)[key] = value
-    end
-    item.Parent = parent
+local function make(className: string,parent: Instance,props: {[string]: any}): Instance
+    local item=Instance.new(className)
+    for key,value in props do (item :: any)[key]=value end
+    item.Parent=parent
     return item
+end
+
+local function frame(parent: Instance,name: string,x: number,y: number,w: number,h: number,
+        color: Color3,z: number,radius: number?): Frame
+    local item=make("Frame",parent,{
+        Name=name,Position=UDim2.fromOffset(x,y),Size=UDim2.fromOffset(w,h),
+        BackgroundColor3=color,BackgroundTransparency=0,
+        BorderSizePixel=0,ZIndex=z,
+    }) :: Frame
+    if radius and radius>0 then
+        make("UICorner",item,{CornerRadius=UDim.new(0,radius)})
+    end
+    return item
+end
+
+local function vectorFallback(container: Frame): Frame
+    -- Stylized turtle shell behind a cat head. All primitives have stable
+    -- pixel dimensions so it remains readable above a Roblox avatar.
+    local art=frame(container,"TurtleCatFallback",0,0,100,100,Branding.DeepBlue,2,50)
+    make("UIStroke",art,{Color=Branding.Gold,Thickness=2.5,Transparency=0.05})
+    local ring=frame(art,"Orbit",5,5,90,90,Branding.PrimaryBlue,3,45)
+    make("UIStroke",ring,{Color=Branding.LightBlue,Thickness=1.5,Transparency=0.2})
+
+    local shell=frame(art,"TurtleShell",12,20,76,60,Branding.DeepBlue,4,28)
+    make("UIStroke",shell,{Color=Branding.Gold,Thickness=2,Transparency=0.1})
+    local topPlate=frame(shell,"ShellPlate",17,8,42,20,Branding.PrimaryBlue,5,9)
+    make("UIStroke",topPlate,{Color=Branding.LightBlue,Thickness=1,Transparency=0.15})
+    local midPlate=frame(shell,"ShellCenter",27,23,22,23,Branding.PrimaryBlue,5,7)
+    make("UIStroke",midPlate,{Color=Branding.LightBlue,Thickness=1,Transparency=0.15})
+    frame(shell,"ShellLeft",8,32,18,15,Branding.PrimaryBlue,5,5)
+    frame(shell,"ShellRight",50,32,18,15,Branding.PrimaryBlue,5,5)
+
+    local earL=frame(art,"CatEarL",23,21,24,24,Branding.LightBlue,6,4)
+    earL.Rotation=45
+    local earR=frame(art,"CatEarR",53,21,24,24,Branding.LightBlue,6,4)
+    earR.Rotation=45
+    local face=frame(art,"CatFace",22,32,56,46,Branding.White,7,19)
+    make("UIStroke",face,{Color=Branding.DeepBlue,Thickness=1.5,Transparency=0.1})
+    frame(face,"EyeLeft",14,17,7,8,Branding.DeepBlue,8,4)
+    frame(face,"EyeRight",35,17,7,8,Branding.DeepBlue,8,4)
+    local nose=frame(face,"Nose",25,28,7,6,Branding.PrimaryBlue,8,3)
+    nose.Rotation=45
+
+    local shine=make("TextLabel",art,{
+        Name="NorthStar",Size=UDim2.fromOffset(18,19),
+        Position=UDim2.fromOffset(41,0),
+        BackgroundTransparency=1,Text="✦",
+        Font=Enum.Font.GothamBold,TextSize=18,
+        TextColor3=Branding.Gold,ZIndex=9,
+    })
+    return art
 end
 
 function Badge.render(tag: BillboardGui)
     tag:SetAttribute("DisplayMode","HQ")
-    tag.Size=UDim2.fromOffset(174,142)
-    tag.StudsOffsetWorldSpace=Vector3.new(0,3.3,0)
+    tag.Size=UDim2.fromOffset(170,146)
+    tag.StudsOffsetWorldSpace=Vector3.new(0,3.15,0)
     tag.MaxDistance=Branding.MaxDistance
 
-    local icon: Instance
+    local iconRoot=frame(tag,"HQEmblem",35,1,100,100,Branding.DeepBlue,1,50)
+    iconRoot.BackgroundTransparency=1
+    local fallback=vectorFallback(iconRoot)
+
     local imageId=tonumber(Branding.LogoAssetId) or 0
     if imageId>0 and imageId%1==0 then
-        icon=make("ImageLabel",tag,{
-            Name="HQLogo",AnchorPoint=Vector2.new(0.5,0),
-            Position=UDim2.new(0.5,0,0,0),
-            Size=UDim2.fromOffset(104,104),
+        local picture=make("ImageLabel",iconRoot,{
+            Name="HQLogo",Size=UDim2.fromScale(1,1),
+            Position=UDim2.fromScale(0,0),
             BackgroundTransparency=1,BorderSizePixel=0,
-            Image="rbxassetid://"..tostring(imageId),
             ScaleType=Enum.ScaleType.Fit,
-        })
-    else
-        -- Safe placeholder while the illustrated PNG is being approved/uploaded
-        -- as a Roblox Image asset; never pretend a nonexistent ID will render.
-        icon=make("Frame",tag,{
-            Name="HQLogoPlaceholder",AnchorPoint=Vector2.new(0.5,0),
-            Position=UDim2.new(0.5,0,0,3),
-            Size=UDim2.fromOffset(94,94),
-            BackgroundColor3=Branding.DarkGreen,
-            BorderSizePixel=0,
-        })
-        make("UICorner",icon,{CornerRadius=UDim.new(0,18)})
-        make("UIStroke",icon,{
-            Color=Branding.Gold,Thickness=3,Transparency=0,
-        })
-        make("TextLabel",icon,{
-            Name="PlaceholderSymbol",
-            BackgroundTransparency=1,
-            Size=UDim2.new(1,0,0,60),
-            Position=UDim2.fromOffset(0,7),
-            Text="★",Font=Enum.Font.GothamBlack,TextSize=42,
-            TextColor3=Branding.Gold,
-            TextStrokeColor3=Color3.fromRGB(12,24,20),
-            TextStrokeTransparency=0.5,
-        })
-        make("TextLabel",icon,{
-            Name="PlaceholderCaption",
-            BackgroundTransparency=1,
-            Size=UDim2.new(1,0,0,24),
-            Position=UDim2.fromOffset(0,62),
-            Text="HQ",Font=Enum.Font.GothamBold,TextSize=18,
-            TextColor3=Branding.Gold,
-            TextStrokeTransparency=0.65,
-        })
+            Image="rbxassetid://"..tostring(imageId),
+            ZIndex=10,
+        }) :: ImageLabel
+        -- Keep the recognizable fallback visible if the image has not loaded,
+        -- its permissions are wrong, or moderation has not approved it yet.
+        local function updateLoaded()
+            if fallback.Parent and picture.Parent then
+                fallback.Visible=not picture.IsLoaded
+            end
+        end
+        picture:GetPropertyChangedSignal("IsLoaded"):Connect(updateLoaded)
+        updateLoaded()
     end
 
     local label=make("TextLabel",tag,{
-        Name="HQLabel",
-        Position=UDim2.new(0,0,0,106),Size=UDim2.new(1,0,0,32),
+        Name="HQLabel",Position=UDim2.fromOffset(0,106),
+        Size=UDim2.new(1,0,0,34),
         BackgroundTransparency=1,
-        Text="HQ",TextSize=24,Font=Enum.Font.GothamBlack,
-        TextColor3=Branding.Gold,TextStrokeColor3=Color3.fromRGB(8,15,13),
-        TextStrokeTransparency=0.15,
-        TextXAlignment=Enum.TextXAlignment.Center,
+        Text="HQ",TextScaled=false,TextSize=26,Font=Enum.Font.GothamBlack,
+        TextColor3=Branding.Gold,TextStrokeColor3=Branding.DeepBlue,
+        TextStrokeTransparency=0.08,TextXAlignment=Enum.TextXAlignment.Center,
         TextYAlignment=Enum.TextYAlignment.Center,
+        ZIndex=12,
     })
     label:SetAttribute("OfficialHQ",true)
 end
