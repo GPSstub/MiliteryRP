@@ -120,12 +120,19 @@ function Actions.run(actor: Player,target: Player,kind: string,
         stopFlight(mover)
         -- Place the arriving character to the right of the destination,
         -- facing the same direction, without overlapping the other player.
-        character:PivotTo(destinationRoot.CFrame*CFrame.new(4,0,0))
-        root.AssemblyLinearVelocity=Vector3.zero
-        root.AssemblyAngularVelocity=Vector3.zero
-        return true,if kind=="to" then
-            actor.Name.." → "..target.Name.." 위치로 순간이동했습니다."
-            else target.Name.." → "..actor.Name.." 위치로 소환했습니다."
+        local moved,moveError=pcall(function()
+            character:PivotTo(destinationRoot.CFrame*CFrame.new(4,0,0))
+            root.AssemblyLinearVelocity=Vector3.zero
+            root.AssemblyAngularVelocity=Vector3.zero
+        end)
+        if not moved then
+            warn("[HQPlayerActions] Teleport failed:",moveError)
+            return false,"순간이동하지 못했습니다. 캐릭터 상태와 Output을 확인하세요."
+        end
+        if kind=="to" then
+            return true,actor.Name.." → "..target.Name.." 위치로 순간이동했습니다."
+        end
+        return true,target.Name.." → "..actor.Name.." 위치로 소환했습니다."
     end
 
     local _,humanoid,root=alive(target)
@@ -139,10 +146,17 @@ function Actions.run(actor: Player,target: Player,kind: string,
     lastAction[actor]=now
     if kind=="explode" then
         lastBlast[actor]=now
-        makeExplosionEffect(root.Position)
+        local visualOk,visualError=pcall(makeExplosionEffect,root.Position)
+        if not visualOk then
+            warn("[HQPlayerActions] Explosion VFX failed:",visualError)
+        end
         -- Kill only the named target. Nearby characters and the map are safe.
         humanoid.Health=0
-        return true,target.Name.." 폭발 처리 완료 (이펙트 표시, 주변 피해 없음)."
+        if visualOk then
+            return true,target.Name.." 폭발 처리 완료 (이펙트 표시, 주변 피해 없음)."
+        end
+        return true,target.Name.." 사망 처리 완료 (폭발 이펙트 오류 · 서버 Output 확인)."
+
     end
     humanoid.Health=0
     return true,target.Name.." 사망 처리 완료."
