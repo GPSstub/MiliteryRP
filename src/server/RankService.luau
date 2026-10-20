@@ -3,7 +3,11 @@ local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Catalog = require(ReplicatedStorage:WaitForChild("Shared"):WaitForChild("RankCatalog"))
 local Insignia=require(script.Parent:WaitForChild("RankInsignia"))
-local HQBadge=require(script.Parent:WaitForChild("HQOverheadBadge"))
+local hqModule=script.Parent:WaitForChild("HQOverheadBadge")
+-- Failure in a visual-only badge must never disable military rank loading.
+local hqLoaded,hqBadgeValue=pcall(require,hqModule)
+if not hqLoaded then warn("[RankService] HQ badge module failed:",hqBadgeValue) end
+local HQBadge: any=if hqLoaded then hqBadgeValue else nil
 local TeamService=require(script.Parent:WaitForChild("TeamService"))
 local RankStore=require(script.Parent:WaitForChild("RankStore"))
 type Rank = Catalog.Rank
@@ -26,13 +30,32 @@ local function renderCharacter(player: Player, character: Model, version: number
     local humanoid=character:FindFirstChildOfClass("Humanoid")
     if humanoid then humanoid.DisplayDistanceType=Enum.HumanoidDisplayDistanceType.None end
     local tag=Instance.new("BillboardGui")
-    tag.Name="RankTag"; tag.Adornee=head; tag.Size=UDim2.fromOffset(180,88)
-    tag.StudsOffsetWorldSpace=Vector3.new(0,2.7,0); tag.MaxDistance=100; tag.AlwaysOnTop=true
-    tag.Parent=head
+    tag.Name="RankTag"; tag.Adornee=head;tag.Enabled=true
+    tag.Size=UDim2.fromOffset(180,88)
+    tag.StudsOffsetWorldSpace=Vector3.new(0,2.7,0);tag.MaxDistance=100
+    tag.AlwaysOnTop=true;tag.LightInfluence=0;tag.ResetOnSpawn=false
     if TeamService.isAdmin(player) then
-        -- HQ is a team appointment, not a rank. Show only the unit emblem and
-        -- "HQ" rather than nickname, military rank name, and rank insignia.
-        HQBadge.render(tag)
+        -- HQ is a temporary team presentation, not a persisted rank. Build
+        -- before parenting so an incomplete nameplate is never replicated.
+        local success,errorMessage=pcall(function()
+            if not HQBadge then error("HQ badge renderer not available") end
+            HQBadge.render(tag)
+        end)
+        if not success then
+            warn("[RankService] HQ badge render failed:",player.UserId,errorMessage)
+            tag:ClearAllChildren()
+            tag:SetAttribute("DisplayMode","HQ")
+            tag.Size=UDim2.fromOffset(160,74)
+            local emergency=Instance.new("TextLabel")
+            emergency.Name="HQLabel";emergency.Text="HQ"
+            emergency.Font=Enum.Font.GothamBold;emergency.TextSize=28
+            emergency.TextColor3=Color3.fromRGB(255,220,125)
+            emergency.TextStrokeTransparency=0.1
+            emergency.BackgroundTransparency=1
+            emergency.Size=UDim2.fromScale(1,1)
+            emergency.Parent=tag
+        end
+        tag.Parent=head
         return
     end
     tag:SetAttribute("DisplayMode","Rank")
@@ -51,12 +74,29 @@ local function renderCharacter(player: Player, character: Model, version: number
         rankLabel.TextColor3=Color3.fromRGB(rank.color[1],rank.color[2],rank.color[3])
         Insignia.render(tag,rank)
     end
+    tag.Parent=head
 end
 local function requestRender(player: Player, character: Model)
     if player.Parent~=Players or not states[player] then return end
     local version=(renderVersion[player] or 0)+1
     renderVersion[player]=version
     task.spawn(renderCharacter,player,character,version)
+end
+local function updateVisibleRank(player: Player)
+    local id=states[player]
+    local stored=if id then Catalog.find(id) else nil
+    if not stored then return end
+    local hq=TeamService.isAdmin(player)
+    local display=if hq then "admin" else stored.name
+    -- RankId / RankCategory / RankOrder continue to represent the saved
+    -- military rank. Never persist "admin" or promote based on HQ membership.
+    player:SetAttribute("Rank",display)
+    player:SetAttribute("RankDisplayId",if hq then "admin" else stored.id)
+    local stats=player:FindFirstChild("leaderstats")
+    local label=if stats then stats:FindFirstChild("계급") else nil
+    if label and label:IsA("StringValue") then
+        label.Value=display
+    end
 end
 local function queueRedraw(player: Player)
     if redrawQueued[player] then return end
@@ -66,6 +106,7 @@ local function queueRedraw(player: Player)
     task.defer(function()
         redrawQueued[player]=nil
         if player.Parent==Players and states[player] then
+            updateVisibleRank(player)
             local character=player.Character
             if character then requestRender(player,character) end
         end
@@ -73,12 +114,9 @@ local function queueRedraw(player: Player)
 end
 local function publish(player: Player, rank: Rank)
     player:SetAttribute("RankId",rank.id)
-    player:SetAttribute("Rank",rank.name)
     player:SetAttribute("RankCategory",rank.category)
     player:SetAttribute("RankOrder",rank.order)
-    local stats=player:FindFirstChild("leaderstats")
-    local value=if stats then stats:FindFirstChild("계급") else nil
-    if value and value:IsA("StringValue") then value.Value=rank.name end
+    updateVisibleRank(player)
     -- Never update rank widgets inside an HQ tag. Rebuild the overhead with
     -- the correct HQ/rank branch after the server's rank attributes settle.
     if connections[player] then queueRedraw(player) end
@@ -132,7 +170,10 @@ function RankService.add(player: Player)
             requestRender(player,character)
         end),
         player.CharacterAppearanceLoaded:Connect(function(character: Model)
-            task.spawn(renderCharacter,player,character)
+            -- The avatar loader may replace its Head/attachments. It must
+            -- redraw with a fresh render version (previously this omitted the
+            -- required version argument and every appearance redraw aborted).
+            requestRender(player,character)
         end),
         player:GetPropertyChangedSignal("Team"):Connect(function()
             queueRedraw(player)
