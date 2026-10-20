@@ -73,8 +73,10 @@ end
 local function vStack(parent: Instance,gap: number)
     make("UIListLayout",parent,{SortOrder=Enum.SortOrder.LayoutOrder,Padding=UDim.new(0,gap)})
 end
-local function isHQ(player: Player): boolean
-    return player.Team~=nil and player.Team.Name=="HQ" and not player.Neutral
+local function hasAdminAccess(player: Player): boolean
+    -- Client UI convenience only; all actions and log reads are separately
+    -- authorized from server-only group-rank data.
+    return player:GetAttribute("CanUseAdminCommands")==true
 end
 
 function Panel.mount(parent: Frame): (boolean)->()
@@ -90,14 +92,14 @@ function Panel.mount(parent: Frame): (boolean)->()
     })
     rounded(root,12)
 
-    local title=text(root,"HQ  /  COMMAND DESK",18,C.text,true)
+    local title=text(root,"GROUP  /  COMMAND DESK",18,C.text,true)
     title.Name="DashboardTitle"
     title.Position=UDim2.fromOffset(16,8)
     title.Size=UDim2.new(1,-172,0,30)
     local subtitle=text(root,"명령 실행 · 인원 통제 · 활동 기록",12,C.muted)
     subtitle.Position=UDim2.fromOffset(16,38)
     subtitle.Size=UDim2.new(1,-32,0,21)
-    local badge=text(root,"● HQ 인증",12,C.accent,true)
+    local badge=text(root,"● 그룹 운영진",12,C.accent,true)
     badge.Name="AuthorizationStatus"
     badge.TextXAlignment=Enum.TextXAlignment.Right
     badge.Position=UDim2.new(1,-152,0,8)
@@ -167,11 +169,11 @@ function Panel.mount(parent: Frame): (boolean)->()
     })
     rounded(dialog,12)
     make("UISizeConstraint",dialog,{MaxSize=Vector2.new(410,188)})
-    local confirmTitle=text(dialog,"HQ 권한을 부여하시겠습니까?",17,C.yellow,true)
+    local confirmTitle=text(dialog,"HQ 팀으로 이동시키겠습니까?",17,C.yellow,true)
     confirmTitle.Position=UDim2.fromOffset(18,14)
     confirmTitle.Size=UDim2.new(1,-36,0,32)
     confirmTitle.ZIndex=31
-    local confirmDetail=text(dialog,"HQ 소속자는 모든 관리자 명령어와 패널을 사용할 수 있습니다.",12,C.muted)
+    local confirmDetail=text(dialog,"HQ는 소속과 머리 위 로고만 바꿉니다. 관리자 권한은 Roblox 그룹 등급에 따라 결정됩니다.",12,C.muted)
     confirmDetail.Position=UDim2.fromOffset(18,52)
     confirmDetail.Size=UDim2.new(1,-36,0,58)
     confirmDetail.ZIndex=31
@@ -188,8 +190,8 @@ function Panel.mount(parent: Frame): (boolean)->()
         feedback.TextColor3=if success==true then C.accent elseif success==false then C.red else C.muted
     end
     local function run(command: string)
-        if not isHQ(player) then
-            status("HQ 팀이 아니므로 관리자 명령을 실행할 수 없습니다.",false)
+        if not hasAdminAccess(player) then
+            status("Roblox 그룹 운영진 등급(200+)이 아니므로 실행할 수 없습니다.",false)
             return
         end
         if type(command)~="string" or #command>256 or not command:match("%S") then
@@ -306,7 +308,7 @@ function Panel.mount(parent: Frame): (boolean)->()
         local members=Players:GetPlayers()
         local totals=teamCounts()
         local intro=card("HQSummary",113)
-        description(intro,"HQ 통제실","현재 서버 기준 · 대상별 실시간 팀 및 계급 관리")
+        description(intro,"운영진 통제실","그룹 운영진 권한 · 현재 서버의 팀·계급 및 인원 관리")
         local summary=text(intro,"접속 "..#members.."명    |    HQ "..totals.HQ.."명    |    일반 관리 대상 "..(#members-totals.HQ).."명",13,C.accent,true)
         summary.Position=UDim2.fromOffset(14,82)
         summary.Size=UDim2.new(1,-28,0,22)
@@ -321,7 +323,7 @@ function Panel.mount(parent: Frame): (boolean)->()
             b.Activated:Connect(function() jump("team") end)
         end
         local quick=card("QuickOperations",158)
-        description(quick,"바로 실행","아래 관리 기능은 HQ 소속 사용자에게만 열립니다.")
+        description(quick,"바로 실행","그룹 관리자 등급 200 이상일 때 사용할 수 있습니다.")
         actionPair(quick,"계급 조정","팀 배정",function() jump("rank") end,function() jump("team") end,88)
         local second=card("QuickActions",105)
         description(second,"기타 작업","무적·비행 제어와 기록 확인")
@@ -378,12 +380,12 @@ function Panel.mount(parent: Frame): (boolean)->()
             end,101)
         local note=card("TargetActionHelp",92)
         description(note,"명령어 입력 방식",
-            "채팅창에서도 ;to 이름 · ;here 이름 · ;kill 이름 · ;폭발 이름으로 실행할 수 있습니다. HQ 권한을 서버에서 확인합니다.")
+            "채팅창에서도 ;to 이름 · ;here 이름 · ;kill 이름 · ;폭발 이름으로 실행합니다. 그룹 등급을 서버에서 검증합니다.")
     end
     local function drawTeam()
         targetCard()
         local frame=card("TeamAssignment",264)
-        description(frame,"팀 배정","HQ 지정 시 관리자 명령어와 패널 권한이 함께 부여됩니다.")
+        description(frame,"팀 배정","HQ 팀에 배정해도 관리자 권한은 생기지 않습니다. 그룹 운영진 등급이 있어야 명령을 실행할 수 있습니다.")
         for index,teamName in TEAM_NAMES do
             local column=(index-1)%2
             local rowIndex=math.floor((index-1)/2)
@@ -400,8 +402,8 @@ function Panel.mount(parent: Frame): (boolean)->()
             if selectedTeam=="HQ" then
                 pendingHQTarget=currentTarget()
                 pendingConfirmedCommand=nil
-                confirmTitle.Text="HQ 권한을 부여하시겠습니까?"
-                confirmDetail.Text="@"..pendingHQTarget.."에게 모든 관리자 명령어 및 관리 패널 사용 권한을 부여합니다."
+                confirmTitle.Text="HQ 팀으로 이동시키겠습니까?"
+                confirmDetail.Text="@"..pendingHQTarget.."의 소속과 머리 위 HQ 표시만 변경됩니다. 관리자 권한은 그룹 역할에서 설정하세요."
                 confirmYes.Text="HQ 팀으로 이동"
                 dialog.Visible=true
             else
@@ -491,7 +493,7 @@ function Panel.mount(parent: Frame): (boolean)->()
         help.Size=UDim2.new(1,-3,0,93+#examples*31)
     end
     fetchLogs=function(kind: string,action: string)
-        if not isHQ(player) or logLoading[kind] then return end
+        if not hasAdminAccess(player) or logLoading[kind] then return end
         logLoading[kind]=true
         logErrors[kind]=""
         if active and currentTab=="logs" and logKind==kind then render() end
@@ -526,12 +528,12 @@ function Panel.mount(parent: Frame): (boolean)->()
                     logErrors[kind]="일부 기록을 불러오지 못했습니다. 새로고침하면 다시 시도합니다."
                 end
             end
-            if active and isHQ(player) and currentTab=="logs" and logKind==kind then render() end
+            if active and hasAdminAccess(player) and currentTab=="logs" and logKind==kind then render() end
         end)
     end
     local function drawLogs()
         local tabs=card("LogTypes",144)
-        description(tabs,"서버 영구 기록","로그는 채팅과 관리 명령을 별도로 저장합니다. HQ 전용 · 서버 재시작 후에도 유지")
+        description(tabs,"서버 영구 기록","채팅·명령 로그는 별도 저장합니다. 그룹 운영진 전용 · 재접속 후에도 조회")
         local chat=button(tabs,"채팅 로그",UDim2.new(0.5,-21,0,41),
             if logKind=="chat" then C.hover else C.raised)
         chat.Position=UDim2.fromOffset(14,91)
@@ -705,7 +707,7 @@ function Panel.mount(parent: Frame): (boolean)->()
         if command then run(command) end
     end)
     response.OnClientEvent:Connect(function(kind: string,data: any)
-        if not isHQ(player) then return end
+        if not hasAdminAccess(player) then return end
         if kind=="result" and type(data)=="table" then
             status(tostring(data.message or "응답 없음"),data.ok==true)
         end
@@ -713,7 +715,7 @@ function Panel.mount(parent: Frame): (boolean)->()
     Players.PlayerAdded:Connect(function() if active and currentTab=="overview" then render() end end)
     Players.PlayerRemoving:Connect(function() if active and currentTab=="overview" then render() end end)
     local function show(visible: boolean)
-        active=visible and isHQ(player)
+        active=visible and hasAdminAccess(player)
         root.Visible=active
         dialog.Visible=false
         pendingHQTarget=nil
@@ -721,7 +723,7 @@ function Panel.mount(parent: Frame): (boolean)->()
         if active then
             currentTab="overview"
             pickerVisible=false
-            status("HQ 권한 확인 완료 · 명령 대기 중",true)
+            status("그룹 관리자 권한 확인 완료 · 명령 대기 중",true)
             render()
             request:FireServer("sync")
         end
