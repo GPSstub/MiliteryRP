@@ -14,8 +14,15 @@ local pending={}
 local filtered={}
 function Runtime.name(entry: any): string
     if entry.authorId==0 then return entry.name end
+    -- New entries carry their already-filtered, persisted display name.
+    -- Cross-server snapshots must not rely on a transient in-memory cache.
+    if type(entry.displayName)=="string" and entry.displayName~="" then
+        return entry.displayName
+    end
     local key=tostring(entry.authorId)..":"..entry.name
-    return filtered[key] or "이름 확인 중"
+    -- Older records may not carry displayName yet. Never leave a perpetual
+    -- "이름 확인 중" label when Roblox filtering is unavailable.
+    return filtered[key] or "이름 표시 불가 · 잠시 후 재시도"
 end
 function Runtime.filter(name: any,userId: number): string?
     if type(name)~="string" or #name>96 or not utf8.len(name) then return nil end
@@ -127,5 +134,8 @@ function Runtime.start()
     for _,p in Players:GetPlayers() do added(p) end
     task.spawn(Runtime.refresh)
     task.spawn(function() while true do task.wait(20);for _,p in Players:GetPlayers() do task.spawn(refreshPlayer,p) end end end)
+    -- Retry migration of pre-existing channel/role names after a transient
+    -- TextService failure; newly-created names no longer need this cache.
+    task.spawn(function() while true do task.wait(45);Runtime.refresh() end end)
 end
 return Runtime
