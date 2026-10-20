@@ -37,7 +37,7 @@ local function renderCharacter(player: Player, character: Model, version: number
     tag.Size=UDim2.fromOffset(180,88)
     tag.StudsOffsetWorldSpace=Vector3.new(0,2.7,0);tag.MaxDistance=100
     tag.AlwaysOnTop=true;tag.LightInfluence=0
-    if TeamService.isAdmin(player) then
+    if TeamService.isHQ(player) then
         -- HQ is a temporary team presentation, not a persisted rank. Build
         -- before parenting so an incomplete nameplate is never replicated.
         local success,errorMessage=pcall(function()
@@ -89,7 +89,7 @@ local function updateVisibleRank(player: Player)
     local id=states[player]
     local stored=if id then Catalog.find(id) else nil
     if not stored then return end
-    local hq=TeamService.isAdmin(player)
+    local hq=TeamService.isHQ(player)
     local display=if hq then "admin" else stored.name
     -- RankId / RankCategory / RankOrder continue to represent the saved
     -- military rank. Never persist "admin" or promote based on HQ membership.
