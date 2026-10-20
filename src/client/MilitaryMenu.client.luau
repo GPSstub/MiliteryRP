@@ -4,7 +4,9 @@ local TweenService = game:GetService("TweenService")
 local UserInputService = game:GetService("UserInputService")
 local GuiService = game:GetService("GuiService")
 local player = Players.LocalPlayer
-local isAdmin = player.UserId == 1153125948
+local function isAdmin(): boolean
+    return player.Team~=nil and player.Team.Name=="HQ" and not player.Neutral
+end
 local gui = Instance.new("ScreenGui")
 gui.Name = "MilitaryMenu"
 gui.ResetOnSpawn = false
@@ -53,20 +55,19 @@ toggle.Size = UDim2.fromOffset(132, 48)
 local flyout = Instance.new("Frame")
 flyout.Name = "Navigation"; flyout.AnchorPoint = Vector2.new(0, 1)
 flyout.Position = UDim2.new(0, 20, 1, -80)
-flyout.Size = UDim2.fromOffset(224, if isAdmin then 190 else 134)
+flyout.Size = UDim2.fromOffset(224, if isAdmin() then 190 else 134)
 flyout.BackgroundColor3 = INK; flyout.BorderSizePixel = 0; flyout.Visible = false
 corner(flyout, 16); flyout.Parent = gui
 local eyebrow = label(flyout, "Eyebrow", "PERSONAL MENU", 11, MUTED)
 eyebrow.Position = UDim2.fromOffset(18, 14); eyebrow.Size = UDim2.new(1, -36, 0, 20)
 local shop = button(flyout, "ShopButton", "상점                       →")
 shop.Position = UDim2.fromOffset(12, 46); shop.Size = UDim2.new(1, -24, 0, 52)
-local admin: TextButton? = nil
-if isAdmin then
-    admin = button(flyout, "AdminButton", "어드민 패널             →")
-    admin.Position = UDim2.fromOffset(12, 104); admin.Size = UDim2.new(1, -24, 0, 52)
-    local note = label(flyout, "AdminNote", "제작자 전용", 11, MUTED)
-    note.Position = UDim2.fromOffset(18, 163); note.Size = UDim2.new(1, -36, 0, 16)
-end
+local admin = button(flyout, "AdminButton", "HQ 관리 패널               →")
+admin.Position = UDim2.fromOffset(12, 104); admin.Size = UDim2.new(1, -24, 0, 52)
+admin.Visible = isAdmin()
+local adminNote = label(flyout, "AdminNote", "● HQ 전용 관리 권한", 11, ACCENT)
+adminNote.Position = UDim2.fromOffset(18, 163); adminNote.Size = UDim2.new(1, -36, 0, 16)
+adminNote.Visible = isAdmin()
 local panel = Instance.new("Frame")
 panel.Name = "ContentPanel"; panel.AnchorPoint = Vector2.new(0.5, 0.5)
 panel.Position = UDim2.fromScale(0.5, 0.5); panel.Size = UDim2.fromScale(0.88, 0.72)
@@ -92,7 +93,18 @@ subtitle.Position = UDim2.new(0, 24, 0.5, 48); subtitle.Size = UDim2.new(1, -48,
 subtitle.TextXAlignment = Enum.TextXAlignment.Center; subtitle.TextWrapped = true
 local footer = label(panel, "Footer", "MILITARY RP  /  STORE", 10, MUTED)
 footer.Position = UDim2.new(0, 24, 1, -34); footer.Size = UDim2.new(1, -48, 0, 16)
-local showAdmin = if isAdmin then require(script.Parent:WaitForChild("AdminPanel")).mount(panel) else function(_visible: boolean) end
+local adminMount: ((boolean)->())?=nil
+local function showAdmin(visible: boolean)
+    if not visible then
+        if adminMount then adminMount(false) end
+        return
+    end
+    if not isAdmin() then return end
+    if not adminMount then
+        adminMount=require(script.Parent:WaitForChild("AdminPanel")).mount(panel)
+    end
+    adminMount(true)
+end
 local function selectForGamepad(object: GuiObject?)
     if UserInputService.PreferredInput == Enum.PreferredInput.Gamepad then GuiService.SelectedObject = object end
 end
@@ -102,19 +114,19 @@ local function dismiss()
     selectForGamepad(toggle)
 end
 local function openPage(page: string)
-    if page == "admin" and not isAdmin then return end
+    if page == "admin" and not isAdmin() then return end
     flyout.Visible = false; panel.Visible = true; toggle.Text = "       메뉴"
     local management = page == "admin"
     showAdmin(management)
     empty.Visible = not management; subtitle.Visible = not management
-    cap.MaxSize = if management then Vector2.new(760, 640) else Vector2.new(600, 400)
+    cap.MaxSize = if management then Vector2.new(1024, 760) else Vector2.new(600, 400)
     panel.Size = if management then UDim2.fromScale(0.94, 0.9) else UDim2.fromScale(0.88, 0.72)
     panel:SetAttribute("Page", page)
     heading.Text = if management then "어드민 패널" else "상점"
-    section.Text = if management then "ADMINISTRATION" else "SUPPLY STORE"
+    section.Text = if management then "HQ  /  OPERATIONS" else "SUPPLY STORE"
     empty.Text = if management then "관리 기능 준비 중" else "아직 진열된 상품이 없어요"
     subtitle.Text = if management then "필요한 관리 기능을 여기에 추가할 예정이에요." else "새로운 보급품을 준비하고 있어요."
-    footer.Text = if management then "MILITARY RP  /  ADMIN" else "MILITARY RP  /  STORE"
+    footer.Text = if management then "MILITARY RP  /  HQ OPERATIONS" else "MILITARY RP  /  STORE"
     selectForGamepad(close)
 end
 toggle.Activated:Connect(function()
@@ -124,7 +136,19 @@ toggle.Activated:Connect(function()
     selectForGamepad(if opening then shop else toggle)
 end)
 shop.Activated:Connect(function() openPage("shop") end)
-if admin then admin.Activated:Connect(function() openPage("admin") end) end
+admin.Activated:Connect(function() openPage("admin") end)
+local function updateHQAccess()
+    local can=isAdmin()
+    admin.Visible=can
+    adminNote.Visible=can
+    flyout.Size=UDim2.fromOffset(224,if can then 190 else 134)
+    if not can and panel.Visible and panel:GetAttribute("Page")=="admin" then
+        dismiss()
+    end
+end
+player:GetPropertyChangedSignal("Team"):Connect(updateHQAccess)
+player:GetPropertyChangedSignal("Neutral"):Connect(updateHQAccess)
+updateHQAccess()
 close.Activated:Connect(dismiss)
 UserInputService.InputBegan:Connect(function(input: InputObject, processed: boolean)
     if processed then return end
