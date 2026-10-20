@@ -5,6 +5,7 @@ local RunService = game:GetService("RunService")
 local Audit = require(script.Parent:WaitForChild("AdminAudit"))
 local RankCommands = require(script.Parent:WaitForChild("RankCommands"))
 local TeamService = require(script.Parent:WaitForChild("TeamService"))
+local AdminLogService = require(script.Parent:WaitForChild("AdminLogService"))
 local Service = {}
 local started = false
 local requests: {[Player]: number} = {}
@@ -114,19 +115,19 @@ function Service.start()
     if started then return end
     started=true
     TeamService.start()
+    AdminLogService.start()
     local request=Instance.new("RemoteEvent"); request.Name="AdminRequest"; request.Parent=ReplicatedStorage
     local response=Instance.new("RemoteEvent"); response.Name="AdminResponse"; response.Parent=ReplicatedStorage
     local flightInput=Instance.new("RemoteEvent"); flightInput.Name="AdminFlightInput"; flightInput.Parent=ReplicatedStorage
-    Audit.Changed.Event:Connect(function(entry)
-        for _, p in Players:GetPlayers() do if authorized(p) then response:FireClient(p, "log", entry) end end
-    end)
     request.OnServerEvent:Connect(function(actor: Player, action: any, text: any)
         if not authorized(actor) then return end
         local now=os.clock()
         if action=="sync" then
             if now-(syncRequests[actor] or -math.huge)<0.5 then return end
             syncRequests[actor]=now
-            response:FireClient(actor,"snapshot",Audit.snapshot())
+            -- Legacy snapshot intentionally contains no raw/unfiltered commands.
+            -- The HQ panel fetches filtered, durable history through AdminLogRequest.
+            response:FireClient(actor,"snapshot",{})
         elseif action=="command" then
             if now-(requests[actor] or -math.huge)<0.25 then
                 response:FireClient(actor,"result",{ok=false,message="너무 빠른 명령입니다. 잠시 후 다시 시도하세요."})
