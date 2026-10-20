@@ -1,12 +1,10 @@
 --!strict
 -- HQ emblem asset configuration.
--- The previous 115201559367134 image contains a solid white square.
--- It is deliberately NOT used anymore because ImageLabel cannot erase pixels
--- of an uploaded texture. Import the supplied transparent HQLogo_Transparent.png
--- in Roblox Studio Asset Manager > Images, with the exact name below.
--- Or enter the NEW approved image ID in LogoAssetId to use rbxassetid://...
+-- The owner-supplied Roblox image ID takes priority over the fallback
+-- game-local asset. If this new asset contains an opaque background, upload a
+-- transparent replacement; ImageLabel cannot remove baked-in white pixels.
 local Branding={
-    LogoAssetId=0,
+    LogoAssetId=70816694077389,
     LogoGameAssetName="HQLogo_Transparent",
     MaxDistance=25,
     IconSize=60, -- GUI pixels; smaller than the old 100px icon
