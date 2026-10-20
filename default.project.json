@@ -63,6 +63,45 @@
         "$className": "StarterPlayerScripts",
         "$path": "src/client"
       }
+    },
+    "Teams": {
+      "$className": "Teams",
+      "HQ": {
+        "$className": "Team",
+        "$properties": {
+          "AutoAssignable": false,
+          "TeamColor": {
+            "BrickColor": 1003
+          }
+        }
+      },
+      "위관급": {
+        "$className": "Team",
+        "$properties": {
+          "AutoAssignable": false,
+          "TeamColor": {
+            "BrickColor": 23
+          }
+        }
+      },
+      "영관급": {
+        "$className": "Team",
+        "$properties": {
+          "AutoAssignable": false,
+          "TeamColor": {
+            "BrickColor": 24
+          }
+        }
+      },
+      "장관급": {
+        "$className": "Team",
+        "$properties": {
+          "AutoAssignable": false,
+          "TeamColor": {
+            "BrickColor": 21
+          }
+        }
+      }
     }
   }
 }
