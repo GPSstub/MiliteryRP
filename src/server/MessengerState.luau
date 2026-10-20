@@ -72,6 +72,13 @@ local function validName(name): boolean
     local length=utf8.len(name)
     return length~=nil and length>=2 and length<=24 and name:match("%S")~=nil
 end
+-- Names approved for public display by TextService are saved with the
+-- channel/role. Old config entries (without displayName) remain compatible.
+local function validDisplayName(name: any): boolean
+    if type(name)~="string" or #name==0 or #name>384 or name:find("[%c]") then return false end
+    local length=utf8.len(name)
+    return length~=nil and length>0 and length<=96 and name:match("%S")~=nil
+end
 local function grantsValid(grants): boolean
     if type(grants)~="table" or count(grants)>8 then return false end
     for key,value in grants do if not State.PERMISSIONS[key] or type(value)~="boolean" then return false end end
@@ -84,10 +91,12 @@ function State.valid(data: any): boolean
     if count(data.roles)>30 or count(data.channels)>28 or count(data.assignments)>1000 or #data.receipts>64 then return false end
     for id in protected do if type(data.roles[id])~="table" then return false end end
     for id,role in data.roles do
-        if type(id)~="string" or not id:match("^[a-z][a-z0-9_]*$") or #id>48 or type(role)~="table" or not validName(role.name) or not grantsValid(role.permissions) or type(role.authorId)~="number" or role.authorId<0 or role.authorId%1~=0 then return false end
+        if type(id)~="string" or not id:match("^[a-z][a-z0-9_]*$") or #id>48 or type(role)~="table" or not validName(role.name) or not grantsValid(role.permissions) or type(role.authorId)~="number" or role.authorId<0 or role.authorId%1~=0
+            or (role.displayName~=nil and not validDisplayName(role.displayName)) then return false end
     end
     for id,entry in data.channels do
-        if type(id)~="string" or type(entry)~="table" or entry.id~=id or not validName(entry.name) or type(entry.authorId)~="number" or type(entry.channel)~="string" or type(entry.acl)~="table" or (entry.persistent~=nil and type(entry.persistent)~="boolean") then return false end
+        if type(id)~="string" or type(entry)~="table" or entry.id~=id or not validName(entry.name) or type(entry.authorId)~="number" or type(entry.channel)~="string" or type(entry.acl)~="table" or (entry.persistent~=nil and type(entry.persistent)~="boolean")
+            or (entry.displayName~=nil and not validDisplayName(entry.displayName)) then return false end
         if entry.authorId<0 or entry.authorId%1~=0 then return false end
         local builtins={general="RP_General",unit="RP_Unit",command="RP_Command",notice="RP_Notice"}
         if builtins[id] then
@@ -123,7 +132,8 @@ function State.apply(data: any, actor: any, op: any): (any?, string)
         if not validName(op.name) or type(op.id)~="string" or not op.id:match("^custom_%w+$") or updated.channels[op.id] or count(updated.channels)>=28 then return nil,"채널 이름 또는 개수 제한을 확인하세요." end
         for _,other in updated.channels do if other.name==op.name then return nil,"같은 이름의 채널이 있습니다." end end
         if op.persistent~=nil and type(op.persistent)~="boolean" then return nil,"영구 저장 설정이 올바르지 않습니다." end
-        updated.channels[op.id]={id=op.id,name=op.name,authorId=actor.userId,channel="RP_"..op.id,builtin=false,persistent=op.persistent==true,acl={read={member=true},write={member=true},manage={operator=true}}}
+        if op.displayName~=nil and not validDisplayName(op.displayName) then return nil,"채널 표시 이름이 유효하지 않습니다." end
+        updated.channels[op.id]={id=op.id,name=op.name,displayName=op.displayName,authorId=actor.userId,channel="RP_"..op.id,builtin=false,persistent=op.persistent==true,acl={read={member=true},write={member=true},manage={operator=true}}}
     elseif action=="rename_channel" or action=="delete_channel" or action=="set_channel_access" or action=="set_channel_persistence" then
         if not entry or not State.channel(data,actor,op.id,"manage") then return nil,"채널 관리 권한이 없습니다." end
         if action=="delete_channel" then
@@ -137,7 +147,8 @@ function State.apply(data: any, actor: any, op: any): (any?, string)
         elseif action=="rename_channel" then
             if not validName(op.name) then return nil,"이름은 2~24자로 지정하세요." end
             for id,other in updated.channels do if id~=op.id and other.name==op.name then return nil,"같은 이름의 채널이 있습니다." end end
-            entry.name=op.name;entry.authorId=actor.userId
+            if op.displayName~=nil and not validDisplayName(op.displayName) then return nil,"채널 표시 이름이 유효하지 않습니다." end
+            entry.name=op.name;entry.displayName=op.displayName;entry.authorId=actor.userId
         else
             if not updated.roles[op.roleId] or not entry.acl[op.mode] or type(op.enabled)~="boolean" then return nil,"잘못된 채널 권한입니다." end
             entry.acl[op.mode][op.roleId]=op.enabled or nil
@@ -146,7 +157,8 @@ function State.apply(data: any, actor: any, op: any): (any?, string)
         if not State.has(data,actor,"MANAGE_ROLES") then return nil,"역할 관리 권한이 없습니다." end
         if action=="create_role" then
             if type(op.roleId)~="string" or not op.roleId:match("^[a-z][a-z0-9_]*$") or #op.roleId<3 or #op.roleId>24 or role or count(updated.roles)>=30 or not validName(op.name) or not grantsValid(op.permissions) then return nil,"역할 ID·이름·권한을 확인하세요." end
-            local created={name=op.name,authorId=actor.userId,permissions=State.copy(op.permissions)}
+            if op.displayName~=nil and not validDisplayName(op.displayName) then return nil,"역할 표시 이름이 유효하지 않습니다." end
+            local created={name=op.name,displayName=op.displayName,authorId=actor.userId,permissions=State.copy(op.permissions)}
             if not canGrant(data,actor,created) then return nil,"보유하지 않은 권한은 부여할 수 없습니다." end
             updated.roles[op.roleId]=created
         else
@@ -162,7 +174,8 @@ function State.apply(data: any, actor: any, op: any): (any?, string)
                 if protected[op.roleId] then return nil,"기본 역할은 보호됩니다." end
                 if action=="rename_role" then
                     if not validName(op.name) then return nil,"역할 이름은 2~24자입니다." end
-                    role.name=op.name;role.authorId=actor.userId
+                    if op.displayName~=nil and not validDisplayName(op.displayName) then return nil,"역할 표시 이름이 유효하지 않습니다." end
+                    role.name=op.name;role.displayName=op.displayName;role.authorId=actor.userId
                 elseif action=="set_permission" then
                     if not State.PERMISSIONS[op.permission] or type(op.enabled)~="boolean" or (op.enabled and not State.has(data,actor,op.permission)) then return nil,"권한을 부여할 수 없습니다." end
                     role.permissions[op.permission]=op.enabled or nil
