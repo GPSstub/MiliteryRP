@@ -323,7 +323,7 @@ function Panel.mount(parent: Frame): (boolean)->()
         actionPair(quick,"계급 조정","팀 배정",function() jump("rank") end,function() jump("team") end,88)
         local second=card("QuickActions",105)
         description(second,"기타 작업","무적·비행 제어와 기록 확인")
-        actionPair(second,"무적;비행", "명령 기록",
+        actionPair(second,"무적/비행", "명령 기록",
             function() jump("god") end,function() jump("logs") end,56)
     end
     local function drawGodOrFlight(kind: string)
