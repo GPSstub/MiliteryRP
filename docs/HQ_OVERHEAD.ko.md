@@ -11,31 +11,34 @@
 - `/팀`으로 HQ에 임명하거나 HQ를 해제할 때, 플레이어가 리스폰하거나, 저장된 계급이 나중에 로드될 때도 자동으로 갱신됩니다. 렌더 순서를 검사해 이전 캐릭터의 머리 위 GUI가 다시 나타나는 현상을 줄였습니다.
 - 이전 코드에서 `CharacterAppearanceLoaded`가 버전 번호를 전달하지 않아 머리 위 UI 재생성이 생략되던 문제를 수정했습니다. 서버 로그 저장 초기화가 실패하더라도 계급 표시 시스템이 시작되도록 초기화 순서를 조정했습니다.
 - HQ 로고 렌더링이 실패하면 Output에 `[RankService] HQ badge render failed`가 표시되고, 최소한의 `HQ` 텍스트를 대신 표시합니다.
-- 머리 위 HQ 이미지가 로드되지 않아도 파란색 거북이 등딱지와 고양이 얼굴을 조합한 간단한 **벡터형 대체 엠블럼**이 표시됩니다. 이미지가 클라이언트에서 정상 로드되면 대체 엠블럼은 자동으로 숨깁니다.
+- **최신 UI 크기:** 로고 60px, 표시 최대 거리 25스터드, 머리 기준 오프셋 2.35스터드. 예전에 겹치던 금색 원형 장식은 제거했습니다.
+- HQ 로고를 로드하지 못하면 작은 파란색 임시 표식이 보입니다. 실제 투명 PNG를 불러오면 임시 표식은 자동으로 숨깁니다.
 
-## 이전에 만든 파란색 HQ PNG를 Roblox에 연결하는 방법
+## 흰색 사각형 배경 제거: 새 투명 PNG 등록 필요
 
-Roblox의 `ImageLabel`은 ChatGPT 첨부 파일 경로나 GitHub PNG 주소를 그대로 쓸 수 없습니다. **Roblox 게임에서 사용할 수 있도록 이미지 에셋으로 업로드**해야 합니다.
+스크린샷에서 흰 사각형이 보이던 원인은 **이전 이미지 에셋 `115201559367134` 자체가 배경이 불투명한 PNG**였기 때문입니다. Roblox `ImageLabel.BackgroundTransparency = 1`로는 텍스처 안의 흰색 픽셀을 지울 수 없습니다.
 
-### 방법 A — 숫자 에셋 ID를 편집하지 않고 적용 (권장)
+새로 준비한 **`HQLogo_Transparent.png`**는 기존 파란색 거북이·고양이 HQ 모양을 유지하면서 바깥의 흰색 배경을 알파 투명 처리했습니다. **기존 ID를 그대로 사용하면 여전히 흰색 사각형이 나옵니다. 반드시 새 투명 이미지를 Roblox 에셋으로 업로드해야 합니다.**
 
-1. 이 대화에서 제공된 **`HQLogo.png`**를 Mac에 저장합니다. 파란색 고양이·거북이 HQ 로고의 원본 내용 그대로이며, 파일명만 Roblox에 맞춰 바꾸었습니다.
-2. Roblox Studio에서 **Asset Manager → Images**로 이동한 뒤 **`HQLogo.png`**를 가져옵니다. 해당 경험에 사용할 권한이 있는 계정으로 업로드해야 합니다.
-3. 이미지가 검열/승인되고 사용할 수 있게 된 뒤 경험을 다시 실행합니다.
-4. `src/shared/HQLogoConfig.luau`에 `LogoAssetId=0`, `LogoGameAssetName="HQLogo"` 상태라면 `rbxgameasset://Images/HQLogo` 경로를 통해 그 경험의 이미지를 로드합니다. 코드에 숫자 ID를 넣을 필요가 없습니다.
+### 방법 A: Studio Asset Manager 이용 (코드 수정 없음)
 
-### 방법 B — 숫자 에셋 ID로 적용
+1. ChatGPT 답변에 첨부된 `HQLogo_Transparent.png`를 저장합니다.
+2. Roblox Studio에서 **Asset Manager → Images**를 열어 해당 PNG를 업로드합니다. 이미지의 이름을 **`HQLogo_Transparent`**로 유지하세요.
+3. 업로드·검수가 완료된 후 게임을 실행합니다. `src/shared/HQLogoConfig.luau` 기본 설정 `LogoAssetId=0`, `LogoGameAssetName="HQLogo_Transparent"`이므로 `rbxgameasset://Images/HQLogo_Transparent`를 로드합니다.
+4. 로고 아래에는 작은 `HQ` 텍스트가 나오며 기존 원형 장식과 흰 사각형은 나타나지 않습니다.
 
-Roblox Creator Dashboard 또는 Studio Asset Manager에서 승인된 이미지의 **Asset ID**를 얻은 뒤:
+### 방법 B: 새 에셋 ID 입력
+
+승인된 투명 PNG의 **새 Roblox 이미지 에셋 ID**를 발급받은 후 아래 설정만 교체해도 됩니다.
 
 ```lua
 -- src/shared/HQLogoConfig.luau
-LogoAssetId = 1234567890, -- 실제로 발급받은 이미지 ID로 교체하세요.
+LogoAssetId = 0, -- 이 0을 새 투명 PNG의 숫자 이미지 ID로 바꾸세요.
 ```
 
-이 값이 0보다 크면 ID를 우선 사용합니다. 다른 Roblox 경험에서 사용하는 로고에도 유리합니다. 위 숫자는 예시이며 실존 로고 ID가 아닙니다.
+새 숫자 ID가 설정되면 게임 로컬 이미지 이름보다 우선 적용됩니다.
 
-**주의:** 승인 전에는 이미지가 표시되지 않을 수 있고, 해당 경험에서 사용할 이미지 권한이 없다면 대체 엠블럼만 보일 수 있습니다.
+> 주의: 기존의 불투명 PNG ID `115201559367134`는 의도적으로 비활성화했습니다. 새 이미지를 아직 업로드하지 않았다면 머리 위에는 **작은 파란 임시 엠블럼**만 표시됩니다.
 
 ## 적용과 테스트
 
@@ -52,7 +55,7 @@ Rojo로 Studio에 코드를 동기화한 다음, 다음 항목을 확인합니�
 2. HQ 관리 패널에서 다른 플레이어를 `HQ`로 이동시켜 같은 표시가 나타나는지 확인합니다.
 3. 해당 플레이어를 `위관급` 등으로 이동하면 머리 위 HQ 표시가 사라지고 평소 계급장과 **원래 군 계급 값**이 돌아와야 합니다. `RankId`가 HQ 전후로 바뀌지 않는 것도 확인하세요.
 4. HQ 멤버가 리스폰해도 로고와 HQ 표시가 유지되는지 확인합니다.
-5. 이미지 승인 후 Studio에서 Play를 다시 시작해 **대체 로고 대신 실제 `HQLogo.png`**가 표시되는지 확인합니다.
+5. 새 투명 PNG `HQLogo_Transparent.png`를 업로드·승인받고 Studio에서 Play를 다시 시작해 **흰 사각형이 없는 HQ 로고**가 표시되는지 확인합니다. 크기가 60px인지도 확인하세요.
 6. 서버 Command Bar에서 `tests/studio/hq-overhead-check.luau` 내용을 실행해 `[HQ OVERHEAD] Passed ... assertions`를 확인합니다.
 
 대상 파일: `src/server/RankService.luau`, `src/server/HQOverheadBadge.luau`, `src/shared/HQLogoConfig.luau`, `src/client/HQLogoLoading.client.luau`
