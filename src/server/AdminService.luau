@@ -8,6 +8,8 @@ local RankCommands = require(script.Parent:WaitForChild("RankCommands"))
 local TeamService = require(script.Parent:WaitForChild("TeamService"))
 local PlayerCommandParser = require(script.Parent:WaitForChild("AdminPlayerCommandParser"))
 local PlayerActions = require(script.Parent:WaitForChild("AdminPlayerActions"))
+local TargetPicker = require(script.Parent:WaitForChild("AdminTargetSelection"))
+local TeamPolicy = require(script.Parent:WaitForChild("TeamPolicy"))
 local AdminLogService = require(script.Parent:WaitForChild("AdminLogService"))
 local Service = {}
 local started = false
@@ -20,13 +22,6 @@ local adminConnections: {[Player]: {RBXScriptConnection}} = {}
 local hadAdmin: {[Player]: boolean} = {}
 local function authorized(actor: Player): boolean
     return TeamService.isAdmin(actor)
-end
-local function targetFor(actor: Player, name: string): Player?
-    if name == "나" or name == "me" then return actor end
-    for _, p in Players:GetPlayers() do
-        if string.lower(p.Name) == string.lower(name) then return p end
-    end
-    return nil
 end
 local function stopFlight(player: Player)
     local state = flying[player]
@@ -85,51 +80,106 @@ local function applyGod(player: Player)
         if health > 0 and health < humanoid.MaxHealth and player:GetAttribute("AdminGod") then humanoid.Health=humanoid.MaxHealth end
     end)
 end
+local function trim(value: string): string
+    return value:match("^%s*(.-)%s*$") or ""
+end
+
+local function nameAndTail(raw: string): (string?,string?)
+    -- ;팀 "Some Display Name" 영관급
+    -- ;무적 "Some Display Name" 켜기
+    local name,tail=raw:match("^(.-%S)%s+(%S+)%s*$")
+    if not name or not tail then return nil,nil end
+    return trim(name),tail
+end
+
 function Service.execute(actor: Player, text: any): (boolean, string)
-    if typeof(actor) ~= "Instance" or not actor:IsA("Player") or not authorized(actor) then return false, "설정된 Roblox 그룹 운영진 등급이어야 관리자 명령어를 사용할 수 있습니다." end
-    if type(text) ~= "string" or #text > 256 or not utf8.len(text) then return false, "명령어는 256바이트 이내로 입력하세요." end
-    local words: {string} = {}
-    for word in string.gmatch(text, "%S+") do table.insert(words, word) end
-    local verb = words[1]
-    if verb == ";계급" or verb == ";rank" or verb == ";계급목록" or verb == ";ranks" then
-        return RankCommands.handle(actor, text) -- RankCommands records its own audit entry.
+    if typeof(actor)~="Instance" or not actor:IsA("Player")
+        or not authorized(actor) then
+        return false,"설정된 Roblox 그룹 운영진 등급이어야 관리자 명령어를 사용할 수 있습니다."
     end
-    local ok, message = false, "사용법: ;to 대상 · ;here 대상 · ;kill 대상 · ;폭발 대상 · ;계급 대위"
-    local target = if words[2] then targetFor(actor, words[2]) else actor
-    if not target then
-        message = "서버에 있는 정확한 Roblox 사용자 이름을 선택하세요."
-    elseif verb == ";무적" or verb == ";god" or verb == ";비행" or verb == ";fly" then
-        local mode = words[3]
-        local enabled = mode == "켜기" or mode == "on"
-        if #words == 3 and (enabled or mode == "끄기" or mode == "off") then
-            if verb == ";무적" or verb == ";god" then
-                target:SetAttribute("AdminGod", enabled); applyGod(target)
-                ok=true; message=target.Name .. (if enabled then " 무적 켜기" else " 무적 끄기")
-            else ok, message = setFlight(target, enabled) end
-        end
-    elseif verb == ";팀" or verb == ";team" then
-        local name = table.concat(words, " ", 3)
-        ok,message=TeamService.assign(actor,target,name)
-    elseif PlayerCommandParser.isVerb(verb) then
-        local action=PlayerCommandParser.parse(text)
-        if not action then
-            message="사용법: ;to 대상 · ;here 대상 · ;kill 대상 · ;폭발 대상 (정확한 사용자 이름)"
-        else
-            local recipient=targetFor(actor,action.target)
-            if not recipient then
-                message="현재 서버에 있는 정확한 Roblox 사용자 이름을 입력하세요."
-            else
-                ok,message=PlayerActions.run(actor,recipient,action.kind,stopFlight)
+    if type(text)~="string" or #text>256 or not utf8.len(text) then
+        return false,"명령어는 256바이트 이내로 입력하세요."
+    end
+    -- Issuing another command invalidates any earlier name disambiguation.
+    TargetPicker.clear(actor)
+
+    local verb,rest=text:match("^%s*(%S+)%s*(.-)%s*$")
+    verb=if verb then string.lower(verb) else ""
+    rest=if rest then trim(rest) else ""
+    if verb==";계급" or verb==";rank" or verb==";계급목록" or verb==";ranks" then
+        return RankCommands.handle(actor,text) -- RankCommands writes its own audit.
+    end
+
+    local targetQuery: string?=nil
+    local perform: ((Player)->(boolean,string))?=nil
+    local failure="사용법: ;계급 닉네임 대위 · ;to 닉네임 · ;here 닉네임 · ;kill 닉네임 · ;폭발 닉네임"
+
+    if verb==";무적" or verb==";god" or verb==";비행" or verb==";fly" then
+        local name,mode=nameAndTail(rest)
+        local enabled=mode=="켜기" or mode=="on"
+        if name and name~="" and (enabled or mode=="끄기" or mode=="off") then
+            targetQuery=name
+            perform=function(selected: Player): (boolean,string)
+                if verb==";무적" or verb==";god" then
+                    selected:SetAttribute("AdminGod",enabled)
+                    applyGod(selected)
+                    return true,selected.Name..(if enabled then " 무적 켜기" else " 무적 끄기")
+                end
+                return setFlight(selected,enabled)
             end
+        else
+            failure="사용법: ;무적 대상 켜기/끄기 · ;비행 대상 켜기/끄기"
+        end
+    elseif verb==";팀" or verb==";team" then
+        local name,teamName=nameAndTail(rest)
+        if name and name~="" and TeamPolicy.isDefined(teamName) then
+            targetQuery=name
+            perform=function(selected: Player): (boolean,string)
+                return TeamService.assign(actor,selected,teamName)
+            end
+        else
+            failure="사용법: ;팀 대상 HQ/위관급/영관급/장관급"
+        end
+    elseif PlayerCommandParser.isVerb(verb) then
+        local command=PlayerCommandParser.parse(text)
+        if command then
+            targetQuery=command.target
+            perform=function(selected: Player): (boolean,string)
+                return PlayerActions.run(actor,selected,command.kind,stopFlight)
+            end
+        else
+            failure="사용법: ;to 대상 · ;here 대상 · ;kill 대상 · ;폭발 대상"
         end
     end
-    Audit.record(actor, text, ok, message)
-    return ok, message
+
+    if not targetQuery or not perform then
+        Audit.record(actor,text,false,failure)
+        return false,failure
+    end
+
+    -- The callback is invoked immediately for a unique result, or later
+    -- after the user chooses a duplicate in the secure server-side picker.
+    local function complete(selected: Player): (boolean,string)
+        if not authorized(actor) or selected.Parent~=Players then
+            return false,"운영진 권한 또는 대상 접속 상태가 변경되었습니다."
+        end
+        local ok,message=perform(selected)
+        Audit.record(actor,text,ok,message)
+        return ok,message
+    end
+    local target,reason,isPending=TargetPicker.resolve(actor,targetQuery,complete)
+    if not target then
+        local message=reason or "대상 플레이어를 찾을 수 없습니다."
+        if not isPending then Audit.record(actor,text,false,message) end
+        return false,message
+    end
+    return complete(target)
 end
 function Service.start()
     if started then return end
     started=true
     TeamService.start()
+    TargetPicker.start()
     -- Audit storage should not take down admin commands or panel commands.
     local auditOk,auditError=pcall(AdminLogService.start)
     if not auditOk then warn("[AdminService] Admin logs unavailable:",auditError) end
