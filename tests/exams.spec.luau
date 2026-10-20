@@ -40,7 +40,9 @@ check(not Rules.apply(board,host,"create","captain"),"Outside target range rejec
 apply(host,"create","private")
 check(board.revision==1 and #board.sessions==1,"First session created")
 check(board.sessions[1].targetId=="private","Wrong target rank")
-check(not Rules.apply(board,host,"create","private_first_class"),"One host cannot create two exams")
+local anotherHosted=Rules.apply(board,host,"create","private_first_class")
+check(anotherHosted~=nil and #anotherHosted.sessions==2,
+    "An officer may organize multiple exams while global slots remain")
 apply(regular,"join",nil,"exam_1")
 check(board.sessions[1].participants[200],"Attendee should be listed")
 check(not Rules.apply(board,regular,"join",nil,"exam_1"),"Duplicate join denied")

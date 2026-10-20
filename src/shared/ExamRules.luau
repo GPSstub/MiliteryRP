@@ -45,16 +45,14 @@ function Rules.valid(state: any): boolean
     if type(state)~="table" or type(state.revision)~="number" or state.revision<0
         or type(state.nextId)~="number" or state.nextId<0
         or type(state.sessions)~="table" or #state.sessions>Rules.MAX_ACTIVE then return false end
-    local hosted={}
     local joined={}
     local ids={}
     for _,exam in state.sessions do
         if type(exam)~="table" or type(exam.id)~="string"
             or not exam.id:match("^exam_%d+$") or ids[exam.id]
-            or not validUserId(exam.hostId) or hosted[exam.hostId]
+            or not validUserId(exam.hostId)
             or not Rules.isTarget(exam.targetId)
             or type(exam.startedAt)~="number" or type(exam.participants)~="table" then return false end
-        hosted[exam.hostId]=true
         ids[exam.id]=true
         for userId,active in exam.participants do
             if not validUserId(userId) or active~=true or joined[userId]
@@ -82,9 +80,6 @@ function Rules.apply(state: any,actor: any,action: any,targetId: any,examId: any
         if actor.canHost~=true then return nil,"위관급 이상의 계급만 시험을 개최할 수 있습니다." end
         if not Rules.isTarget(targetId) then return nil,"선택할 수 없는 시험 계급입니다." end
         if #nextState.sessions>=Rules.MAX_ACTIVE then return nil,"동시에 개최 가능한 시험은 6개입니다." end
-        for _,exam in nextState.sessions do
-            if exam.hostId==actor.userId then return nil,"이미 개최 중인 시험이 있습니다." end
-        end
         nextState.nextId+=1
         table.insert(nextState.sessions,{
             id="exam_"..tostring(nextState.nextId),

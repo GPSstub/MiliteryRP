@@ -108,7 +108,7 @@ local creator=make("Frame",window,{Name="CreateSection",
 rounded(creator,12)
 local createTitle=text(creator,"Title","시험 창설  ·  개최할 시험 계급을 선택하세요",15,C.white,true)
 createTitle.Position=UDim2.fromOffset(15,8);createTitle.Size=UDim2.fromOffset(700,29)
-local createInfo=text(creator,"Hint","위관급 이상만 개최 가능  /  개최자당 1개",11,C.muted,false)
+local createInfo=text(creator,"Hint","위관급 이상 개최 가능  /  서버 전체 동시 최대 6개",11,C.muted,false)
 createInfo.Position=UDim2.fromOffset(15,91);createInfo.Size=UDim2.fromOffset(685,20)
 local createButton=button(creator,"CreateButton","시험 창설",C.accent)
 createButton.Position=UDim2.fromOffset(720,46);createButton.Size=UDim2.fromOffset(127,49)
