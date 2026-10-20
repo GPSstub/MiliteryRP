@@ -6,6 +6,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local TextChatService = game:GetService("TextChatService")
 local RunService = game:GetService("RunService")
 local Permissions = require(script.Parent.MessengerPermissions)
+local AdminLogService=require(script.Parent.AdminLogService)
 local Protocol = require(ReplicatedStorage:WaitForChild("Shared"):WaitForChild("MessengerActionProtocol"))
 
 local Actions = {}
@@ -191,6 +192,7 @@ local function invoke(player: Player, action: any, payload: any): any
         if not canModerate(player,entry.channelId) then return {ok=false,message="고정 관리 권한이 없습니다."} end
         entry.pinned=not entry.pinned
         publish(entry,"pin",{pinned=entry.pinned})
+        AdminLogService.captureModeration(entry.channelId,player,entry.id,"pin")
         return {ok=true}
     elseif action=="delete" then
         if entry.authorId~=player.UserId and not canModerate(player,entry.channelId) then
@@ -198,6 +200,7 @@ local function invoke(player: Player, action: any, payload: any): any
         end
         entry.deleted=true
         publish(entry,"delete",{})
+        AdminLogService.captureModeration(entry.channelId,player,entry.id,"delete")
         return {ok=true}
     end
     return {ok=false,message="지원하지 않는 작업입니다."}
