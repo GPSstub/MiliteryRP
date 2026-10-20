@@ -52,7 +52,7 @@
 
 Studio에서 `;계급 대위`를 실행하고 성공 메시지가 표시되면 Stop → Play로 재접속해서 계급을 확인합니다. Explorer의 Players → 본인 플레이어 → Attributes에서 `RankStorageStatus`가 `Ready`인지 확인할 수 있습니다. `Error`이면 Output의 `[RankStore]` 경고와 API 설정을 확인하세요.
 
-저장소 이름은 Studio에서 `MilitaryRP_Ranks_Dev_v1`, 실제 공개/비공개 서버에서는 `MilitaryRP_Ranks_v1`이며 키는 `user_<UserId>` 형식입니다. 최초 접속 시 훈련병을 화면에 임시 표시했다가 저장된 계급을 불러옵니다. **일반 채팅 기록은 영구 저장하지 않습니다. 공지사항 및 관리자가 영구 보관을 선택한 채널의 게시글만 별도 DataStore에 저장됩니다.**
+저장소 이름은 Studio에서 `MilitaryRP_Ranks_Dev_v1`, 실제 공개/비공개 서버에서는 `MilitaryRP_Ranks_v1`이며 키는 `user_<UserId>` 형식입니다. 최초 접속 시 훈련병을 화면에 임시 표시했다가 저장된 계급을 불러옵니다. **일반 채널의 메신저 대화 목록은 영구 보관하지 않지만, **별도의 운영진 감사 로그에는 군용 메신저 채팅이 필터링되어 저장됩니다**. 사용자에게 수집·보관 정책을 공지하세요. 공지사항 및 관리자가 영구 보관을 선택한 채널의 게시글은 별도 DataStore에 저장됩니다.**
 
 ## 계급표
 

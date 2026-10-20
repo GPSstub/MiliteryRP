@@ -62,3 +62,9 @@ Roblox Studio에서 Rojo를 재연결하고, 반드시 게임을 게시한 상�
 - [Roblox: Data Stores](https://create.roblox.com/docs/cloud-services/data-stores)
 - [Roblox: DataStore UpdateAsync](https://create.roblox.com/docs/reference/engine/classes/GlobalDataStore)
 - [Roblox: TextChatService](https://create.roblox.com/docs/reference/engine/classes/TextChatService)
+
+## 부대 전용 영구 기록 접근 범위
+
+`unit` 채널을 영구 보관하면 새 게시글에 서버가 확인한 소속 부대 ID(현재 `Unit` Attribute, 없으면 Team 이름)가 기록됩니다. 조회/수정/삭제/이모지/고정 및 푸시 알림은 **현재 동일한 부대**에만 허용됩니다. 부대 변경 시 클라이언트는 이전 기록과 비동기 조회 상태를 폐기합니다. 옛 버전에서 작성되어 부대 정보가 없는 `unit` 영구 기록은 어느 부대에도 공개되지 않습니다. 이전 글을 복구하려면 관리자가 별도의 검증된 마이그레이션 절차를 수행해야 합니다.
+
+현재 저장소는 채널당 300개 게시글 한도를 부대 간에 공유합니다. 부대 수가 많아지면 저장 키를 부대별로 분리하는 확장이 권장됩니다.
