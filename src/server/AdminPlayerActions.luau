@@ -93,7 +93,7 @@ end
 function Actions.run(actor: Player,target: Player,kind: string,
         stopFlight: (Player)->()): (boolean,string)
     if not TeamService.isAdmin(actor) or target.Parent~=Players then
-        return false,"HQ 팀만 현재 서버 플레이어를 조작할 수 있습니다."
+        return false,"Roblox 그룹 운영진만 플레이어 제어 명령을 사용할 수 있습니다."
     end
     if kind~="to" and kind~="here" and kind~="kill" and kind~="explode" then
         return false,"알 수 없는 플레이어 명령어입니다."
