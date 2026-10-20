@@ -67,13 +67,13 @@ local function handle(actor: Player, text: any): (boolean, string, boolean?)
     return saved,if saved then found.Name.." → "..desiredName
         else saveError or "계급을 저장하지 못했습니다."
 end
-function Commands.handle(actor: Player, text: any): (boolean, string)
+function Commands.handle(actor: Player, text: any): (boolean, string, boolean?)
     local ok,message,pending=handle(actor,text)
     if not pending and typeof(actor)=="Instance" and actor:IsA("Player")
         and TeamService.isAdmin(actor) and type(text)=="string" then
         Audit.record(actor,text,ok,message)
     end
-    return ok,message
+    return ok,message,pending
 end
 function Commands.start()
     if started then return end
