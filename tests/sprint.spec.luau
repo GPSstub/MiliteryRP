@@ -1,0 +1,30 @@
+--!strict
+local Config=require("../src/shared/SprintConfig")
+local Rules=require("../src/shared/SprintRules")
+local passed=0
+local function check(value: any,reason: string)
+    passed+=1
+    assert(value,reason)
+end
+
+check(Config.WalkSpeed==16,"Walking speed must be 16")
+check(Config.SprintSpeed==24,"Sprinting speed must be 24")
+check(Config.SprintSpeed>Config.WalkSpeed,"Sprinting must be faster than walking")
+check(Rules.allowed(true,true,false,false,false),"Healthy player may sprint")
+check(not Rules.allowed(false,true,false,false,false),"Not requesting sprint must walk")
+check(not Rules.allowed(true,false,false,false,false),"Dead players must not sprint")
+check(not Rules.allowed(true,true,true,false,false),"Seated players must not sprint")
+check(not Rules.allowed(true,true,false,true,false),"Flying admins must not sprint")
+check(not Rules.allowed(true,true,false,false,true),"PlatformStanding players must not sprint")
+check(not Rules.allowed("true",true,false,false,false),"Remote must not accept string truthiness")
+check(not Rules.allowed(24,true,false,false,false),"Remote must not accept client speed numbers")
+check(not Rules.allowed(nil,true,false,false,false),"Remote must not accept nil request")
+check(Rules.speed(true,true,false,false,false,16,24)==24,"Run speed expected")
+check(Rules.speed(false,true,false,false,false,16,24)==16,"Walk speed expected")
+check(Rules.speed(true,true,true,false,false,16,24)==16,"Sitting forces walk speed")
+check(Rules.speed(true,true,false,true,false,16,24)==16,"Admin flight forces walk speed")
+check(Rules.speed(true,false,false,false,false,16,24)==16,"Death forces walk speed")
+check(Rules.speed(true,true,false,false,true,16,24)==16,"PlatformStand forces walk speed")
+local ok=pcall(function() (Config :: any).SprintSpeed=999 end)
+check(not ok,"Sprint config must be immutable")
+print("Sprint policy passed: "..passed.." assertions")
