@@ -64,6 +64,7 @@ function Commands.start()
     for _,spec in {{"SetMilitaryRank",";계급",";rank"},{"ListMilitaryRanks",";계급목록",";ranks"}} do
         local command=Instance.new("TextChatCommand")
         command.Name=spec[1];command.PrimaryAlias=spec[2];command.SecondaryAlias=spec[3]
+        command.Enabled=true
         command.Triggered:Connect(function(source: TextSource, text: string)
             if not source then return end
             local actor=Players:GetPlayerByUserId(source.UserId)
