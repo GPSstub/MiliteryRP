@@ -43,4 +43,14 @@ end
 
 local response=ReplicatedStorage:WaitForChild("AdminResponse",10)
 check(response and response:IsA("RemoteEvent"),"HQ chat command feedback remote is missing")
+local picker=ReplicatedStorage:WaitForChild("AdminTargetSelection",10)
+check(picker and picker:IsA("RemoteEvent"),"Ambiguous display nickname picker remote is missing")
+local match=require(ServerScriptService:WaitForChild("AdminTargetMatch"))
+local parser=require(ServerScriptService:WaitForChild("AdminPlayerCommandParser"))
+check(match.validQuery("파란 거북이"),"Unicode display names should be valid")
+check(match.validQuery("철"),"Partial display names should be valid")
+check(assert(parser.parse(";kill 파란 거북이")).target=="파란 거북이",
+    "Player action with multiword DisplayName parsed incorrectly")
+check(assert(Parser.parse(";계급 파란 거북이 대위")).target=="파란 거북이",
+    "Rank command with multiword DisplayName parsed incorrectly")
 print("[HQ SEMICOLON] PASS: "..total.." checks; try ;계급목록, ;to 대상, ;here 대상, ;kill 대상, ;폭발 대상 in Roblox chat.")
