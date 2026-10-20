@@ -5,7 +5,9 @@ local UserInputService = game:GetService("UserInputService")
 local GuiService = game:GetService("GuiService")
 local player = Players.LocalPlayer
 local function isAdmin(): boolean
-    return player.Team~=nil and player.Team.Name=="HQ" and not player.Neutral
+    -- Presentation only. The server never trusts this replicated attribute for
+    -- permission checks; it uses a private GroupService rank cache.
+    return player:GetAttribute("CanUseAdminCommands")==true
 end
 local gui = Instance.new("ScreenGui")
 gui.Name = "MilitaryMenu"
@@ -62,10 +64,10 @@ local eyebrow = label(flyout, "Eyebrow", "PERSONAL MENU", 11, MUTED)
 eyebrow.Position = UDim2.fromOffset(18, 14); eyebrow.Size = UDim2.new(1, -36, 0, 20)
 local shop = button(flyout, "ShopButton", "상점                       →")
 shop.Position = UDim2.fromOffset(12, 46); shop.Size = UDim2.new(1, -24, 0, 52)
-local admin = button(flyout, "AdminButton", "HQ 관리 패널               →")
+local admin = button(flyout, "AdminButton", "운영진 패널                  →")
 admin.Position = UDim2.fromOffset(12, 104); admin.Size = UDim2.new(1, -24, 0, 52)
 admin.Visible = isAdmin()
-local adminNote = label(flyout, "AdminNote", "● HQ 전용 관리 권한", 11, ACCENT)
+local adminNote = label(flyout, "AdminNote", "● Roblox 그룹 운영진", 11, ACCENT)
 adminNote.Position = UDim2.fromOffset(18, 163); adminNote.Size = UDim2.new(1, -36, 0, 16)
 adminNote.Visible = isAdmin()
 local panel = Instance.new("Frame")
@@ -123,10 +125,10 @@ local function openPage(page: string)
     panel.Size = if management then UDim2.fromScale(0.94, 0.9) else UDim2.fromScale(0.88, 0.72)
     panel:SetAttribute("Page", page)
     heading.Text = if management then "어드민 패널" else "상점"
-    section.Text = if management then "HQ  /  OPERATIONS" else "SUPPLY STORE"
+    section.Text = if management then "GROUP  /  OPERATIONS" else "SUPPLY STORE"
     empty.Text = if management then "관리 기능 준비 중" else "아직 진열된 상품이 없어요"
     subtitle.Text = if management then "필요한 관리 기능을 여기에 추가할 예정이에요." else "새로운 보급품을 준비하고 있어요."
-    footer.Text = if management then "MILITARY RP  /  HQ OPERATIONS" else "MILITARY RP  /  STORE"
+    footer.Text = if management then "MILITARY RP  /  GROUP OPERATIONS" else "MILITARY RP  /  STORE"
     selectForGamepad(close)
 end
 toggle.Activated:Connect(function()
@@ -137,7 +139,7 @@ toggle.Activated:Connect(function()
 end)
 shop.Activated:Connect(function() openPage("shop") end)
 admin.Activated:Connect(function() openPage("admin") end)
-local function updateHQAccess()
+local function updateAdminAccess()
     local can=isAdmin()
     admin.Visible=can
     adminNote.Visible=can
@@ -146,9 +148,8 @@ local function updateHQAccess()
         dismiss()
     end
 end
-player:GetPropertyChangedSignal("Team"):Connect(updateHQAccess)
-player:GetPropertyChangedSignal("Neutral"):Connect(updateHQAccess)
-updateHQAccess()
+player:GetAttributeChangedSignal("CanUseAdminCommands"):Connect(updateAdminAccess)
+updateAdminAccess()
 close.Activated:Connect(dismiss)
 UserInputService.InputBegan:Connect(function(input: InputObject, processed: boolean)
     if processed then return end
