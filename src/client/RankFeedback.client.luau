@@ -17,7 +17,7 @@ feedback.OnClientEvent:Connect(function(message: any)
     showResult("[계급]",message)
 end)
 task.spawn(function()
-    local adminResponse=ReplicatedStorage:WaitForChild("AdminResponse",15)
+    local adminResponse=ReplicatedStorage:WaitForChild("AdminResponse")
     if not adminResponse or not adminResponse:IsA("RemoteEvent") then return end
     adminResponse.OnClientEvent:Connect(function(kind: any,data: any)
         if kind=="chat_result" and type(data)=="table" then
