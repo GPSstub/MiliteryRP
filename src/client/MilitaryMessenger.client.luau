@@ -88,6 +88,7 @@ local function getUnit(target)
 end
 
 local channelAccess = {}
+local memberRoleLabels: {[string]: {string}}={}
 local function canView(id)
     if not channelAccess[id] or not channelAccess[id].canRead then return false end
     if id == "command" then
@@ -1496,11 +1497,13 @@ local function renderMembers()
             name.Position = UDim2.fromOffset(44, 4)
             name.Size = UDim2.new(1, -47, 0, 20)
 
+            local publicLabels=memberRoleLabels[tostring(target.UserId)] or {}
+            local roleSuffix=if #publicLabels>0 then " · "..table.concat(publicLabels,", ") else ""
             local rank = label(
                 row,
-                tostring(target:GetAttribute("Rank") or "훈련병"),
+                tostring(target:GetAttribute("Rank") or "훈련병")..roleSuffix,
                 10,
-                C.muted,
+                if #publicLabels>0 then C.accentLight else C.muted,
                 false
             )
 
@@ -1616,6 +1619,7 @@ local function syncCustomChannels()
     end)
     if not ok or not result or not result.ok or not result.data then return end
     local previousSelection = selectedChannel
+    memberRoleLabels=if type(result.data.memberRoles)=="table" then result.data.memberRoles else {}
     local previousModes={}
     for id,item in channelAccess do previousModes[id]=item.persistent==true end
     local incoming = {}
