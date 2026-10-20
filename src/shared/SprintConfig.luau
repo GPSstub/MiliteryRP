@@ -4,7 +4,6 @@
 local Config={
     WalkSpeed=16,
     SprintSpeed=24,
-    EnableCooldownSeconds=0.12,
     MobileButtonTitle="달리기",
 }
 return table.freeze(Config)
