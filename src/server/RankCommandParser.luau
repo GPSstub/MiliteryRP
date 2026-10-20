@@ -9,10 +9,10 @@ function Parser.parse(message: any): Command?
         if #words > 3 then return nil end
     end
     local alias=string.lower(words[1] or "")
-    if alias=="/계급목록" or alias=="/ranks" then
+    if alias==";계급목록" or alias==";ranks" then
         return if #words==1 then {kind="list"} else nil
     end
-    if alias~="/계급" and alias~="/rank" then return nil end
+    if alias~=";계급" and alias~=";rank" then return nil end
     if #words==2 then return {kind="set",rank=words[2]} end
     if #words==3 then return {kind="set",target=words[2],rank=words[3]} end
     return nil
