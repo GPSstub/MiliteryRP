@@ -77,7 +77,7 @@ function Picker.clear(actor: Player)
 end
 
 function Picker.resolve(actor: Player,query: string,
-        completion: (Player)->(boolean,string)): (Player?,string?)
+        completion: (Player)->(boolean,string)): (Player?,string?,boolean?)
     -- Starting a new command cancels the earlier selection. This prevents
     -- stale kill/teleport confirmations from executing after another command.
     Picker.clear(actor)
@@ -115,7 +115,7 @@ function Picker.resolve(actor: Player,query: string,
         completion=completion,
     }
     reply(actor,"open",{ticket=ticketCounter,query=query,candidates=list})
-    return nil,tostring(#options).."명이 검색됐습니다. 화면에서 대상을 선택하세요."
+    return nil,tostring(#options).."명이 검색됐습니다. 화면에서 대상을 선택하세요.",true
 end
 
 return Picker
