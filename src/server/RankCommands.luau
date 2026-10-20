@@ -13,7 +13,7 @@ local lastCommand: {[Player]: number}={}
 local started=false
 local Commands={}
 local Audit=require(script.Parent:WaitForChild("AdminAudit"))
-local function handle(actor: Player, text: any): (boolean, string)
+local function handle(actor: Player, text: any): (boolean, string, boolean?)
     if typeof(actor)~="Instance" or not actor:IsA("Player") or actor.Parent~=Players
         or not TeamService.isAdmin(actor) then
         return false,"계급 변경 명령어는 Roblox 그룹 운영진 전용입니다."
@@ -23,6 +23,7 @@ local function handle(actor: Player, text: any): (boolean, string)
         return false,"잠시 후 다시 입력하세요."
     end
     lastCommand[actor]=now
+    TargetPicker.clear(actor)
     local command=Parser.parse(text)
     if not command then
         return false,"사용법: ;계급 대위 · ;계급 닉네임 대위 · ;계급목록"
@@ -58,15 +59,18 @@ local function handle(actor: Player, text: any): (boolean, string)
         return saved,if saved then actor.Name.." → "..desiredName
             else saveError or "계급을 저장하지 못했습니다."
     end
-    local found,reason=TargetPicker.resolve(actor,command.target,applyTo)
-    if not found then return false,reason or "대상 플레이어를 찾지 못했습니다." end
+    local found,reason,pending=TargetPicker.resolve(actor,command.target,applyTo)
+    if not found then
+        return false,reason or "대상 플레이어를 찾지 못했습니다.",pending
+    end
     local saved,saveError=RankService.set(found,desiredId)
     return saved,if saved then found.Name.." → "..desiredName
         else saveError or "계급을 저장하지 못했습니다."
 end
 function Commands.handle(actor: Player, text: any): (boolean, string)
-    local ok,message=handle(actor,text)
-    if typeof(actor)=="Instance" and actor:IsA("Player") and TeamService.isAdmin(actor) and type(text)=="string" then
+    local ok,message,pending=handle(actor,text)
+    if not pending and typeof(actor)=="Instance" and actor:IsA("Player")
+        and TeamService.isAdmin(actor) and type(text)=="string" then
         Audit.record(actor,text,ok,message)
     end
     return ok,message
