@@ -74,8 +74,8 @@ end
 
 function Service.start()
     if started then return end
-    started=true
     Service.ensure()
+    started=true
     Players.PlayerAdded:Connect(add)
     Players.PlayerRemoving:Connect(function(player)
         local connection=watched[player]
