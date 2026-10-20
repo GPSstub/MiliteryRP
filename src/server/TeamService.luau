@@ -1,10 +1,11 @@
 --!strict
 -- Creates official Roblox Team instances and assigns rank-category teams.
--- HQ is privileged and can only be granted through a server-authorized admin
--- operation; promotion to general NEVER grants HQ.
+-- HQ is an appearance/team label. Admin command permission is instead based
+-- on independently verified Roblox GROUP roles, never on Team membership.
 local Players=game:GetService("Players")
 local Teams=game:GetService("Teams")
 local Policy=require(script.Parent.TeamPolicy)
+local AdminGroupService=require(script.Parent.AdminGroupService)
 
 local Service={}
 local started=false
@@ -27,7 +28,13 @@ function Service.ensure()
     end
 end
 
+-- Permission check for every administrative command, panel, and log.
 function Service.isAdmin(player: Player): boolean
+    return AdminGroupService.isAdmin(player)
+end
+
+-- Visual HQ branding and session-only team selection remain independent.
+function Service.isHQ(player: Player): boolean
     if player.Parent~=Players then return false end
     local hq=Teams:FindFirstChild(Policy.HQ)
     return hq~=nil and hq:IsA("Team") and player.Team==hq and not player.Neutral
@@ -35,7 +42,7 @@ end
 
 local function applyRankTeam(player: Player)
     if player.Parent~=Players then return end
-    if Service.isAdmin(player) then return end
+    if Service.isHQ(player) then return end
     local teamName=Policy.teamForCategory(player:GetAttribute("RankCategory"))
     local team=if teamName then Teams:FindFirstChild(teamName) else nil
     if team and team:IsA("Team") then
@@ -61,7 +68,7 @@ local function add(player: Player)
 end
 
 function Service.assign(actor: Player,target: Player,name: string): (boolean,string)
-    if not Service.isAdmin(actor) then return false,"HQ 팀만 팀을 배정할 수 있습니다." end
+    if not Service.isAdmin(actor) then return false,"Roblox 그룹 관리자만 팀을 배정할 수 있습니다." end
     if target.Parent~=Players or not Policy.isDefined(name) then
         return false,"HQ · 위관급 · 영관급 · 장관급 팀 중에서 선택하세요."
     end
@@ -75,6 +82,7 @@ end
 function Service.start()
     if started then return end
     Service.ensure()
+    AdminGroupService.start()
     started=true
     Players.PlayerAdded:Connect(add)
     Players.PlayerRemoving:Connect(function(player)
