@@ -31,6 +31,12 @@ for _,player in Players:GetPlayers() do
             "HQ player should be able to list ranks: "..message)
     else
         check(not success,"Non-HQ player unexpectedly executed a rank command")
+        -- This is harmless for non-HQ users: authorization must reject BEFORE
+        -- the kill, explosion or teleport action is considered.
+        for _,command in {";to me",";here me",";kill me",";폭발 me"} do
+            local actionOK=AdminService.execute(player,command)
+            check(not actionOK,"Non-HQ player was allowed to run "..command)
+        end
     end
 end
 print("[HQ TEST] "..checks.." assertions passed; "..#Players:GetPlayers().." players inspected.")
