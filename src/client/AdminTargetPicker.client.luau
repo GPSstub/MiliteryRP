@@ -204,6 +204,14 @@ local function show(data: any)
     for i,player in data.candidates do
         makeCandidate(player,i)
     end
+    local opening=generation
+    local openedTicket=ticket
+    task.delay(30,function()
+        if generation==opening and ticket==openedTicket and overlay.Visible then
+            remote:FireServer("cancel",openedTicket)
+            hide()
+        end
+    end)
 end
 
 local function chatResult(message: string,ok: boolean)
