@@ -60,6 +60,12 @@ local function onCharacter(player: Player,character: Model)
             humanoid.Seated:Connect(function(active: boolean)
                 if active then apply(player,false) end
             end),
+            humanoid:GetPropertyChangedSignal("Sit"):Connect(function()
+                if humanoid.Sit then apply(player,false) end
+            end),
+            humanoid:GetPropertyChangedSignal("PlatformStand"):Connect(function()
+                if humanoid.PlatformStand then apply(player,false) end
+            end),
             humanoid.Died:Connect(function()
                 apply(player,false)
             end),
