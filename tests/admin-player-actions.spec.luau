@@ -15,6 +15,12 @@ local cases={
     {";폭발 Soldier_123","explode","Soldier_123"},
     {";explode TargetPlayer","explode","TargetPlayer"},
     {";EXPLODE TargetPlayer","explode","TargetPlayer"},
+    {";to Risa","to","Risa"},
+    {";here 철수","here","철수"},
+    {";kill 파란 거북이","kill","파란 거북이"},
+    {";폭발 \"Sora The Cat\"","explode","Sora The Cat"},
+    {";to A","to","A"},
+    {";here Ab","here","Ab"},
 }
 for _,case in cases do
     local result=Parser.parse(case[1])
@@ -27,12 +33,11 @@ for _,verb in {";to",";here",";kill",";폭발",";explode"} do
 end
 for _,input in {
     "",";",";to",";here",";kill",";폭발",
-    ";to A",";to Ab",";to .Player",";to @Player",";kill all",
-    ";here TargetPlayer extra",";kill TargetPlayer extra",
-    ";폭발 TargetPlayer 100", "normal text", "to TargetPlayer",
+    ";kill all",";kill everyone",";to 모두",";here 전체",
+    "normal text", "to TargetPlayer",
     "/to TargetPlayer","/kill TargetPlayer",
     ";unknown TargetPlayer",string.rep("a",257),
-    ";to "..string.rep("a",21),
+    ";to "..string.rep("a",101),
 } do
     check(Parser.parse(input)==nil,"Invalid input accepted: "..input)
 end
