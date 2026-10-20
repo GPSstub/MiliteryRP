@@ -75,24 +75,27 @@ function Badge.render(tag: BillboardGui)
     local fallback=vectorFallback(iconRoot)
 
     local imageId=tonumber(Branding.LogoAssetId) or 0
+    local imageUri: string?=nil
     if imageId>0 and imageId%1==0 then
-        local picture=make("ImageLabel",iconRoot,{
+        imageUri="rbxassetid://"..tostring(imageId)
+    elseif type(Branding.LogoGameAssetName)=="string"
+        and Branding.LogoGameAssetName:match("^[%w_]+$") then
+        -- Roblox Asset Manager can resolve game-local images by their filename,
+        -- without needing a hard-coded numeric asset ID.
+        imageUri="rbxgameasset://Images/"..Branding.LogoGameAssetName
+    end
+    if imageUri then
+        make("ImageLabel",iconRoot,{
             Name="HQLogo",Size=UDim2.fromScale(1,1),
             Position=UDim2.fromScale(0,0),
             BackgroundTransparency=1,BorderSizePixel=0,
             ScaleType=Enum.ScaleType.Fit,
-            Image="rbxassetid://"..tostring(imageId),
+            Image=imageUri,
             ZIndex=10,
-        }) :: ImageLabel
-        -- Keep the recognizable fallback visible if the image has not loaded,
-        -- its permissions are wrong, or moderation has not approved it yet.
-        local function updateLoaded()
-            if fallback.Parent and picture.Parent then
-                fallback.Visible=not picture.IsLoaded
-            end
-        end
-        picture:GetPropertyChangedSignal("IsLoaded"):Connect(updateLoaded)
-        updateLoaded()
+        })
+        -- The vector fallback stays behind the image; if Roblox has not
+        -- approved/imported the asset, an emblem still remains visible.
+        -- IsLoaded is client-only, so we must not hide the fallback on server.
     end
 
     local label=make("TextLabel",tag,{
