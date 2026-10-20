@@ -14,6 +14,7 @@ local Store=require(script.Parent.MessengerStore)
 local Rules=require(script.Parent.MessengerState)
 local Permissions=require(script.Parent.MessengerPermissions)
 local Core=require(script.Parent.MessengerArchiveCore)
+local AdminLogService=require(script.Parent.AdminLogService)
 
 local Archive={}
 local name=if RunService:IsStudio() then "MilitaryMessenger_Boards_Dev_v1" else "MilitaryMessenger_Boards_v1"
@@ -217,7 +218,9 @@ local function request(player: Player,action: any,payload: any): any
         if not allowed(player,channelId,"write") then return {ok=false,message="작성 권한이 변경되었습니다."} end
         local ok,message,updated=update(channelId,op)
         if not ok then return {ok=false,message=message} end
-        local id=if action=="post" then op.id else op.id
+        -- Archive posts are filtered by sanitizeText before UpdateAsync commits.
+        AdminLogService.captureBulletin(channelId,player,body,action)
+        local id=op.id
         local entry=Core.find(updated,id)
         return {ok=true,message=message,entry=entry and Core.page(updated,player.UserId,(entry.seq or 0)+1,1).entries[1]}
     end
