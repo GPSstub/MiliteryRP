@@ -1,19 +1,20 @@
 --!strict
--- HQ-only nameplate. Approved Roblox image asset supplied by the game owner.
--- LogoAssetId takes priority over the optional game-local HQLogo image.
--- If it is not yet approved or accessible to this experience, a GUI fallback remains.
--- A PNG path, sandbox URL or GitHub URL is not an ImageLabel texture.
-local Branding = {
-    LogoAssetId = 115201559367134,
-    -- Alternative to entering an ID: import HQLogo.png under Asset Manager
-    -- > Images in this Roblox experience. ImageLabel accepts rbxgameasset URIs.
-    LogoGameAssetName = "HQLogo",
-    -- Display the HQ overhead emblem only to nearby players (studs).
-    MaxDistance = 25,
-    PrimaryBlue = Color3.fromRGB(24, 76, 159),
-    DeepBlue = Color3.fromRGB(10, 32, 76),
-    LightBlue = Color3.fromRGB(175, 205, 255),
-    Gold = Color3.fromRGB(247, 208, 131),
-    White = Color3.fromRGB(247, 250, 255),
+-- HQ emblem asset configuration.
+-- The previous 115201559367134 image contains a solid white square.
+-- It is deliberately NOT used anymore because ImageLabel cannot erase pixels
+-- of an uploaded texture. Import the supplied transparent HQLogo_Transparent.png
+-- in Roblox Studio Asset Manager > Images, with the exact name below.
+-- Or enter the NEW approved image ID in LogoAssetId to use rbxassetid://...
+local Branding={
+    LogoAssetId=0,
+    LogoGameAssetName="HQLogo_Transparent",
+    MaxDistance=25,
+    IconSize=60, -- GUI pixels; smaller than the old 100px icon
+    OffsetY=2.35, -- studs above the avatar's head
+    PrimaryBlue=Color3.fromRGB(68,123,206),
+    DeepBlue=Color3.fromRGB(22,55,118),
+    LightBlue=Color3.fromRGB(194,218,255),
+    Gold=Color3.fromRGB(247,208,131),
+    White=Color3.fromRGB(247,250,255),
 }
 return table.freeze(Branding)
