@@ -11,6 +11,40 @@ local function apply(actor,op)
     check(updated~=nil,message);data=updated;check(Rules.valid(data));return updated
 end
 check(Rules.valid(data));check(Rules.has(data,member,"SEND_MESSAGES"));check(not Rules.has(data,member,"MANAGE_ROLES"))
+-- Filtered display names are server-generated and persist across new sessions.
+local displayData=Rules.default()
+local createdWithDisplay=assert(Rules.apply(displayData,owner,{
+    action="create_channel",id="custom_filtered",name="새 공지방",
+    displayName="새 공지방",persistent=true,
+}))
+check(Rules.valid(createdWithDisplay))
+check(createdWithDisplay.channels.custom_filtered.displayName=="새 공지방")
+check(createdWithDisplay.channels.custom_filtered.persistent==true)
+local renamedWithDisplay=assert(Rules.apply(createdWithDisplay,owner,{
+    action="rename_channel",id="custom_filtered",name="군 규칙",
+    displayName="군 규칙",
+}))
+check(Rules.valid(renamedWithDisplay))
+check(renamedWithDisplay.channels.custom_filtered.displayName=="군 규칙")
+local newRole=assert(Rules.apply(renamedWithDisplay,owner,{
+    action="create_role",roleId="security",name="경비",displayName="경비",
+    permissions={SEND_MESSAGES=true},
+}))
+check(newRole.roles.security.displayName=="경비")
+local renamedRole=assert(Rules.apply(newRole,owner,{
+    action="rename_role",roleId="security",name="경비대",displayName="경비대",
+}))
+check(renamedRole.roles.security.displayName=="경비대")
+local invalidDisplay=Rules.copy(renamedRole)
+invalidDisplay.channels.custom_filtered.displayName="<invalid"
+check(Rules.valid(invalidDisplay)) -- Plain text is escaped by UI where needed.
+invalidDisplay.channels.custom_filtered.displayName=string.rep("x",385)
+check(not Rules.valid(invalidDisplay))
+check(not Rules.apply(renamedRole,owner,{
+    action="rename_channel",id="custom_filtered",name="군 안내",displayName=string.rep("x",385),
+}))
+-- Records created before filtered display-name persistence remain compatible.
+check(Rules.valid(Rules.default()))
 check(not Rules.apply(data,member,{action="create_channel",id="custom_x",name="Private"}))
 apply(owner,{action="create_channel",id="custom_x",name="Private"})
 apply(owner,{action="create_role",roleId="medic",name="의무병",permissions={SEND_MESSAGES=true}})
