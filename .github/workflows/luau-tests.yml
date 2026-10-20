@@ -1,0 +1,29 @@
+name: Luau and safe build checks
+
+on:
+  push:
+    branches: [main, "fix/**"]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install pinned upstream Luau CLI
+        shell: bash
+        run: |
+          git clone --depth 1 --branch 0.743 https://github.com/luau-lang/luau.git "$RUNNER_TEMP/luau"
+          test "$(git -C "$RUNNER_TEMP/luau" rev-parse HEAD)" = "9d7748a4f324213a18cb8283fa2a77c330225fa0"
+          cmake -S "$RUNNER_TEMP/luau" -B "$RUNNER_TEMP/luau/build" -DCMAKE_BUILD_TYPE=Release -DLUAU_BUILD_TESTS=OFF
+          cmake --build "$RUNNER_TEMP/luau/build" --target Luau.Repl.CLI Luau.Compile.CLI -j 2
+      - name: Compile scripts and run pure Luau tests
+        shell: bash
+        run: |
+          python3 tools/test.py --luau "$RUNNER_TEMP/luau/build/luau" --compiler "$RUNNER_TEMP/luau/build/luau-compile"
+      - name: Verify test-place builder cannot overwrite real map
+        run: python3 tests/test_build_place.py
