@@ -2,7 +2,7 @@
 
 군용 메신저의 채널·역할·권한 관리와 DataStore 영구 저장을 구현했습니다. 채널 목록의 `+` 또는 설정에서 생성·이름 변경·삭제하고, 역할별 읽기·쓰기·관리와 사용자별 역할을 지정할 수 있습니다. **채널 생성 때 '영구 보관'을 선택하면 공지·규칙 게시판처럼 기록이 유지됩니다.** 일반 채널은 기록을 저장하지 않습니다.
 
-**[메신저 사용법·저장 구조·비공개 테스트 게시 안내](docs/MESSENGER.ko.md)** · **[영구 보관 채널 만들기](docs/MESSENGER_ARCHIVE.ko.md)** · **[HQ 팀/어드민 패널](docs/HQ_TEAMS_ADMIN.ko.md)** · **[영구 채팅·명령어 로그](docs/HQ_SERVER_LOGS.ko.md)**
+**[메신저 사용법·저장 구조·비공개 테스트 게시 안내](docs/MESSENGER.ko.md)** · **[영구 보관 채널 만들기](docs/MESSENGER_ARCHIVE.ko.md)** · **[HQ 팀/어드민 패널](docs/HQ_TEAMS_ADMIN.ko.md)** · **[영구 채팅·명령어 로그](docs/HQ_SERVER_LOGS.ko.md)** · **[간편 역할 부여/채널 이름 오류 수정](docs/MESSENGER_ROLES.ko.md)**
 
 저장 서비스가 연결되지 않으면 메신저 설정 변경과 메시지 전달을 잠그며, 기본 Roblox 채팅은 유지됩니다. 실제 Roblox 저장/다중 사용자 검증은 별도의 테스트 경험에서 진행하세요.
 
