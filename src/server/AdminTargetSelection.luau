@@ -81,6 +81,9 @@ function Picker.resolve(actor: Player,query: string,
     -- Starting a new command cancels the earlier selection. This prevents
     -- stale kill/teleport confirmations from executing after another command.
     Picker.clear(actor)
+    if not TeamService.isAdmin(actor) then
+        return nil,"그룹 운영진 권한이 없어 대상을 선택할 수 없습니다."
+    end
     if not Matcher.validQuery(query) then
         return nil,"대상 이름이나 표시 닉네임을 입력하세요. 'all' 같은 전체 지정은 지원하지 않습니다."
     end
@@ -93,9 +96,6 @@ function Picker.resolve(actor: Player,query: string,
         return nil,"일치하는 사람이 없습니다. 사용자 이름 또는 표시 닉네임을 확인하세요."
     end
     if #options==1 then return options[1],nil end
-    if not TeamService.isAdmin(actor) then
-        return nil,"운영진 권한이 없어 플레이어 목록을 열 수 없습니다."
-    end
     Picker.start()
     ticketCounter+=1
     local allowed: {[number]: Player}={}
