@@ -8,7 +8,7 @@
 - HQ 멤버에게는 **기존 닉네임/일반 군 계급명/군 계급장**을 따로 표시하지 않습니다. 기존 기본 Roblox Humanoid 이름표도 숨깁니다.
 - HQ에서 위관급·영관급·장관급 등 다른 팀으로 이동하면 **일반 닉네임+계급장+계급명** 표시로 되돌아갑니다.
 - `/팀`으로 HQ에 임명하거나 HQ를 해제할 때, 플레이어가 리스폰하거나, 저장된 계급이 나중에 로드될 때도 자동으로 갱신됩니다. 렌더 순서를 검사해 이전 캐릭터의 머리 위 GUI가 다시 나타나는 현상을 줄였습니다.
-- 머리 위 HQ 이미지가 로드되지 않아도 파란색 거북이 등딱지와 고양이 얼굴을 조합한 간단한 **벡터형 대체 엠블럼**이 표시됩니다.
+- 머리 위 HQ 이미지가 로드되지 않아도 파란색 거북이 등딱지와 고양이 얼굴을 조합한 간단한 **벡터형 대체 엠블럼**이 표시됩니다. 이미지가 클라이언트에서 정상 로드되면 대체 엠블럼은 자동으로 숨깁니다.
 
 ## 이전에 만든 파란색 HQ PNG를 Roblox에 연결하는 방법
 
@@ -52,7 +52,7 @@ Rojo로 Studio에 코드를 동기화한 다음, 다음 항목을 확인합니�
 5. 이미지 승인 후 Studio에서 Play를 다시 시작해 **대체 로고 대신 실제 `HQLogo.png`**가 표시되는지 확인합니다.
 6. 서버 Command Bar에서 `tests/studio/hq-overhead-check.luau` 내용을 실행해 `[HQ OVERHEAD] Passed ... assertions`를 확인합니다.
 
-대상 파일: `src/server/RankService.luau`, `src/server/HQOverheadBadge.luau`, `src/shared/HQLogoConfig.luau`
+대상 파일: `src/server/RankService.luau`, `src/server/HQOverheadBadge.luau`, `src/shared/HQLogoConfig.luau`, `src/client/HQLogoLoading.client.luau`
 
 **검증 상태:** GitHub 파일 수정과 소스 점검은 진행했지만, 직접 Roblox Studio를 실행한 통합 검증은 아직 수행하지 않았습니다.
 
