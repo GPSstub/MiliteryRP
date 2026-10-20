@@ -98,7 +98,8 @@ local function incoming(actor: Player,action: any,payload: any)
         if action=="create_channel" then op.id="custom_"..HttpService:GenerateGUID(false):gsub("-","") end
         -- Messenger roles are user-facing labels; IDs are internal and unique.
         if action=="create_role" and (op.roleId==nil or op.roleId=="") then
-            op.roleId="role_"..HttpService:GenerateGUID(false):gsub("-",""):sub(1,18)
+            local token=HttpService:GenerateGUID(false):gsub("-","")
+            op.roleId="role_"..token:sub(1,18)
         end
         -- Reject unauthorized edits before expensive filtering; transaction re-checks latest stored roles.
         local preview,message=Rules.apply(Store.get(),Store.context(actor),op)
