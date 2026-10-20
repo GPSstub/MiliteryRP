@@ -1506,6 +1506,26 @@ local function renderMembers()
 
             rank.Position = UDim2.fromOffset(44, 24)
             rank.Size = UDim2.new(1, -47, 0, 17)
+
+            if player:GetAttribute("MessengerCanManageRoles")==true then
+                name.Size=UDim2.new(1,-91,0,20)
+                rank.Size=UDim2.new(1,-91,0,17)
+                local give=button(row,"역할",C.surface)
+                give.Name="AssignRole"
+                give.AnchorPoint=Vector2.new(1,0.5)
+                give.Position=UDim2.new(1,-4,0.5,0)
+                give.Size=UDim2.fromOffset(42,30)
+                give.TextSize=11
+                give.Activated:Connect(function()
+                    local picker=window:FindFirstChild("MessengerRolePicker")
+                        or window:WaitForChild("MessengerRolePicker",4)
+                    if picker and picker:IsA("BindableEvent") then
+                        picker:Fire(target.UserId)
+                    else
+                        description.Text="역할 설정을 준비하지 못했습니다. 잠시 후 다시 시도하세요."
+                    end
+                end)
+            end
         end
     end
 
@@ -1710,6 +1730,7 @@ local function updateAccess()
     end
 
     if canView(selectedChannel) then selectChannel(selectedChannel) else renderMessages(); updateChannelButtons() end
+    renderMembers()
 end
 
 -- Register these signals once, not every time updateAccess runs.
