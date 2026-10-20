@@ -1,0 +1,60 @@
+# HQ 플레이어 제어 명령어 — to / here / kill / 폭발
+
+구현 브랜치: [GitHub main](https://github.com/GPSstub/MiliteryRP/tree/main)
+
+## 사용 방법
+
+**HQ 팀에 소속된 사용자만** Roblox 기본 채팅창 또는 **메뉴 → HQ 관리 패널 → 플레이어 제어** 탭에서 사용할 수 있습니다. 실행할 때마다 서버에서 해당 사용자의 현재 팀과 대상 존재 여부를 검증합니다.
+
+| 명령어 | 의미 | 예시 |
+|---|---|---|
+| `;to 대상` | **나**를 대상 플레이어 옆으로 순간이동 | `;to Soldier123` |
+| `;here 대상` | **대상**을 내 옆으로 소환 | `;here Soldier123` |
+| `;kill 대상` | 대상 플레이어의 캐릭터 사망 처리 | `;kill Soldier123` |
+| `;폭발 대상` | 대상에게 폭발 이펙트를 표시하고 대상만 사망 처리 | `;폭발 Soldier123` |
+| `;explode 대상` | `;폭발` 영어 별칭 | `;explode Soldier123` |
+
+`대상`에는 **현재 서버에서 접속 중인 정확한 Roblox 사용자 이름(Name)**을 입력합니다. DisplayName이나 이름 일부는 자동 검색하지 않습니다. `나`와 `me`를 자기 자신 대상으로 사용할 수 있지만 `;to 나` / `;here 나`는 의미가 없어 거부합니다.
+
+### 안전한 적용 범위
+
+- 이 네 명령어는 계급과 관계없이 **현재 HQ 팀 사용자만** 실행할 수 있습니다.
+- `to`, `here`는 두 캐릭터 모두 살아 있어야 하며 **이동하는 캐릭터**가 착석 중이거나 고정되어 있으면 거부합니다.
+- 순간이동은 목적지 캐릭터와 겹치지 않도록 **옆으로 약 4스터드** 떨어진 위치로 이동합니다. 비행 중이었다면 해당 캐릭터의 비행을 먼저 해제합니다.
+- `kill`, `폭발`은 대상 한 명에게만 작용하며 다른 플레이어를 일괄 대상으로 하는 `all`과 같은 지정은 허용하지 않습니다.
+- `폭발`은 **불꽃 파티클, 순간 섬광, 팽창하는 네온 구체와 Roblox 폭발 시각 효과**를 재생합니다. `BlastRadius=0`, `BlastPressure=0`, `DestroyJointRadiusPercent=0`으로 설정해 **주변 플레이어·건물·지형을 폭발 자체로 피해 입히지 않습니다.** 지정된 대상의 체력만 0으로 만듭니다.
+- `폭발` 명령은 HQ 사용자별 **2초 간격**으로 제한하며, 플레이어 제어 명령 전체에는 약 0.35초 간격 제한이 있습니다.
+- 채팅 명령은 Roblox `TextChatCommand`가 가로채므로 일반 채팅에 공개되지 않고, 결과만 실행한 사용자에게 시스템 메시지로 표시됩니다.
+- 서버 감사 로그에는 실행한 명령어와 성공/실패 여부가 저장 시도됩니다. 저장 장애·호출 제한이 발생하면 일부 기록이 누락될 수 있습니다.
+
+### 어드민 패널
+
+`메뉴 → HQ 관리 패널 → 플레이어 제어`에서 대상 플레이어를 먼저 선택합니다. `대상에게 이동`, `대상 데려오기`, `대상 사망`, `폭발 효과` 버튼을 사용합니다. **사망·폭발 버튼에는 확인창**이 표시됩니다.
+
+기존 **명령어** 탭의 직접 입력 및 사용 예시에도 네 가지 명령을 추가했습니다. 채팅창에서 직접 입력한 명령에는 별도 확인창이 뜨지 않으므로 대상을 확인한 뒤 사용하세요.
+
+## 반영 / 테스트
+
+```bash
+git status --short
+git switch main
+git pull --ff-only origin main
+rojo serve default.project.json
+```
+
+로컬 변경 사항을 먼저 확인한 뒤 Studio Rojo 플러그인을 다시 연결하고 Stop → Play로 실행합니다.
+
+1. Studio **Start Server + 2 Players**에서 한 계정을 HQ로 지정합니다.
+2. HQ 계정 채팅창에서 `;to 다른계정이름` → HQ가 대상 옆으로 이동하는지 확인합니다.
+3. 반대로 `;here 다른계정이름` → 대상이 HQ 옆으로 오는지 확인합니다.
+4. `;kill 다른계정이름` → 대상만 사망 처리되는지, 다른 사람은 살아 있는지 확인합니다.
+5. 대상이 리스폰한 뒤 `;폭발 다른계정이름` → 불꽃/섬광 및 대상 사망, 주변 물리/건물 피해 없음 확인합니다.
+6. HQ가 아닌 사용자로 네 명령을 시도 → 실행되지 않는지 확인합니다.
+7. **어드민 패널 → 플레이어 제어**에서 대상 선택 후 두 순간이동 버튼과 사망/폭발 확인창을 확인합니다.
+8. 비행 상태나 착석 상태에서 순간이동을 시도하고 차단·비행 해제 동작을 확인합니다.
+9. `tests/studio/admin-semicolon-check.luau`를 서버 Command Bar에서 실행해 새 `TextChatCommand`가 등록됐는지 확인합니다.
+10. 공식 Luau CLI가 있다면 `python3 tools/test.py`로 `tests/admin-player-actions.spec.luau`를 포함한 순수 파서 검사와 컴파일 검사를 실행합니다.
+
+**검증 상태:** GitHub 코드와 테스트 하네스는 추가했지만, Roblox Studio에서 실제 2인 플레이 통합 테스트를 완료한 상태는 아닙니다.
+
+관련 Roblox 공식 문서: [TextChatCommand](https://create.roblox.com/docs/reference/engine/classes/TextChatCommand), [Explosion](https://create.roblox.com/docs/reference/engine/classes/Explosion), [PVInstance:PivotTo](https://create.roblox.com/docs/reference/engine/classes/PVInstance#PivotTo).
