@@ -25,6 +25,9 @@ function Parser.parse(text: any): PlayerAction?
     if target=="나" or string.lower(target)=="me" then
         return {kind=kind,target=target}
     end
+    -- No mass-target selectors: each action affects exactly one named player.
+    if target=="모두" or target=="전체" or string.lower(target)=="all"
+        or string.lower(target)=="everyone" then return nil end
     if #target<3 or #target>20 or not target:match("^[%w_]+$") then
         return nil
     end
