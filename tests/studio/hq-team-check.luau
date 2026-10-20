@@ -1,6 +1,6 @@
 -- Server Command Bar or Studio test script (run only while Play is active).
 -- Safe test: does not grant teams, change ranks or touch DataStores.
--- Executing /계급목록 may append a harmless entry to the in-server audit log.
+-- Executing ;계급목록 may append a harmless entry to the in-server audit log.
 local ServerScriptService=game:GetService("ServerScriptService")
 local Players=game:GetService("Players")
 local Teams=game:GetService("Teams")
@@ -25,7 +25,7 @@ for _,player in Players:GetPlayers() do
     check(hq==(player.Team==Teams:FindFirstChild("HQ") and not player.Neutral),
         "Inconsistent HQ membership: "..player.Name)
     -- Safe rank listing only; no ranks, teams or admin modes are changed.
-    local success,message=AdminService.execute(player,"/계급목록")
+    local success,message=AdminService.execute(player,";계급목록")
     if hq then
         check(success or message=="잠시 후 다시 입력하세요.",
             "HQ player should be able to list ranks: "..message)
