@@ -191,7 +191,7 @@ function Panel.mount(parent: Frame): (boolean)->()
     end
     local function run(command: string)
         if not hasAdminAccess(player) then
-            status("Roblox 그룹 운영진 등급(200+)이 아니므로 실행할 수 없습니다.",false)
+            status("그룹 운영진 권한을 확인할 수 없어 실행할 수 없습니다.",false)
             return
         end
         if type(command)~="string" or #command>256 or not command:match("%S") then
