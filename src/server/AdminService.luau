@@ -1,6 +1,5 @@
 --!strict
 local Players = game:GetService("Players")
-local Teams = game:GetService("Teams")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
 local Audit = require(script.Parent:WaitForChild("AdminAudit"))
@@ -9,6 +8,7 @@ local TeamService = require(script.Parent:WaitForChild("TeamService"))
 local Service = {}
 local started = false
 local requests: {[Player]: number} = {}
+local syncRequests: {[Player]: number} = {}
 local inputs: {[Player]: number} = {}
 local flying: {[Player]: any} = {}
 local healthConnections: {[Player]: RBXScriptConnection} = {}
@@ -123,10 +123,16 @@ function Service.start()
     request.OnServerEvent:Connect(function(actor: Player, action: any, text: any)
         if not authorized(actor) then return end
         local now=os.clock()
-        if now-(requests[actor] or -math.huge)<0.25 then return end
-        requests[actor]=now
-        if action=="sync" then response:FireClient(actor,"snapshot",Audit.snapshot())
+        if action=="sync" then
+            if now-(syncRequests[actor] or -math.huge)<0.5 then return end
+            syncRequests[actor]=now
+            response:FireClient(actor,"snapshot",Audit.snapshot())
         elseif action=="command" then
+            if now-(requests[actor] or -math.huge)<0.25 then
+                response:FireClient(actor,"result",{ok=false,message="너무 빠른 명령입니다. 잠시 후 다시 시도하세요."})
+                return
+            end
+            requests[actor]=now
             local ok,message=Service.execute(actor,text)
             response:FireClient(actor,"result",{ok=ok,message=message})
         end
@@ -178,7 +184,7 @@ function Service.start()
     Players.PlayerAdded:Connect(added)
     for _,p in Players:GetPlayers() do added(p) end
     Players.PlayerRemoving:Connect(function(p)
-        stopFlight(p); requests[p]=nil; inputs[p]=nil;hadHQ[p]=nil
+        stopFlight(p); requests[p]=nil;syncRequests[p]=nil;inputs[p]=nil;hadHQ[p]=nil
         if healthConnections[p] then healthConnections[p]:Disconnect();healthConnections[p]=nil end
         local connections=teamConnections[p]
         if connections then
