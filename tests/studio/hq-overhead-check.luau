@@ -6,6 +6,7 @@ local Players=game:GetService("Players")
 local Teams=game:GetService("Teams")
 local ServerScriptService=game:GetService("ServerScriptService")
 local TeamService=require(ServerScriptService:WaitForChild("TeamService"))
+local Catalog=require(game:GetService("ReplicatedStorage"):WaitForChild("Shared"):WaitForChild("RankCatalog"))
 local Branding=require(game:GetService("ReplicatedStorage"):WaitForChild("Shared"):WaitForChild("HQLogoConfig"))
 
 local checks=0
@@ -24,14 +25,27 @@ for _,player in Players:GetPlayers() do
         continue
     end
     local tag=head:FindFirstChild("RankTag")
-    if not tag then
-        task.wait(1)
-        tag=head:FindFirstChild("RankTag")
-    end
+    if not tag then tag=head:WaitForChild("RankTag",5) end
     check(tag and tag:IsA("BillboardGui"),player.Name.." is missing overhead GUI")
     local isHQ=TeamService.isAdmin(player)
     check(isHQ==(player.Team==hq and not player.Neutral),
         player.Name.." HQ membership is inconsistent")
+    local rankId=player:GetAttribute("RankId")
+    local storedRank=Catalog.find(rankId)
+    check(storedRank~=nil,player.Name.." saved rank ID is invalid")
+    local shown=if isHQ then "admin" else storedRank.name
+    check(player:GetAttribute("Rank")==shown,
+        player.Name.." Rank attribute should be "..shown)
+    local displayId=if isHQ then "admin" else rankId
+    check(player:GetAttribute("RankDisplayId")==displayId,
+        player.Name.." RankDisplayId not synchronized")
+    local leaderstats=player:FindFirstChild("leaderstats")
+    local rankValue=if leaderstats then leaderstats:FindFirstChild("계급") else nil
+    check(rankValue and rankValue:IsA("StringValue") and rankValue.Value==shown,
+        player.Name.." leaderboard should display "..shown)
+    check(player:GetAttribute("RankCategory")==storedRank.category
+        and player:GetAttribute("RankOrder")==storedRank.order,
+        player.Name.." HQ must not overwrite the persisted military rank")
     local expectedMode=if isHQ then "HQ" else "Rank"
     check(tag:GetAttribute("DisplayMode")==expectedMode,
         player.Name.." overhead mode is wrong")
