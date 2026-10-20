@@ -155,6 +155,7 @@ function Panel.mount(parent: Frame): (boolean)->()
     local pendingHQTarget: string?=nil
     local active=false
     local render: ()->()=function() end
+    local fetchLogs: (string,string)->()=function() end
 
     local dialog=make("Frame",root,{
         Name="HQConfirmation",Visible=false,AnchorPoint=Vector2.new(0.5,0.5),
@@ -293,6 +294,9 @@ function Panel.mount(parent: Frame): (boolean)->()
         currentTab=tab
         pickerVisible=false
         render()
+        if tab=="logs" and not logLoaded[logKind] then
+            fetchLogs(logKind,"latest")
+        end
     end
 
     local function drawOverview()
@@ -438,7 +442,7 @@ function Panel.mount(parent: Frame): (boolean)->()
         end
         help.Size=UDim2.new(1,-3,0,240)
     end
-    local function fetchLogs(kind: string,action: string)
+    fetchLogs=function(kind: string,action: string)
         if not isHQ(player) or logLoading[kind] then return end
         logLoading[kind]=true
         logErrors[kind]=""
