@@ -8,6 +8,8 @@ local Actions=require(script.Parent.MessengerActions)
 local Archive=require(script.Parent.MessengerArchive)
 local AdminLogService=require(script.Parent.AdminLogService)
 local Runtime={}
+local nameSignal=Instance.new("BindableEvent")
+Runtime.NamesChanged=nameSignal.Event
 local started=false
 local channels: {[string]: TextChannel}={}
 local pending={}
@@ -29,8 +31,13 @@ function Runtime.filter(name: any,userId: number): string?
     local ok,value=pcall(function()
         return TextService:FilterStringAsync(name,userId,Enum.TextFilterContext.PublicChat):GetNonChatStringForBroadcastAsync()
     end)
-    if ok then
-        filtered[tostring(userId)..":"..name]=value
+    if ok and type(value)=="string" and value~="" and utf8.len(value)
+        and #value<=384 then
+        local key=tostring(userId)..":"..name
+        if filtered[key]~=value then
+            filtered[key]=value
+            nameSignal:Fire()
+        end
         return value
     end
     return nil
@@ -85,7 +92,9 @@ local function refreshOnce()
         for _,entry in group do
             if entry.authorId~=0 then
                 local key=tostring(entry.authorId)..":"..entry.name;activeNames[key]=true
-                if not filtered[key] then Runtime.filter(entry.name,entry.authorId) end
+                if not entry.displayName and not filtered[key] then
+                    Runtime.filter(entry.name,entry.authorId)
+                end
             end
         end
     end
