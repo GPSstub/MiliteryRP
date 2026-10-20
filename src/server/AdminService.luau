@@ -132,7 +132,8 @@ function Service.execute(actor: Player, text: any): (boolean, string)
         end
     elseif verb==";팀" or verb==";team" then
         local name,teamName=nameAndTail(rest)
-        if name and name~="" and TeamPolicy.isDefined(teamName) then
+        if name and name~="" and type(teamName)=="string"
+            and TeamPolicy.isDefined(teamName) then
             targetQuery=name
             perform=function(selected: Player): (boolean,string)
                 return TeamService.assign(actor,selected,teamName)
