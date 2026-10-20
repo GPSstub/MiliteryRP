@@ -3,6 +3,7 @@
 local Players=game:GetService("Players")
 local ReplicatedStorage=game:GetService("ReplicatedStorage")
 local ContextActionService=game:GetService("ContextActionService")
+local TweenService=game:GetService("TweenService")
 local UserInputService=game:GetService("UserInputService")
 local player=Players.LocalPlayer
 local Rules=require(ReplicatedStorage:WaitForChild("Shared"):WaitForChild("TrainingRifleRules"))
@@ -79,6 +80,88 @@ crosshair.Visible=false
 crosshair.Parent=gui
 
 local selected: Tool?=nil
+-- Client-only body/weapon motion complements the server-replicated moving
+-- magazine and bolt. No uploaded AnimationId assets are required.
+local baseGrip: CFrame?=nil
+local movementVersion=0
+local lastLocalShot=-math.huge
+local currentGripTween: Tween?=nil
+local leftShoulder: Motor6D?=nil
+local leftShoulderBase: CFrame?=nil
+local armTween: Tween?=nil
+
+local function animateGrip(tool: Tool,target: CFrame,duration: number,style: Enum.EasingStyle?)
+    if currentGripTween then currentGripTween:Cancel() end
+    if tool.Parent==nil then return end
+    local tween=TweenService:Create(tool,TweenInfo.new(duration,style or Enum.EasingStyle.Quad,
+        Enum.EasingDirection.Out),{Grip=target})
+    currentGripTween=tween
+    tween:Play()
+end
+local function shoulderTarget(target: CFrame,duration: number)
+    if armTween then armTween:Cancel() end
+    if not leftShoulder or not leftShoulder.Parent then return end
+    armTween=TweenService:Create(leftShoulder,TweenInfo.new(duration,Enum.EasingStyle.Quad,
+        Enum.EasingDirection.Out),{C0=target})
+    armTween:Play()
+end
+local function findShoulder()
+    leftShoulder=nil
+    leftShoulderBase=nil
+    local character=player.Character
+    if not character then return end
+    local torso=character:FindFirstChild("UpperTorso") or character:FindFirstChild("Torso")
+    if not torso then return end
+    local shoulder=torso:FindFirstChild("LeftShoulder") or torso:FindFirstChild("Left Shoulder")
+    if shoulder and shoulder:IsA("Motor6D") then
+        leftShoulder=shoulder
+        leftShoulderBase=shoulder.C0
+    end
+end
+local function recoil(tool: Tool)
+    if selected~=tool or not baseGrip then return end
+    if tool:GetAttribute("Reloading")==true or (tool:GetAttribute("Ammo") or 0)<=0 then return end
+    local now=os.clock()
+    if now-lastLocalShot<Rules.SHOT_INTERVAL then return end
+    lastLocalShot=now
+    movementVersion+=1
+    local version=movementVersion
+    local rest=baseGrip
+    -- Short kick towards the player's shoulder; settles without blocking fire.
+    animateGrip(tool,rest*CFrame.new(0,0,0.13)*CFrame.Angles(math.rad(5),0,0),0.035)
+    local camera=workspace.CurrentCamera
+    if camera then
+        camera.CFrame=camera.CFrame*CFrame.Angles(math.rad(0.8),math.rad(math.random(-3,3)/10),0)
+    end
+    task.delay(0.055,function()
+        if movementVersion==version and selected==tool and baseGrip==rest then
+            animateGrip(tool,rest,0.12)
+        end
+    end)
+end
+local function reloadPose(tool: Tool)
+    if selected~=tool or not baseGrip then return end
+    movementVersion+=1
+    local version=movementVersion
+    local rest=baseGrip
+    animateGrip(tool,rest*CFrame.new(0,-0.12,0.16)
+        *CFrame.Angles(math.rad(21),math.rad(-12),math.rad(-9)),0.24)
+    if leftShoulder and leftShoulderBase then
+        shoulderTarget(leftShoulderBase*CFrame.Angles(math.rad(-46),0,math.rad(32)),0.25)
+    end
+    task.delay(0.38,function()
+        if movementVersion~=version or selected~=tool then return end
+        animateGrip(tool,rest*CFrame.new(0,-0.18,0.22)
+            *CFrame.Angles(math.rad(31),math.rad(-18),math.rad(-12)),0.33)
+    end)
+    task.delay(1.17,function()
+        if movementVersion~=version or selected~=tool then return end
+        animateGrip(tool,rest,0.48,Enum.EasingStyle.Back)
+        if leftShoulder and leftShoulderBase then
+            shoulderTarget(leftShoulderBase*CFrame.Angles(math.rad(-22),0,math.rad(14)),0.42)
+        end
+    end)
+end
 local observed: {[Tool]: boolean}=setmetatable({}, {__mode="k"})
 local function updateAmmo()
     local tool=selected
@@ -100,6 +183,16 @@ local function reloadAction(_name: string,inputState: Enum.UserInputState,_input
 end
 local function unequip(tool: Tool)
     if selected~=tool then return end
+    movementVersion+=1
+    if currentGripTween then currentGripTween:Cancel();currentGripTween=nil end
+    if baseGrip then tool.Grip=baseGrip end
+    if armTween then armTween:Cancel();armTween=nil end
+    if leftShoulder and leftShoulderBase and leftShoulder.Parent then
+        leftShoulder.C0=leftShoulderBase
+    end
+    leftShoulder=nil
+    leftShoulderBase=nil
+    baseGrip=nil
     selected=nil
     panel.Visible=false
     crosshair.Visible=false
@@ -109,12 +202,26 @@ local function equip(tool: Tool)
     if selected==tool then return end
     if selected then unequip(selected) end
     selected=tool
+    baseGrip=tool.Grip
+    movementVersion+=1
+    local version=movementVersion
+    lastLocalShot=-math.huge
+    findShoulder()
     panel.Visible=true
     crosshair.Visible=true
     updateAmmo()
+    local rest=baseGrip
+    tool.Grip=rest*CFrame.new(0,-0.15,0.14)*CFrame.Angles(math.rad(20),0,0)
+    task.defer(function()
+        if selected==tool and movementVersion==version then animateGrip(tool,rest,0.23) end
+    end)
+    if leftShoulder and leftShoulderBase then
+        shoulderTarget(leftShoulderBase*CFrame.Angles(math.rad(-22),0,math.rad(14)),0.22)
+    end
     ContextActionService:BindAction("TrainingRifleReload",reloadAction,true,Enum.KeyCode.R)
     ContextActionService:SetTitle("TrainingRifleReload","재장전")
     ContextActionService:SetPosition("TrainingRifleReload",UDim2.new(1,-168,1,-192))
+    if tool:GetAttribute("Reloading")==true then reloadPose(tool) end
 end
 local function observe(child: Instance)
     if not child:IsA("Tool") then return end
@@ -138,11 +245,28 @@ local function observe(child: Instance)
     tool.Activated:Connect(function()
         if selected~=tool then return end
         local camera=workspace.CurrentCamera
-        if camera then remote:FireServer("fire",camera.CFrame.LookVector) end
+        if not camera then return end
+        -- Project the center reticle into the world, so the server can fire
+        -- from the actual muzzle toward the same target (not a parallel ray).
+        local size=camera.ViewportSize
+        local ray=camera:ViewportPointToRay(size.X*0.5,size.Y*0.5)
+        local params=RaycastParams.new()
+        params.FilterType=Enum.RaycastFilterType.Exclude
+        params.FilterDescendantsInstances=if player.Character then {player.Character} else {}
+        params.IgnoreWater=true
+        local hit=workspace:Raycast(ray.Origin,ray.Direction*Rules.RANGE,params)
+        local aimPoint=if hit then hit.Position else ray.Origin+ray.Direction*Rules.RANGE
+        remote:FireServer("fire",aimPoint)
+        recoil(tool)
     end)
     for _,attribute in {"Ammo","Reserve","Reloading"} do
         tool:GetAttributeChangedSignal(attribute):Connect(function()
-            if selected==tool then updateAmmo() end
+            if selected==tool then
+                updateAmmo()
+                if attribute=="Reloading" and tool:GetAttribute("Reloading")==true then
+                    reloadPose(tool)
+                end
+            end
         end)
     end
     if tool.Parent==player.Character then equip(tool) end
