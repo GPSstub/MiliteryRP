@@ -86,7 +86,7 @@ local function applyGod(player: Player)
     end)
 end
 function Service.execute(actor: Player, text: any): (boolean, string)
-    if typeof(actor) ~= "Instance" or not actor:IsA("Player") or not authorized(actor) then return false, "Roblox 그룹 운영진(등급 200 이상)만 관리자 명령어를 사용할 수 있습니다." end
+    if typeof(actor) ~= "Instance" or not actor:IsA("Player") or not authorized(actor) then return false, "설정된 Roblox 그룹 운영진 등급이어야 관리자 명령어를 사용할 수 있습니다." end
     if type(text) ~= "string" or #text > 256 or not utf8.len(text) then return false, "명령어는 256바이트 이내로 입력하세요." end
     local words: {string} = {}
     for word in string.gmatch(text, "%S+") do table.insert(words, word) end
