@@ -33,7 +33,7 @@ local function renderCharacter(player: Player, character: Model, version: number
     tag.Name="RankTag"; tag.Adornee=head;tag.Enabled=true
     tag.Size=UDim2.fromOffset(180,88)
     tag.StudsOffsetWorldSpace=Vector3.new(0,2.7,0);tag.MaxDistance=100
-    tag.AlwaysOnTop=true;tag.LightInfluence=0;tag.ResetOnSpawn=false
+    tag.AlwaysOnTop=true;tag.LightInfluence=0
     if TeamService.isAdmin(player) then
         -- HQ is a temporary team presentation, not a persisted rank. Build
         -- before parenting so an incomplete nameplate is never replicated.
