@@ -95,7 +95,6 @@ function Sprint.start()
     local remote=Instance.new("RemoteEvent")
     remote.Name="SprintRequest"
     remote.Parent=ReplicatedStorage
-    requestRemote=remote
 
     remote.OnServerEvent:Connect(function(player: Player,requested: any)
         if player.Parent~=Players or type(requested)~="boolean" then return end
