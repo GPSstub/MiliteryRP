@@ -83,6 +83,7 @@ function Panel.mount(parent: Frame): (boolean)->()
     local player=Players.LocalPlayer
     local request=ReplicatedStorage:WaitForChild("AdminRequest") :: RemoteEvent
     local response=ReplicatedStorage:WaitForChild("AdminResponse") :: RemoteEvent
+    local targetSelection=ReplicatedStorage:WaitForChild("AdminTargetSelection") :: RemoteEvent
     local logRemote=ReplicatedStorage:WaitForChild("AdminLogRequest") :: RemoteFunction
 
     local root=make("Frame",parent,{
@@ -244,8 +245,8 @@ function Panel.mount(parent: Frame): (boolean)->()
         local baseline=if narrowTarget then 204 else 150
         local height=if pickerVisible then baseline+visibleCount*38 else baseline
         local frame=card("TargetSelector",height)
-        description(frame,"대상 플레이어","본인 또는 현재 서버의 Roblox 사용자 이름을 선택하세요.")
-        local selector=input(frame,currentTarget(),"나 / Roblox 사용자 이름")
+        description(frame,"대상 플레이어","사용자 이름 일부 또는 표시 닉네임도 가능해요. 여러 명이면 선택창이 나옵니다.")
+        local selector=input(frame,currentTarget(),"나 / 사용자 이름 일부 / 표시 닉네임")
         selector.Name="TargetName"
         selector.Position=UDim2.fromOffset(14,86)
         selector.Size=if narrowTarget then UDim2.new(1,-28,0,44) else UDim2.new(1,-150,0,44)
@@ -453,7 +454,7 @@ function Panel.mount(parent: Frame): (boolean)->()
     end
     local function drawCommand()
         local frame=card("DirectCommand",219)
-        description(frame,"직접 명령어","서버의 승인된 관리 명령만 실행됩니다. Lua 코드 실행은 지원하지 않습니다.")
+        description(frame,"직접 명령어","일부 이름·표시 닉네임 사용 가능. 중복이면 대상을 골라야 실행됩니다.")
         local value=input(frame,"","예: ;계급 사용자이름 대위")
         value.Name="CommandInput"
         value.Position=UDim2.fromOffset(14,93)
@@ -709,6 +710,18 @@ function Panel.mount(parent: Frame): (boolean)->()
     response.OnClientEvent:Connect(function(kind: string,data: any)
         if not hasAdminAccess(player) then return end
         if kind=="result" and type(data)=="table" then
+            if data.pending==true then
+                status(tostring(data.message or "대상을 선택하세요."))
+            else
+                status(tostring(data.message or "응답 없음"),data.ok==true)
+            end
+        end
+    end)
+    targetSelection.OnClientEvent:Connect(function(kind: any,data: any)
+        if not hasAdminAccess(player) then return end
+        if kind=="open" then
+            status("이름이 겹칩니다. 표시 닉네임과 @사용자이름을 확인하고 대상을 선택하세요.")
+        elseif kind=="result" and type(data)=="table" then
             status(tostring(data.message or "응답 없음"),data.ok==true)
         end
     end)
