@@ -248,7 +248,7 @@ end
 
 local function request(player: Player,kind: any,action: any): any
     if not TeamService.isAdmin(player) then
-        return {ok=false,message="Roblox 그룹 운영진(등급 200 이상)만 서버 로그에 접근할 수 있습니다."}
+        return {ok=false,message="설정된 Roblox 그룹 운영진 등급이어야 서버 로그에 접근할 수 있습니다."}
     end
     if not Core.typeValid(kind) or (action~="latest" and action~="more") then
         return {ok=false,message="잘못된 로그 요청입니다."}
