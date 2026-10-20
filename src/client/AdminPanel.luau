@@ -227,19 +227,22 @@ function Panel.mount(parent: Frame): (boolean)->()
     local function targetCard()
         local online=Players:GetPlayers()
         local visibleCount=if pickerVisible then math.min(#online,12) else 0
-        local height=if pickerVisible then 160+visibleCount*38 else 150
+        local narrowTarget=root.AbsoluteSize.X<440
+        local baseline=if narrowTarget then 204 else 150
+        local height=if pickerVisible then baseline+visibleCount*38 else baseline
         local frame=card("TargetSelector",height)
         description(frame,"대상 플레이어","본인 또는 현재 서버의 Roblox 사용자 이름을 선택하세요.")
         local selector=input(frame,currentTarget(),"나 / Roblox 사용자 이름")
         selector.Name="TargetName"
         selector.Position=UDim2.fromOffset(14,86)
-        selector.Size=UDim2.new(1,-150,0,44)
+        selector.Size=if narrowTarget then UDim2.new(1,-28,0,44) else UDim2.new(1,-150,0,44)
         selector:GetPropertyChangedSignal("Text"):Connect(function()
             selectedTarget=selector.Text:match("^%s*(.-)%s*$") or ""
         end)
         local choose=button(frame,if pickerVisible then "목록 닫기" else "인원 선택  ▾",
             UDim2.fromOffset(116,44))
-        choose.Position=UDim2.new(1,-130,0,86)
+        choose.Position=if narrowTarget then UDim2.fromOffset(14,138) else UDim2.new(1,-130,0,86)
+        choose.Size=if narrowTarget then UDim2.new(1,-28,0,44) else UDim2.fromOffset(116,44)
         choose.Activated:Connect(function()
             selectedTarget=selector.Text
             pickerVisible=not pickerVisible
@@ -247,7 +250,7 @@ function Panel.mount(parent: Frame): (boolean)->()
         end)
         if pickerVisible then
             local list=make("ScrollingFrame",frame,{
-                Name="OnlinePlayers",Position=UDim2.fromOffset(14,140),
+                Name="OnlinePlayers",Position=UDim2.fromOffset(14,if narrowTarget then 192 else 140),
                 Size=UDim2.new(1,-28,0,visibleCount*38),
                 BackgroundTransparency=1,BorderSizePixel=0,
                 ScrollBarThickness=3,AutomaticCanvasSize=Enum.AutomaticSize.Y,
