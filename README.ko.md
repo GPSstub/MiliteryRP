@@ -52,7 +52,7 @@
 
 Studio에서 `;계급 대위`를 실행하고 성공 메시지가 표시되면 Stop → Play로 재접속해서 계급을 확인합니다. Explorer의 Players → 본인 플레이어 → Attributes에서 `RankStorageStatus`가 `Ready`인지 확인할 수 있습니다. `Error`이면 Output의 `[RankStore]` 경고와 API 설정을 확인하세요.
 
-저장소 이름은 Studio에서 `MilitaryRP_Ranks_Dev_v1`, 실제 공개/비공개 서버에서는 `MilitaryRP_Ranks_v1`이며 키는 `user_<UserId>` 형식입니다. 최초 접속 시 훈련병을 화면에 임시 표시했다가 저장된 계급을 불러옵니다. **일반 채팅 기록은 영구 저장하지 않습니다. 공지사항 및 관리자가 영구 보관을 선택한 채널의 게시글만 별도 DataStore에 저장됩니다.**
+저장소 이름은 Studio에서 `MilitaryRP_Ranks_Dev_v1`, 실제 공개/비공개 서버에서는 `MilitaryRP_Ranks_v1`이며 키는 `user_<UserId>` 형식입니다. 최초 접속 시 훈련병을 화면에 임시 표시했다가 저장된 계급을 불러옵니다. **일반 채널의 메신저 대화 목록은 영구 보관하지 않지만, **별도의 운영진 감사 로그에는 군용 메신저 채팅이 필터링되어 저장됩니다**. 사용자에게 수집·보관 정책을 공지하세요. 공지사항 및 관리자가 영구 보관을 선택한 채널의 게시글은 별도 DataStore에 저장됩니다.**
 
 ## 계급표
 
@@ -79,8 +79,10 @@ Studio에서 `;계급 대위`를 실행하고 성공 메시지가 표시되면 S
 - `src/client/RankFeedback.client.luau`: Roblox 기본 채팅에 명령 결과 표시. 별도 창을 만들지 않는다.
 
 ```sh
-python3 tools/build_place.py
+python3 tools/build_place.py  # MilitaryRP.test.rbxlx (새 테스트 맵만 생성)
 ```
+
+**주의:** 완성된 `MilitaryRP.rbxlx`의 18개 건물 맵은 이 명령으로 재생성되지 않습니다. 기존 맵의 Luau 스크립트만 갱신하려면 `python3 tools/sync_place.py`를 사용하세요. 빌드 스크립트는 완성 맵 덮어쓰기를 거부합니다.
 
 생성 파일은 현대 TextChatService를 사용하도록 설정되어 있다. 오래된 Roblox XML 파일은 기본값이 LegacyChatService일 수 있으므로 명령어가 안 되면 Edit 모드에서 TextChatService의 ChatVersion이 TextChatService인지 확인한다. 일반 게임 스크립트에서 이 보호된 설정을 바꾸지 않는다.
 

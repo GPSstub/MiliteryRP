@@ -1,10 +1,19 @@
 """Generate a standalone Roblox XML place from the same sources Rojo uses."""
 from pathlib import Path
 import xml.etree.ElementTree as ET
+import argparse
 import json
 ROOT = Path(__file__).resolve().parents[1]
 
-def build():
+def build(output=None, overwrite=False):
+    target = Path(output) if output is not None else ROOT/'MilitaryRP.test.rbxlx'
+    # Full place contains the real 18-building map. This test-place generator
+    # MUST NEVER overwrite it, even with --overwrite.
+    if target.resolve() == (ROOT/'MilitaryRP.rbxlx').resolve():
+        raise ValueError('Refusing to replace the complete MilitaryRP.rbxlx map; use tools/sync_place.py')
+    if target.exists() and not overwrite:
+        raise FileExistsError(f'Output already exists: {target}; pass --overwrite for TEST files only')
+    target.parent.mkdir(parents=True, exist_ok=True)
     root = ET.Element('roblox', {'version': '4'})
     ET.SubElement(root, 'External').text = 'null'
     ET.SubElement(root, 'External').text = 'nil'
@@ -56,7 +65,6 @@ def build():
                 cls, name = 'ModuleScript', path.stem
             source(parent, cls, name, path)
     ET.indent(root)
-    target = ROOT/'MilitaryRP.rbxlx'
     ET.ElementTree(root).write(target, encoding='utf-8', xml_declaration=True)
     parsed = ET.parse(target)
     scripts = parsed.findall('.//ProtectedString')
@@ -66,4 +74,8 @@ def build():
     print(f'Built {target.name}: {len(scripts)} embedded scripts; XML parsed successfully.')
 
 if __name__ == '__main__':
-    build()
+    parser = argparse.ArgumentParser(description='Build a minimal TEST place, never the completed map')
+    parser.add_argument('--output', type=Path, default=ROOT/'MilitaryRP.test.rbxlx')
+    parser.add_argument('--overwrite', action='store_true', help='Allow replacing an existing TEST output')
+    args = parser.parse_args()
+    build(args.output, args.overwrite)

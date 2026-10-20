@@ -9,6 +9,7 @@ local Service={}
 local started=false
 local ranks: {[Player]: number}={}
 local generations: {[Player]: number}={}
+local checking: {[Player]: boolean}={}
 
 function Service.isAdmin(player: Player): boolean
     return player.Parent==Players and Policy.isAdminRank(ranks[player])
@@ -65,13 +66,24 @@ local function resolve(player: Player,version: number)
     player:SetAttribute("AdminGroupStatus","Error")
 end
 
+local function refresh(player: Player)
+    if player.Parent~=Players or not generations[player] or checking[player] then return end
+    checking[player]=true
+    local version=generations[player]
+    task.spawn(function()
+        local ok,message=pcall(resolve,player,version)
+        checking[player]=nil
+        if not ok then warn("[AdminGroupService] Refresh failed:",message) end
+    end)
+end
+
 local function add(player: Player)
     if generations[player] then return end
     generations[player]=1
     player:SetAttribute("AdminGroupRank",0)
     player:SetAttribute("CanUseAdminCommands",false)
     player:SetAttribute("AdminGroupStatus","Checking")
-    task.spawn(resolve,player,1)
+    refresh(player)
 end
 
 function Service.start()
@@ -81,8 +93,19 @@ function Service.start()
     Players.PlayerRemoving:Connect(function(player)
         ranks[player]=nil
         generations[player]=nil
+        checking[player]=nil
     end)
     for _,player in Players:GetPlayers() do add(player) end
+    -- Refresh active group administrators periodically. This shortens stale
+    -- permission windows but Roblox caches group roles, so it is NOT immediate.
+    task.spawn(function()
+        while started do
+            task.wait(180)
+            for _,player in Players:GetPlayers() do
+                if Policy.isAdminRank(ranks[player]) then refresh(player) end
+            end
+        end
+    end)
 end
 
 return Service

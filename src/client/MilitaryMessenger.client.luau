@@ -709,6 +709,8 @@ local archiveRemote=game:GetService("ReplicatedStorage"):WaitForChild("Messenger
 local archiveChanged=game:GetService("ReplicatedStorage"):WaitForChild("MessengerArchiveChanged") :: RemoteEvent
 local archiveLoaded: {[string]: boolean}={}
 local archiveLoading: {[string]: boolean}={}
+-- Ignore delayed archive responses after a unit/permission context change.
+local archiveGeneration: {[string]: number}={}
 local archiveCursor: {[string]: number?}={}
 local archiveLastFetch: {[string]: number}={}
 local archiveDirty: {[string]: boolean}={}
@@ -936,6 +938,7 @@ end
 -- Cursor is a monotonically increasing sequence rather than an array index,
 -- so removing older posts cannot shift the paging boundary.
 loadArchive = function(channelId: string,before: number?)
+    local generation=archiveGeneration[channelId] or 0
     if archiveLoading[channelId] or not canView(channelId)
         or not (channelAccess[channelId] and channelAccess[channelId].persistent) then return end
     local now=os.clock()
@@ -955,6 +958,7 @@ loadArchive = function(channelId: string,before: number?)
         local ok,result=pcall(function()
             return archiveRemote:InvokeServer("load",{channelId=channelId,before=before})
         end)
+        if (archiveGeneration[channelId] or 0)~=generation then return end
         archiveLoading[channelId]=false
         if not ok or type(result)~="table" or result.ok~=true then
             if selectedChannel==channelId then
@@ -1059,12 +1063,13 @@ archiveChanged.OnClientEvent:Connect(function(data: any)
             local existing=findEntry(messageId)
             if existing and os.clock()-(lastArchiveLookup[messageId] or -math.huge)>0.4 then
                 lastArchiveLookup[messageId]=os.clock()
+                local generation=archiveGeneration[id] or 0
                 task.spawn(function()
                     local ok,result=pcall(function()
                         return archiveRemote:InvokeServer("lookup",{channelId=id,id=messageId})
                     end)
                     if not ok or type(result)~="table" or not result.ok then return end
-                    if not canView(id) then return end
+                    if (archiveGeneration[id] or 0)~=generation or not canView(id) then return end
                     if result.entry then
                         result.entry.channelId=id
                         result.entry.time=result.entry.timeLabel or "이전 기록"
@@ -1714,6 +1719,13 @@ local function updateAccess()
     if currentUnit ~= previousUnit then
         previousUnit = currentUnit
         history.unit = {}
+        archiveGeneration.unit=(archiveGeneration.unit or 0)+1
+        archiveLoaded.unit=nil
+        archiveLoading.unit=nil
+        archiveCursor.unit=nil
+        archiveLastFetch.unit=nil
+        archiveDirty.unit=nil
+        archiveWantedRevision.unit=nil
         unread.unit = 0
         drafts.unit = nil; pendingMessages.unit = nil; scrollPositions.unit = nil
         if selectedChannel == "unit" then input.Text = ""; renderMessages() end
