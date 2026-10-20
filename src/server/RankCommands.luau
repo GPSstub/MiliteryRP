@@ -5,17 +5,17 @@ local ReplicatedStorage=game:GetService("ReplicatedStorage")
 local Catalog=require(ReplicatedStorage:WaitForChild("Shared"):WaitForChild("RankCatalog"))
 local RankService=require(script.Parent:WaitForChild("RankService"))
 local Parser=require(script.Parent:WaitForChild("RankCommandParser"))
--- Current user's Roblox account, confirmed from their local Studio playtest.
--- This restricts only these edit commands; military ranks confer no permissions.
-local COMMAND_OWNER_USER_ID=1153125948
+local TeamService=require(script.Parent:WaitForChild("TeamService"))
+-- Administrator commands are authorized by current server Team membership.
+-- Rank promotion alone never grants HQ access.
 local lastCommand: {[Player]: number}={}
 local started=false
 local Commands={}
 local Audit=require(script.Parent:WaitForChild("AdminAudit"))
 local function handle(actor: Player, text: any): (boolean, string)
     if typeof(actor)~="Instance" or not actor:IsA("Player") or actor.Parent~=Players
-        or actor.UserId~=COMMAND_OWNER_USER_ID then
-        return false,"계급 변경 명령어는 제작자 전용입니다."
+        or not TeamService.isAdmin(actor) then
+        return false,"계급 변경 명령어는 HQ 팀 전용입니다."
     end
     local now=os.clock()
     if now-(lastCommand[actor] or -math.huge)<0.5 then return false,"잠시 후 다시 입력하세요." end
@@ -47,7 +47,7 @@ local function handle(actor: Player, text: any): (boolean, string)
 end
 function Commands.handle(actor: Player, text: any): (boolean, string)
     local ok,message=handle(actor,text)
-    if typeof(actor)=="Instance" and actor:IsA("Player") and actor.Parent==Players and actor.UserId==COMMAND_OWNER_USER_ID and type(text)=="string" then
+    if typeof(actor)=="Instance" and actor:IsA("Player") and TeamService.isAdmin(actor) and type(text)=="string" then
         Audit.record(actor,text,ok,message)
     end
     return ok,message
@@ -55,6 +55,7 @@ end
 function Commands.start()
     if started then return end
     started=true
+    TeamService.start()
     local feedback=Instance.new("RemoteEvent")
     feedback.Name="RankCommandFeedback";feedback.Parent=ReplicatedStorage
     for _,spec in {{"SetMilitaryRank","/계급","/rank"},{"ListMilitaryRanks","/계급목록","/ranks"}} do
