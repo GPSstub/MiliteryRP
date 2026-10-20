@@ -25,6 +25,7 @@ local NAV={
     {"overview","개요"},
     {"god","무적"},
     {"fly","비행"},
+    {"actions","플레이어 제어"},
     {"team","팀 관리"},
     {"rank","계급"},
     {"command","명령어"},
@@ -154,6 +155,7 @@ function Panel.mount(parent: Frame): (boolean)->()
     local navButtons: {[string]: TextButton}={}
     local lastSent=0
     local pendingHQTarget: string?=nil
+    local pendingConfirmedCommand: string?=nil
     local active=false
     local render: ()->()=function() end
     local fetchLogs: (string,string)->()=function() end
@@ -325,6 +327,11 @@ function Panel.mount(parent: Frame): (boolean)->()
         description(second,"기타 작업","무적·비행 제어와 기록 확인")
         actionPair(second,"무적/비행", "명령 기록",
             function() jump("god") end,function() jump("logs") end,56)
+        local actionCard=card("QuickPlayerActions",113)
+        description(actionCard,"플레이어 제어","순간이동·소환·사망·폭발 효과 명령어")
+        local entry=button(actionCard,"→  대상 플레이어 제어 열기",UDim2.new(1,-28,0,35),C.raised)
+        entry.Position=UDim2.fromOffset(14,72)
+        entry.Activated:Connect(function() jump("actions") end)
     end
     local function drawGodOrFlight(kind: string)
         targetCard()
@@ -339,6 +346,39 @@ function Panel.mount(parent: Frame): (boolean)->()
             function() run(verb.." "..currentTarget().." 끄기") end,92)
         local info=card("ControlHelp",92)
         description(info,"실행 전에 확인","대상은 현재 접속 중이어야 합니다. 변경 내용은 서버 권한 검사를 통과해야 적용됩니다.")
+    end
+    local function drawPlayerActions()
+        targetCard()
+        local movement=card("TeleportControls",163)
+        description(movement,"순간이동 / 소환",
+            "현재 서버에서 살아 있는 플레이어를 대상으로 실행합니다. 대상 옆 약 4스터드 위치로 이동합니다.")
+        actionPair(movement,"→  대상에게 이동 (;to)","←  대상 데려오기 (;here)",
+            function() run(";to "..currentTarget()) end,
+            function() run(";here "..currentTarget()) end,99)
+
+        local danger=card("TargetEffects",175)
+        description(danger,"사망 / 폭발 효과",
+            "선택한 대상만 사망 처리합니다. 폭발은 불꽃과 섬광 효과만 표시하고 주변 플레이어·맵에는 피해를 주지 않습니다.")
+        actionPair(danger,"×  대상 사망 (;kill)","✦  폭발 효과 (;폭발)",
+            function()
+                pendingHQTarget=nil
+                pendingConfirmedCommand=";kill "..currentTarget()
+                confirmTitle.Text="대상을 사망 처리할까요?"
+                confirmDetail.Text="@"..currentTarget().."의 캐릭터를 즉시 사망 처리합니다."
+                confirmYes.Text="사망 처리"
+                dialog.Visible=true
+            end,
+            function()
+                pendingHQTarget=nil
+                pendingConfirmedCommand=";폭발 "..currentTarget()
+                confirmTitle.Text="대상에게 폭발 효과를 실행할까요?"
+                confirmDetail.Text="@"..currentTarget().."에게만 사망이 적용됩니다. 주변 건물과 다른 사람은 안전합니다."
+                confirmYes.Text="폭발 실행"
+                dialog.Visible=true
+            end,101)
+        local note=card("TargetActionHelp",92)
+        description(note,"명령어 입력 방식",
+            "채팅창에서도 ;to 이름 · ;here 이름 · ;kill 이름 · ;폭발 이름으로 실행할 수 있습니다. HQ 권한을 서버에서 확인합니다.")
     end
     local function drawTeam()
         targetCard()
@@ -359,7 +399,10 @@ function Panel.mount(parent: Frame): (boolean)->()
         submit.Activated:Connect(function()
             if selectedTeam=="HQ" then
                 pendingHQTarget=currentTarget()
+                pendingConfirmedCommand=nil
+                confirmTitle.Text="HQ 권한을 부여하시겠습니까?"
                 confirmDetail.Text="@"..pendingHQTarget.."에게 모든 관리자 명령어 및 관리 패널 사용 권한을 부여합니다."
+                confirmYes.Text="HQ 팀으로 이동"
                 dialog.Visible=true
             else
                 run(";팀 "..currentTarget().." "..selectedTeam)
@@ -430,6 +473,10 @@ function Panel.mount(parent: Frame): (boolean)->()
             ";무적 나 켜기",
             ";비행 나 끄기",
             ";팀 나 HQ",
+            ";to 플레이어이름",
+            ";here 플레이어이름",
+            ";kill 플레이어이름",
+            ";폭발 플레이어이름",
         }
         for i,command in examples do
             local b=button(help,command,UDim2.new(1,-28,0,29),C.raised)
@@ -441,7 +488,7 @@ function Panel.mount(parent: Frame): (boolean)->()
                 value:CaptureFocus()
             end)
         end
-        help.Size=UDim2.new(1,-3,0,240)
+        help.Size=UDim2.new(1,-3,0,93+#examples*31)
     end
     fetchLogs=function(kind: string,action: string)
         if not isHQ(player) or logLoading[kind] then return end
@@ -583,6 +630,7 @@ function Panel.mount(parent: Frame): (boolean)->()
         end
         if currentTab=="overview" then drawOverview()
         elseif currentTab=="god" or currentTab=="fly" then drawGodOrFlight(currentTab)
+        elseif currentTab=="actions" then drawPlayerActions()
         elseif currentTab=="team" then drawTeam()
         elseif currentTab=="rank" then drawRank()
         elseif currentTab=="command" then drawCommand()
@@ -643,13 +691,18 @@ function Panel.mount(parent: Frame): (boolean)->()
     end)
     updateLayout()
 
-    confirmNo.Activated:Connect(function() pendingHQTarget=nil;dialog.Visible=false end)
-    confirmYes.Activated:Connect(function()
-        if not pendingHQTarget then return end
-        local username=pendingHQTarget
+    confirmNo.Activated:Connect(function()
         pendingHQTarget=nil
+        pendingConfirmedCommand=nil
         dialog.Visible=false
-        run(";팀 "..username.." HQ")
+    end)
+    confirmYes.Activated:Connect(function()
+        local command=pendingConfirmedCommand
+        if pendingHQTarget then command=";팀 "..pendingHQTarget.." HQ" end
+        pendingHQTarget=nil
+        pendingConfirmedCommand=nil
+        dialog.Visible=false
+        if command then run(command) end
     end)
     response.OnClientEvent:Connect(function(kind: string,data: any)
         if not isHQ(player) then return end
@@ -664,6 +717,7 @@ function Panel.mount(parent: Frame): (boolean)->()
         root.Visible=active
         dialog.Visible=false
         pendingHQTarget=nil
+        pendingConfirmedCommand=nil
         if active then
             currentTab="overview"
             pickerVisible=false
