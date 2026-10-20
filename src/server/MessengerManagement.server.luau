@@ -85,7 +85,6 @@ local function incoming(actor: Player,action: any,payload: any)
         if not preview then return {ok=false,message=message} end
         if op.name then
             if now-(metadataLast[actor] or -math.huge)<60 then return {ok=false,message="이름 생성·변경은 1분에 한 번 가능합니다."} end
-            metadataLast[actor]=now
             local displayName=Runtime.filter(op.name,actor.UserId)
             if not displayName then return {ok=false,message="Roblox가 이름 검열을 완료하지 못했습니다. 잠시 후 다시 시도하세요."} end
             -- Store filtered, broadcast-safe text with the channel/role.
@@ -93,6 +92,7 @@ local function incoming(actor: Player,action: any,payload: any)
             op.displayName=displayName
         end
         local success,notice=Store.commit(actor,op,payload.revision)
+        if success and op.name then metadataLast[actor]=os.clock() end
         return {ok=success,message=notice,data=snapshot(actor)}
     end)
     editing[actor]=nil
