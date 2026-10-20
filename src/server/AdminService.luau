@@ -16,8 +16,8 @@ local syncRequests: {[Player]: number} = {}
 local inputs: {[Player]: number} = {}
 local flying: {[Player]: any} = {}
 local healthConnections: {[Player]: RBXScriptConnection} = {}
-local teamConnections: {[Player]: {RBXScriptConnection}} = {}
-local hadHQ: {[Player]: boolean} = {}
+local adminConnections: {[Player]: {RBXScriptConnection}} = {}
+local hadAdmin: {[Player]: boolean} = {}
 local function authorized(actor: Player): boolean
     return TeamService.isAdmin(actor)
 end
@@ -86,7 +86,7 @@ local function applyGod(player: Player)
     end)
 end
 function Service.execute(actor: Player, text: any): (boolean, string)
-    if typeof(actor) ~= "Instance" or not actor:IsA("Player") or not authorized(actor) then return false, "HQ 팀만 관리자 명령어를 사용할 수 있습니다." end
+    if typeof(actor) ~= "Instance" or not actor:IsA("Player") or not authorized(actor) then return false, "Roblox 그룹 운영진(등급 200 이상)만 관리자 명령어를 사용할 수 있습니다." end
     if type(text) ~= "string" or #text > 256 or not utf8.len(text) then return false, "명령어는 256바이트 이내로 입력하세요." end
     local words: {string} = {}
     for word in string.gmatch(text, "%S+") do table.insert(words, word) end
@@ -157,7 +157,7 @@ function Service.start()
     end)
     -- Chat bar commands: the engine intercepts ';...' before broadcasting
     -- regular chat. Every call still enters Service.execute(), which validates
-    -- the player's current HQ membership on the server.
+    -- the player's server-verified Roblox group rank.
     for _,spec in {
         {"HQGodCommand",";무적",";god"},
         {"HQFlightCommand",";비행",";fly"},
@@ -205,20 +205,20 @@ function Service.start()
     end)
     local function added(player: Player)
         player:SetAttribute("AdminGod",false); player:SetAttribute("AdminFlying",false)
-        hadHQ[player]=authorized(player)
-        local function checkTeam()
-            local stillHQ=authorized(player)
-            if hadHQ[player] and not stillHQ then
-                -- HQ powers are revoked immediately on transfer out of HQ.
+        hadAdmin[player]=authorized(player)
+        local function checkPermission()
+            -- Server GroupService controls the authoritative role cache.
+            -- HQ team transfers must not grant or revoke group privileges.
+            local allowed=authorized(player)
+            if hadAdmin[player] and not allowed then
                 stopFlight(player)
                 player:SetAttribute("AdminGod",false)
                 applyGod(player)
             end
-            hadHQ[player]=stillHQ
+            hadAdmin[player]=allowed
         end
-        teamConnections[player]={
-            player:GetPropertyChangedSignal("Team"):Connect(checkTeam),
-            player:GetPropertyChangedSignal("Neutral"):Connect(checkTeam),
+        adminConnections[player]={
+            player:GetAttributeChangedSignal("CanUseAdminCommands"):Connect(checkPermission),
             player.CharacterAdded:Connect(function(character)
                 stopFlight(player)
                 local humanoid=character:WaitForChild("Humanoid",10)
@@ -229,12 +229,12 @@ function Service.start()
     Players.PlayerAdded:Connect(added)
     for _,p in Players:GetPlayers() do added(p) end
     Players.PlayerRemoving:Connect(function(p)
-        stopFlight(p); requests[p]=nil;syncRequests[p]=nil;inputs[p]=nil;hadHQ[p]=nil
+        stopFlight(p); requests[p]=nil;syncRequests[p]=nil;inputs[p]=nil;hadAdmin[p]=nil
         if healthConnections[p] then healthConnections[p]:Disconnect();healthConnections[p]=nil end
-        local connections=teamConnections[p]
+        local connections=adminConnections[p]
         if connections then
             for _,connection in connections do connection:Disconnect() end
-            teamConnections[p]=nil
+            adminConnections[p]=nil
         end
     end)
 end
