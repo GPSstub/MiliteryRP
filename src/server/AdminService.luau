@@ -1,6 +1,7 @@
 --!strict
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local TextChatService = game:GetService("TextChatService")
 local RunService = game:GetService("RunService")
 local Audit = require(script.Parent:WaitForChild("AdminAudit"))
 local RankCommands = require(script.Parent:WaitForChild("RankCommands"))
@@ -88,23 +89,23 @@ function Service.execute(actor: Player, text: any): (boolean, string)
     local words: {string} = {}
     for word in string.gmatch(text, "%S+") do table.insert(words, word) end
     local verb = words[1]
-    if verb == "/계급" or verb == "/rank" or verb == "/계급목록" or verb == "/ranks" then
+    if verb == ";계급" or verb == ";rank" or verb == ";계급목록" or verb == ";ranks" then
         return RankCommands.handle(actor, text) -- RankCommands records its own audit entry.
     end
-    local ok, message = false, "사용법: /무적 나 켜기 · /비행 나 끄기 · /팀 사용자이름 팀이름 · /계급 대위"
+    local ok, message = false, "사용법: ;무적 나 켜기 · ;비행 나 끄기 · ;팀 사용자이름 팀이름 · ;계급 대위"
     local target = if words[2] then targetFor(actor, words[2]) else actor
     if not target then
         message = "서버에 있는 정확한 Roblox 사용자 이름을 선택하세요."
-    elseif verb == "/무적" or verb == "/god" or verb == "/비행" or verb == "/fly" then
+    elseif verb == ";무적" or verb == ";god" or verb == ";비행" or verb == ";fly" then
         local mode = words[3]
         local enabled = mode == "켜기" or mode == "on"
         if #words == 3 and (enabled or mode == "끄기" or mode == "off") then
-            if verb == "/무적" or verb == "/god" then
+            if verb == ";무적" or verb == ";god" then
                 target:SetAttribute("AdminGod", enabled); applyGod(target)
                 ok=true; message=target.Name .. (if enabled then " 무적 켜기" else " 무적 끄기")
             else ok, message = setFlight(target, enabled) end
         end
-    elseif verb == "/팀" or verb == "/team" then
+    elseif verb == ";팀" or verb == ";team" then
         local name = table.concat(words, " ", 3)
         ok,message=TeamService.assign(actor,target,name)
     end
@@ -115,7 +116,9 @@ function Service.start()
     if started then return end
     started=true
     TeamService.start()
-    AdminLogService.start()
+    -- Audit storage should not take down admin commands or panel commands.
+    local auditOk,auditError=pcall(AdminLogService.start)
+    if not auditOk then warn("[AdminService] Admin logs unavailable:",auditError) end
     local request=Instance.new("RemoteEvent"); request.Name="AdminRequest"; request.Parent=ReplicatedStorage
     local response=Instance.new("RemoteEvent"); response.Name="AdminResponse"; response.Parent=ReplicatedStorage
     local flightInput=Instance.new("RemoteEvent"); flightInput.Name="AdminFlightInput"; flightInput.Parent=ReplicatedStorage
@@ -138,6 +141,28 @@ function Service.start()
             response:FireClient(actor,"result",{ok=ok,message=message})
         end
     end)
+    -- Chat bar commands: the engine intercepts ';...' before broadcasting
+    -- regular chat. Every call still enters Service.execute(), which validates
+    -- the player's current HQ membership on the server.
+    for _,spec in {
+        {"HQGodCommand",";무적",";god"},
+        {"HQFlightCommand",";비행",";fly"},
+        {"HQTeamCommand",";팀",";team"},
+    } do
+        local command=Instance.new("TextChatCommand")
+        command.Name=spec[1]
+        command.PrimaryAlias=spec[2]
+        command.SecondaryAlias=spec[3]
+        command.Triggered:Connect(function(source: TextSource,text: string)
+            if not source then return end
+            local actor=Players:GetPlayerByUserId(source.UserId)
+            if not actor then return end
+            local ok,message=Service.execute(actor,text)
+            response:FireClient(actor,"chat_result",{ok=ok,message=message})
+        end)
+        command.Parent=TextChatService
+    end
+
     local function finiteVector(value: any): boolean
         return typeof(value)=="Vector3" and value.X==value.X and value.Y==value.Y and value.Z==value.Z
             and math.abs(value.X)<=1.01 and math.abs(value.Y)<=1.01 and math.abs(value.Z)<=1.01 and value.Magnitude<=1.01
