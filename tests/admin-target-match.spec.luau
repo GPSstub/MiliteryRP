@@ -36,6 +36,17 @@ check(ids("nonexistent")=="","Unknown nickname matches nobody")
 check(ids("@soraalice")=="202","Exact username is unambiguous")
 check(ids("Sora")=="202","Exact DisplayName prioritized")
 check(ids("blue")=="299","Case-insensitive username prefix")
+check(ids("@Sora")=="202","Explicit @ syntax only matches account usernames")
+check(ids("@철수")=="","DisplayNames must not match explicit @username syntax")
+local collision={
+    {UserId=11,Name="Hello",DisplayName="Different"},
+    {UserId=12,Name="SomethingElse",DisplayName="Hello"},
+}
+check(#Match.find(collision,"Hello")==2,
+    "Exact real usernames and display names with the same text must be disambiguated")
+local explicit=Match.find(collision,"@Hello")
+check(#explicit==1 and explicit[1].UserId==11,
+    "@username must bypass ambiguous display-name collisions")
 
 for _,invalid in {""," ","  ","all","ALL","everyone","모두","전체","\n","\t"} do
     check(not Match.validQuery(invalid),"Mass, empty and control queries must be rejected")
