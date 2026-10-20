@@ -234,7 +234,7 @@ function Panel.mount(parent: Frame): (boolean)->()
         selector.Name="TargetName"
         selector.Position=UDim2.fromOffset(14,86)
         selector.Size=UDim2.new(1,-150,0,44)
-        selector.FocusLost:Connect(function()
+        selector:GetPropertyChangedSignal("Text"):Connect(function()
             selectedTarget=selector.Text:match("^%s*(.-)%s*$") or ""
         end)
         local choose=button(frame,if pickerVisible then "목록 닫기" else "인원 선택  ▾",
