@@ -2,6 +2,7 @@
 local Players=game:GetService("Players")
 local TeamService=require(script.Parent:WaitForChild("TeamService"))
 local RankService=require(script.Parent:WaitForChild("RankService"))
+local SprintService=require(script.Parent:WaitForChild("SprintService"))
 
 -- Ensure the four teams are available before rank loading and command registration.
 -- Non-HQ teams track RankCategory; HQ is an explicit admin appointment.
@@ -12,6 +13,10 @@ TeamService.start()
 Players.PlayerAdded:Connect(RankService.add)
 Players.PlayerRemoving:Connect(RankService.remove)
 for _,player in Players:GetPlayers() do RankService.add(player) end
+
+-- Sprint controls are independent of persistent logs and HQ administration.
+-- Start the server movement authority before optional services.
+SprintService.start()
 
 local logsReady,logError=pcall(function()
     require(script.Parent:WaitForChild("AdminLogService")).start()
