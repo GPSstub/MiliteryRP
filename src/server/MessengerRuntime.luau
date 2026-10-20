@@ -6,6 +6,7 @@ local Store=require(script.Parent.MessengerStore)
 local Permissions=require(script.Parent.MessengerPermissions)
 local Actions=require(script.Parent.MessengerActions)
 local Archive=require(script.Parent.MessengerArchive)
+local AdminLogService=require(script.Parent.AdminLogService)
 local Runtime={}
 local started=false
 local channels: {[string]: TextChannel}={}
@@ -38,7 +39,12 @@ local function delivery(id: string,message: TextChatMessage,recipient: TextSourc
     local receiver=Players:GetPlayerByUserId(recipient.UserId)
     if not sender or not receiver or not Permissions.channel(sender,id,"write") or not Permissions.channel(receiver,id,"read") then return false end
     if id=="unit" and (unit(sender)==nil or unit(sender)~=unit(receiver)) then return false end
-    return Actions.observe(id,message)
+    local deliver=Actions.observe(id,message)
+    if deliver then
+        -- Never yield inside ShouldDeliverCallback.
+        AdminLogService.captureChat(id,message,sender)
+    end
+    return deliver
 end
 local function refreshPlayer(player: Player)
     if player.Parent~=Players then return end
@@ -109,6 +115,7 @@ function Runtime.start()
     if started then return end;started=true
     Actions.start()
     Archive.start()
+    AdminLogService.start()
     local function added(p: Player)
         for _,attribute in {"RankOrder","Unit"} do p:GetAttributeChangedSignal(attribute):Connect(function() task.spawn(refreshPlayer,p) end) end
         for _,property in {"Team","Neutral"} do p:GetPropertyChangedSignal(property):Connect(function() task.spawn(refreshPlayer,p) end) end
