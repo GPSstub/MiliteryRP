@@ -1,5 +1,5 @@
 --!strict
--- Persistent, HQ-only audit viewer. Two OrderedDataStores index immutable
+-- Persistent, Roblox group-admin-only audit viewer. Two OrderedDataStores index immutable
 -- individual DataStore records. No fixed history age/count cutoff.
 --
 -- IMPORTANT: two separate DataStore writes cannot be transactional. Writes
