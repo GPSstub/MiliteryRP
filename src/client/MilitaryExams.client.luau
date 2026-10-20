@@ -17,8 +17,8 @@ local C={
     border=Color3.fromRGB(58,66,76),warning=Color3.fromRGB(235,185,105),
 }
 local function make(className: string,parent: Instance,props: any): any
-    local object=Instance.new(className)
-    for key,value in props do (object :: any)[key]=value end
+    local object: any=Instance.new(className)
+    for key,value in props do object[key]=value end
     object.Parent=parent
     return object
 end
@@ -314,7 +314,8 @@ mutate=function(action: string,payload: any)
         createButton.Active=true
         examAction.Active=true
         if ok and type(response)=="table" then
-            status.Text=tostring(response.message or if response.ok then "완료되었습니다." else "처리 실패")
+            status.Text=if type(response.message)=="string" then response.message
+                elseif response.ok then "완료되었습니다." else "처리 실패"
             if response.ok then applyData(response.data) end
         else
             status.Text="서버에 연결할 수 없습니다. 다시 시도하세요."

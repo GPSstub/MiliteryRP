@@ -47,7 +47,7 @@ local function track(player: Player)
         for _,exam in board.sessions do
             if exam.hostId==player.UserId then hosts=true;break end
         end
-        if hosts and not canHost(player) then
+        if hosts and not Rules.canHost(RankService.get(player)) then
             remove(player)
         elseif hosts then
             announce() -- Publish their new rank label to all viewers.
