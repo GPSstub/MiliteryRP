@@ -5,6 +5,11 @@ local ReplicatedStorage=game:GetService("ReplicatedStorage")
 local player=Players.LocalPlayer
 local gui=player:WaitForChild("PlayerGui"):WaitForChild("MilitaryMessenger")
 local window=gui:WaitForChild("MessengerWindow") :: Frame
+-- Local-only bridge from the member list to the roles settings page.
+-- The server still verifies every role assignment.
+local rolePicker=Instance.new("BindableEvent")
+rolePicker.Name="MessengerRolePicker"
+rolePicker.Parent=window
 local header=window:WaitForChild("Header") :: Frame
 local sidebar=window:WaitForChild("ChannelSidebar") :: Frame
 local remote=ReplicatedStorage:WaitForChild("MessengerManage") :: RemoteFunction
@@ -326,6 +331,19 @@ end)
 open.Activated:Connect(function()
     overlay.Visible=not overlay.Visible
     if overlay.Visible then selectedChannel=window:GetAttribute("SelectedChannel") or selectedChannel;refresh() end
+end)
+rolePicker.Event:Connect(function(userId: any)
+    if type(userId)~="number" or userId<1 or userId%1~=0 then return end
+    selectedPersonUserId=userId
+    personSearch=""
+    page="people"
+    overlay.Visible=true
+    selectedChannel=window:GetAttribute("SelectedChannel") or selectedChannel
+    refresh()
+    if not state.canManageRoles then
+        status.Text="역할을 부여할 권한이 없습니다."
+        status.TextColor3=Color3.fromRGB(244,167,167)
+    end
 end)
 changed.OnClientEvent:Connect(function() task.delay(0.65,refresh) end)
 window:GetPropertyChangedSignal("Visible"):Connect(function() if not window.Visible then modal.Visible=false;overlay.Visible=false;modalInput:ReleaseFocus(false) end end)
