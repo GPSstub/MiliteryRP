@@ -17,6 +17,12 @@ for _,category in {"훈련병","병","부사관","준사관"} do
     check(not Rules.canHost({category=category}),"Lower ranks must not host")
 end
 check(not Rules.canHost(nil),"Nil rank cannot host")
+local studio=Rules.new()
+local studioCreated=Rules.apply(studio,{userId=-1,canHost=true},"create","private",nil,1700000000)
+check(studioCreated~=nil and Rules.valid(studioCreated),"Studio mock negative UserId can host")
+local studioJoined=Rules.apply(studioCreated,{userId=-2,canHost=false},"join",nil,"exam_1",1700000000)
+check(studioJoined~=nil and studioJoined.sessions[1].participants[-2],
+    "Studio mock negative UserId can join")
 check(#Rules.TARGET_IDS==8,"There should be exactly eight exam target ranks")
 for _,id in Rules.TARGET_IDS do check(Rules.isTarget(id),"Invalid target in published catalog") end
 for _,id in {"trainee","warrant_officer","captain","major","general","fake"} do

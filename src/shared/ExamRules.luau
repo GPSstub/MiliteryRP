@@ -37,7 +37,8 @@ local function copy(state: any): any
 end
 
 local function validUserId(id: any): boolean
-    return type(id)=="number" and id>0 and id%1==0 and id<math.huge
+    -- Studio multi-client test players may use negative UserIds.
+    return type(id)=="number" and id~=0 and id%1==0 and math.abs(id)<math.huge
 end
 
 function Rules.valid(state: any): boolean
