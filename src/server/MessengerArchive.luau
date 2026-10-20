@@ -245,6 +245,9 @@ local function request(player: Player,action: any,payload: any): any
         local op={action=mode,id=id,authorId=player.UserId,
             moderator=moderator(player,channelId),emoji=payload.emoji}
         local ok,message=update(channelId,op)
+        if ok and (mode=="delete" or mode=="pin") then
+            AdminLogService.captureModeration(channelId,player,id,mode)
+        end
         return {ok=ok,message=message}
     end
     return {ok=false,message="지원하지 않는 요청입니다."}
