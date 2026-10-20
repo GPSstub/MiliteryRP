@@ -52,6 +52,10 @@ for _,player in Players:GetPlayers() do
     if isHQ then
         local label=tag:FindFirstChild("HQLabel")
         local image=tag:FindFirstChild("HQEmblem")
+        check(tag.MaxDistance==Branding.MaxDistance,
+            player.Name.." uses the wrong HQ visibility distance")
+        check(tag.Size.X.Offset<=120 and tag.Size.Y.Offset<=115,
+            player.Name.." has an oversized HQ billboard")
         check(label and label:IsA("TextLabel") and label.Text=="HQ",
             player.Name.." has no HQ label")
         check(image and image:IsA("Frame"),
