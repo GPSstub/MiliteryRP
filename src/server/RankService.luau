@@ -3,6 +3,8 @@ local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Catalog = require(ReplicatedStorage:WaitForChild("Shared"):WaitForChild("RankCatalog"))
 local Insignia=require(script.Parent:WaitForChild("RankInsignia"))
+local HQBadge=require(script.Parent:WaitForChild("HQOverheadBadge"))
+local TeamService=require(script.Parent:WaitForChild("TeamService"))
 local RankStore=require(script.Parent:WaitForChild("RankStore"))
 type Rank = Catalog.Rank
 local RankService = {}
@@ -11,6 +13,7 @@ local connections: {[Player]: {RBXScriptConnection}} = {}
 local saving: {[Player]: boolean} = {}
 -- A successful write takes precedence over a GetAsync started before that write.
 local localChanges: {[Player]: number} = {}
+local redrawQueued: {[Player]: boolean} = {}
 local function renderCharacter(player: Player, character: Model)
     local head=character:WaitForChild("Head",10)
     if player.Character ~= character or not states[player] or not head or not head:IsA("BasePart") then return end
@@ -22,6 +25,13 @@ local function renderCharacter(player: Player, character: Model)
     tag.Name="RankTag"; tag.Adornee=head; tag.Size=UDim2.fromOffset(180,88)
     tag.StudsOffsetWorldSpace=Vector3.new(0,2.7,0); tag.MaxDistance=100; tag.AlwaysOnTop=true
     tag.Parent=head
+    if TeamService.isAdmin(player) then
+        -- HQ is a team appointment, not a rank. Show only the unit emblem and
+        -- "HQ" rather than nickname, military rank name, and rank insignia.
+        HQBadge.render(tag)
+        return
+    end
+    tag:SetAttribute("DisplayMode","Rank")
     local identity=Instance.new("TextLabel")
     identity.Name="Identity"; identity.Size=UDim2.new(1,0,0,26); identity.Position=UDim2.fromOffset(0,0)
     identity.BackgroundTransparency=1; identity.TextColor3=Color3.fromRGB(244,245,240)
@@ -38,6 +48,19 @@ local function renderCharacter(player: Player, character: Model)
         Insignia.render(tag,rank)
     end
 end
+local function queueRedraw(player: Player)
+    if redrawQueued[player] then return end
+    redrawQueued[player]=true
+    -- Team and Neutral often change during the same assignment. Coalesce
+    -- those signals so the tag reflects the final effective membership.
+    task.defer(function()
+        redrawQueued[player]=nil
+        if player.Parent==Players and states[player] then
+            local character=player.Character
+            if character then task.spawn(renderCharacter,player,character) end
+        end
+    end)
+end
 local function publish(player: Player, rank: Rank)
     player:SetAttribute("RankId",rank.id)
     player:SetAttribute("Rank",rank.name)
@@ -46,17 +69,9 @@ local function publish(player: Player, rank: Rank)
     local stats=player:FindFirstChild("leaderstats")
     local value=if stats then stats:FindFirstChild("계급") else nil
     if value and value:IsA("StringValue") then value.Value=rank.name end
-    local character=player.Character
-    if character then
-        local head=character:FindFirstChild("Head")
-        local tag=if head then head:FindFirstChild("RankTag") else nil
-        local label=if tag then tag:FindFirstChild("Rank") else nil
-        if label and label:IsA("TextLabel") then
-            label.Text=rank.name
-            label.TextColor3=Color3.fromRGB(rank.color[1],rank.color[2],rank.color[3])
-            Insignia.render(tag,rank)
-        end
-    end
+    -- Never update rank widgets inside an HQ tag. Rebuild the overhead with
+    -- the correct HQ/rank branch after the server's rank attributes settle.
+    if connections[player] then queueRedraw(player) end
 end
 -- Server-only assignment API. A command succeeds only after UpdateAsync confirms
 -- the new rank is persisted. We never save a default rank during player departure.
@@ -83,7 +98,6 @@ function RankService.set(player: Player, rankId: any): (boolean, string?)
         states[player]=rank.id
         publish(player,rank)
         player:SetAttribute("RankStorageStatus","Ready")
-        if player.Character then task.spawn(renderCharacter,player,player.Character) end
     end
     return true,nil
 end
@@ -110,6 +124,12 @@ function RankService.add(player: Player)
         player.CharacterAppearanceLoaded:Connect(function(character: Model)
             task.spawn(renderCharacter,player,character)
         end),
+        player:GetPropertyChangedSignal("Team"):Connect(function()
+            queueRedraw(player)
+        end),
+        player:GetPropertyChangedSignal("Neutral"):Connect(function()
+            queueRedraw(player)
+        end),
     }
     if player.Character then task.spawn(renderCharacter,player,player.Character) end
 
@@ -132,7 +152,6 @@ function RankService.add(player: Player)
         states[player]=restored.id
         publish(player,restored)
         player:SetAttribute("RankStorageStatus","Ready")
-        if player.Character then task.spawn(renderCharacter,player,player.Character) end
     end)
 end
 function RankService.remove(player: Player)
@@ -144,5 +163,6 @@ function RankService.remove(player: Player)
     states[player]=nil
     localChanges[player]=nil
     saving[player]=nil
+    redrawQueued[player]=nil
 end
 return RankService
