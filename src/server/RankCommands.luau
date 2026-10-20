@@ -6,8 +6,8 @@ local Catalog=require(ReplicatedStorage:WaitForChild("Shared"):WaitForChild("Ran
 local RankService=require(script.Parent:WaitForChild("RankService"))
 local Parser=require(script.Parent:WaitForChild("RankCommandParser"))
 local TeamService=require(script.Parent:WaitForChild("TeamService"))
--- Administrator commands are authorized by current server Team membership.
--- Rank promotion alone never grants HQ access.
+-- Administrator commands are authorized by server-verified Roblox group rank.
+-- No team transfer or rank promotion can grant administrator authority.
 local lastCommand: {[Player]: number}={}
 local started=false
 local Commands={}
@@ -15,7 +15,7 @@ local Audit=require(script.Parent:WaitForChild("AdminAudit"))
 local function handle(actor: Player, text: any): (boolean, string)
     if typeof(actor)~="Instance" or not actor:IsA("Player") or actor.Parent~=Players
         or not TeamService.isAdmin(actor) then
-        return false,"계급 변경 명령어는 HQ 팀 전용입니다."
+        return false,"계급 변경 명령어는 Roblox 그룹 운영진 전용입니다."
     end
     local now=os.clock()
     if now-(lastCommand[actor] or -math.huge)<0.5 then return false,"잠시 후 다시 입력하세요." end
