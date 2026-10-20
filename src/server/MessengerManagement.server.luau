@@ -14,7 +14,7 @@ local editing={}
 local metadataLast={}
 local function snapshot(actor: Player)
     local data=Store.get()
-    local result={channels={},permissions={roles={},people={},ownerId=Rules.OWNER},storage=Store.status(),revision=data.revision,
+    local result={channels={},permissions={roles={},people={},ownerId=Rules.OWNER},memberRoles={},storage=Store.status(),revision=data.revision,
         canCreate=Permissions.has(actor,"CREATE_CHANNELS"),canManageRoles=Permissions.has(actor,"MANAGE_ROLES"),canManageSettings=Permissions.has(actor,"MANAGE_SETTINGS")}
     if not result.storage.ready then return result end
     for id,entry in data.channels do
@@ -28,6 +28,17 @@ local function snapshot(actor: Player)
         end
     end
     table.sort(result.channels,function(a,b) return a.id<b.id end)
+    -- Non-sensitive, manually assigned role labels appear beside online members,
+    -- much like Discord role badges. Private role management data stays manager-only.
+    for _,onlinePlayer in Players:GetPlayers() do
+        local labels={}
+        for roleId in data.assignments[tostring(onlinePlayer.UserId)] or {} do
+            local role=data.roles[roleId]
+            if role and roleId~="muted" then table.insert(labels,Runtime.name(role)) end
+        end
+        table.sort(labels)
+        result.memberRoles[tostring(onlinePlayer.UserId)]=labels
+    end
     -- Role names and grants are needed to edit channel ACLs; assignments remain manager-only.
     for id,role in data.roles do
         result.permissions.roles[id]={name=Runtime.name(role),permissions=Rules.copy(role.permissions),protected=table.find({"member","officer","operator","muted"},id)~=nil}
