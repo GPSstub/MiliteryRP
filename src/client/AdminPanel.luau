@@ -573,6 +573,7 @@ function Panel.mount(parent: Frame): (boolean)->()
     end
     render=function()
         if not root.Parent then return end
+        local previousScroll=if currentTab=="logs" then body.CanvasPosition else Vector2.zero
         clearBody()
         body.CanvasPosition=Vector2.zero
         for key,b in navButtons do
@@ -587,6 +588,14 @@ function Panel.mount(parent: Frame): (boolean)->()
         elseif currentTab=="command" then drawCommand()
         else drawLogs() end
         root:SetAttribute("Tab",currentTab)
+        if currentTab=="logs" then
+            task.defer(function()
+                if root.Parent and currentTab=="logs" then
+                    local maxY=math.max(0,body.AbsoluteCanvasSize.Y-body.AbsoluteWindowSize.Y)
+                    body.CanvasPosition=Vector2.new(0,math.clamp(previousScroll.Y,0,maxY))
+                end
+            end)
+        end
     end
 
     for index,spec in NAV do
