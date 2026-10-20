@@ -20,6 +20,14 @@ local function flying(): boolean
     return player:GetAttribute("AdminFlying")==true
 end
 
+local function canRunNow(): boolean
+    if flying() then return false end
+    local character=player.Character
+    local humanoid=if character then character:FindFirstChildOfClass("Humanoid") else nil
+    return humanoid~=nil and humanoid.Health>0 and not humanoid.Sit
+        and humanoid.SeatPart==nil and not humanoid.PlatformStand
+end
+
 local function refreshButton()
     ContextActionService:SetTitle(ACTION,if toggled then "걷기" else Config.MobileButtonTitle)
     local touch=ContextActionService:GetButton(ACTION)
@@ -31,7 +39,7 @@ local function refreshButton()
 end
 
 local function updateIntent()
-    local shouldRun=(toggled or next(held)~=nil) and not flying()
+    local shouldRun=(toggled or next(held)~=nil) and canRunNow()
     if requested~=shouldRun then
         requested=shouldRun
         remote:FireServer(shouldRun)
@@ -55,7 +63,7 @@ local function sprintAction(_name: string,state: Enum.UserInputState,input: Inpu
         or key==Enum.KeyCode.ButtonL3
 
     if state==Enum.UserInputState.Begin then
-        if flying() or UserInputService:GetFocusedTextBox() then
+        if not canRunNow() or UserInputService:GetFocusedTextBox() then
             return Enum.ContextActionResult.Pass
         end
         if toggleDevice then
@@ -73,8 +81,10 @@ local function sprintAction(_name: string,state: Enum.UserInputState,input: Inpu
     return Enum.ContextActionResult.Sink
 end
 
-ContextActionService:BindAction(
-    ACTION,sprintAction,true,
+-- This intentionally takes precedence over default Shift bindings (e.g.
+-- optional shift-lock camera toggle) so holding Shift reliably sprints.
+ContextActionService:BindActionAtPriority(
+    ACTION,sprintAction,true,Enum.ContextActionPriority.High.Value+1,
     Enum.KeyCode.LeftShift,Enum.KeyCode.RightShift,Enum.KeyCode.ButtonL3
 )
 ContextActionService:SetPosition(ACTION,UDim2.new(0.77,0,0.55,0))
