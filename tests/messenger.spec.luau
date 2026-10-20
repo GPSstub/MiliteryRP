@@ -35,6 +35,22 @@ local renamedRole=assert(Rules.apply(newRole,owner,{
     action="rename_role",roleId="security",name="경비대",displayName="경비대",
 }))
 check(renamedRole.roles.security.displayName=="경비대")
+-- Role chips in the member picker toggle stored assignments, not local UI state.
+local assignedWithDisplay=assert(Rules.apply(renamedRole,owner,{
+    action="assign_role",roleId="security",userId=456,
+}))
+check(assignedWithDisplay.assignments["456"].security==true)
+check(Rules.rolesFor(assignedWithDisplay,{userId=456,rankOrder=1}).security)
+check(Rules.valid(assignedWithDisplay))
+local unassignedWithDisplay=assert(Rules.apply(assignedWithDisplay,owner,{
+    action="remove_role",roleId="security",userId=456,
+}))
+check(unassignedWithDisplay.assignments["456"]==nil)
+check(not Rules.rolesFor(unassignedWithDisplay,{userId=456,rankOrder=1}).security)
+check(Rules.valid(unassignedWithDisplay))
+local limitedMember={userId=456,rankOrder=1}
+check(not Rules.apply(renamedRole,limitedMember,{action="assign_role",roleId="security",userId=456}))
+
 local invalidDisplay=Rules.copy(renamedRole)
 invalidDisplay.channels.custom_filtered.displayName="<invalid"
 check(Rules.valid(invalidDisplay)) -- Plain text is escaped by UI where needed.
