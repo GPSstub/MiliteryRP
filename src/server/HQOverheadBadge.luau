@@ -54,6 +54,9 @@ function Badge.render(tag: BillboardGui)
     end
 
     if uri then
+        -- Do not layer a decorative circle under the transparent image.
+        -- The client can show the fallback only while the image is loading.
+        fallback.Visible=false
         make("ImageLabel",panel,{
             Name="HQLogo",Size=UDim2.fromScale(1,1),
             Position=UDim2.fromOffset(0,0),
