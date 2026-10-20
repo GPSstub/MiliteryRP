@@ -5,15 +5,17 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
 local Audit = require(script.Parent:WaitForChild("AdminAudit"))
 local RankCommands = require(script.Parent:WaitForChild("RankCommands"))
+local TeamService = require(script.Parent:WaitForChild("TeamService"))
 local Service = {}
-local OWNER = 1153125948
 local started = false
 local requests: {[Player]: number} = {}
 local inputs: {[Player]: number} = {}
 local flying: {[Player]: any} = {}
 local healthConnections: {[Player]: RBXScriptConnection} = {}
+local teamConnections: {[Player]: {RBXScriptConnection}} = {}
+local hadHQ: {[Player]: boolean} = {}
 local function authorized(actor: Player): boolean
-    return actor.Parent == Players and actor.UserId == OWNER
+    return TeamService.isAdmin(actor)
 end
 local function targetFor(actor: Player, name: string): Player?
     if name == "나" or name == "me" then return actor end
@@ -80,7 +82,7 @@ local function applyGod(player: Player)
     end)
 end
 function Service.execute(actor: Player, text: any): (boolean, string)
-    if typeof(actor) ~= "Instance" or not actor:IsA("Player") or not authorized(actor) then return false, "제작자 전용 기능입니다." end
+    if typeof(actor) ~= "Instance" or not actor:IsA("Player") or not authorized(actor) then return false, "HQ 팀만 관리자 명령어를 사용할 수 있습니다." end
     if type(text) ~= "string" or #text > 256 or not utf8.len(text) then return false, "명령어는 256바이트 이내로 입력하세요." end
     local words: {string} = {}
     for word in string.gmatch(text, "%S+") do table.insert(words, word) end
@@ -103,11 +105,7 @@ function Service.execute(actor: Player, text: any): (boolean, string)
         end
     elseif verb == "/팀" or verb == "/team" then
         local name = table.concat(words, " ", 3)
-        local team = Teams:FindFirstChild(name)
-        if team and team:IsA("Team") then
-            target.Team = team; target.Neutral = false
-            ok=true; message=target.Name .. " → " .. team.Name
-        else message="등록된 팀을 선택하세요. 현재 팀이 없으면 변경할 수 없습니다." end
+        ok,message=TeamService.assign(actor,target,name)
     end
     Audit.record(actor, text, ok, message)
     return ok, message
@@ -115,6 +113,7 @@ end
 function Service.start()
     if started then return end
     started=true
+    TeamService.start()
     local request=Instance.new("RemoteEvent"); request.Name="AdminRequest"; request.Parent=ReplicatedStorage
     local response=Instance.new("RemoteEvent"); response.Name="AdminResponse"; response.Parent=ReplicatedStorage
     local flightInput=Instance.new("RemoteEvent"); flightInput.Name="AdminFlightInput"; flightInput.Parent=ReplicatedStorage
@@ -155,17 +154,37 @@ function Service.start()
     end)
     local function added(player: Player)
         player:SetAttribute("AdminGod",false); player:SetAttribute("AdminFlying",false)
-        player.CharacterAdded:Connect(function(character)
-            stopFlight(player)
-            local humanoid=character:WaitForChild("Humanoid",10)
-            if humanoid and player.Character==character then applyGod(player) end
-        end)
+        hadHQ[player]=authorized(player)
+        local function checkTeam()
+            local stillHQ=authorized(player)
+            if hadHQ[player] and not stillHQ then
+                -- HQ powers are revoked immediately on transfer out of HQ.
+                stopFlight(player)
+                player:SetAttribute("AdminGod",false)
+                applyGod(player)
+            end
+            hadHQ[player]=stillHQ
+        end
+        teamConnections[player]={
+            player:GetPropertyChangedSignal("Team"):Connect(checkTeam),
+            player:GetPropertyChangedSignal("Neutral"):Connect(checkTeam),
+            player.CharacterAdded:Connect(function(character)
+                stopFlight(player)
+                local humanoid=character:WaitForChild("Humanoid",10)
+                if humanoid and player.Character==character then applyGod(player) end
+            end),
+        }
     end
     Players.PlayerAdded:Connect(added)
     for _,p in Players:GetPlayers() do added(p) end
     Players.PlayerRemoving:Connect(function(p)
-        stopFlight(p); requests[p]=nil; inputs[p]=nil
+        stopFlight(p); requests[p]=nil; inputs[p]=nil;hadHQ[p]=nil
         if healthConnections[p] then healthConnections[p]:Disconnect();healthConnections[p]=nil end
+        local connections=teamConnections[p]
+        if connections then
+            for _,connection in connections do connection:Disconnect() end
+            teamConnections[p]=nil
+        end
     end)
 end
 return Service
