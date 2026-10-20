@@ -14,9 +14,13 @@ local saving: {[Player]: boolean} = {}
 -- A successful write takes precedence over a GetAsync started before that write.
 local localChanges: {[Player]: number} = {}
 local redrawQueued: {[Player]: boolean} = {}
-local function renderCharacter(player: Player, character: Model)
+local renderVersion: {[Player]: number} = {}
+local function renderCharacter(player: Player, character: Model, version: number)
     local head=character:WaitForChild("Head",10)
-    if player.Character ~= character or not states[player] or not head or not head:IsA("BasePart") then return end
+    -- WaitForChild can yield; stale spawn/appearance requests must not build
+    -- competing BillboardGuis after a team change or respawn.
+    if player.Parent~=Players or player.Character~=character or not states[player]
+        or renderVersion[player]~=version or not head or not head:IsA("BasePart") then return end
     local previous=head:FindFirstChild("RankTag")
     if previous then previous:Destroy() end
     local humanoid=character:FindFirstChildOfClass("Humanoid")
@@ -48,6 +52,12 @@ local function renderCharacter(player: Player, character: Model)
         Insignia.render(tag,rank)
     end
 end
+local function requestRender(player: Player, character: Model)
+    if player.Parent~=Players or not states[player] then return end
+    local version=(renderVersion[player] or 0)+1
+    renderVersion[player]=version
+    task.spawn(renderCharacter,player,character,version)
+end
 local function queueRedraw(player: Player)
     if redrawQueued[player] then return end
     redrawQueued[player]=true
@@ -57,7 +67,7 @@ local function queueRedraw(player: Player)
         redrawQueued[player]=nil
         if player.Parent==Players and states[player] then
             local character=player.Character
-            if character then task.spawn(renderCharacter,player,character) end
+            if character then requestRender(player,character) end
         end
     end)
 end
@@ -119,7 +129,7 @@ function RankService.add(player: Player)
     publish(player,rank)
     connections[player]={
         player.CharacterAdded:Connect(function(character: Model)
-            task.spawn(renderCharacter,player,character)
+            requestRender(player,character)
         end),
         player.CharacterAppearanceLoaded:Connect(function(character: Model)
             task.spawn(renderCharacter,player,character)
@@ -131,7 +141,7 @@ function RankService.add(player: Player)
             queueRedraw(player)
         end),
     }
-    if player.Character then task.spawn(renderCharacter,player,player.Character) end
+    if player.Character then requestRender(player,player.Character) end
 
     -- Load asynchronously so a temporary DataStore outage never blocks character
     -- creation, rank commands registration, or the rest of the server.
@@ -164,5 +174,6 @@ function RankService.remove(player: Player)
     localChanges[player]=nil
     saving[player]=nil
     redrawQueued[player]=nil
+    renderVersion[player]=nil
 end
 return RankService
