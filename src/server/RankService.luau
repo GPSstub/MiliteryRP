@@ -3,10 +3,13 @@ local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Catalog = require(ReplicatedStorage:WaitForChild("Shared"):WaitForChild("RankCatalog"))
 local Insignia=require(script.Parent:WaitForChild("RankInsignia"))
-local hqModule=script.Parent:WaitForChild("HQOverheadBadge")
--- Failure in a visual-only badge must never disable military rank loading.
-local hqLoaded,hqBadgeValue=pcall(require,hqModule)
-if not hqLoaded then warn("[RankService] HQ badge module failed:",hqBadgeValue) end
+local hqModule=script.Parent:WaitForChild("HQOverheadBadge",5)
+-- A missing/broken decorative badge should never prevent all ranks from loading.
+local hqLoaded,hqBadgeValue=false,nil
+if hqModule then
+    hqLoaded,hqBadgeValue=pcall(require,hqModule)
+end
+if not hqLoaded then warn("[RankService] HQ badge module unavailable:",hqBadgeValue) end
 local HQBadge: any=if hqLoaded then hqBadgeValue else nil
 local TeamService=require(script.Parent:WaitForChild("TeamService"))
 local RankStore=require(script.Parent:WaitForChild("RankStore"))
