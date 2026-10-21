@@ -70,22 +70,6 @@ local window=make("Frame",gui,{Name="ExamWindow",AnchorPoint=Vector2.new(0.5,0.5
 rounded(window,16)
 stroke(window)
 local scale=make("UIScale",window,{Scale=1})
-local function resize()
-    local camera=workspace.CurrentCamera
-    if not camera then return end
-    local viewport=camera.ViewportSize
-    scale.Scale=math.min(1,math.max(0.32,(viewport.X-32)/920),math.max(0.32,(viewport.Y-100)/660))
-end
-resize()
-local viewportChanged: RBXScriptConnection?=nil
-local function watchViewport()
-    if viewportChanged then viewportChanged:Disconnect();viewportChanged=nil end
-    local camera=workspace.CurrentCamera
-    if camera then viewportChanged=camera:GetPropertyChangedSignal("ViewportSize"):Connect(resize) end
-    resize()
-end
-workspace:GetPropertyChangedSignal("CurrentCamera"):Connect(watchViewport)
-watchViewport()
 
 local header=make("Frame",window,{Name="Header",Size=UDim2.new(1,0,0,88),
     BackgroundColor3=C.sidebar,BorderSizePixel=0})
@@ -108,7 +92,7 @@ local creator=make("Frame",window,{Name="CreateSection",
 rounded(creator,12)
 local createTitle=text(creator,"Title","시험 창설  ·  개최할 시험 계급을 선택하세요",15,C.white,true)
 createTitle.Position=UDim2.fromOffset(15,8);createTitle.Size=UDim2.fromOffset(700,29)
-local createInfo=text(creator,"Hint","위관급 이상 개최 가능  /  서버 전체 동시 최대 6개",11,C.muted,false)
+local createInfo=text(creator,"Hint","위관급 이상 개최 · 1인 1시험 · 같은 계급만 참가",11,C.muted,false)
 createInfo.Position=UDim2.fromOffset(15,91);createInfo.Size=UDim2.fromOffset(685,20)
 local createButton=button(creator,"CreateButton","시험 창설",C.accent)
 createButton.Position=UDim2.fromOffset(720,46);createButton.Size=UDim2.fromOffset(127,49)
@@ -157,14 +141,62 @@ examAction.Size=UDim2.new(1,-32,0,43)
 examAction.Visible=false
 local status=text(window,"Status","시험 정보는 현재 서버 기준입니다.",12,C.muted,false)
 status.Position=UDim2.new(0,22,1,-25);status.Size=UDim2.new(1,-44,0,20)
+local mobileBody=scrolling(window,"MobileContent")
+mobileBody.Position=UDim2.fromOffset(8,88)
+mobileBody.Size=UDim2.new(1,-16,1,-122)
+mobileBody.Visible=false
+local mobileLayout=mobileBody:FindFirstChildOfClass("UIListLayout")
 local function arrange(canCreate: boolean)
+    local viewport=gui.AbsoluteSize
+    local compact=viewport.X<760 or viewport.Y<520
+    launcher.Size=UDim2.fromOffset(if compact then 88 else 112,48)
+    launcher.AnchorPoint=if compact then Vector2.new(1,0) else Vector2.new(1,0.5)
+    launcher.Position=if compact then UDim2.new(1,-8,0,86) else UDim2.new(1,-16,0.5,-62)
+    scale.Scale=1
+    window.Size=UDim2.fromOffset(math.min(900,math.max(240,viewport.X-16)),math.min(610,math.max(200,viewport.Y-16)))
+    mobileBody.Visible=compact
+    creator.Parent=if compact then mobileBody else window
+    left.Parent=if compact then mobileBody else window
+    right.Parent=if compact then mobileBody else window
+    creator.LayoutOrder=1;left.LayoutOrder=2;right.LayoutOrder=3
     creator.Visible=canCreate
-    local top=if canCreate then 232 else 100
-    local bottom=if canCreate then 264 else 132
-    left.Position=UDim2.fromOffset(18,top)
-    left.Size=UDim2.new(0,418,1,-bottom)
-    right.Position=UDim2.fromOffset(448,top)
-    right.Size=UDim2.new(1,-466,1,-bottom)
+    title.Position=UDim2.fromOffset(16,30);title.Size=UDim2.new(1,-175,0,40)
+    title.TextSize=if compact then 22 else 26
+    eyebrow.Position=UDim2.fromOffset(16,6);eyebrow.Size=UDim2.new(1,-32,0,22)
+    eyebrow.TextSize=if compact then 9 else 11
+    capacity.Visible=not compact and viewport.X>=900
+    refreshButton.Position=UDim2.new(1,-154,0,32)
+    refreshButton.Size=UDim2.fromOffset(94,44)
+    closeButton.Position=UDim2.new(1,-54,0,32)
+    closeButton.Size=UDim2.fromOffset(44,44)
+    createTitle.Size=UDim2.new(1,-28,0,32)
+    createTitle.Text=if compact then "개최할 시험 계급" else "시험 창설 · 개최할 시험 계급을 선택하세요"
+    createInfo.Size=UDim2.new(1,-28,0,30);createInfo.TextWrapped=true
+    if compact then
+        creator.Size=UDim2.new(1,-6,0,225)
+        left.Size=UDim2.new(1,-6,0,230)
+        right.Size=UDim2.new(1,-6,0,380)
+        createInfo.Position=UDim2.fromOffset(14,139)
+        createButton.Position=UDim2.fromOffset(14,177)
+        createButton.Size=UDim2.new(1,-28,0,44)
+    else
+        creator.Position=UDim2.fromOffset(18,100);creator.Size=UDim2.new(1,-36,0,121)
+        local top=if canCreate then 232 else 100
+        local bottom=if canCreate then 264 else 132
+        left.Position=UDim2.fromOffset(18,top);left.Size=UDim2.new(0,418,1,-bottom)
+        right.Position=UDim2.fromOffset(448,top);right.Size=UDim2.new(1,-466,1,-bottom)
+        createInfo.Position=UDim2.fromOffset(15,91)
+        createButton.Position=UDim2.fromOffset(720,46);createButton.Size=UDim2.fromOffset(127,49)
+    end
+    for index,id in Rules.TARGET_IDS do
+        local chip=rankButtons[id]
+        chip.Position=if compact then UDim2.new(((index-1)%4)/4,7,0,46+math.floor((index-1)/4)*46)
+            else UDim2.fromOffset(14+(index-1)*86,48)
+        chip.Size=if compact then UDim2.new(0.25,-10,0,42) else UDim2.fromOffset(80,36)
+    end
+    detailHost.TextWrapped=true;detailExtra.TextWrapped=true
+    examAction.TextSize=13;examAction.TextWrapped=true
+    status.TextWrapped=true;status.TextSize=11
 end
 arrange(false)
 
@@ -263,10 +295,13 @@ local function render()
         if member.userId==player.UserId then joined=true;break end
     end
     examAction.Visible=true
-    examAction.Text=if isHost then "시험 종료" elseif joined then "참가 취소" else "시험 참가하기"
+    local eligible=board and board.rankId==selected.targetId
+    examAction.Text=if not isHost and not joined and not eligible then "시험 계급과 현재 계급이 같아야 참가 가능" elseif isHost then "시험 종료" elseif joined then "참가 취소" else "시험 참가하기"
     examAction.BackgroundColor3=if isHost or joined then C.hover else C.accent
-    examAction.Active=not pending
+    examAction.Active=not pending and (isHost or joined or eligible==true)
 end
+
+gui:GetPropertyChangedSignal("AbsoluteSize"):Connect(render)
 
 local function applyData(data: any)
     if type(data)~="table" or type(data.sessions)~="table" or type(data.revision)~="number" then return end

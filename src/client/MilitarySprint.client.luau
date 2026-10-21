@@ -32,6 +32,7 @@ local function refreshButton()
     ContextActionService:SetTitle(ACTION,if toggled then "걷기" else Config.MobileButtonTitle)
     local touch=ContextActionService:GetButton(ACTION)
     if touch and touch:IsA("ImageButton") then
+        touch.Size=UDim2.fromOffset(52,52)
         touch.Visible=not flying()
         touch.ImageColor3=if requested then Color3.fromRGB(111,193,133)
             else Color3.fromRGB(235,239,230)
@@ -87,7 +88,7 @@ ContextActionService:BindActionAtPriority(
     ACTION,sprintAction,true,Enum.ContextActionPriority.High.Value+1,
     Enum.KeyCode.LeftShift,Enum.KeyCode.RightShift,Enum.KeyCode.ButtonL3
 )
-local TOUCH_POSITION=UDim2.new(0.77,0,0.55,0)
+local TOUCH_POSITION=UDim2.new(1,-64,1,-200)
 ContextActionService:SetPosition(ACTION,TOUCH_POSITION)
 refreshButton()
 -- On some touch clients ContextActionGui is created slightly after binding.

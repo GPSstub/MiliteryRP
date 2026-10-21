@@ -53,6 +53,8 @@ function Rules.valid(state: any): boolean
             or not validUserId(exam.hostId)
             or not Rules.isTarget(exam.targetId)
             or type(exam.startedAt)~="number" or type(exam.participants)~="table" then return false end
+        if joined[exam.hostId] then return false end
+        joined[exam.hostId]=true
         ids[exam.id]=true
         for userId,active in exam.participants do
             if not validUserId(userId) or active~=true or joined[userId]
@@ -71,6 +73,13 @@ local function locate(state: any,examId: any): (number?,any?)
     return nil,nil
 end
 
+function Rules.busy(state: any,userId: number): boolean
+    for _,exam in state.sessions do
+        if exam.hostId==userId or exam.participants[userId] then return true end
+    end
+    return false
+end
+
 -- Context is built on the server from RankService, never from remote payloads.
 function Rules.apply(state: any,actor: any,action: any,targetId: any,examId: any,now: any): (any?,string)
     if not Rules.valid(state) or type(actor)~="table" or not validUserId(actor.userId)
@@ -78,6 +87,7 @@ function Rules.apply(state: any,actor: any,action: any,targetId: any,examId: any
     local nextState=copy(state)
     if action=="create" then
         if actor.canHost~=true then return nil,"위관급 이상의 계급만 시험을 개최할 수 있습니다." end
+        if Rules.busy(state,actor.userId) then return nil,"이미 시험을 개최하거나 참가 중입니다. 먼저 종료 또는 참가 취소해 주세요." end
         if not Rules.isTarget(targetId) then return nil,"선택할 수 없는 시험 계급입니다." end
         if #nextState.sessions>=Rules.MAX_ACTIVE then return nil,"동시에 개최 가능한 시험은 6개입니다." end
         nextState.nextId+=1
@@ -95,6 +105,8 @@ function Rules.apply(state: any,actor: any,action: any,targetId: any,examId: any
         for _,other in nextState.sessions do
             if other.participants[actor.userId] then return nil,"다른 시험에 참가 중입니다." end
         end
+        if Rules.busy(state,actor.userId) then return nil,"이미 다른 시험을 개최하거나 참가 중입니다." end
+        if actor.rankId~=exam.targetId then return nil,"시험 계급과 현재 계급이 같아야 참가할 수 있습니다." end
         exam.participants[actor.userId]=true
     elseif action=="leave" then
         local _,exam=locate(nextState,examId)

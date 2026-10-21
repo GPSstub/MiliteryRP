@@ -69,6 +69,23 @@ hint.Font=Enum.Font.Gotham
 hint.TextSize=12
 hint.TextXAlignment=Enum.TextXAlignment.Right
 hint.Parent=panel
+local function layoutHUD()
+    local size=gui.AbsoluteSize
+    local compact=size.X<760 or size.Y<520
+    local touch=UserInputService.TouchEnabled and compact
+    panel.AnchorPoint=if touch then Vector2.new(0.5,0) else Vector2.new(1,1)
+    panel.Position=if touch then UDim2.new(0.5,0,0,4) else UDim2.new(1,-12,1,-12)
+    panel.Size=UDim2.fromOffset(if compact then 158 else 208,if compact then 78 else 91)
+    ammo.TextSize=if compact then 24 else 29
+    ammo.Position=UDim2.fromOffset(10,if compact then 20 else 24)
+    ammo.Size=UDim2.new(1,-20,0,if compact then 34 else 43)
+    hint.Position=UDim2.fromOffset(10,if compact then 56 else 69)
+    title.TextSize=if compact then 11 else 12
+end
+gui:GetPropertyChangedSignal("AbsoluteSize"):Connect(layoutHUD)
+UserInputService:GetPropertyChangedSignal("TouchEnabled"):Connect(layoutHUD)
+layoutHUD()
+
 local crosshair=Instance.new("TextLabel")
 crosshair.Name="RifleReticle"
 crosshair.AnchorPoint=Vector2.new(0.5,0.5)
@@ -273,7 +290,9 @@ local function equip(tool: Tool)
     end
     ContextActionService:BindAction("TrainingRifleReload",reloadAction,true,Enum.KeyCode.R)
     ContextActionService:SetTitle("TrainingRifleReload","재장전")
-    ContextActionService:SetPosition("TrainingRifleReload",UDim2.new(1,-168,1,-192))
+    ContextActionService:SetPosition("TrainingRifleReload",UDim2.new(1,-132,1,-200))
+    local reloadButton=ContextActionService:GetButton("TrainingRifleReload")
+    if reloadButton then reloadButton.Size=UDim2.fromOffset(52,52) end
     if tool:GetAttribute("Reloading")==true then reloadPose(tool) end
 end
 local function observe(child: Instance)

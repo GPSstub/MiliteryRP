@@ -8,7 +8,7 @@ end
 local board=Rules.new()
 local host={userId=1,canHost=true}
 local otherHost={userId=2,canHost=true}
-local regular={userId=200,canHost=false}
+local regular={userId=200,canHost=false,rankId="private"}
 local rankCategories={"위관","영관","장관"}
 for _,category in rankCategories do
     check(Rules.canHost({category=category}),"Officer category must host: "..category)
@@ -20,7 +20,7 @@ check(not Rules.canHost(nil),"Nil rank cannot host")
 local studio=Rules.new()
 local studioCreated=Rules.apply(studio,{userId=-1,canHost=true},"create","private",nil,1700000000)
 check(studioCreated~=nil and Rules.valid(studioCreated),"Studio mock negative UserId can host")
-local studioJoined=Rules.apply(studioCreated,{userId=-2,canHost=false},"join",nil,"exam_1",1700000000)
+local studioJoined=Rules.apply(studioCreated,{userId=-2,canHost=false,rankId="private"},"join",nil,"exam_1",1700000000)
 check(studioJoined~=nil and studioJoined.sessions[1].participants[-2],
     "Studio mock negative UserId can join")
 check(#Rules.TARGET_IDS==8,"There should be exactly eight exam target ranks")
@@ -41,8 +41,7 @@ apply(host,"create","private")
 check(board.revision==1 and #board.sessions==1,"First session created")
 check(board.sessions[1].targetId=="private","Wrong target rank")
 local anotherHosted=Rules.apply(board,host,"create","private_first_class")
-check(anotherHosted~=nil and #anotherHosted.sessions==2,
-    "An officer may organize multiple exams while global slots remain")
+check(anotherHosted==nil,"A host may only organize one exam")
 apply(regular,"join",nil,"exam_1")
 check(board.sessions[1].participants[200],"Attendee should be listed")
 check(not Rules.apply(board,regular,"join",nil,"exam_1"),"Duplicate join denied")
@@ -53,8 +52,12 @@ apply(otherHost,"create","corporal")
 check(not Rules.apply(board,regular,"join",nil,"exam_2"),"Only one joined exam at a time")
 apply(regular,"leave",nil,"exam_1")
 check(not board.sessions[1].participants[200],"Leave should remove attendee")
+check(not Rules.apply(board,regular,"join",nil,"exam_2"),"Wrong rank cannot join")
+regular.rankId="corporal"
 apply(regular,"join",nil,"exam_2")
 check(board.sessions[2].participants[200],"Can join another after leaving")
+check(not Rules.apply(board,host,"join",nil,"exam_2"),"Hosting prevents joining another exam")
+check(not Rules.apply(board,{userId=200,canHost=true,rankId="corporal"},"create","private"),"Attending prevents hosting")
 local newcomer={userId=3,canHost=true}
 apply(newcomer,"create","sergeant")
 for id=4,6 do apply({userId=id,canHost=true},"create","sergeant_major") end
@@ -75,6 +78,7 @@ local withJoins=board
 local cleanedAttendee,removed=Rules.removePlayer(board,200)
 check(not removed,"Already removed participant should have no effect")
 check(cleanedAttendee.revision==withJoins.revision,"No-change disconnect should not bump revision")
+regular.rankId="private"
 apply(regular,"join",nil,"exam_1")
 local afterLeave,changed=Rules.removePlayer(board,200)
 check(changed and afterLeave.sessions[1].participants[200]==nil,
@@ -85,4 +89,12 @@ apply(host,"close",nil,"exam_1")
 check(#board.sessions==5,"Host can end exam")
 check(not Rules.apply(board,regular,"join",nil,"exam_1"),"Closed exam cannot be joined")
 check(not Rules.apply(board,{userId=0,canHost=true},"create","private"),"Invalid actor denied")
+local reopened=Rules.apply(board,host,"create","private")
+check(reopened~=nil,"Host can create after closing")
+for _,id in Rules.TARGET_IDS do
+    local single=Rules.apply(Rules.new(),host,"create",id)
+    check(Rules.apply(single,{userId=20,rankId=id},"join",nil,"exam_1")~=nil,"Matching rank joins "..id)
+    check(not Rules.apply(single,{userId=20,rankId="trainee"},"join",nil,"exam_1"),"Other rank denied "..id)
+    check(not Rules.apply(single,{userId=20},"join",nil,"exam_1"),"Unloaded rank denied "..id)
+end
 print("Exam board rules passed "..assertions.." assertions")

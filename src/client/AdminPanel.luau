@@ -662,7 +662,11 @@ function Panel.mount(parent: Frame): (boolean)->()
         navButtons[spec[1]]=b
     end
     local function updateLayout()
-        local narrow=root.AbsoluteSize.X<590
+        local narrow=root.AbsoluteSize.X<590 or parent.AbsoluteSize.Y<480
+        local short=parent.AbsoluteSize.Y<480
+        root.Position=UDim2.fromOffset(10,if short then 70 else 102)
+        root.Size=UDim2.new(1,-20,1,if short then -80 else -138)
+        subtitle.Visible=not short
         navLayout.FillDirection=if narrow then Enum.FillDirection.Horizontal else Enum.FillDirection.Vertical
         for _,b in navButtons do
             b.Size=if narrow then UDim2.fromOffset(82,38) else UDim2.new(1,-4,0,39)
@@ -673,10 +677,10 @@ function Panel.mount(parent: Frame): (boolean)->()
             title.Size=UDim2.new(1,-141,0,30)
             badge.Size=UDim2.fromOffset(118,30)
             badge.Position=UDim2.new(1,-132,0,8)
-            nav.Position=UDim2.fromOffset(10,67)
+            nav.Position=UDim2.fromOffset(10,if short then 38 else 67)
             nav.Size=UDim2.new(1,-20,0,50)
-            body.Position=UDim2.fromOffset(10,123)
-            body.Size=UDim2.new(1,-20,1,-166)
+            body.Position=UDim2.fromOffset(10,if short then 94 else 123)
+            body.Size=UDim2.new(1,-20,1,if short then -104 else -166)
         else
             title.TextSize=18
             title.Size=UDim2.new(1,-172,0,30)

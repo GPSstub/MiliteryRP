@@ -42,16 +42,15 @@ end
 local function track(player: Player)
     if rankConnections[player] then return end
     rankConnections[player]=player:GetAttributeChangedSignal("RankId"):Connect(function()
-        -- A demoted or departed host must not keep a privileged exam open.
-        local hosts=false
+        local rank=RankService.get(player)
+        local incompatible=false
         for _,exam in board.sessions do
-            if exam.hostId==player.UserId then hosts=true;break end
+            if (exam.hostId==player.UserId and not Rules.canHost(rank))
+                or (exam.participants[player.UserId] and (not rank or rank.id~=exam.targetId)) then
+                incompatible=true;break
+            end
         end
-        if hosts and not Rules.canHost(RankService.get(player)) then
-            remove(player)
-        elseif hosts then
-            announce() -- Publish their new rank label to all viewers.
-        end
+        if incompatible then remove(player) else announce() end
     end)
 end
 
@@ -67,7 +66,8 @@ end
 
 local function snapshot(player: Player): any
     local result={revision=board.revision,maxActive=Rules.MAX_ACTIVE,
-        canCreate=canHost(player),sessions={}}
+        canCreate=canHost(player) and not Rules.busy(board,player.UserId),
+        rankId=(hostRank(player) or {}).id,sessions={}}
     for _,exam in board.sessions do
         local host=Players:GetPlayerByUserId(exam.hostId)
         if host then
@@ -114,7 +114,8 @@ request.OnServerInvoke=function(player: Player,action: any,payload: any): any
     if examId~=nil and (type(examId)~="string" or #examId>24) then
         return {ok=false,message="시험 번호 형식이 잘못되었습니다."}
     end
-    local actor={userId=player.UserId,canHost=canHost(player)}
+    local rank=hostRank(player)
+    local actor={userId=player.UserId,canHost=Rules.canHost(rank),rankId=if rank then rank.id else nil}
     local updated,message=Rules.apply(board,actor,action,targetId,examId,os.time())
     if not updated then return {ok=false,message=message} end
     board=updated

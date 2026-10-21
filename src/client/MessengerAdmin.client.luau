@@ -65,13 +65,15 @@ local refresh: ()->()
 local scrim=make("TextButton",window,{Name="ModalBackdrop",Text="",AutoButtonColor=false,
     Size=UDim2.fromScale(1,1),BackgroundColor3=Color3.new(0,0,0),BackgroundTransparency=0.35,
     BorderSizePixel=0,Visible=false,ZIndex=24})
-local modal=make("Frame",window,{Name="ChannelModal",BackgroundColor3=C.bg,BorderSizePixel=0,Size=UDim2.fromScale(0.9,0.75),
+local modal=make("ScrollingFrame",window,{Name="ChannelModal",BackgroundColor3=C.bg,BorderSizePixel=0,Size=UDim2.fromScale(0.9,0.75),
     AnchorPoint=Vector2.new(0.5,0.5),Position=UDim2.fromScale(0.5,0.5),Visible=false,ZIndex=25})
+modal.CanvasSize=UDim2.fromOffset(0,330);modal.ScrollBarThickness=4
+modal.ScrollingDirection=Enum.ScrollingDirection.Y
 corner(modal)
 make("UISizeConstraint",modal,{MaxSize=Vector2.new(420,330)})
 local modalTitle=text(modal,"채널 만들기",36);modalTitle.Position=UDim2.fromOffset(20,16);modalTitle.Size=UDim2.new(1,-40,0,36);modalTitle.TextSize=19;modalTitle.ZIndex=26
 local modalInput=input(modal,"이름 (2~24자)");modalInput.Name="NameInput";modalInput.Position=UDim2.fromOffset(20,66);modalInput.Size=UDim2.new(1,-40,0,44);modalInput.ZIndex=26
-local modalInfo=text(modal,"",90);modalInfo.Position=UDim2.fromOffset(20,118);modalInfo.Size=UDim2.new(1,-40,1,-184);modalInfo.ZIndex=26
+local modalInfo=text(modal,"",90);modalInfo.Position=UDim2.fromOffset(20,118);modalInfo.Size=UDim2.new(1,-40,0,100);modalInfo.ZIndex=26
 local persistentSelected=false
 local persistentChoice=button(modal,"PersistentChoice","○  일반 채널 · 기록 저장 안 함",C.surface)
 persistentChoice.Position=UDim2.fromOffset(20,116)
@@ -83,8 +85,8 @@ persistentChoice.Activated:Connect(function()
     persistentChoice.Text=if persistentSelected then "✓  영구 보관 · 기록 저장" else "○  일반 채널 · 기록 저장 안 함"
     persistentChoice.BackgroundColor3=if persistentSelected then C.accent else C.surface
 end)
-local confirm=button(modal,"Confirm","저장",C.accent);confirm.Position=UDim2.new(0,20,1,-56);confirm.Size=UDim2.new(0.5,-26,0,44);confirm.ZIndex=26
-local cancel=button(modal,"Cancel","취소");cancel.Position=UDim2.new(0.5,6,1,-56);cancel.Size=UDim2.new(0.5,-26,0,44);cancel.ZIndex=26
+local confirm=button(modal,"Confirm","저장",C.accent);confirm.Position=UDim2.fromOffset(20,274);confirm.Size=UDim2.new(0.5,-26,0,44);confirm.ZIndex=26
+local cancel=button(modal,"Cancel","취소");cancel.Position=UDim2.new(0.5,6,0,274);cancel.Size=UDim2.new(0.5,-26,0,44);cancel.ZIndex=26
 local modalAction: ((string)->())?=nil
 modal:GetPropertyChangedSignal("Visible"):Connect(function() scrim.Visible=modal.Visible end)
 scrim.Activated:Connect(function() if not busy then modal.Visible=false;modalInput:ReleaseFocus(false) end end)
@@ -144,7 +146,8 @@ local function permissionRow(value: string,enabled: boolean,fn: ()->())
 end
 local tabs={}
 local function layout()
-    local narrow=window.AbsoluteSize.X<600
+    local narrow=window.AbsoluteSize.X<600 or window.AbsoluteSize.Y<440
+    modal.Size=UDim2.new(1,-16,1,-16)
     nav.Position=UDim2.fromOffset(0,0);nav.Size=if narrow then UDim2.new(1,0,0,80) else UDim2.new(0,144,1,-48)
     back.Position=UDim2.fromOffset(8,8);back.Size=UDim2.new(if narrow then 0 else 1,if narrow then 110 else -16,0,if narrow then 32 else 40)
     for i,b in tabs do

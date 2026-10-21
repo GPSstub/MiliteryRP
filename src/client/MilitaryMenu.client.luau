@@ -99,7 +99,9 @@ subtitle.Position = UDim2.new(0, 24, 0.5, 48); subtitle.Size = UDim2.new(1, -48,
 subtitle.TextXAlignment = Enum.TextXAlignment.Center; subtitle.TextWrapped = true
 local footer = label(panel, "Footer", "MILITARY RP  /  STORE", 10, MUTED)
 footer.Position = UDim2.new(0, 24, 1, -34); footer.Size = UDim2.new(1, -48, 0, 16)
-local passCard=Instance.new("Frame")
+local passCard=Instance.new("ScrollingFrame")
+passCard.BorderSizePixel=0;passCard.ScrollBarThickness=4
+passCard.CanvasSize=UDim2.fromOffset(0,202);passCard.ScrollingDirection=Enum.ScrollingDirection.Y
 passCard.Name="GamePassCard"; passCard.BackgroundTransparency=1
 passCard.Position=UDim2.fromOffset(24,106); passCard.Size=UDim2.new(1,-48,1,-152)
 passCard.Visible=false; passCard.Parent=panel
@@ -109,7 +111,7 @@ local passDescription=label(passCard,"Description","HK416 영구 사용권\n30�
 passDescription.Position=UDim2.fromOffset(0,44); passDescription.Size=UDim2.new(1,0,0,68)
 passDescription.TextWrapped=true
 local buy=button(passCard,"BuyGamePass","확인 중…")
-buy.AnchorPoint=Vector2.new(0,1); buy.Position=UDim2.fromScale(0,1); buy.Size=UDim2.new(1,0,0,48)
+buy.AnchorPoint=Vector2.zero; buy.Position=UDim2.fromOffset(0,142); buy.Size=UDim2.new(1,0,0,48)
 local passId=0
 local sale=false
 local price: number?=nil
@@ -151,6 +153,41 @@ player:GetAttributeChangedSignal("TrainingRifleOwned"):Connect(updatePass)
 player:GetAttributeChangedSignal("TrainingRifleOwnershipStatus"):Connect(updatePass)
 ReplicatedStorage:GetAttributeChangedSignal("TrainingRifleGamePassId"):Connect(loadPass)
 loadPass()
+local function layoutMenu()
+    local size=gui.AbsoluteSize
+    local compact=size.X<760 or size.Y<520
+    local management=panel:GetAttribute("Page")=="admin"
+    if compact then
+        panel.Size=UDim2.fromOffset(math.max(240,size.X-16),math.max(180,size.Y-16))
+        cap.MaxSize=Vector2.new(1024,760)
+    else
+        panel.Size=if management then UDim2.fromScale(0.94,0.9) else UDim2.fromScale(0.88,0.72)
+        cap.MaxSize=if management then Vector2.new(1024,760) else Vector2.new(600,400)
+    end
+    local touch=UserInputService.TouchEnabled and compact
+    toggle.AnchorPoint=if touch then Vector2.zero else Vector2.new(0,1)
+    toggle.Position=if touch then UDim2.fromOffset(8,8) else UDim2.new(0,20,1,-20)
+    toggle.Size=UDim2.fromOffset(if touch then 112 else 132,48)
+    flyout.AnchorPoint=if touch then Vector2.zero else Vector2.new(0,1)
+    flyout.Position=if touch then UDim2.fromOffset(8,64) else UDim2.new(0,20,1,-80)
+    local short=compact and size.Y<420
+    local row=if short then 44 else 52
+    shop.Position=UDim2.fromOffset(12,if short then 8 else 46)
+    passes.Position=UDim2.fromOffset(12,if short then 56 else 104)
+    admin.Position=UDim2.fromOffset(12,if short then 104 else 162)
+    for _,b in {shop,passes,admin} do b.Size=UDim2.new(1,-24,0,row) end
+    eyebrow.Visible=not short;adminNote.Visible=isAdmin() and not short
+    flyout.Size=UDim2.fromOffset(math.min(224,size.X-16),if short then (if isAdmin() then 156 else 108) else (if isAdmin() then 248 else 190))
+    local shortHeader=compact and management
+    heading.Position=UDim2.fromOffset(24,if shortHeader then 16 else 42)
+    heading.TextSize=if shortHeader then 21 else 24
+    section.Visible=not shortHeader;accent.Visible=not shortHeader
+    line.Position=UDim2.fromOffset(24,if shortHeader then 63 else 90)
+    footer.Visible=not shortHeader
+    passCard.Size=UDim2.new(1,-48,1,if compact then -122 else -152)
+end
+gui:GetPropertyChangedSignal("AbsoluteSize"):Connect(layoutMenu)
+UserInputService:GetPropertyChangedSignal("TouchEnabled"):Connect(layoutMenu)
 local adminMount: ((boolean)->())?=nil
 local function showAdmin(visible: boolean)
     if not visible then
@@ -187,6 +224,7 @@ local function openPage(page: string)
     empty.Text = if management then "관리 기능 준비 중" else "아직 진열된 상품이 없어요"
     subtitle.Text = if management then "필요한 관리 기능을 여기에 추가할 예정이에요." else "새로운 보급품을 준비하고 있어요."
     footer.Text = if management then "MILITARY RP  /  GROUP OPERATIONS" else "MILITARY RP  /  STORE"
+    layoutMenu()
     selectForGamepad(close)
 end
 toggle.Activated:Connect(function()
@@ -203,6 +241,7 @@ local function updateAdminAccess()
     admin.Visible=can
     adminNote.Visible=can
     flyout.Size=UDim2.fromOffset(224,if can then 248 else 190)
+    layoutMenu()
     if not can and panel.Visible and panel:GetAttribute("Page")=="admin" then
         dismiss()
     end
@@ -216,3 +255,4 @@ UserInputService.InputBegan:Connect(function(input: InputObject, processed: bool
 end)
 -- Admin actions are validated separately by AdminService on the server.
 gui.Parent = player:WaitForChild("PlayerGui")
+layoutMenu()

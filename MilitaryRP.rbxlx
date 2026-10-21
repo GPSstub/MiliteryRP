@@ -141019,7 +141019,9 @@ subtitle.Position = UDim2.new(0, 24, 0.5, 48); subtitle.Size = UDim2.new(1, -48,
 subtitle.TextXAlignment = Enum.TextXAlignment.Center; subtitle.TextWrapped = true
 local footer = label(panel, "Footer", "MILITARY RP  /  STORE", 10, MUTED)
 footer.Position = UDim2.new(0, 24, 1, -34); footer.Size = UDim2.new(1, -48, 0, 16)
-local passCard=Instance.new("Frame")
+local passCard=Instance.new("ScrollingFrame")
+passCard.BorderSizePixel=0;passCard.ScrollBarThickness=4
+passCard.CanvasSize=UDim2.fromOffset(0,202);passCard.ScrollingDirection=Enum.ScrollingDirection.Y
 passCard.Name="GamePassCard"; passCard.BackgroundTransparency=1
 passCard.Position=UDim2.fromOffset(24,106); passCard.Size=UDim2.new(1,-48,1,-152)
 passCard.Visible=false; passCard.Parent=panel
@@ -141029,7 +141031,7 @@ local passDescription=label(passCard,"Description","HK416 영구 사용권\n30�
 passDescription.Position=UDim2.fromOffset(0,44); passDescription.Size=UDim2.new(1,0,0,68)
 passDescription.TextWrapped=true
 local buy=button(passCard,"BuyGamePass","확인 중…")
-buy.AnchorPoint=Vector2.new(0,1); buy.Position=UDim2.fromScale(0,1); buy.Size=UDim2.new(1,0,0,48)
+buy.AnchorPoint=Vector2.zero; buy.Position=UDim2.fromOffset(0,142); buy.Size=UDim2.new(1,0,0,48)
 local passId=0
 local sale=false
 local price: number?=nil
@@ -141071,6 +141073,41 @@ player:GetAttributeChangedSignal("TrainingRifleOwned"):Connect(updatePass)
 player:GetAttributeChangedSignal("TrainingRifleOwnershipStatus"):Connect(updatePass)
 ReplicatedStorage:GetAttributeChangedSignal("TrainingRifleGamePassId"):Connect(loadPass)
 loadPass()
+local function layoutMenu()
+    local size=gui.AbsoluteSize
+    local compact=size.X&lt;760 or size.Y&lt;520
+    local management=panel:GetAttribute("Page")=="admin"
+    if compact then
+        panel.Size=UDim2.fromOffset(math.max(240,size.X-16),math.max(180,size.Y-16))
+        cap.MaxSize=Vector2.new(1024,760)
+    else
+        panel.Size=if management then UDim2.fromScale(0.94,0.9) else UDim2.fromScale(0.88,0.72)
+        cap.MaxSize=if management then Vector2.new(1024,760) else Vector2.new(600,400)
+    end
+    local touch=UserInputService.TouchEnabled and compact
+    toggle.AnchorPoint=if touch then Vector2.zero else Vector2.new(0,1)
+    toggle.Position=if touch then UDim2.fromOffset(8,8) else UDim2.new(0,20,1,-20)
+    toggle.Size=UDim2.fromOffset(if touch then 112 else 132,48)
+    flyout.AnchorPoint=if touch then Vector2.zero else Vector2.new(0,1)
+    flyout.Position=if touch then UDim2.fromOffset(8,64) else UDim2.new(0,20,1,-80)
+    local short=compact and size.Y&lt;420
+    local row=if short then 44 else 52
+    shop.Position=UDim2.fromOffset(12,if short then 8 else 46)
+    passes.Position=UDim2.fromOffset(12,if short then 56 else 104)
+    admin.Position=UDim2.fromOffset(12,if short then 104 else 162)
+    for _,b in {shop,passes,admin} do b.Size=UDim2.new(1,-24,0,row) end
+    eyebrow.Visible=not short;adminNote.Visible=isAdmin() and not short
+    flyout.Size=UDim2.fromOffset(math.min(224,size.X-16),if short then (if isAdmin() then 156 else 108) else (if isAdmin() then 248 else 190))
+    local shortHeader=compact and management
+    heading.Position=UDim2.fromOffset(24,if shortHeader then 16 else 42)
+    heading.TextSize=if shortHeader then 21 else 24
+    section.Visible=not shortHeader;accent.Visible=not shortHeader
+    line.Position=UDim2.fromOffset(24,if shortHeader then 63 else 90)
+    footer.Visible=not shortHeader
+    passCard.Size=UDim2.new(1,-48,1,if compact then -122 else -152)
+end
+gui:GetPropertyChangedSignal("AbsoluteSize"):Connect(layoutMenu)
+UserInputService:GetPropertyChangedSignal("TouchEnabled"):Connect(layoutMenu)
 local adminMount: ((boolean)-&gt;())?=nil
 local function showAdmin(visible: boolean)
     if not visible then
@@ -141107,6 +141144,7 @@ local function openPage(page: string)
     empty.Text = if management then "관리 기능 준비 중" else "아직 진열된 상품이 없어요"
     subtitle.Text = if management then "필요한 관리 기능을 여기에 추가할 예정이에요." else "새로운 보급품을 준비하고 있어요."
     footer.Text = if management then "MILITARY RP  /  GROUP OPERATIONS" else "MILITARY RP  /  STORE"
+    layoutMenu()
     selectForGamepad(close)
 end
 toggle.Activated:Connect(function()
@@ -141123,6 +141161,7 @@ local function updateAdminAccess()
     admin.Visible=can
     adminNote.Visible=can
     flyout.Size=UDim2.fromOffset(224,if can then 248 else 190)
+    layoutMenu()
     if not can and panel.Visible and panel:GetAttribute("Page")=="admin" then
         dismiss()
     end
@@ -141136,6 +141175,7 @@ UserInputService.InputBegan:Connect(function(input: InputObject, processed: bool
 end)
 -- Admin actions are validated separately by AdminService on the server.
 gui.Parent = player:WaitForChild("PlayerGui")
+layoutMenu()
 </ProtectedString>
 					<bool name="Disabled">false</bool>
 					<Content name="LinkedSource"><null /></Content>
@@ -141819,7 +141859,11 @@ function Panel.mount(parent: Frame): (boolean)-&gt;()
         navButtons[spec[1]]=b
     end
     local function updateLayout()
-        local narrow=root.AbsoluteSize.X&lt;590
+        local narrow=root.AbsoluteSize.X&lt;590 or parent.AbsoluteSize.Y&lt;480
+        local short=parent.AbsoluteSize.Y&lt;480
+        root.Position=UDim2.fromOffset(10,if short then 70 else 102)
+        root.Size=UDim2.new(1,-20,1,if short then -80 else -138)
+        subtitle.Visible=not short
         navLayout.FillDirection=if narrow then Enum.FillDirection.Horizontal else Enum.FillDirection.Vertical
         for _,b in navButtons do
             b.Size=if narrow then UDim2.fromOffset(82,38) else UDim2.new(1,-4,0,39)
@@ -141830,10 +141874,10 @@ function Panel.mount(parent: Frame): (boolean)-&gt;()
             title.Size=UDim2.new(1,-141,0,30)
             badge.Size=UDim2.fromOffset(118,30)
             badge.Position=UDim2.new(1,-132,0,8)
-            nav.Position=UDim2.fromOffset(10,67)
+            nav.Position=UDim2.fromOffset(10,if short then 38 else 67)
             nav.Size=UDim2.new(1,-20,0,50)
-            body.Position=UDim2.fromOffset(10,123)
-            body.Size=UDim2.new(1,-20,1,-166)
+            body.Position=UDim2.fromOffset(10,if short then 94 else 123)
+            body.Size=UDim2.new(1,-20,1,if short then -104 else -166)
         else
             title.TextSize=18
             title.Size=UDim2.new(1,-172,0,30)
@@ -142602,10 +142646,16 @@ local function updateLayout(viewportOverride: Vector2?)
         return
     end
 
-    local viewport = viewportOverride or camera.ViewportSize
+    local viewport = viewportOverride or gui.AbsoluteSize
 
-    local width = math.min(1080, math.max(260, viewport.X - 24))
-    local height = math.min(720, math.max(240, viewport.Y - 84))
+    local width = math.min(1080, math.max(240, viewport.X - 16))
+    local height = math.min(720, math.max(180, viewport.Y - 16))
+    window.AnchorPoint=Vector2.new(0.5,0.5)
+    window.Position=UDim2.fromScale(0.5,0.5)
+    local small=viewport.X&lt;760 or viewport.Y&lt;520
+    launcher.Size=UDim2.fromOffset(if small then 88 else 112,48)
+    launcher.Position=if small then UDim2.new(1,-8,0,142) else UDim2.new(1,-16,0.5,0)
+    launcher.AnchorPoint=if small then Vector2.new(1,0) else Vector2.new(1,0.5)
     compact = width &lt; 640
     local sidebarWidth = if compact then (if drawerOpen then width else 0) else (if width &lt; 840 then 190 else 220)
     local memberWidth = if width &gt;= 960 then 190 else 0
@@ -142637,6 +142687,7 @@ end
 
 channelToggle.Activated:Connect(function() drawerOpen = not drawerOpen; updateLayout() end)
 updateLayout()
+gui:GetPropertyChangedSignal("AbsoluteSize"):Connect(function() updateLayout() end)
 
 local cameraConnection: RBXScriptConnection? = nil
 local function connectCamera(camera)
@@ -144342,13 +144393,15 @@ local refresh: ()-&gt;()
 local scrim=make("TextButton",window,{Name="ModalBackdrop",Text="",AutoButtonColor=false,
     Size=UDim2.fromScale(1,1),BackgroundColor3=Color3.new(0,0,0),BackgroundTransparency=0.35,
     BorderSizePixel=0,Visible=false,ZIndex=24})
-local modal=make("Frame",window,{Name="ChannelModal",BackgroundColor3=C.bg,BorderSizePixel=0,Size=UDim2.fromScale(0.9,0.75),
+local modal=make("ScrollingFrame",window,{Name="ChannelModal",BackgroundColor3=C.bg,BorderSizePixel=0,Size=UDim2.fromScale(0.9,0.75),
     AnchorPoint=Vector2.new(0.5,0.5),Position=UDim2.fromScale(0.5,0.5),Visible=false,ZIndex=25})
+modal.CanvasSize=UDim2.fromOffset(0,330);modal.ScrollBarThickness=4
+modal.ScrollingDirection=Enum.ScrollingDirection.Y
 corner(modal)
 make("UISizeConstraint",modal,{MaxSize=Vector2.new(420,330)})
 local modalTitle=text(modal,"채널 만들기",36);modalTitle.Position=UDim2.fromOffset(20,16);modalTitle.Size=UDim2.new(1,-40,0,36);modalTitle.TextSize=19;modalTitle.ZIndex=26
 local modalInput=input(modal,"이름 (2~24자)");modalInput.Name="NameInput";modalInput.Position=UDim2.fromOffset(20,66);modalInput.Size=UDim2.new(1,-40,0,44);modalInput.ZIndex=26
-local modalInfo=text(modal,"",90);modalInfo.Position=UDim2.fromOffset(20,118);modalInfo.Size=UDim2.new(1,-40,1,-184);modalInfo.ZIndex=26
+local modalInfo=text(modal,"",90);modalInfo.Position=UDim2.fromOffset(20,118);modalInfo.Size=UDim2.new(1,-40,0,100);modalInfo.ZIndex=26
 local persistentSelected=false
 local persistentChoice=button(modal,"PersistentChoice","○  일반 채널 · 기록 저장 안 함",C.surface)
 persistentChoice.Position=UDim2.fromOffset(20,116)
@@ -144360,8 +144413,8 @@ persistentChoice.Activated:Connect(function()
     persistentChoice.Text=if persistentSelected then "✓  영구 보관 · 기록 저장" else "○  일반 채널 · 기록 저장 안 함"
     persistentChoice.BackgroundColor3=if persistentSelected then C.accent else C.surface
 end)
-local confirm=button(modal,"Confirm","저장",C.accent);confirm.Position=UDim2.new(0,20,1,-56);confirm.Size=UDim2.new(0.5,-26,0,44);confirm.ZIndex=26
-local cancel=button(modal,"Cancel","취소");cancel.Position=UDim2.new(0.5,6,1,-56);cancel.Size=UDim2.new(0.5,-26,0,44);cancel.ZIndex=26
+local confirm=button(modal,"Confirm","저장",C.accent);confirm.Position=UDim2.fromOffset(20,274);confirm.Size=UDim2.new(0.5,-26,0,44);confirm.ZIndex=26
+local cancel=button(modal,"Cancel","취소");cancel.Position=UDim2.new(0.5,6,0,274);cancel.Size=UDim2.new(0.5,-26,0,44);cancel.ZIndex=26
 local modalAction: ((string)-&gt;())?=nil
 modal:GetPropertyChangedSignal("Visible"):Connect(function() scrim.Visible=modal.Visible end)
 scrim.Activated:Connect(function() if not busy then modal.Visible=false;modalInput:ReleaseFocus(false) end end)
@@ -144421,7 +144474,8 @@ local function permissionRow(value: string,enabled: boolean,fn: ()-&gt;())
 end
 local tabs={}
 local function layout()
-    local narrow=window.AbsoluteSize.X&lt;600
+    local narrow=window.AbsoluteSize.X&lt;600 or window.AbsoluteSize.Y&lt;440
+    modal.Size=UDim2.new(1,-16,1,-16)
     nav.Position=UDim2.fromOffset(0,0);nav.Size=if narrow then UDim2.new(1,0,0,80) else UDim2.new(0,144,1,-48)
     back.Position=UDim2.fromOffset(8,8);back.Size=UDim2.new(if narrow then 0 else 1,if narrow then 110 else -16,0,if narrow then 32 else 40)
     for i,b in tabs do
@@ -144723,22 +144777,6 @@ local window=make("Frame",gui,{Name="ExamWindow",AnchorPoint=Vector2.new(0.5,0.5
 rounded(window,16)
 stroke(window)
 local scale=make("UIScale",window,{Scale=1})
-local function resize()
-    local camera=workspace.CurrentCamera
-    if not camera then return end
-    local viewport=camera.ViewportSize
-    scale.Scale=math.min(1,math.max(0.32,(viewport.X-32)/920),math.max(0.32,(viewport.Y-100)/660))
-end
-resize()
-local viewportChanged: RBXScriptConnection?=nil
-local function watchViewport()
-    if viewportChanged then viewportChanged:Disconnect();viewportChanged=nil end
-    local camera=workspace.CurrentCamera
-    if camera then viewportChanged=camera:GetPropertyChangedSignal("ViewportSize"):Connect(resize) end
-    resize()
-end
-workspace:GetPropertyChangedSignal("CurrentCamera"):Connect(watchViewport)
-watchViewport()
 
 local header=make("Frame",window,{Name="Header",Size=UDim2.new(1,0,0,88),
     BackgroundColor3=C.sidebar,BorderSizePixel=0})
@@ -144761,7 +144799,7 @@ local creator=make("Frame",window,{Name="CreateSection",
 rounded(creator,12)
 local createTitle=text(creator,"Title","시험 창설  ·  개최할 시험 계급을 선택하세요",15,C.white,true)
 createTitle.Position=UDim2.fromOffset(15,8);createTitle.Size=UDim2.fromOffset(700,29)
-local createInfo=text(creator,"Hint","위관급 이상 개최 가능  /  서버 전체 동시 최대 6개",11,C.muted,false)
+local createInfo=text(creator,"Hint","위관급 이상 개최 · 1인 1시험 · 같은 계급만 참가",11,C.muted,false)
 createInfo.Position=UDim2.fromOffset(15,91);createInfo.Size=UDim2.fromOffset(685,20)
 local createButton=button(creator,"CreateButton","시험 창설",C.accent)
 createButton.Position=UDim2.fromOffset(720,46);createButton.Size=UDim2.fromOffset(127,49)
@@ -144810,14 +144848,62 @@ examAction.Size=UDim2.new(1,-32,0,43)
 examAction.Visible=false
 local status=text(window,"Status","시험 정보는 현재 서버 기준입니다.",12,C.muted,false)
 status.Position=UDim2.new(0,22,1,-25);status.Size=UDim2.new(1,-44,0,20)
+local mobileBody=scrolling(window,"MobileContent")
+mobileBody.Position=UDim2.fromOffset(8,88)
+mobileBody.Size=UDim2.new(1,-16,1,-122)
+mobileBody.Visible=false
+local mobileLayout=mobileBody:FindFirstChildOfClass("UIListLayout")
 local function arrange(canCreate: boolean)
+    local viewport=gui.AbsoluteSize
+    local compact=viewport.X&lt;760 or viewport.Y&lt;520
+    launcher.Size=UDim2.fromOffset(if compact then 88 else 112,48)
+    launcher.AnchorPoint=if compact then Vector2.new(1,0) else Vector2.new(1,0.5)
+    launcher.Position=if compact then UDim2.new(1,-8,0,86) else UDim2.new(1,-16,0.5,-62)
+    scale.Scale=1
+    window.Size=UDim2.fromOffset(math.min(900,math.max(240,viewport.X-16)),math.min(610,math.max(200,viewport.Y-16)))
+    mobileBody.Visible=compact
+    creator.Parent=if compact then mobileBody else window
+    left.Parent=if compact then mobileBody else window
+    right.Parent=if compact then mobileBody else window
+    creator.LayoutOrder=1;left.LayoutOrder=2;right.LayoutOrder=3
     creator.Visible=canCreate
-    local top=if canCreate then 232 else 100
-    local bottom=if canCreate then 264 else 132
-    left.Position=UDim2.fromOffset(18,top)
-    left.Size=UDim2.new(0,418,1,-bottom)
-    right.Position=UDim2.fromOffset(448,top)
-    right.Size=UDim2.new(1,-466,1,-bottom)
+    title.Position=UDim2.fromOffset(16,30);title.Size=UDim2.new(1,-175,0,40)
+    title.TextSize=if compact then 22 else 26
+    eyebrow.Position=UDim2.fromOffset(16,6);eyebrow.Size=UDim2.new(1,-32,0,22)
+    eyebrow.TextSize=if compact then 9 else 11
+    capacity.Visible=not compact and viewport.X&gt;=900
+    refreshButton.Position=UDim2.new(1,-154,0,32)
+    refreshButton.Size=UDim2.fromOffset(94,44)
+    closeButton.Position=UDim2.new(1,-54,0,32)
+    closeButton.Size=UDim2.fromOffset(44,44)
+    createTitle.Size=UDim2.new(1,-28,0,32)
+    createTitle.Text=if compact then "개최할 시험 계급" else "시험 창설 · 개최할 시험 계급을 선택하세요"
+    createInfo.Size=UDim2.new(1,-28,0,30);createInfo.TextWrapped=true
+    if compact then
+        creator.Size=UDim2.new(1,-6,0,225)
+        left.Size=UDim2.new(1,-6,0,230)
+        right.Size=UDim2.new(1,-6,0,380)
+        createInfo.Position=UDim2.fromOffset(14,139)
+        createButton.Position=UDim2.fromOffset(14,177)
+        createButton.Size=UDim2.new(1,-28,0,44)
+    else
+        creator.Position=UDim2.fromOffset(18,100);creator.Size=UDim2.new(1,-36,0,121)
+        local top=if canCreate then 232 else 100
+        local bottom=if canCreate then 264 else 132
+        left.Position=UDim2.fromOffset(18,top);left.Size=UDim2.new(0,418,1,-bottom)
+        right.Position=UDim2.fromOffset(448,top);right.Size=UDim2.new(1,-466,1,-bottom)
+        createInfo.Position=UDim2.fromOffset(15,91)
+        createButton.Position=UDim2.fromOffset(720,46);createButton.Size=UDim2.fromOffset(127,49)
+    end
+    for index,id in Rules.TARGET_IDS do
+        local chip=rankButtons[id]
+        chip.Position=if compact then UDim2.new(((index-1)%4)/4,7,0,46+math.floor((index-1)/4)*46)
+            else UDim2.fromOffset(14+(index-1)*86,48)
+        chip.Size=if compact then UDim2.new(0.25,-10,0,42) else UDim2.fromOffset(80,36)
+    end
+    detailHost.TextWrapped=true;detailExtra.TextWrapped=true
+    examAction.TextSize=13;examAction.TextWrapped=true
+    status.TextWrapped=true;status.TextSize=11
 end
 arrange(false)
 
@@ -144916,10 +145002,13 @@ local function render()
         if member.userId==player.UserId then joined=true;break end
     end
     examAction.Visible=true
-    examAction.Text=if isHost then "시험 종료" elseif joined then "참가 취소" else "시험 참가하기"
+    local eligible=board and board.rankId==selected.targetId
+    examAction.Text=if not isHost and not joined and not eligible then "시험 계급과 현재 계급이 같아야 참가 가능" elseif isHost then "시험 종료" elseif joined then "참가 취소" else "시험 참가하기"
     examAction.BackgroundColor3=if isHost or joined then C.hover else C.accent
-    examAction.Active=not pending
+    examAction.Active=not pending and (isHost or joined or eligible==true)
 end
+
+gui:GetPropertyChangedSignal("AbsoluteSize"):Connect(render)
 
 local function applyData(data: any)
     if type(data)~="table" or type(data.sessions)~="table" or type(data.revision)~="number" then return end
@@ -145040,7 +145129,7 @@ local remote=ReplicatedStorage:WaitForChild("AdminTargetSelection") :: RemoteEve
 local gui=Instance.new("ScreenGui")
 gui.Name="AdminTargetPicker"
 gui.ResetOnSpawn=false
-gui.IgnoreGuiInset=true
+gui.ScreenInsets=Enum.ScreenInsets.CoreUISafeInsets
 gui.DisplayOrder=100
 gui.ZIndexBehavior=Enum.ZIndexBehavior.Sibling
 gui.Parent=localPlayer:WaitForChild("PlayerGui")
@@ -145058,13 +145147,13 @@ local card=Instance.new("Frame")
 card.Name="CandidatePicker"
 card.AnchorPoint=Vector2.new(0.5,0.5)
 card.Position=UDim2.fromScale(0.5,0.5)
-card.Size=UDim2.new(0.9,0,0.74,0)
+card.Size=UDim2.new(1,-16,1,-16)
 card.BackgroundColor3=Color3.fromRGB(28,37,44)
 card.BorderSizePixel=0
 card.Parent=overlay
 local sizeLimit=Instance.new("UISizeConstraint")
 sizeLimit.MaxSize=Vector2.new(490,570)
-sizeLimit.MinSize=Vector2.new(260,240)
+sizeLimit.MinSize=Vector2.zero
 sizeLimit.Parent=card
 local corner=Instance.new("UICorner")
 corner.CornerRadius=UDim.new(0,14)
@@ -145393,6 +145482,7 @@ local function refreshButton()
     ContextActionService:SetTitle(ACTION,if toggled then "걷기" else Config.MobileButtonTitle)
     local touch=ContextActionService:GetButton(ACTION)
     if touch and touch:IsA("ImageButton") then
+        touch.Size=UDim2.fromOffset(52,52)
         touch.Visible=not flying()
         touch.ImageColor3=if requested then Color3.fromRGB(111,193,133)
             else Color3.fromRGB(235,239,230)
@@ -145448,7 +145538,7 @@ ContextActionService:BindActionAtPriority(
     ACTION,sprintAction,true,Enum.ContextActionPriority.High.Value+1,
     Enum.KeyCode.LeftShift,Enum.KeyCode.RightShift,Enum.KeyCode.ButtonL3
 )
-local TOUCH_POSITION=UDim2.new(0.77,0,0.55,0)
+local TOUCH_POSITION=UDim2.new(1,-64,1,-200)
 ContextActionService:SetPosition(ACTION,TOUCH_POSITION)
 refreshButton()
 -- On some touch clients ContextActionGui is created slightly after binding.
@@ -145566,6 +145656,23 @@ hint.Font=Enum.Font.Gotham
 hint.TextSize=12
 hint.TextXAlignment=Enum.TextXAlignment.Right
 hint.Parent=panel
+local function layoutHUD()
+    local size=gui.AbsoluteSize
+    local compact=size.X&lt;760 or size.Y&lt;520
+    local touch=UserInputService.TouchEnabled and compact
+    panel.AnchorPoint=if touch then Vector2.new(0.5,0) else Vector2.new(1,1)
+    panel.Position=if touch then UDim2.new(0.5,0,0,4) else UDim2.new(1,-12,1,-12)
+    panel.Size=UDim2.fromOffset(if compact then 158 else 208,if compact then 78 else 91)
+    ammo.TextSize=if compact then 24 else 29
+    ammo.Position=UDim2.fromOffset(10,if compact then 20 else 24)
+    ammo.Size=UDim2.new(1,-20,0,if compact then 34 else 43)
+    hint.Position=UDim2.fromOffset(10,if compact then 56 else 69)
+    title.TextSize=if compact then 11 else 12
+end
+gui:GetPropertyChangedSignal("AbsoluteSize"):Connect(layoutHUD)
+UserInputService:GetPropertyChangedSignal("TouchEnabled"):Connect(layoutHUD)
+layoutHUD()
+
 local crosshair=Instance.new("TextLabel")
 crosshair.Name="RifleReticle"
 crosshair.AnchorPoint=Vector2.new(0.5,0.5)
@@ -145770,7 +145877,9 @@ local function equip(tool: Tool)
     end
     ContextActionService:BindAction("TrainingRifleReload",reloadAction,true,Enum.KeyCode.R)
     ContextActionService:SetTitle("TrainingRifleReload","재장전")
-    ContextActionService:SetPosition("TrainingRifleReload",UDim2.new(1,-168,1,-192))
+    ContextActionService:SetPosition("TrainingRifleReload",UDim2.new(1,-132,1,-200))
+    local reloadButton=ContextActionService:GetButton("TrainingRifleReload")
+    if reloadButton then reloadButton.Size=UDim2.fromOffset(52,52) end
     if tool:GetAttribute("Reloading")==true then reloadPose(tool) end
 end
 local function observe(child: Instance)
@@ -145990,7 +146099,67 @@ workspace.ChildAdded:Connect(function(child: Instance)
     child.Destroying:Once(function() connection:Disconnect() end)
 end)
 return Viewmodel
-</ProtectedString></Properties></Item></Item>
+</ProtectedString></Properties></Item><Item class="LocalScript" referent="MessengerSync9"><Properties><string name="Name">MobileLayout</string><ProtectedString name="Source">--!strict
+-- Keep phone launchers and the weapon HUD clear of open full-screen panels.
+local Players=game:GetService("Players")
+local playerGui=Players.LocalPlayer:WaitForChild("PlayerGui")
+local watched: {[Instance]: boolean}={}
+local windows={ContentPanel=true,MessengerWindow=true,ExamWindow=true,DimOverlay=true}
+local launchers={MenuButton=true,CommunicationButton=true,ExamButton=true}
+local function refresh()
+    local camera=workspace.CurrentCamera
+    if not camera then return end
+    local compact=camera.ViewportSize.X&lt;900 or camera.ViewportSize.Y&lt;580
+    local modal=false
+    if compact then
+        for object in watched do
+            if object.Parent and object:IsA("GuiObject") and windows[object.Name] and object.Visible then
+                modal=true;break
+            end
+        end
+    end
+    for object in watched do
+        if object.Parent and object:IsA("GuiObject") and launchers[object.Name] then
+            local ownWindow=if object.Name=="CommunicationButton" and object.Parent then object.Parent:FindFirstChild("MessengerWindow") else nil
+            object.Visible=not modal and not (ownWindow and ownWindow:IsA("GuiObject") and ownWindow.Visible)
+        end
+    end
+    local context=playerGui:FindFirstChild("ContextActionGui")
+    if context and context:IsA("ScreenGui") then context.Enabled=not modal end
+    local flight=playerGui:FindFirstChild("FlightControls")
+    if flight and flight:IsA("ScreenGui") then flight.Enabled=not modal end
+    local hud=playerGui:FindFirstChild("TrainingRifleHUD")
+    if hud and hud:IsA("ScreenGui") then hud.Enabled=not modal end
+end
+local function bind(object: Instance)
+    if not object:IsA("GuiObject") or watched[object]
+        or (not windows[object.Name] and not launchers[object.Name]) then return end
+    -- Limit matches to this game's top-level screens, not similarly named chat rows.
+    local screen=object:FindFirstAncestorOfClass("ScreenGui")
+    if not screen or not ({MilitaryMenu=true,MilitaryMessenger=true,MilitaryExams=true,AdminTargetPicker=true})[screen.Name] then return end
+    watched[object]=true
+    local connection: RBXScriptConnection?=nil
+    connection=object:GetPropertyChangedSignal("Visible"):Connect(refresh)
+    object.Destroying:Once(function()
+        watched[object]=nil
+        if connection then connection:Disconnect() end
+        task.defer(refresh)
+    end)
+    task.defer(refresh)
+end
+-- Some UI helpers parent buttons before assigning their final names.
+playerGui.DescendantAdded:Connect(function(object) task.defer(bind,object) end)
+for _,object in playerGui:GetDescendants() do bind(object) end
+local viewportConnection: RBXScriptConnection?=nil
+local function cameraChanged()
+    if viewportConnection then viewportConnection:Disconnect() end
+    local camera=workspace.CurrentCamera
+    if camera then viewportConnection=camera:GetPropertyChangedSignal("ViewportSize"):Connect(refresh) end
+    refresh()
+end
+workspace:GetPropertyChangedSignal("CurrentCamera"):Connect(cameraChanged)
+cameraChanged()
+</ProtectedString><bool name="Disabled">false</bool></Properties></Item></Item>
 		<Item class="StarterCharacterScripts" referent="RBX280decb0b2774230b3f4a5d109ab505e">
 			<Properties>
 				<BinaryString name="AttributesSerialize" />
@@ -146864,6 +147033,8 @@ function Rules.valid(state: any): boolean
             or not validUserId(exam.hostId)
             or not Rules.isTarget(exam.targetId)
             or type(exam.startedAt)~="number" or type(exam.participants)~="table" then return false end
+        if joined[exam.hostId] then return false end
+        joined[exam.hostId]=true
         ids[exam.id]=true
         for userId,active in exam.participants do
             if not validUserId(userId) or active~=true or joined[userId]
@@ -146882,6 +147053,13 @@ local function locate(state: any,examId: any): (number?,any?)
     return nil,nil
 end
 
+function Rules.busy(state: any,userId: number): boolean
+    for _,exam in state.sessions do
+        if exam.hostId==userId or exam.participants[userId] then return true end
+    end
+    return false
+end
+
 -- Context is built on the server from RankService, never from remote payloads.
 function Rules.apply(state: any,actor: any,action: any,targetId: any,examId: any,now: any): (any?,string)
     if not Rules.valid(state) or type(actor)~="table" or not validUserId(actor.userId)
@@ -146889,6 +147067,7 @@ function Rules.apply(state: any,actor: any,action: any,targetId: any,examId: any
     local nextState=copy(state)
     if action=="create" then
         if actor.canHost~=true then return nil,"위관급 이상의 계급만 시험을 개최할 수 있습니다." end
+        if Rules.busy(state,actor.userId) then return nil,"이미 시험을 개최하거나 참가 중입니다. 먼저 종료 또는 참가 취소해 주세요." end
         if not Rules.isTarget(targetId) then return nil,"선택할 수 없는 시험 계급입니다." end
         if #nextState.sessions&gt;=Rules.MAX_ACTIVE then return nil,"동시에 개최 가능한 시험은 6개입니다." end
         nextState.nextId+=1
@@ -146906,6 +147085,8 @@ function Rules.apply(state: any,actor: any,action: any,targetId: any,examId: any
         for _,other in nextState.sessions do
             if other.participants[actor.userId] then return nil,"다른 시험에 참가 중입니다." end
         end
+        if Rules.busy(state,actor.userId) then return nil,"이미 다른 시험을 개최하거나 참가 중입니다." end
+        if actor.rankId~=exam.targetId then return nil,"시험 계급과 현재 계급이 같아야 참가할 수 있습니다." end
         exam.participants[actor.userId]=true
     elseif action=="leave" then
         local _,exam=locate(nextState,examId)
@@ -150631,16 +150812,15 @@ end
 local function track(player: Player)
     if rankConnections[player] then return end
     rankConnections[player]=player:GetAttributeChangedSignal("RankId"):Connect(function()
-        -- A demoted or departed host must not keep a privileged exam open.
-        local hosts=false
+        local rank=RankService.get(player)
+        local incompatible=false
         for _,exam in board.sessions do
-            if exam.hostId==player.UserId then hosts=true;break end
+            if (exam.hostId==player.UserId and not Rules.canHost(rank))
+                or (exam.participants[player.UserId] and (not rank or rank.id~=exam.targetId)) then
+                incompatible=true;break
+            end
         end
-        if hosts and not Rules.canHost(RankService.get(player)) then
-            remove(player)
-        elseif hosts then
-            announce() -- Publish their new rank label to all viewers.
-        end
+        if incompatible then remove(player) else announce() end
     end)
 end
 
@@ -150656,7 +150836,8 @@ end
 
 local function snapshot(player: Player): any
     local result={revision=board.revision,maxActive=Rules.MAX_ACTIVE,
-        canCreate=canHost(player),sessions={}}
+        canCreate=canHost(player) and not Rules.busy(board,player.UserId),
+        rankId=(hostRank(player) or {}).id,sessions={}}
     for _,exam in board.sessions do
         local host=Players:GetPlayerByUserId(exam.hostId)
         if host then
@@ -150703,7 +150884,8 @@ request.OnServerInvoke=function(player: Player,action: any,payload: any): any
     if examId~=nil and (type(examId)~="string" or #examId&gt;24) then
         return {ok=false,message="시험 번호 형식이 잘못되었습니다."}
     end
-    local actor={userId=player.UserId,canHost=canHost(player)}
+    local rank=hostRank(player)
+    local actor={userId=player.UserId,canHost=Rules.canHost(rank),rankId=if rank then rank.id else nil}
     local updated,message=Rules.apply(board,actor,action,targetId,examId,os.time())
     if not updated then return {ok=false,message=message} end
     board=updated

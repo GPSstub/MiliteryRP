@@ -612,10 +612,16 @@ local function updateLayout(viewportOverride: Vector2?)
         return
     end
 
-    local viewport = viewportOverride or camera.ViewportSize
+    local viewport = viewportOverride or gui.AbsoluteSize
 
-    local width = math.min(1080, math.max(260, viewport.X - 24))
-    local height = math.min(720, math.max(240, viewport.Y - 84))
+    local width = math.min(1080, math.max(240, viewport.X - 16))
+    local height = math.min(720, math.max(180, viewport.Y - 16))
+    window.AnchorPoint=Vector2.new(0.5,0.5)
+    window.Position=UDim2.fromScale(0.5,0.5)
+    local small=viewport.X<760 or viewport.Y<520
+    launcher.Size=UDim2.fromOffset(if small then 88 else 112,48)
+    launcher.Position=if small then UDim2.new(1,-8,0,142) else UDim2.new(1,-16,0.5,0)
+    launcher.AnchorPoint=if small then Vector2.new(1,0) else Vector2.new(1,0.5)
     compact = width < 640
     local sidebarWidth = if compact then (if drawerOpen then width else 0) else (if width < 840 then 190 else 220)
     local memberWidth = if width >= 960 then 190 else 0
@@ -647,6 +653,7 @@ end
 
 channelToggle.Activated:Connect(function() drawerOpen = not drawerOpen; updateLayout() end)
 updateLayout()
+gui:GetPropertyChangedSignal("AbsoluteSize"):Connect(function() updateLayout() end)
 
 local cameraConnection: RBXScriptConnection? = nil
 local function connectCamera(camera)
