@@ -606,6 +606,7 @@ create("UIListLayout", membersFeed, {
 -- 반응형 레이아웃
 -- ==========================================
 
+local openingTween: Tween?=nil
 local function updateLayout(viewportOverride: Vector2?)
     local camera = workspace.CurrentCamera
 
@@ -620,6 +621,13 @@ local function updateLayout(viewportOverride: Vector2?)
     -- inverse logical dimensions so content is smaller without being clipped.
     local width = math.min(1080, math.max(240, viewport.X*density.widthCoverage/density.scale))
     local height = math.min(720, math.max(180, viewport.Y*density.heightCoverage/density.scale))
+    -- A viewport change must cancel an in-progress opening animation before
+    -- applying the newly calculated scale. Otherwise the tween can restore
+    -- a stale larger size after the phone rotates or the window resizes.
+    if openingTween then
+        openingTween:Cancel()
+        openingTween=nil
+    end
     windowScale.Scale=density.scale
     window.AnchorPoint=Vector2.new(0.5,0.5)
     window.Position=UDim2.fromScale(0.5,0.5)
@@ -2139,25 +2147,31 @@ local function setOpen(state)
 
     launcher.Visible = not state
     window.Visible = state
-
+    if openingTween then
+        openingTween:Cancel()
+        openingTween=nil
+    end
+    local viewport=gui.AbsoluteSize
     if state then
-        windowScale.Scale = 0.94
-
-        TweenService:Create(
+        -- Keep the MOBILE target scale instead of tweening back to 1.0.
+        -- Before this fix, the opening animation undid updateLayout() and
+        -- made the messenger spill past the phone screen.
+        local initial,target=MobileUIRules.openingScales(
+            viewport.X,viewport.Y,UserInputService.TouchEnabled
+        )
+        windowScale.Scale=initial
+        openingTween=TweenService:Create(
             windowScale,
-            TweenInfo.new(
-                0.18,
-                Enum.EasingStyle.Quint,
-                Enum.EasingDirection.Out
-            ),
-            {
-                Scale = 1,
-            }
-        ):Play()
-
+            TweenInfo.new(0.18,Enum.EasingStyle.Quint,Enum.EasingDirection.Out),
+            {Scale=target}
+        )
+        openingTween:Play()
         selectChannel(selectedChannel)
         renderMessages()
     else
+        windowScale.Scale=MobileUIRules.forViewport(
+            viewport.X,viewport.Y,UserInputService.TouchEnabled
+        ).scale
         input:ReleaseFocus()
     end
 end
