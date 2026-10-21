@@ -26,7 +26,11 @@ local function refresh()
     local context=playerGui:FindFirstChild("ContextActionGui")
     if context and context:IsA("ScreenGui") then context.Enabled=not modal end
     local flight=playerGui:FindFirstChild("FlightControls")
-    if flight and flight:IsA("ScreenGui") then flight.Enabled=not modal end
+    if flight and flight:IsA("ScreenGui") then
+        -- The flight controller alone owns Enabled. Only provide modal state
+        -- so closing a dialog cannot reveal buttons when not flying.
+        flight:SetAttribute("HiddenByModal",modal)
+    end
     local hud=playerGui:FindFirstChild("TrainingRifleHUD")
     if hud and hud:IsA("ScreenGui") then hud.Enabled=not modal end
 end
@@ -48,6 +52,11 @@ local function bind(object: Instance)
 end
 -- Some UI helpers parent buttons before assigning their final names.
 playerGui.DescendantAdded:Connect(function(object) task.defer(bind,object) end)
+-- AdminFlight can create its ScreenGui after this script starts. Apply the
+-- current modal suppression as soon as the flight GUI appears.
+playerGui.ChildAdded:Connect(function(object)
+    if object.Name=="FlightControls" then task.defer(refresh) end
+end)
 for _,object in playerGui:GetDescendants() do bind(object) end
 local viewportConnection: RBXScriptConnection?=nil
 local function cameraChanged()

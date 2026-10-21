@@ -4,10 +4,17 @@ local ReplicatedStorage=game:GetService("ReplicatedStorage")
 local RunService=game:GetService("RunService")
 local UserInputService=game:GetService("UserInputService")
 local player=Players.LocalPlayer
+local VisibilityRules=require(ReplicatedStorage:WaitForChild("Shared"):WaitForChild("FlightControlsRules"))
 local remote=ReplicatedStorage:WaitForChild("AdminFlightInput") :: RemoteEvent
 local timer=0
 local focused=true
-local gui=Instance.new("ScreenGui");gui.Name="FlightControls";gui.ResetOnSpawn=false;gui.ScreenInsets=Enum.ScreenInsets.CoreUISafeInsets;gui.Parent=player:WaitForChild("PlayerGui")
+local gui=Instance.new("ScreenGui")
+gui.Name="FlightControls"
+gui.ResetOnSpawn=false
+gui.ScreenInsets=Enum.ScreenInsets.CoreUISafeInsets
+-- Start hidden: no visible frame before the server's AdminFlying value arrives.
+gui.Enabled=false
+gui.Parent=player:WaitForChild("PlayerGui")
 local upHeld,downHeld=false,false
 for i,spec in {{"상승",true},{"하강",false}} do
     local b=Instance.new("TextButton");b.Name=if spec[2] then "Up" else "Down";b.Text=spec[1] :: string
@@ -26,10 +33,21 @@ for i,spec in {{"상승",true},{"하강",false}} do
     end)
 end
 local function updateVisibility()
-    gui.Enabled=player:GetAttribute("AdminFlying")==true
-    upHeld=false;downHeld=false
+    -- Flight owns this ScreenGui.Enabled flag. MobileLayout only publishes
+    -- whether a compact-screen modal blocks the controls; it must not enable
+    -- the flight GUI just because a window was closed.
+    gui.Enabled=VisibilityRules.visible(
+        player:GetAttribute("AdminFlying"),
+        gui:GetAttribute("HiddenByModal")
+    )
+    if not gui.Enabled then
+        upHeld=false
+        downHeld=false
+    end
 end
-player:GetAttributeChangedSignal("AdminFlying"):Connect(updateVisibility);updateVisibility()
+player:GetAttributeChangedSignal("AdminFlying"):Connect(updateVisibility)
+gui:GetAttributeChangedSignal("HiddenByModal"):Connect(updateVisibility)
+updateVisibility()
 UserInputService.WindowFocusReleased:Connect(function() focused=false;upHeld=false;downHeld=false;remote:FireServer(Vector3.zero,Vector3.new(0,0,-1)) end)
 UserInputService.WindowFocused:Connect(function() focused=true end)
 RunService.Heartbeat:Connect(function(dt)
