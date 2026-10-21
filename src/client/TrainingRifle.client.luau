@@ -6,6 +6,7 @@ local ContextActionService=game:GetService("ContextActionService")
 local TweenService=game:GetService("TweenService")
 local UserInputService=game:GetService("UserInputService")
 local player=Players.LocalPlayer
+local mouse=player:GetMouse()
 local Rules=require(ReplicatedStorage:WaitForChild("Shared"):WaitForChild("TrainingRifleRules"))
 local Spring=require(ReplicatedStorage:WaitForChild("Shared"):WaitForChild("RifleRecoilSpring"))
 local RunService=game:GetService("RunService")
@@ -242,7 +243,9 @@ local function equip(tool: Tool)
     previousCameraKick=0
     findShoulder()
     panel.Visible=true
-    crosshair.Visible=true
+    -- PC now aims by mouse cursor, not the center reticle. Avoid drawing
+    -- a misleading fixed '+' at screen center. Touch retains center aiming.
+    crosshair.Visible=not UserInputService.MouseEnabled
     updateAmmo()
     local rest=baseGrip
     tool.Grip=rest*CFrame.new(0,-0.15,0.14)*CFrame.Angles(math.rad(20),0,0)
@@ -280,10 +283,16 @@ local function observe(child: Instance)
         if selected~=tool then return end
         local camera=workspace.CurrentCamera
         if not camera then return end
-        -- Project the center reticle into the world, so the server can fire
-        -- from the actual muzzle toward the same target (not a parallel ray).
-        local size=camera.ViewportSize
-        local ray=camera:ViewportPointToRay(size.X*0.5,size.Y*0.5)
+        -- PC mouse.UnitRay points at the actual pointer position, including
+        -- when the camera is in third person. Shift-lock naturally aims
+        -- through the locked cursor. Mobile still uses a center-screen ray.
+        local ray: Ray
+        if UserInputService.MouseEnabled then
+            ray=mouse.UnitRay
+        else
+            local size=camera.ViewportSize
+            ray=camera:ViewportPointToRay(size.X*0.5,size.Y*0.5)
+        end
         local params=RaycastParams.new()
         params.FilterType=Enum.RaycastFilterType.Exclude
         params.FilterDescendantsInstances=if player.Character then {player.Character} else {}
