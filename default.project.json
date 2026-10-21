@@ -75,12 +75,21 @@
           }
         }
       },
-      "위관급": {
+      "본부": {
         "$className": "Team",
         "$properties": {
           "AutoAssignable": false,
           "TeamColor": {
-            "BrickColor": 23
+            "BrickColor": 106
+          }
+        }
+      },
+      "장관급": {
+        "$className": "Team",
+        "$properties": {
+          "AutoAssignable": false,
+          "TeamColor": {
+            "BrickColor": 21
           }
         }
       },
@@ -93,12 +102,30 @@
           }
         }
       },
-      "장관급": {
+      "위관급": {
         "$className": "Team",
         "$properties": {
           "AutoAssignable": false,
           "TeamColor": {
-            "BrickColor": 21
+            "BrickColor": 23
+          }
+        }
+      },
+      "부사관급": {
+        "$className": "Team",
+        "$properties": {
+          "AutoAssignable": false,
+          "TeamColor": {
+            "BrickColor": 105
+          }
+        }
+      },
+      "병사": {
+        "$className": "Team",
+        "$properties": {
+          "AutoAssignable": false,
+          "TeamColor": {
+            "BrickColor": 28
           }
         }
       }

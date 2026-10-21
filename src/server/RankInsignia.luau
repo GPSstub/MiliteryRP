@@ -20,7 +20,9 @@ function Insignia.render(tag: Instance, rank: Rank)
     plate:SetAttribute("Symbol", rank.symbol)
     plate:SetAttribute("Marks", rank.marks)
     plate.Parent = tag
-    if rank.symbol == "training" then return end
+    -- The icon atlas contains exactly the original 20 military ranks.
+    -- The persisted admin rank has its own nameplate, not an atlas tile.
+    if rank.symbol == "training" or rank.symbol == "admin" then return end
     local index = rank.order - 1
     local column, row = index % COLUMNS, math.floor(index / COLUMNS)
     -- Normalized clipping remains correct if Roblox resizes the uploaded texture.
