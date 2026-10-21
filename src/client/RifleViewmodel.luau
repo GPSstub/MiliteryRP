@@ -32,7 +32,13 @@ end
 local function addPart(part: BasePart,parent: Model)
     local copy=part:Clone()
     for _,child in copy:GetDescendants() do
+        -- Modern R15 rigs also use AnimationConstraint/RigidConstraint, whose
+        -- attachments can still refer to the REAL character after Part:Clone.
+        -- Strip every physics/animation controller BEFORE anchoring/parenting.
         if child:IsA("JointInstance") or child:IsA("WeldConstraint")
+            or child:IsA("Constraint") or child:IsA("BodyMover")
+            or child:IsA("IKControl") or child:IsA("Humanoid")
+            or child:IsA("AnimationController") or child:IsA("Animator")
             or child:IsA("Sound") or child:IsA("LuaSourceContainer") then
             child:Destroy()
         end

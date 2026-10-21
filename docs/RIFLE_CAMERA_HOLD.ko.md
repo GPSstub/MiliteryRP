@@ -28,3 +28,11 @@
 - 3인칭 전환 시 표시 모델 제거 및 원본 총 표시 복원 확인. 장착 해제 후 잔여 양손 IK, 고정 Motor6D, 타깃 0개 확인. 반복 장착/해제 시 정상 Humanoid 상태 및 기존 이동 유지 확인.
 
 Studio에서 서버 1개/플레이어 1명으로 검증했습니다. 실제 다중 클라이언트 및 DataStore 통합 검증/공개 경험 배포는 수행하지 않았습니다. 배포 전 AGENTS.md의 통합 검증은 별도로 수행해야 합니다.
+
+## 1인칭 전환 시 캐릭터가 날아가는 문제 수정
+
+최초 카메라 모델 구현에서 R15 팔에 있던 `AnimationConstraint`와 `BallSocketConstraint`를 제거하지 않았습니다. 복제된 팔의 제약 12개가 실제 아바타의 Attachment를 참조한 채로 남았고, 카메라에 맞춰 움직이는 고정 파트가 실제 캐릭터를 끌어당겼습니다. 최초 검증에서 이 이상 이동을 제대로 구분하지 못했습니다.
+
+`RifleViewmodel.addPart`는 이제 원본 복제 직후, Anchor 및 Workspace 배치 전에 모든 Constraint, JointInstance, WeldConstraint, BodyMover 및 애니메이션 컨트롤러를 제거합니다. 텍스처·메시·총구 이펙트는 유지합니다. 몸통 고정 연결 문제가 아니라, 1인칭 표시용 팔에 남은 물리 연결이 원인이었습니다.
+
+수정 전 실제 아바타에는 AnimationConstraint 15개, BallSocketConstraint 14개 등이 있었고 복제 팔에는 연결 12개가 남았습니다. 수정 후 같은 아바타로 재시작하여 검증한 결과: 표시 모델의 물리 연결 0개, 1인칭 전환 후 정지 상태 이동량 0, 최대 속도 약 0.00000012 studs/s, Humanoid Running/체력 100 유지. 기존 Play에서 ModuleScript 코드만 동기화하면 이미 require된 이전 코드가 남으므로 반드시 Stop 후 다시 Play해야 합니다.
