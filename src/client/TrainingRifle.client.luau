@@ -116,6 +116,10 @@ local function findShoulder()
     leftShoulderBase=nil
     local character=player.Character
     if not character then return end
+    local humanoid=character:FindFirstChildOfClass("Humanoid")
+    -- R15 off-hand is driven by a server IKControl linked to the weapon.
+    -- Rotating LeftShoulder.C0 here would fight the whole-arm IK solver.
+    if humanoid and humanoid.RigType==Enum.HumanoidRigType.R15 then return end
     local torso=character:FindFirstChild("UpperTorso") or character:FindFirstChild("Torso")
     if not torso then return end
     local shoulder=torso:FindFirstChild("LeftShoulder") or torso:FindFirstChild("Left Shoulder")
