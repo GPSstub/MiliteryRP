@@ -22,13 +22,11 @@ local ORANGE=Color3.fromRGB(223,158,63)
 -- assembly around its local Y-axis. Do not rotate the meshes separately:
 -- attachments, tracers, magazine and support-hand IK must stay aligned.
 local R15_GRIP_YAW_DEGREES=180
--- After the yaw correction the rifle's muzzle still points roughly 15° above
--- the R15 character's forward line. Apply a LOCAL negative-X pitch after yaw:
--- this lowers the muzzle without changing the shared mesh/muzzle/IK axes.
-local R15_GRIP_PITCH_DEGREES=-14
-local BASE_GRIP=CFrame.new(0,-0.30,-0.43)
+-- Keep the default R15 Tool.Grip offset. The sole grip rotation is 180° yaw;
+-- no pitch compensation is applied, per the user's in-game reference.
+local R15_GRIP_PITCH_DEGREES=0
+local BASE_GRIP=CFrame.new(0,-0.29,-0.42)
     *CFrame.Angles(0,math.rad(R15_GRIP_YAW_DEGREES),0)
-    *CFrame.Angles(math.rad(R15_GRIP_PITCH_DEGREES),0,0)
 -- The 5.71-stud mesh was larger than the R15 avatar in the screenshots.
 -- Scale *every* world-space mesh component consistently to ~3.65 studs.
 local HK416_MESH_SCALE=0.64
@@ -123,6 +121,7 @@ local function buildTool(): Tool
     tool:SetAttribute("GripYawDegrees",R15_GRIP_YAW_DEGREES)
     tool:SetAttribute("GripPitchDegrees",R15_GRIP_PITCH_DEGREES)
     tool:SetAttribute("MagazineInsertionLift",HK416_MAG_INSERTION_LIFT)
+    tool:SetAttribute("MagazineFlipDegrees",180)
     local handle=Instance.new("Part")
     handle.Name="Handle"
     handle.Size=Vector3.new(0.29,0.32,0.89)
@@ -174,11 +173,17 @@ local function buildTool(): Tool
         -- Upper magazine lip originally ended at OBJ y=-0.329, while the
         -- receiver magwell extends lower. New lip ends around y=-0.039,
         -- visibly inserted into the receiver instead of dangling beneath it.
+        -- The imported independent magazine was visually upside-down.
+        -- Rotate the PART's local Z axis 180° around its own center, while
+        -- retaining the magwell center chosen by the insertion adjustment.
+        -- Position and orientation live in the Motor6D rest C0, so the
+        -- reload tween returns to the corrected orientation.
+        local MAG_ROTATION=CFrame.Angles(0,0,math.rad(180))
         local position=CFrame.new(
             0,
             (-1.041+HK416_MAG_INSERTION_LIFT)*HK416_MESH_SCALE,
             (0.121+HK416_MAG_REARWARD_ADJUST)*HK416_MESH_SCALE
-        )
+        )*MAG_ROTATION
         magazine.CFrame=handle.CFrame*position
         magazine.Anchored=false
         magazine.CanCollide=false
@@ -326,9 +331,13 @@ local function animateMag(handle: BasePart)
     local weapon=handle.Parent
     local scale=if weapon and weapon:IsA("Tool") and weapon:GetAttribute("UsingHK416Mesh")==true
         then HK416_MESH_SCALE else 1
+    -- For the flipped HK416 magazine, move DOWN in receiver/handle space.
+    -- base*CFrame.new(...) would move upward because its Y axis is inverted.
+    local translated=if scale~=1
+        then CFrame.new(0,-0.64*scale,-0.12*scale)*base
+        else base*CFrame.new(0,-0.64*scale,-0.12*scale)
     TweenService:Create(joint,TweenInfo.new(0.29,Enum.EasingStyle.Quad),{
-        C0=base*CFrame.new(0,-0.64*scale,-0.12*scale)
-            *CFrame.Angles(math.rad(11),0,0)}):Play()
+        C0=translated*CFrame.Angles(math.rad(11),0,0)}):Play()
     task.delay(0.96,function()
         if joint.Parent then
             TweenService:Create(joint,TweenInfo.new(0.41,Enum.EasingStyle.Back,Enum.EasingDirection.Out),{C0=base}):Play()
