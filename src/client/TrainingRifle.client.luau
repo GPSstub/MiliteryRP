@@ -7,6 +7,8 @@ local TweenService=game:GetService("TweenService")
 local UserInputService=game:GetService("UserInputService")
 local player=Players.LocalPlayer
 local Rules=require(ReplicatedStorage:WaitForChild("Shared"):WaitForChild("TrainingRifleRules"))
+local Spring=require(ReplicatedStorage:WaitForChild("Shared"):WaitForChild("RifleRecoilSpring"))
+local RunService=game:GetService("RunService")
 local remote=ReplicatedStorage:WaitForChild("TrainingRifleAction") :: RemoteEvent
 
 local gui=Instance.new("ScreenGui")
@@ -85,6 +87,10 @@ local selected: Tool?=nil
 local baseGrip: CFrame?=nil
 local movementVersion=0
 local lastLocalShot=-math.huge
+local recoilPosition=0
+local recoilVelocity=0
+local recoilActive=false
+local previousCameraKick=0
 local currentGripTween: Tween?=nil
 local leftShoulder: Motor6D?=nil
 local leftShoulderBase: CFrame?=nil
@@ -124,24 +130,40 @@ local function recoil(tool: Tool)
     local now=os.clock()
     if now-lastLocalShot<Rules.SHOT_INTERVAL then return end
     lastLocalShot=now
+    -- Add velocity rather than teleporting to a rotation. Critical damping
+    -- gives visible upward travel and a smooth, gradual downward recovery.
+    if currentGripTween then currentGripTween:Cancel();currentGripTween=nil end
     movementVersion+=1
-    local version=movementVersion
-    local rest=baseGrip
-    -- Short kick towards the player's shoulder; settles without blocking fire.
-    animateGrip(tool,rest*CFrame.new(0,0,0.13)*CFrame.Angles(math.rad(5),0,0),0.035)
-    local camera=workspace.CurrentCamera
-    if camera then
-        camera.CFrame=camera.CFrame*CFrame.Angles(math.rad(0.8),math.rad(math.random(-3,3)/10),0)
-    end
-    task.delay(0.055,function()
-        if movementVersion==version and selected==tool and baseGrip==rest then
-            animateGrip(tool,rest,0.12)
+    recoilVelocity=math.min(recoilVelocity+Spring.KICK,Spring.KICK*1.5)
+    recoilActive=true
+end
+
+RunService:BindToRenderStep("TrainingRifleSmoothRecoil",
+    Enum.RenderPriority.Camera.Value+1,function(dt)
+        if not selected then return end
+        recoilPosition,recoilVelocity=Spring.step(recoilPosition,recoilVelocity,dt)
+        local camera=workspace.CurrentCamera
+        local nextCameraKick=recoilPosition*1.65
+        if camera then
+            local delta=nextCameraKick-previousCameraKick
+            camera.CFrame=camera.CFrame*CFrame.Angles(math.rad(delta),0,0)
+        end
+        previousCameraKick=nextCameraKick
+        if recoilActive and baseGrip and selected:GetAttribute("Reloading")~=true then
+            local rest=baseGrip
+            selected.Grip=rest*CFrame.new(0,-recoilPosition*0.04,recoilPosition*0.12)
+                *CFrame.Angles(math.rad(recoilPosition*6),0,0)
+            if recoilPosition==0 and recoilVelocity==0 then
+                selected.Grip=rest
+                recoilActive=false
+            end
         end
     end)
-end
+
 local function reloadPose(tool: Tool)
     if selected~=tool or not baseGrip then return end
     movementVersion+=1
+    recoilActive=false
     local version=movementVersion
     local rest=baseGrip
     animateGrip(tool,rest*CFrame.new(0,-0.12,0.16)
@@ -184,6 +206,10 @@ end
 local function unequip(tool: Tool)
     if selected~=tool then return end
     movementVersion+=1
+    recoilActive=false
+    recoilPosition=0
+    recoilVelocity=0
+    previousCameraKick=0
     if currentGripTween then currentGripTween:Cancel();currentGripTween=nil end
     if baseGrip then tool.Grip=baseGrip end
     if armTween then armTween:Cancel();armTween=nil end
@@ -206,6 +232,10 @@ local function equip(tool: Tool)
     movementVersion+=1
     local version=movementVersion
     lastLocalShot=-math.huge
+    recoilActive=false
+    recoilPosition=0
+    recoilVelocity=0
+    previousCameraKick=0
     findShoulder()
     panel.Visible=true
     crosshair.Visible=true
