@@ -3,6 +3,7 @@
 -- supplies positional SFX, and animates magazine/bolt for other players too.
 local Players=game:GetService("Players")
 local ReplicatedStorage=game:GetService("ReplicatedStorage")
+local ServerStorage=game:GetService("ServerStorage")
 local Debris=game:GetService("Debris")
 local TweenService=game:GetService("TweenService")
 local Rules=require(ReplicatedStorage:WaitForChild("Shared"):WaitForChild("TrainingRifleRules"))
@@ -98,6 +99,7 @@ local function buildTool(): Tool
     tool.Grip=BASE_GRIP
     tool:SetAttribute("WeaponId",Rules.WEAPON_ID)
     tool:SetAttribute("MagazineSize",Rules.MAGAZINE)
+    tool:SetAttribute("UsingHK416Mesh",false)
     local handle=Instance.new("Part")
     handle.Name="Handle"
     handle.Size=Vector3.new(0.29,0.32,0.89)
@@ -109,7 +111,63 @@ local function buildTool(): Tool
     handle.Massless=true
     handle.Parent=tool
 
-    local plastic=Enum.Material.SmoothPlastic
+    -- Mesh templates are imported by the developer via Studio's 3D importer.
+    -- ServerStorage is deliberately NOT Rojo-managed; local mesh uploads remain
+    -- in the game place even when the Lua source is re-synced.
+    local assetFolder=ServerStorage:FindFirstChild("HK416Assets")
+    local bodyAsset=if assetFolder then assetFolder:FindFirstChild("Body") else nil
+    local magAsset=if assetFolder then assetFolder:FindFirstChild("Magazine") else nil
+    local hasMeshes=bodyAsset~=nil and bodyAsset:IsA("MeshPart")
+        and magAsset~=nil and magAsset:IsA("MeshPart")
+    local mag: Motor6D
+    local bolt: Motor6D
+    if hasMeshes then
+        tool:SetAttribute("UsingHK416Mesh",true)
+        -- OBJ meshes were reoriented and scaled together before export.
+        -- Each MeshPart is recentered at import, so its CFrame is restored to
+        -- the original shared coordinate-system bounds center here.
+        handle.Transparency=1
+        local body=(bodyAsset :: MeshPart):Clone()
+        body.Name="HK416Body"
+        body.Size=Vector3.new(0.5495,1.6201,5.7085)
+        body.CFrame=handle.CFrame*CFrame.new(0.0131,0.0047,-0.0024)
+        body.Anchored=false
+        body.CanCollide=false
+        body.CanTouch=false
+        body.CanQuery=false
+        body.Massless=true
+        body.Parent=tool
+        local welded=Instance.new("WeldConstraint")
+        welded.Part0=handle
+        welded.Part1=body
+        welded.Parent=body
+
+        local magazine=(magAsset :: MeshPart):Clone()
+        magazine.Name="Magazine"
+        magazine.Size=Vector3.new(0.2240,1.4240,0.5080)
+        local position=CFrame.new(0,-1.041,0.121)
+        magazine.CFrame=handle.CFrame*position
+        magazine.Anchored=false
+        magazine.CanCollide=false
+        magazine.CanTouch=false
+        magazine.CanQuery=false
+        magazine.Massless=true
+        magazine.Parent=tool
+        mag=Instance.new("Motor6D")
+        mag.Name="MagazineJoint"
+        mag.Part0=handle
+        mag.Part1=magazine
+        mag.C0=position
+        mag.C1=CFrame.identity
+        mag.Parent=handle
+        motorBases[mag]=position
+        -- The original body OBJ includes the bolt as one connected mesh, so
+        -- use a modest overlay action piece rather than cutting its geometry.
+        bolt=articulated(tool,handle,"Bolt",Vector3.new(0.08,0.10,0.28),
+            CFrame.new(0.29,0.31,0.45))
+    else
+        -- Works immediately with Rojo even before the two assets are imported.
+        local plastic=Enum.Material.SmoothPlastic
     local metal=Enum.Material.Metal
     local cylinder=Enum.PartType.Cylinder
     -- Higher-detail, symmetrical low-poly carbine model with optical sight.
@@ -145,16 +203,17 @@ local function buildTool(): Tool
     piece(tool,handle,"ShoulderPad",Vector3.new(0.41,0.55,0.14),CFrame.new(0,-0.16,1.72),DARK,plastic)
     piece(tool,handle,"SafetySelector",Vector3.new(0.06,0.10,0.17),CFrame.new(0.20,0,0.20),ORANGE,metal)
     piece(tool,handle,"MagCollar",Vector3.new(0.34,0.10,0.36),CFrame.new(0,-0.34,-0.24),STEEL,metal)
-    local mag=articulated(tool,handle,"Magazine",Vector3.new(0.32,0.73,0.33),
+    mag=articulated(tool,handle,"Magazine",Vector3.new(0.32,0.73,0.33),
         CFrame.new(0,-0.68,-0.21)*CFrame.Angles(math.rad(12),0,0))
-    local bolt=articulated(tool,handle,"Bolt",Vector3.new(0.08,0.11,0.37),CFrame.new(0.24,0.18,-0.18))
+    bolt=articulated(tool,handle,"Bolt",Vector3.new(0.08,0.11,0.37),CFrame.new(0.24,0.18,-0.18))
     local port=piece(tool,handle,"EjectionPort",Vector3.new(0.012,0.14,0.42),
         CFrame.new(0.216,0.16,-0.13),DARK,metal)
     port.Transparency=0.1
+    end
 
     local muzzle=Instance.new("Attachment")
     muzzle.Name="Muzzle"
-    muzzle.Position=Vector3.new(0,0,-2.47)
+    muzzle.Position=if hasMeshes then Vector3.new(0,0.32,-2.91) else Vector3.new(0,0,-2.47)
     muzzle.Parent=handle
     local spark=Instance.new("ParticleEmitter")
     spark.Name="MuzzleFlash"
