@@ -22,11 +22,22 @@ local ORANGE=Color3.fromRGB(223,158,63)
 -- assembly around its local Y-axis. Do not rotate the meshes separately:
 -- attachments, tracers, magazine and support-hand IK must stay aligned.
 local R15_GRIP_YAW_DEGREES=180
-local BASE_GRIP=CFrame.new(0,-0.22,-0.40)
+-- After the yaw correction the rifle's muzzle still points roughly 15° above
+-- the R15 character's forward line. Apply a LOCAL negative-X pitch after yaw:
+-- this lowers the muzzle without changing the shared mesh/muzzle/IK axes.
+local R15_GRIP_PITCH_DEGREES=-14
+local BASE_GRIP=CFrame.new(0,-0.30,-0.43)
     *CFrame.Angles(0,math.rad(R15_GRIP_YAW_DEGREES),0)
+    *CFrame.Angles(math.rad(R15_GRIP_PITCH_DEGREES),0,0)
 -- The 5.71-stud mesh was larger than the R15 avatar in the screenshots.
 -- Scale *every* world-space mesh component consistently to ~3.65 studs.
 local HK416_MESH_SCALE=0.64
+-- The OBJ body and magazine originated as independent Meshy models.
+-- The previous [-1.041] Y center made the magazine's upper edge sit
+-- almost entirely OUTSIDE the receiver; seat it 0.29 source units deeper.
+-- This correction is in original OBJ units so scaling stays consistent.
+local HK416_MAG_INSERTION_LIFT=0.29
+local HK416_MAG_REARWARD_ADJUST=0.00
 -- Public Creator Store sounds. Availability still depends on experience permissions.
 local FIRE_SOUND_ID="rbxassetid://9113189096"
 local RELOAD_SOUND_ID="rbxassetid://8145744063"
@@ -110,6 +121,8 @@ local function buildTool(): Tool
     tool:SetAttribute("UsingR15SupportIK",false)
     tool:SetAttribute("HK416ModelScale",HK416_MESH_SCALE)
     tool:SetAttribute("GripYawDegrees",R15_GRIP_YAW_DEGREES)
+    tool:SetAttribute("GripPitchDegrees",R15_GRIP_PITCH_DEGREES)
+    tool:SetAttribute("MagazineInsertionLift",HK416_MAG_INSERTION_LIFT)
     local handle=Instance.new("Part")
     handle.Name="Handle"
     handle.Size=Vector3.new(0.29,0.32,0.89)
@@ -158,7 +171,14 @@ local function buildTool(): Tool
         local magazine=(magAsset :: MeshPart):Clone()
         magazine.Name="Magazine"
         magazine.Size=Vector3.new(0.2240,1.4240,0.5080)*HK416_MESH_SCALE
-        local position=CFrame.new(0,-1.041*HK416_MESH_SCALE,0.121*HK416_MESH_SCALE)
+        -- Upper magazine lip originally ended at OBJ y=-0.329, while the
+        -- receiver magwell extends lower. New lip ends around y=-0.039,
+        -- visibly inserted into the receiver instead of dangling beneath it.
+        local position=CFrame.new(
+            0,
+            (-1.041+HK416_MAG_INSERTION_LIFT)*HK416_MESH_SCALE,
+            (0.121+HK416_MAG_REARWARD_ADJUST)*HK416_MESH_SCALE
+        )
         magazine.CFrame=handle.CFrame*position
         magazine.Anchored=false
         magazine.CanCollide=false
