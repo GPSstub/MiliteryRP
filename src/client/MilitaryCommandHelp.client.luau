@@ -164,6 +164,9 @@ helpEvent.OnClientEvent:Connect(function(canUseAdmin: any)
         else "명령어 열람은 가능하지만 실행은 Roblox 그룹 랭크 200 이상만 허용됩니다."
     scroller.CanvasPosition=Vector2.zero
     gui.Enabled=true
+    -- Re-evaluate viewport size on first open (disabled ScreenGui can report
+    -- a zero AbsoluteSize until it becomes visible).
+    resize()
     if UserInputService.PreferredInput==Enum.PreferredInput.Gamepad then
         GuiService.SelectedObject=close
     end
