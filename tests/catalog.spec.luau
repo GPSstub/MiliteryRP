@@ -1,7 +1,7 @@
 --!strict
 local Catalog=require("../src/shared/RankCatalog")
-local expected={"훈련병","이병","일병","상병","병장","하사","중사","상사","원사","준위","소위","중위","대위","소령","중령","대령","준장","소장","중장","대장"}
-assert(#Catalog.All==20)
+local expected={"훈련병","이병","일병","상병","병장","하사","중사","상사","원사","준위","소위","중위","대위","소령","중령","대령","준장","소장","중장","대장","admin"}
+assert(#Catalog.All==21)
 assert((Catalog :: any).BattalionName==nil)
 local seen: {[string]: boolean}={}
 for i,rank in Catalog.All do
@@ -10,12 +10,18 @@ for i,rank in Catalog.All do
     assert(Catalog.find(rank.id)==rank)
     assert(#rank.color==3)
     assert(type(rank.symbol)=="string" and rank.marks>=0 and rank.marks<=4)
+    if i==21 then
+        assert(rank.id=="admin" and rank.category=="관리자" and rank.symbol=="admin")
+    else
+        assert(rank.symbol~="admin","Original 20 atlas ranks must stay in place")
+    end
 end
 assert(Catalog.find(Catalog.DefaultId)==Catalog.All[1])
+assert(Catalog.find("admin")==Catalog.All[21])
 assert(Catalog.find("unknown")==nil)
 assert(Catalog.find(1)==nil)
 assert(Catalog.find({})==nil)
 assert(Catalog.find(nil)==nil)
 local ok=pcall(function() (Catalog.All[1] :: any).name="변조" end)
 assert(not ok)
-print("PASS: 20 ranks, unique IDs/order/colors, no team dependency, default, invalid input and immutable catalog")
+print("PASS: 20 original military ranks + persisted admin, stable atlas order, immutable catalog")
