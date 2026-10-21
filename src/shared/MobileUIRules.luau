@@ -23,4 +23,10 @@ function Rules.forViewport(width: number,height: number,touch: boolean): any
         heightCoverage=if compact then 0.88 else 0.94,
     }
 end
+-- Return the opening animation's start and END scale together. This keeps
+-- the target proportional to the current screen instead of resetting to 1.
+function Rules.openingScales(width: number,height: number,touch: boolean): (number,number)
+    local target=Rules.forViewport(width,height,touch).scale
+    return target*0.94,target
+end
 return table.freeze(Rules)
