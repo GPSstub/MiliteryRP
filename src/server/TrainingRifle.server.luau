@@ -17,13 +17,16 @@ local STEEL=Color3.fromRGB(46,50,53)
 local DARK=Color3.fromRGB(24,28,31)
 local OLIVE=Color3.fromRGB(79,85,72)
 local ORANGE=Color3.fromRGB(223,158,63)
--- Previous -90-degree X Grip tilted the barrel down. This grip keeps local
--- -Z forward, with only a mild positional offset relative to the right hand.
--- Yaw is intentionally zero until the actual R15 pose can be inspected.
--- A 180-degree flip based only on a side screenshot could invert a correct muzzle.
-local R15_GRIP_YAW_DEGREES=0
-local BASE_GRIP=CFrame.new(0,-0.29,-0.42)
+-- R15 test screenshots: the buttstock was in front of the first-person
+-- camera, while the muzzle was close to the player. Turn the entire equipped
+-- assembly around its local Y-axis. Do not rotate the meshes separately:
+-- attachments, tracers, magazine and support-hand IK must stay aligned.
+local R15_GRIP_YAW_DEGREES=180
+local BASE_GRIP=CFrame.new(0,-0.22,-0.40)
     *CFrame.Angles(0,math.rad(R15_GRIP_YAW_DEGREES),0)
+-- The 5.71-stud mesh was larger than the R15 avatar in the screenshots.
+-- Scale *every* world-space mesh component consistently to ~3.65 studs.
+local HK416_MESH_SCALE=0.64
 -- Public Creator Store sounds. Availability still depends on experience permissions.
 local FIRE_SOUND_ID="rbxassetid://9113189096"
 local RELOAD_SOUND_ID="rbxassetid://8145744063"
@@ -105,6 +108,8 @@ local function buildTool(): Tool
     tool:SetAttribute("MagazineSize",Rules.MAGAZINE)
     tool:SetAttribute("UsingHK416Mesh",false)
     tool:SetAttribute("UsingR15SupportIK",false)
+    tool:SetAttribute("HK416ModelScale",HK416_MESH_SCALE)
+    tool:SetAttribute("GripYawDegrees",R15_GRIP_YAW_DEGREES)
     local handle=Instance.new("Part")
     handle.Name="Handle"
     handle.Size=Vector3.new(0.29,0.32,0.89)
@@ -134,8 +139,11 @@ local function buildTool(): Tool
         handle.Transparency=1
         local body=(bodyAsset :: MeshPart):Clone()
         body.Name="HK416Body"
-        body.Size=Vector3.new(0.5495,1.6201,5.7085)
-        body.CFrame=handle.CFrame*CFrame.new(0.0131,0.0047,-0.0024)
+        body.Size=Vector3.new(0.5495,1.6201,5.7085)*HK416_MESH_SCALE
+        -- Blender-exported OBJ keeps orientation but its center is near the
+        -- origin. Multiply the center's translation by the same scale.
+        body.CFrame=handle.CFrame*CFrame.new(
+            0.0131*HK416_MESH_SCALE,0.0047*HK416_MESH_SCALE,-0.0024*HK416_MESH_SCALE)
         body.Anchored=false
         body.CanCollide=false
         body.CanTouch=false
@@ -149,8 +157,8 @@ local function buildTool(): Tool
 
         local magazine=(magAsset :: MeshPart):Clone()
         magazine.Name="Magazine"
-        magazine.Size=Vector3.new(0.2240,1.4240,0.5080)
-        local position=CFrame.new(0,-1.041,0.121)
+        magazine.Size=Vector3.new(0.2240,1.4240,0.5080)*HK416_MESH_SCALE
+        local position=CFrame.new(0,-1.041*HK416_MESH_SCALE,0.121*HK416_MESH_SCALE)
         magazine.CFrame=handle.CFrame*position
         magazine.Anchored=false
         magazine.CanCollide=false
@@ -168,8 +176,8 @@ local function buildTool(): Tool
         motorBases[mag]=position
         -- The original body OBJ includes the bolt as one connected mesh, so
         -- use a modest overlay action piece rather than cutting its geometry.
-        bolt=articulated(tool,handle,"Bolt",Vector3.new(0.08,0.10,0.28),
-            CFrame.new(0.29,0.31,0.45))
+        bolt=articulated(tool,handle,"Bolt",Vector3.new(0.08,0.10,0.28)*HK416_MESH_SCALE,
+            CFrame.new(0.29*HK416_MESH_SCALE,0.31*HK416_MESH_SCALE,0.45*HK416_MESH_SCALE))
     else
         -- Works immediately with Rojo even before the two assets are imported.
         local plastic=Enum.Material.SmoothPlastic
@@ -220,19 +228,25 @@ local function buildTool(): Tool
     -- while reloading it reaches for the magazine, which moves on Motor6D.
     local support=Instance.new("Attachment")
     support.Name="SupportHandTarget"
-    support.Position=Vector3.new(-0.20,-0.07,-0.95)
+    support.Position=if hasMeshes
+        then Vector3.new(-0.20,-0.07,-0.95)*HK416_MESH_SCALE
+        else Vector3.new(-0.20,-0.07,-0.95)
     support.Parent=handle
     local magazinePart=mag.Part1
     if magazinePart then
         local reloadHand=Instance.new("Attachment")
         reloadHand.Name="MagazineHandTarget"
-        reloadHand.Position=Vector3.new(-0.15,0.21,0)
+        reloadHand.Position=if hasMeshes
+            then Vector3.new(-0.15,0.21,0)*HK416_MESH_SCALE
+            else Vector3.new(-0.15,0.21,0)
         reloadHand.Parent=magazinePart
     end
 
     local muzzle=Instance.new("Attachment")
     muzzle.Name="Muzzle"
-    muzzle.Position=if hasMeshes then Vector3.new(0,0.32,-2.91) else Vector3.new(0,0,-2.47)
+    muzzle.Position=if hasMeshes
+        then Vector3.new(0,0.32,-2.91)*HK416_MESH_SCALE
+        else Vector3.new(0,0,-2.47)
     muzzle.Parent=handle
     local spark=Instance.new("ParticleEmitter")
     spark.Name="MuzzleFlash"
@@ -278,7 +292,10 @@ local function animateBolt(handle: BasePart)
     if not joint or not joint:IsA("Motor6D") then return end
     local base=motorBases[joint]
     if not base then return end
-    joint.C0=base*CFrame.new(0,0,0.17)
+    local weapon=handle.Parent
+    local scale=if weapon and weapon:IsA("Tool") and weapon:GetAttribute("UsingHK416Mesh")==true
+        then HK416_MESH_SCALE else 1
+    joint.C0=base*CFrame.new(0,0,0.17*scale)
     TweenService:Create(joint,TweenInfo.new(0.12,Enum.EasingStyle.Quad,Enum.EasingDirection.Out),{C0=base}):Play()
 end
 local function animateMag(handle: BasePart)
@@ -286,8 +303,12 @@ local function animateMag(handle: BasePart)
     if not joint or not joint:IsA("Motor6D") then return end
     local base=motorBases[joint]
     if not base then return end
+    local weapon=handle.Parent
+    local scale=if weapon and weapon:IsA("Tool") and weapon:GetAttribute("UsingHK416Mesh")==true
+        then HK416_MESH_SCALE else 1
     TweenService:Create(joint,TweenInfo.new(0.29,Enum.EasingStyle.Quad),{
-        C0=base*CFrame.new(0,-0.64,-0.12)*CFrame.Angles(math.rad(11),0,0)}):Play()
+        C0=base*CFrame.new(0,-0.64*scale,-0.12*scale)
+            *CFrame.Angles(math.rad(11),0,0)}):Play()
     task.delay(0.96,function()
         if joint.Parent then
             TweenService:Create(joint,TweenInfo.new(0.41,Enum.EasingStyle.Back,Enum.EasingDirection.Out),{C0=base}):Play()
