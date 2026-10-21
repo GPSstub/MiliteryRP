@@ -145447,6 +145447,7 @@ local player=Players.LocalPlayer
 local mouse=player:GetMouse()
 local Rules=require(ReplicatedStorage:WaitForChild("Shared"):WaitForChild("TrainingRifleRules"))
 local Spring=require(ReplicatedStorage:WaitForChild("Shared"):WaitForChild("RifleRecoilSpring"))
+local Viewmodel=require(script.Parent:WaitForChild("RifleViewmodel"))
 local RunService=game:GetService("RunService")
 local remote=ReplicatedStorage:WaitForChild("TrainingRifleAction") :: RemoteEvent
 
@@ -145597,6 +145598,18 @@ RunService:BindToRenderStep("TrainingRifleSmoothRecoil",
                 recoilActive=false
             end
         end
+        -- RightGrip is disabled while the torso mount holds the rifle.
+        -- Convert the same equip/reload/recoil Grip pose into mount space so
+        -- the intentional animations survive without following arm swings.
+        local handle=selected:FindFirstChild("Handle")
+        local mount=if handle then handle:FindFirstChild("RifleHoldJoint") else nil
+        if mount and mount:IsA("Motor6D") and baseGrip then
+            local rest=mount:GetAttribute("RestC0")
+            if typeof(rest)=="CFrame" then
+                mount.C0=rest*baseGrip*selected.Grip:Inverse()
+            end
+        end
+        Viewmodel.update(selected,camera,if baseGrip then baseGrip*selected.Grip:Inverse() else CFrame.identity)
     end)
 
 local function reloadPose(tool: Tool)
@@ -145624,9 +145637,10 @@ local function reloadPose(tool: Tool)
     end)
 end
 -- A rejected shot (wall obstruction, cooldown, empty magazine) must not kick.
-remote.OnClientEvent:Connect(function(action: unknown,tool: unknown)
+remote.OnClientEvent:Connect(function(action: unknown,tool: unknown,hitPoint: unknown)
     if action=="shot" and typeof(tool)=="Instance" and tool:IsA("Tool") and selected==tool then
         recoil(tool)
+        if typeof(hitPoint)=="Vector3" then Viewmodel.shot(tool,hitPoint) end
     end
 end)
 local observed: {[Tool]: boolean}=setmetatable({}, {__mode="k"})
@@ -145665,6 +145679,7 @@ local function unequip(tool: Tool)
     leftShoulderBase=nil
     baseGrip=nil
     selected=nil
+    Viewmodel.clear()
     panel.Visible=false
     crosshair.Visible=false
     ContextActionService:UnbindAction("TrainingRifleReload")
@@ -145762,7 +145777,155 @@ local function watchCharacter(character: Model)
 end
 player.CharacterAdded:Connect(watchCharacter)
 if player.Character then watchCharacter(player.Character) end
-</ProtectedString><bool name="Disabled">false</bool></Properties></Item></Item>
+</ProtectedString><bool name="Disabled">false</bool></Properties></Item><Item class="ModuleScript" referent="MessengerSync5"><Properties><string name="Name">RifleViewmodel</string><ProtectedString name="Source">--!strict
+-- Local camera-space presentation only. Hits, ammo and wall checks stay server-side.
+local Players=game:GetService("Players")
+local Debris=game:GetService("Debris")
+local player=Players.LocalPlayer
+local Viewmodel={}
+local CAMERA_GRIP=CFrame.new(0.60,-0.70,-0.75)
+local owner: Tool?=nil
+local model: Model?=nil
+local sourceHandle: BasePart?=nil
+local copies: {[BasePart]: BasePart}={}
+local hidden: {[BasePart]: number}={}
+local hiddenParticles: {[ParticleEmitter]: number}={}
+local lastFrame=CFrame.identity
+
+function Viewmodel.clear()
+    for part,value in hidden do
+        if part.Parent then part.LocalTransparencyModifier=value end
+    end
+    for emitter,value in hiddenParticles do
+        if emitter.Parent then emitter.LocalTransparencyModifier=value end
+    end
+    table.clear(copies)
+    table.clear(hidden)
+    table.clear(hiddenParticles)
+    if model then model:Destroy() end
+    owner=nil
+    model=nil
+    sourceHandle=nil
+end
+
+local function addPart(part: BasePart,parent: Model)
+    local copy=part:Clone()
+    for _,child in copy:GetDescendants() do
+        if child:IsA("JointInstance") or child:IsA("WeldConstraint")
+            or child:IsA("Sound") or child:IsA("LuaSourceContainer") then
+            child:Destroy()
+        end
+    end
+    copy.Anchored=true
+    copy.CanCollide=false
+    copy.CanTouch=false
+    copy.CanQuery=false
+    copy.CastShadow=false
+    copy.LocalTransparencyModifier=0
+    copy.Parent=parent
+    copies[part]=copy
+    hidden[part]=part.LocalTransparencyModifier
+    for _,child in part:GetDescendants() do
+        if child:IsA("ParticleEmitter") then
+            hiddenParticles[child]=child.LocalTransparencyModifier
+        end
+    end
+end
+
+local function build(tool: Tool,camera: Camera): boolean
+    local handle=tool:FindFirstChild("Handle")
+    if not handle or not handle:IsA("BasePart") then return false end
+    local view=Instance.new("Model")
+    view.Name="TrainingRifleViewmodel"
+    for _,child in tool:GetChildren() do
+        if child:IsA("BasePart") then addPart(child,view) end
+    end
+    local character=player.Character
+    if character then
+        for _,name in {"RightUpperArm","RightLowerArm","RightHand",
+            "LeftUpperArm","LeftLowerArm","LeftHand","Right Arm","Left Arm"} do
+            local arm=character:FindFirstChild(name)
+            if arm and arm:IsA("BasePart") then addPart(arm,view) end
+        end
+    end
+    sourceHandle=handle
+    owner=tool
+    model=view
+    view.Parent=camera
+    return true
+end
+
+function Viewmodel.update(tool: Tool?,camera: Camera?,pose: CFrame)
+    local firstPerson=camera~=nil and (player.CameraMode==Enum.CameraMode.LockFirstPerson
+        or (camera.CFrame.Position-camera.Focus.Position).Magnitude&lt;1)
+    if not firstPerson or not tool or not camera then
+        if model then Viewmodel.clear() end
+        return
+    end
+    if owner~=tool then
+        Viewmodel.clear()
+        if not build(tool,camera) then return end
+    end
+    local view=model
+    local handle=sourceHandle
+    if not view or not handle or not handle.Parent then Viewmodel.clear();return end
+    view.Parent=camera
+    lastFrame=camera.CFrame*CAMERA_GRIP*pose
+    for source,copy in copies do
+        if source.Parent and copy.Parent then
+            source.LocalTransparencyModifier=1
+            copy.CFrame=lastFrame*handle.CFrame:ToObjectSpace(source.CFrame)
+        end
+    end
+    for emitter in hiddenParticles do
+        if emitter.Parent then emitter.LocalTransparencyModifier=1 end
+    end
+end
+
+function Viewmodel.shot(tool: Tool,hitPoint: Vector3)
+    if owner~=tool or not model then return end
+    local muzzle=model:FindFirstChild("Muzzle",true)
+    if not muzzle or not muzzle:IsA("Attachment") then return end
+    local spark=muzzle:FindFirstChild("MuzzleFlash")
+    if spark and spark:IsA("ParticleEmitter") then spark:Emit(7) end
+    local light=muzzle:FindFirstChild("FlashLight")
+    if light and light:IsA("PointLight") then
+        light.Enabled=true
+        task.delay(0.07,function() if light.Parent then light.Enabled=false end end)
+    end
+    local origin=muzzle.WorldPosition
+    local distance=(hitPoint-origin).Magnitude
+    if distance&lt;0.1 then return end
+    local tracer=Instance.new("Part")
+    tracer.Name="TrainingRifleViewTracer"
+    tracer.Anchored=true
+    tracer.CanCollide=false
+    tracer.CanTouch=false
+    tracer.CanQuery=false
+    tracer.Material=Enum.Material.Neon
+    tracer.Color=Color3.fromRGB(251,202,130)
+    tracer.Transparency=0.35
+    tracer.Size=Vector3.new(0.035,0.035,distance)
+    tracer.CFrame=CFrame.lookAt(origin,hitPoint)*CFrame.new(0,0,-distance/2)
+    tracer.Parent=workspace
+    Debris:AddItem(tracer,0.075)
+end
+
+-- Hide only our own world-space tracer while showing the camera-space one.
+-- Other players keep seeing the authoritative muzzle and tracer as usual.
+workspace.ChildAdded:Connect(function(child: Instance)
+    if child.Name~="TrainingRifleTracer" or not child:IsA("BasePart") then return end
+    local function hideOwnTracer()
+        if model and child:GetAttribute("ShooterUserId")==player.UserId then
+            child.LocalTransparencyModifier=1
+        end
+    end
+    hideOwnTracer()
+    local connection=child:GetAttributeChangedSignal("ShooterUserId"):Connect(hideOwnTracer)
+    child.Destroying:Once(function() connection:Disconnect() end)
+end)
+return Viewmodel
+</ProtectedString></Properties></Item></Item>
 		<Item class="StarterCharacterScripts" referent="RBX280decb0b2774230b3f4a5d109ab505e">
 			<Properties>
 				<BinaryString name="AttributesSerialize" />
@@ -150837,7 +151000,7 @@ local ORANGE=Color3.fromRGB(223,158,63)
 -- its muzzle along local -Z; keep the equipped assembly facing forward.
 local R15_GRIP_YAW_DEGREES=0
 local R15_GRIP_PITCH_DEGREES=16
-local BASE_GRIP=CFrame.new(0,-0.15,0)
+local BASE_GRIP=CFrame.new(0,0.1,-0.3)
     *CFrame.Angles(math.rad(R15_GRIP_PITCH_DEGREES),0,0)
 local HK416_MESH_SCALE=0.64
 local HK416_SOURCE_REVISION="MeshyPBR-20261021"
@@ -150922,12 +151085,13 @@ local function buildTool(): Tool
     tool:SetAttribute("MagazineSize",Rules.MAGAZINE)
     tool:SetAttribute("UsingHK416Mesh",false)
     tool:SetAttribute("UsingR15SupportIK",false)
+    tool:SetAttribute("UsingStableRifleMount",false)
     tool:SetAttribute("HK416ModelScale",HK416_MESH_SCALE)
     tool:SetAttribute("GripYawDegrees",R15_GRIP_YAW_DEGREES)
     tool:SetAttribute("GripPitchDegrees",R15_GRIP_PITCH_DEGREES)
     tool:SetAttribute("MeshSourceRevision",HK416_SOURCE_REVISION)
     tool:SetAttribute("MagazineFlipDegrees",0)
-    tool:SetAttribute("MagazineTiltDegrees",-8)
+    tool:SetAttribute("MagazineTiltDegrees",15)
     local handle=Instance.new("Part")
     handle.Name="Handle"
     handle.Size=Vector3.new(0.29,0.32,0.89)
@@ -150980,8 +151144,8 @@ local function buildTool(): Tool
         -- Keep it upright and seat its feed lips inside the receiver magwell.
         -- Rotate around the inserted feed lips so the bottom leans toward
         -- the stock without opening a gap at the top of the magazine.
-        local position=CFrame.new(Vector3.new(0,0.39,-1.08)*HK416_MESH_SCALE)
-            *CFrame.Angles(math.rad(-8),0,0)
+        local position=CFrame.new(Vector3.new(0,0.40,-1)*HK416_MESH_SCALE)
+            *CFrame.Angles(math.rad(15),0,0)
             *CFrame.new(0,-0.63*HK416_MESH_SCALE,0)
         magazine.CFrame=handle.CFrame*position
         magazine.Anchored=false
@@ -151068,13 +151232,22 @@ local function buildTool(): Tool
 
     local muzzle=Instance.new("Attachment")
     muzzle.Name="Muzzle"
-    muzzle.Position=if hasMeshes
-        then Vector3.new(0,0.75,-4.11)*HK416_MESH_SCALE
-        else Vector3.new(0,0,-2.47)
-    muzzle.Parent=handle
+    local meshBody=tool:FindFirstChild("HK416Body")
+    if hasMeshes and meshBody and meshBody:IsA("MeshPart") then
+        -- Measured from the FBX muzzle's terminal ring, relative to mesh center.
+        -- The imported body points along +Z; Front (-Z) needs a half-turn.
+        muzzle.CFrame=CFrame.new(Vector3.new(0.04483,0.32258,2.88072)*HK416_MESH_SCALE)
+            *CFrame.Angles(0,math.pi,0)
+        muzzle.Parent=meshBody
+    else
+        muzzle.Position=Vector3.new(0,0,-2.47)
+        muzzle.Parent=handle
+    end
     local spark=Instance.new("ParticleEmitter")
     spark.Name="MuzzleFlash"
     spark.Enabled=false
+    spark.EmissionDirection=Enum.NormalId.Front
+    spark.LockedToPart=true
     spark.Rate=0
     spark.Texture="rbxasset://textures/particles/sparkles_main.dds"
     spark.Lifetime=NumberRange.new(0.04,0.10)
@@ -151140,11 +151313,12 @@ local function animateMag(handle: BasePart)
         end
     end)
 end
-local function makeTracer(from: Vector3,to: Vector3)
+local function makeTracer(from: Vector3,to: Vector3,shooterId: number)
     local length=(to-from).Magnitude
     if length&lt;0.1 then return end
     local p=Instance.new("Part")
     p.Name="TrainingRifleTracer"
+    p:SetAttribute("ShooterUserId",shooterId)
     p.Anchored=true
     p.CanCollide=false
     p.CanTouch=false
@@ -151169,7 +151343,7 @@ local function fire(player: Player,tool: Tool,state: Rules.WeaponState,aimPoint:
     if not head or not head:IsA("BasePart") or not root or not root:IsA("BasePart")
         or not humanoid or humanoid.Health&lt;=0 then return end
     local handle=tool:FindFirstChild("Handle")
-    local muzzle=if handle then handle:FindFirstChild("Muzzle") else nil
+    local muzzle=tool:FindFirstChild("Muzzle",true)
     if not handle or not handle:IsA("BasePart") or not muzzle or not muzzle:IsA("Attachment") then return end
     local origin=muzzle.WorldPosition
     if (origin-head.Position).Magnitude&gt;8 then return end
@@ -151189,7 +151363,6 @@ local function fire(player: Player,tool: Tool,state: Rules.WeaponState,aimPoint:
     if bridge.Magnitude&gt;0.1 and workspace:Raycast(head.Position,bridge,params) then return end
     if not Rules.tryFire(state,os.clock()) then return end
     publish(tool,state)
-    remote:FireClient(player,"shot",tool)
     playSound(handle,"FireSound")
     animateBolt(handle)
     local spark=muzzle:FindFirstChild("MuzzleFlash")
@@ -151200,7 +151373,9 @@ local function fire(player: Player,tool: Tool,state: Rules.WeaponState,aimPoint:
         task.delay(0.07,function() if light.Parent then light.Enabled=false end end)
     end
     local result=workspace:Raycast(origin,direction*Rules.RANGE,params)
-    makeTracer(origin,if result then result.Position else origin+direction*Rules.RANGE)
+    local hitPoint=if result then result.Position else origin+direction*Rules.RANGE
+    makeTracer(origin,hitPoint,player.UserId)
+    remote:FireClient(player,"shot",tool,hitPoint)
     if not result then return end
     local model=result.Instance:FindFirstAncestorOfClass("Model")
     local victim=if model then model:FindFirstChildOfClass("Humanoid") else nil
@@ -151239,9 +151414,9 @@ remote.OnServerEvent:Connect(function(player: Player,action: any,aimPoint: any)
         if humanoid and humanoid.Health&gt;0 then reload(tool,state) end
     end
 end)
--- The off-hand follows the HK416 through R15 IK instead of moving only one
--- shoulder Motor6D. Server-created IKControl/Attachments replicate to clients.
--- R6 characters continue using the existing client shoulder fallback.
+-- Fix the weapon to the torso; IK makes both hands follow the weapon instead
+-- of allowing the walk/tool arm animations to drag its muzzle around.
+-- R6 retains Roblox's normal grip and the existing client shoulder fallback.
 local function configureR15IK(tool: Tool,character: Model)
     local humanoid=character:FindFirstChildOfClass("Humanoid")
     if not humanoid or humanoid.RigType~=Enum.HumanoidRigType.R15 then return end
@@ -151253,37 +151428,109 @@ local function configureR15IK(tool: Tool,character: Model)
     if not rest or not rest:IsA("Attachment") then return end
 
     local active: IKControl?=nil
+    local rightControl: IKControl?=nil
+    local rightTarget: Attachment?=nil
+    local mount: Motor6D?=nil
+    local defaultGrip: JointInstance?=nil
+    local gripWasEnabled=true
+    local equipVersion=0
     local function release()
-        local old=active
-        active=nil
+        equipVersion+=1
+        if active then active:Destroy();active=nil end
+        if rightControl then rightControl:Destroy();rightControl=nil end
+        if mount then mount:Destroy();mount=nil end
+        if rightTarget then rightTarget:Destroy();rightTarget=nil end
+        if defaultGrip and defaultGrip.Parent then defaultGrip.Enabled=gripWasEnabled end
+        defaultGrip=nil
         tool:SetAttribute("UsingR15SupportIK",false)
-        if old and old.Parent then
-            TweenService:Create(old,TweenInfo.new(0.16,Enum.EasingStyle.Quad),{Weight=0}):Play()
-            task.delay(0.18,function() if old.Parent then old:Destroy() end end)
-        end
+        tool:SetAttribute("UsingStableRifleMount",false)
     end
     tool.Equipped:Connect(function()
-        if tool.Parent~=character or humanoid.Health&lt;=0 then return end
-        local upper=character:FindFirstChild("LeftUpperArm")
-        local hand=character:FindFirstChild("LeftHand")
-        if not upper or not upper:IsA("BasePart")
-            or not hand or not hand:IsA("BasePart") then return end
         release()
-        local ik=Instance.new("IKControl")
-        ik.Name="TrainingRifleLeftHandIK"
-        ik.Type=Enum.IKControlType.Position
-        ik.ChainRoot=upper
-        ik.EndEffector=hand
-        ik.Target=if tool:GetAttribute("Reloading")==true and loading then loading else rest
-        ik.SmoothTime=0.09
-        ik.Priority=10
-        ik.Weight=0
-        ik.Enabled=true
-        ik.Parent=humanoid
-        active=ik
-        tool:SetAttribute("UsingR15SupportIK",true)
-        TweenService:Create(ik,TweenInfo.new(0.24,Enum.EasingStyle.Quad,Enum.EasingDirection.Out),
-            {Weight=0.95}):Play()
+        local version=equipVersion
+        -- Client-owned R15 animation can reach the server after Equipped.
+        -- Wait for the actual forward hold pose, never freeze the spawn pose
+        -- with the arm dangling down. The bounded wait cancels on unequip.
+        task.spawn(function()
+            local ready=false
+            for attempt=1,80 do
+                if version~=equipVersion or tool.Parent~=character or humanoid.Health&lt;=0 then return end
+                local root=character:FindFirstChild("HumanoidRootPart")
+                local hand=character:FindFirstChild("RightHand")
+                local grip=if hand then hand:FindFirstChild("RightGrip") else nil
+                if attempt&gt;=4 and grip and grip:IsA("JointInstance") and grip.Part1==handle
+                    and root and root:IsA("BasePart")
+                    and handle.CFrame.LookVector:Dot(root.CFrame.LookVector)&gt;0.85
+                    and handle.CFrame.UpVector.Y&gt;0.75 then
+                    ready=true
+                    break
+                end
+                task.wait(0.05)
+            end
+            if not ready then return end
+            local torso=character:FindFirstChild("UpperTorso")
+            local leftUpper=character:FindFirstChild("LeftUpperArm")
+            local leftHand=character:FindFirstChild("LeftHand")
+            local rightUpper=character:FindFirstChild("RightUpperArm")
+            local rightHand=character:FindFirstChild("RightHand")
+            if not torso or not torso:IsA("BasePart")
+                or not leftUpper or not leftUpper:IsA("BasePart")
+                or not leftHand or not leftHand:IsA("BasePart")
+                or not rightUpper or not rightUpper:IsA("BasePart")
+                or not rightHand or not rightHand:IsA("BasePart") then return end
+            local grip=rightHand:FindFirstChild("RightGrip")
+            if not grip or not grip:IsA("JointInstance") or grip.Part1~=handle then return end
+
+            local target=Instance.new("Attachment")
+            target.Name="TriggerHandTarget"
+            target.CFrame=handle.CFrame:ToObjectSpace(rightHand.CFrame)
+            target.Parent=handle
+            rightTarget=target
+            local joint=Instance.new("Motor6D")
+            joint.Name="RifleHoldJoint"
+            joint.Part0=torso
+            joint.Part1=handle
+            -- Server animation replication can lag the owning client's arm.
+            -- Keep the fitted grip position, with a level forward rifle frame.
+            local root=character:FindFirstChild("HumanoidRootPart")
+            if not root or not root:IsA("BasePart") then target:Destroy();rightTarget=nil;return end
+            local held=CFrame.lookAt(handle.Position,
+                handle.Position+root.CFrame.LookVector,root.CFrame.UpVector)
+            joint.C0=torso.CFrame:ToObjectSpace(held)
+            joint.C1=CFrame.identity
+            joint:SetAttribute("RestC0",joint.C0)
+            defaultGrip=grip
+            gripWasEnabled=grip.Enabled
+            grip.Enabled=false
+            joint.Parent=handle
+            mount=joint
+
+            local right=Instance.new("IKControl")
+            right.Name="TrainingRifleRightHandIK"
+            right.Type=Enum.IKControlType.Transform
+            right.ChainRoot=rightUpper
+            right.EndEffector=rightHand
+            right.Target=target
+            right.SmoothTime=0
+            right.Priority=20
+            right.Weight=1
+            right.Parent=humanoid
+            rightControl=right
+
+            local left=Instance.new("IKControl")
+            left.Name="TrainingRifleLeftHandIK"
+            left.Type=Enum.IKControlType.Position
+            left.ChainRoot=leftUpper
+            left.EndEffector=leftHand
+            left.Target=if tool:GetAttribute("Reloading")==true and loading then loading else rest
+            left.SmoothTime=0
+            left.Priority=10
+            left.Weight=1
+            left.Parent=humanoid
+            active=left
+            tool:SetAttribute("UsingR15SupportIK",true)
+            tool:SetAttribute("UsingStableRifleMount",true)
+        end)
     end)
     tool.Unequipped:Connect(release)
     tool.Destroying:Connect(release)

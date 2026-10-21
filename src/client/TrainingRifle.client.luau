@@ -9,6 +9,7 @@ local player=Players.LocalPlayer
 local mouse=player:GetMouse()
 local Rules=require(ReplicatedStorage:WaitForChild("Shared"):WaitForChild("TrainingRifleRules"))
 local Spring=require(ReplicatedStorage:WaitForChild("Shared"):WaitForChild("RifleRecoilSpring"))
+local Viewmodel=require(script.Parent:WaitForChild("RifleViewmodel"))
 local RunService=game:GetService("RunService")
 local remote=ReplicatedStorage:WaitForChild("TrainingRifleAction") :: RemoteEvent
 
@@ -159,6 +160,18 @@ RunService:BindToRenderStep("TrainingRifleSmoothRecoil",
                 recoilActive=false
             end
         end
+        -- RightGrip is disabled while the torso mount holds the rifle.
+        -- Convert the same equip/reload/recoil Grip pose into mount space so
+        -- the intentional animations survive without following arm swings.
+        local handle=selected:FindFirstChild("Handle")
+        local mount=if handle then handle:FindFirstChild("RifleHoldJoint") else nil
+        if mount and mount:IsA("Motor6D") and baseGrip then
+            local rest=mount:GetAttribute("RestC0")
+            if typeof(rest)=="CFrame" then
+                mount.C0=rest*baseGrip*selected.Grip:Inverse()
+            end
+        end
+        Viewmodel.update(selected,camera,if baseGrip then baseGrip*selected.Grip:Inverse() else CFrame.identity)
     end)
 
 local function reloadPose(tool: Tool)
@@ -186,9 +199,10 @@ local function reloadPose(tool: Tool)
     end)
 end
 -- A rejected shot (wall obstruction, cooldown, empty magazine) must not kick.
-remote.OnClientEvent:Connect(function(action: unknown,tool: unknown)
+remote.OnClientEvent:Connect(function(action: unknown,tool: unknown,hitPoint: unknown)
     if action=="shot" and typeof(tool)=="Instance" and tool:IsA("Tool") and selected==tool then
         recoil(tool)
+        if typeof(hitPoint)=="Vector3" then Viewmodel.shot(tool,hitPoint) end
     end
 end)
 local observed: {[Tool]: boolean}=setmetatable({}, {__mode="k"})
@@ -227,6 +241,7 @@ local function unequip(tool: Tool)
     leftShoulderBase=nil
     baseGrip=nil
     selected=nil
+    Viewmodel.clear()
     panel.Visible=false
     crosshair.Visible=false
     ContextActionService:UnbindAction("TrainingRifleReload")
