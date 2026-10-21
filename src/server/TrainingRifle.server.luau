@@ -331,9 +331,13 @@ local function animateMag(handle: BasePart)
     local weapon=handle.Parent
     local scale=if weapon and weapon:IsA("Tool") and weapon:GetAttribute("UsingHK416Mesh")==true
         then HK416_MESH_SCALE else 1
+    -- For the flipped HK416 magazine, move DOWN in receiver/handle space.
+    -- base*CFrame.new(...) would move upward because its Y axis is inverted.
+    local translated=if scale~=1
+        then CFrame.new(0,-0.64*scale,-0.12*scale)*base
+        else base*CFrame.new(0,-0.64*scale,-0.12*scale)
     TweenService:Create(joint,TweenInfo.new(0.29,Enum.EasingStyle.Quad),{
-        C0=base*CFrame.new(0,-0.64*scale,-0.12*scale)
-            *CFrame.Angles(math.rad(11),0,0)}):Play()
+        C0=translated*CFrame.Angles(math.rad(11),0,0)}):Play()
     task.delay(0.96,function()
         if joint.Parent then
             TweenService:Create(joint,TweenInfo.new(0.41,Enum.EasingStyle.Back,Enum.EasingDirection.Out),{C0=base}):Play()
