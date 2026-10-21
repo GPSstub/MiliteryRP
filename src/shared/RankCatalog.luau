@@ -21,11 +21,13 @@ local definitions: {{string}} = {
     {"major_general", "소장", "장관"},
     {"lieutenant_general", "중장", "장관"},
     {"general", "대장", "장관"},
+    {"admin", "admin", "관리자"},
 }
 local colors: {[string]: {number}} = {
     ["훈련병"]={190,198,190}, ["병"]={212,225,204}, ["부사관"]={235,199,110},
     ["준사관"]={237,214,158}, ["위관"]={217,224,234},
     ["영관"]={210,220,235}, ["장관"]={246,221,137},
+    ["관리자"]={148,211,255},
 }
 local ordered: {Rank} = {}
 local byId: {[string]: Rank} = {}
@@ -37,7 +39,8 @@ for order, entry in definitions do
     elseif order == 10 then symbol="diamond"; marks=1
     elseif order <= 13 and order >= 11 then symbol="diamond"; marks=order-10
     elseif order <= 16 and order >= 14 then symbol="flower"; marks=order-13
-    elseif order >= 17 then symbol="star"; marks=order-16 end
+    elseif order >= 17 and order <= 20 then symbol="star"; marks=order-16
+    elseif entry[1] == "admin" then symbol="admin"; marks=0 end
     local rank: Rank = {id=entry[1], name=entry[2], category=entry[3],
         order=order, color=table.clone(colors[entry[3]]), symbol=symbol, marks=marks}
     table.freeze(rank.color)

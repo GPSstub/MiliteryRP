@@ -20,7 +20,7 @@ local C={
     red=Color3.fromRGB(235,148,145),
     yellow=Color3.fromRGB(236,205,128),
 }
-local TEAM_NAMES={"HQ","위관급","영관급","장관급"}
+local TEAM_NAMES={"HQ","본부","장관급","영관급","위관급","부사관급","병사"}
 local NAV={
     {"overview","개요"},
     {"god","무적"},
@@ -145,7 +145,7 @@ function Panel.mount(parent: Frame): (boolean)->()
 
     local currentTab="overview"
     local selectedTarget="나"
-    local selectedTeam="위관급"
+    local selectedTeam="병사"
     local selectedRank="second_lieutenant"
     local pickerVisible=false
     local logKind="chat"
@@ -313,8 +313,8 @@ function Panel.mount(parent: Frame): (boolean)->()
         local summary=text(intro,"접속 "..#members.."명    |    HQ "..totals.HQ.."명    |    일반 관리 대상 "..(#members-totals.HQ).."명",13,C.accent,true)
         summary.Position=UDim2.fromOffset(14,82)
         summary.Size=UDim2.new(1,-28,0,22)
-        local teamCard=card("TeamOverview",176)
-        description(teamCard,"편제 현황","계급이 위관·영관·장관으로 변경되면 소속 팀이 자동 조정됩니다.")
+        local teamCard=card("TeamOverview",263)
+        description(teamCard,"편제 현황","admin은 HQ · 준위는 위관급 · 본부는 수동 배정")
         for index,name in TEAM_NAMES do
             local column=(index-1)%2
             local r=math.floor((index-1)/2)
@@ -385,7 +385,7 @@ function Panel.mount(parent: Frame): (boolean)->()
     end
     local function drawTeam()
         targetCard()
-        local frame=card("TeamAssignment",264)
+        local frame=card("TeamAssignment",365)
         description(frame,"팀 배정","HQ 팀에 배정해도 관리자 권한은 생기지 않습니다. 그룹 운영진 등급이 있어야 명령을 실행할 수 있습니다.")
         for index,teamName in TEAM_NAMES do
             local column=(index-1)%2
@@ -398,7 +398,7 @@ function Panel.mount(parent: Frame): (boolean)->()
             b.Activated:Connect(function() selectedTeam=teamName;render() end)
         end
         local submit=button(frame,"선택한 팀으로 이동시키기",UDim2.new(1,-28,0,44),C.raised)
-        submit.Position=UDim2.fromOffset(14,202)
+        submit.Position=UDim2.fromOffset(14,304)
         submit.Activated:Connect(function()
             if selectedTeam=="HQ" then
                 pendingHQTarget=currentTarget()
@@ -412,7 +412,7 @@ function Panel.mount(parent: Frame): (boolean)->()
             end
         end)
         local note=card("TeamNote",92)
-        description(note,"자동 편제 규칙","위관·영관·장관 계급은 자동 배정됩니다. HQ는 계급으로 얻을 수 없고 직접 지정해야 합니다.")
+        description(note,"자동 편제 규칙","admin→HQ, 준위→위관급, 하사~원사→부사관급, 훈련병~병장→병사. 본부는 관리자 수동 배정.")
     end
     local function drawRank()
         targetCard()
@@ -475,7 +475,7 @@ function Panel.mount(parent: Frame): (boolean)->()
             ";계급목록",
             ";무적 나 켜기",
             ";비행 나 끄기",
-            ";팀 나 HQ",
+            ";팀 나 본부",
             ";to 플레이어이름",
             ";here 플레이어이름",
             ";kill 플레이어이름",

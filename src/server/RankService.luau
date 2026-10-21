@@ -38,7 +38,7 @@ local function renderCharacter(player: Player, character: Model, version: number
     tag.StudsOffsetWorldSpace=Vector3.new(0,2.7,0);tag.MaxDistance=100
     tag.AlwaysOnTop=true;tag.LightInfluence=0
     if TeamService.isHQ(player) then
-        -- HQ is a temporary team presentation, not a persisted rank. Build
+        -- HQ is a team presentation, never an override of the saved rank. Build
         -- before parenting so an incomplete nameplate is never replicated.
         local success,errorMessage=pcall(function()
             if not HQBadge then error("HQ badge renderer not available") end
@@ -58,6 +58,24 @@ local function renderCharacter(player: Player, character: Model, version: number
             emergency.Size=UDim2.fromScale(1,1)
             emergency.Parent=tag
         end
+        -- Keep the HQ emblem, but still show the actual persisted rank:
+        -- manually placing an ordinary soldier in HQ must not make them admin.
+        local actual=Catalog.find(states[player])
+        local badgeHeight=tag.Size.Y.Offset
+        tag.Size=UDim2.fromOffset(tag.Size.X.Offset,badgeHeight+21)
+        local actualLabel=Instance.new("TextLabel")
+        actualLabel.Name="ActualRank"
+        actualLabel.Text=if actual then actual.name else "계급 확인 중"
+        actualLabel.TextColor3=if actual
+            then Color3.fromRGB(actual.color[1],actual.color[2],actual.color[3])
+            else Color3.fromRGB(220,220,220)
+        actualLabel.TextStrokeTransparency=0.25
+        actualLabel.TextSize=14
+        actualLabel.Font=Enum.Font.GothamBold
+        actualLabel.BackgroundTransparency=1
+        actualLabel.Position=UDim2.fromOffset(0,badgeHeight-3)
+        actualLabel.Size=UDim2.new(1,0,0,20)
+        actualLabel.Parent=tag
         tag.Parent=head
         return
     end
@@ -89,12 +107,11 @@ local function updateVisibleRank(player: Player)
     local id=states[player]
     local stored=if id then Catalog.find(id) else nil
     if not stored then return end
-    local hq=TeamService.isHQ(player)
-    local display=if hq then "admin" else stored.name
-    -- RankId / RankCategory / RankOrder continue to represent the saved
-    -- military rank. Never persist "admin" or promote based on HQ membership.
+    -- Rank, RankDisplayId and leaderstats always show the saved rank.
+    -- Being transferred into HQ is *not* a rank promotion.
+    local display=stored.name
     player:SetAttribute("Rank",display)
-    player:SetAttribute("RankDisplayId",if hq then "admin" else stored.id)
+    player:SetAttribute("RankDisplayId",stored.id)
     local stats=player:FindFirstChild("leaderstats")
     local label=if stats then stats:FindFirstChild("계급") else nil
     if label and label:IsA("StringValue") then
@@ -120,8 +137,7 @@ local function publish(player: Player, rank: Rank)
     player:SetAttribute("RankCategory",rank.category)
     player:SetAttribute("RankOrder",rank.order)
     updateVisibleRank(player)
-    -- Never update rank widgets inside an HQ tag. Rebuild the overhead with
-    -- the correct HQ/rank branch after the server's rank attributes settle.
+    -- Rebuild the nameplate after both saved-rank and team attributes settle.
     if connections[player] then queueRedraw(player) end
 end
 -- Server-only assignment API. A command succeeds only after UpdateAsync confirms

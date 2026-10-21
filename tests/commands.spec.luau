@@ -2,6 +2,9 @@
 local Parser=require("../src/server/RankCommandParser")
 
 assert(assert(Parser.parse(";계급 대위")).rank=="대위")
+assert(assert(Parser.parse(";계급 admin")).rank=="admin")
+assert(assert(Parser.parse(";계급 나 admin")).rank=="admin")
+assert(assert(Parser.parse(";rank admin")).rank=="admin")
 assert(assert(Parser.parse(";rank general")).rank=="general")
 assert(assert(Parser.parse(";계급 pikachu6361phw 병장")).target=="pikachu6361phw")
 assert(assert(Parser.parse(" ;계급   나   원사  ")).rank=="원사")

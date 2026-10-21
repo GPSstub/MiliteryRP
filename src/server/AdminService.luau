@@ -139,7 +139,7 @@ function Service.execute(actor: Player, text: any): (boolean, string, boolean?)
                 return TeamService.assign(actor,selected,teamName)
             end
         else
-            failure="사용법: ;팀 대상 HQ/위관급/영관급/장관급"
+            failure="사용법: ;팀 대상 HQ/본부/장관급/영관급/위관급/부사관급/병사"
         end
     elseif PlayerCommandParser.isVerb(verb) then
         local command=PlayerCommandParser.parse(text)
