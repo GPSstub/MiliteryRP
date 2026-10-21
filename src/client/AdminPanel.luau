@@ -534,7 +534,7 @@ function Panel.mount(parent: Frame): (boolean)->()
     end
     local function drawLogs()
         local tabs=card("LogTypes",144)
-        description(tabs,"서버 영구 기록","채팅·명령 로그는 별도 저장합니다. 그룹 운영진 전용 · 재접속 후에도 조회")
+        description(tabs,"현재 서버 기록","현재 서버의 채팅·명령 기록 · 운영진 전용 · 서버 종료 시 삭제")
         local chat=button(tabs,"채팅 로그",UDim2.new(0.5,-21,0,41),
             if logKind=="chat" then C.hover else C.raised)
         chat.Position=UDim2.fromOffset(14,91)
@@ -555,7 +555,7 @@ function Panel.mount(parent: Frame): (boolean)->()
         end)
         local header=card("HistoryControls",120)
         local label=if logKind=="chat" then "메신저 채팅 기록" else "관리자 명령 실행 기록"
-        description(header,label,"재접속 시 최신 기록부터 불러옵니다. 아래쪽에서 과거 기록을 이어 볼 수 있습니다.")
+        description(header,label,"현재 서버가 시작된 이후의 기록입니다. 서버가 종료되면 사라집니다.")
         local reload=button(header,if logLoading[logKind] then "조회 중…" else "↻  최신 기록 새로고침",
             UDim2.new(1,-28,0,37))
         reload.Position=UDim2.fromOffset(14,73)
@@ -566,13 +566,13 @@ function Panel.mount(parent: Frame): (boolean)->()
         local total=#logHistory[logKind]
         local desc=if logLoading[logKind] then "기록을 조회 중입니다…"
             elseif not logLoaded[logKind] then "기록을 아직 불러오지 않았습니다."
-            elseif total==0 then "저장된 로그가 없거나 아직 색인되지 않았습니다."
+            elseif total==0 then "현재 서버에 기록이 없습니다."
             else tostring(total).."개 불러옴"..(if logMore[logKind] then " · 과거 기록 더 있음" else " · 마지막 기록까지 불러옴")
         description(details,"조회 상태",desc)
         local queueSize=tonumber(logStats.queued) or 0
         local errors=tonumber(logStats.failed) or 0
         local lost=tonumber(logStats.dropped) or 0
-        local queueText=text(details,"대기 "..queueSize.."개  ·  저장 실패 "..errors.."개  ·  한도 초과 "..lost.."개",11,
+        local queueText=text(details,"대기 "..queueSize.."개  ·  필터 실패 "..errors.."개  ·  한도 초과 "..lost.."개",11,
             if errors>0 or lost>0 then C.red else C.muted)
         queueText.Position=UDim2.fromOffset(14,78)
         queueText.Size=UDim2.new(1,-28,0,22)
@@ -589,7 +589,7 @@ function Panel.mount(parent: Frame): (boolean)->()
             local measured=TextService:GetTextSize(bodyText,13,Enum.Font.GothamMedium,
                 Vector2.new(wrapWidth,5000))
             local lineHeight=math.max(42,math.ceil(measured.Y)+8)
-            local entry=card("PersistentLog_"..tostring(index),74+lineHeight)
+            local entry=card("SessionLog_"..tostring(index),74+lineHeight)
             local timeStamp=os.date("%Y-%m-%d  %H:%M:%S",
                 tonumber(item.time) or os.time())
             local headline=if logKind=="command" then

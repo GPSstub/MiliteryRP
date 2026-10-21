@@ -194,7 +194,7 @@ function Service.start()
             if now-(syncRequests[actor] or -math.huge)<0.5 then return end
             syncRequests[actor]=now
             -- Legacy snapshot intentionally contains no raw/unfiltered commands.
-            -- The HQ panel fetches filtered, durable history through AdminLogRequest.
+            -- The HQ panel fetches filtered, server-session history through AdminLogRequest.
             response:FireClient(actor,"snapshot",{})
         elseif action=="command" then
             if now-(requests[actor] or -math.huge)<0.25 then

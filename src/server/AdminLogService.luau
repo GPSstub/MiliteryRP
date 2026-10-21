@@ -1,18 +1,9 @@
 --!strict
--- Persistent, Roblox group-admin-only audit viewer. Two OrderedDataStores index immutable
--- individual DataStore records. No fixed history age/count cutoff.
---
--- IMPORTANT: two separate DataStore writes cannot be transactional. Writes
--- are retried with bounded memory; Roblox service outages/quotas can prevent
--- guaranteed completeness. Never advertise this as a forensic audit system.
---
--- Player-written text is NEVER stored raw: TextService broadcast filtering
--- must succeed first. Only authorized HQ viewers can request any log pages.
+-- Server-local filtered audit history. No storage or cross-server messaging.
+-- A new server starts empty; current-server reconnects can read this session.
 local Players=game:GetService("Players")
 local ReplicatedStorage=game:GetService("ReplicatedStorage")
-local DataStoreService=game:GetService("DataStoreService")
 local TextService=game:GetService("TextService")
-local RunService=game:GetService("RunService")
 local HttpService=game:GetService("HttpService")
 
 local Core=require(script.Parent.AdminLogCore)
@@ -22,22 +13,14 @@ local Audit=require(script.Parent.AdminAudit)
 
 local Service={}
 local started=false
-local suffix=if RunService:IsStudio() then "_Dev_v1" else "_v1"
-local records=DataStoreService:GetDataStore("MilitaryRP_AdminLogRecords"..suffix)
-local indices={
-    chat=DataStoreService:GetOrderedDataStore("MilitaryRP_AdminLogChat"..suffix),
-    command=DataStoreService:GetOrderedDataStore("MilitaryRP_AdminLogCommands"..suffix),
-}
-local queue: {any}={}
-local pendingById: {[string]: boolean}={}
+local history=require(script.Parent.ServerLogHistory).new()
 local seen: {[string]: boolean}={}
 local seenOrder: {string}={}
-local sessions: {[Player]: {[string]: any}}={}
+local sessions: {[Player]: {[string]: number}}={}
 local lastRequest: {[Player]: number}={}
 local lastError=""
 local failures=0
 local dropped=0
-local MAX_RETRIES=7
 local PAGE_SIZE=Core.PAGE_SIZE
 
 local function remember(messageId: string): boolean
@@ -78,62 +61,8 @@ local function createEntry(kind: string,fields: any): any
 end
 
 local function enqueue(entry: any)
-    if not Core.valid(entry) then
-        warn("[AdminLogs] Invalid audit record rejected")
-        failures+=1
-        return
-    end
-    if pendingById[entry.id] then return end
-    if #queue>=Core.MAX_QUEUE then
-        dropped+=1
-        warn("[AdminLogs] Queue full; event not persisted. Check DataStore limits.")
-        return
-    end
-    pendingById[entry.id]=true
-    table.insert(queue,{entry=entry,attempts=0,nextAttempt=0})
-end
-
-local function worker()
-    while started do
-        local now=os.clock()
-        local chosen=nil
-        for i,item in queue do
-            if item.nextAttempt<=now then
-                chosen=table.remove(queue,i)
-                break
-            end
-        end
-        if chosen then
-            local entry=chosen.entry
-            -- First write full filtered record, then publish its ordered index.
-            -- Retrying uses the *same* id to avoid duplicate log records.
-            local okRecord=pcall(function()
-                records:SetAsync(entry.id,entry)
-            end)
-            local okIndex=false
-            if okRecord then
-                okIndex=pcall(function()
-                    indices[entry.kind]:SetAsync(entry.id,entry.sort)
-                end)
-            end
-            if okRecord and okIndex then
-                pendingById[entry.id]=nil
-            else
-                chosen.attempts+=1
-                lastError="로그 저장소가 요청을 거부했습니다. 재시도 중입니다."
-                if chosen.attempts>=MAX_RETRIES then
-                    failures+=1
-                    pendingById[entry.id]=nil
-                    warn("[AdminLogs] Failed to persist an event after retries:",entry.id)
-                else
-                    chosen.nextAttempt=os.clock()+math.min(30,2^chosen.attempts)
-                    table.insert(queue,chosen)
-                end
-            end
-        else
-            task.wait(0.25)
-        end
-    end
+    if not Core.valid(entry) then failures+=1; return end
+    history.append(entry)
 end
 
 -- This is invoked only *after* the messenger server has authorized delivery.
@@ -166,7 +95,7 @@ function Service.captureChat(channelId: string,message: TextChatMessage,author: 
     end)
 end
 
--- Permanent bulletin posts are already filtered by MessengerArchive before
+-- Bulletin posts are already filtered by MessengerArchive before
 -- persisting; log just the successfully committed public-safe text.
 function Service.captureBulletin(channelId: string,author: Player,filtered: string,mode: string)
     if not started or not Core.typeValid("chat") or type(filtered)~="string"
@@ -225,27 +154,6 @@ local function viewRecord(player: Player,record: any): any?
     return Core.present(record,allowedContent)
 end
 
-local function currentPage(player: Player,kind: string,pages: any): any
-    local items={}
-    local incomplete=false
-    for _,pair in pages:GetCurrentPage() do
-        if type(pair)=="table" and Core.keyValid(pair.key) then
-            local ok,record=pcall(function()
-                return records:GetAsync(pair.key)
-            end)
-            if ok then
-                local item=viewRecord(player,record)
-                if item then table.insert(items,item) end
-            else
-                incomplete=true
-            end
-        end
-    end
-    return {ok=true,kind=kind,entries=items,hasMore=not pages.IsFinished,
-        incomplete=incomplete,
-        status={queued=#queue,failed=failures,dropped=dropped,lastError=lastError}}
-end
-
 local function request(player: Player,kind: any,action: any): any
     if not TeamService.isAdmin(player) then
         return {ok=false,message="설정된 Roblox 그룹 운영진 등급이어야 서버 로그에 접근할 수 있습니다."}
@@ -260,38 +168,17 @@ local function request(player: Player,kind: any,action: any): any
     lastRequest[player]=now
     local all=sessions[player]
     if not all then all={};sessions[player]=all end
-    local existing=all[kind]
-    if existing and existing.busy then return {ok=false,message="기록을 읽는 중입니다."} end
-    local token={}
-    all[kind]={busy=true,token=token,at=now,pages=if existing then existing.pages else nil}
-    local pages=nil
-    local ok,err=pcall(function()
-        if action=="latest" or not existing or not existing.pages then
-            pages=indices[kind]:GetSortedAsync(false,PAGE_SIZE)
-        elseif existing.pages.IsFinished then
-            pages=existing.pages
-        else
-            existing.pages:AdvanceToNextPageAsync()
-            pages=existing.pages
-        end
-    end)
-    if not ok or not pages then
-        all[kind]=nil
-        return {ok=false,message="영구 로그 목록 조회 실패. DataStore 설정 또는 요청 제한을 확인하세요."}
+    local before=if action=="more" then all[kind] else nil
+    local entries,cursor,hasMore=history.page(kind,before,PAGE_SIZE)
+    local items={}
+    for _,entry in entries do
+        local item=viewRecord(player,entry)
+        if item then table.insert(items,item) end
     end
-    if not TeamService.isAdmin(player) or player.Parent~=Players then
-        all[kind]=nil
-        return {ok=false,message="HQ 권한이 변경되었습니다."}
-    end
-    local result=currentPage(player,kind,pages)
-    -- Revalidate after potentially yielding DataStore reads.
-    if not TeamService.isAdmin(player) or player.Parent~=Players then
-        all[kind]=nil
-        return {ok=false,message="HQ 권한이 변경되었습니다."}
-    end
-    if sessions[player] and sessions[player][kind] and sessions[player][kind].token==token then
-        sessions[player][kind]={pages=pages,at=os.clock(),busy=false}
-    end
+    all[kind]=cursor
+    local result={ok=true,kind=kind,entries=items,hasMore=hasMore,incomplete=false,
+        status={queued=0,failed=failures,dropped=dropped,lastError=lastError}}
+
     return result
 end
 
@@ -307,11 +194,7 @@ function Service.start()
         sessions[player]=nil
         lastRequest[player]=nil
     end)
-    for _=1,2 do task.spawn(worker) end
-    game:BindToClose(function()
-        local untilTime=os.clock()+20
-        while #queue>0 and os.clock()<untilTime do task.wait(0.2) end
-    end)
+
 end
 
 return Service

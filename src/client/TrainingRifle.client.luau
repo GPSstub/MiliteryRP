@@ -213,7 +213,7 @@ local function updateAmmo()
     local reserve=tool:GetAttribute("Reserve")
     local isReloading=tool:GetAttribute("Reloading")==true
     ammo.Text=tostring(if type(mag)=="number" then mag else "?")
-        .." / "..tostring(if type(reserve)=="number" then reserve else "?")
+        .." / "..(if tool:GetAttribute("UnlimitedReserve")==true then "∞" else tostring(if type(reserve)=="number" then reserve else "?"))
     hint.Text=if isReloading then "재장전 중..."
         elseif mag==0 and reserve==0 then "예비 탄약 없음"
         else (if UserInputService.TouchEnabled then "재장전 버튼" else "R  ·  재장전")
@@ -317,7 +317,7 @@ local function observe(child: Instance)
         local aimPoint=if hit then hit.Position else ray.Origin+ray.Direction*Rules.RANGE
         remote:FireServer("fire",aimPoint)
     end)
-    for _,attribute in {"Ammo","Reserve","Reloading"} do
+    for _,attribute in {"Ammo","Reserve","Reloading","UnlimitedReserve"} do
         tool:GetAttributeChangedSignal(attribute):Connect(function()
             if selected==tool then
                 updateAmmo()

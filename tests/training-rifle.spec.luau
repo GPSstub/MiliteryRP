@@ -36,3 +36,16 @@ for i=1,30 do assert(Rules.tryFire(t,200+i*(Rules.SHOT_INTERVAL+0.01))) end
 assert(not Rules.startReload(t,210))
 assert(t.ammo==0 and t.reserve==0)
 print("PASS: training rifle ammo, cadence, reload, reserve exhaustion")
+
+local unlimited=Rules.new(true)
+unlimited.reserve=0
+for cycle=1,10 do
+    local now=300+cycle*10
+    for i=1,30 do assert(Rules.tryFire(unlimited,now+i*0.17)) end
+    assert(unlimited.ammo==0 and not Rules.tryFire(unlimited,now+6))
+    assert(Rules.startReload(unlimited,now+6))
+    assert(not Rules.tryFire(unlimited,now+7))
+    assert(Rules.completeReload(unlimited,now+8))
+    assert(unlimited.ammo==30 and unlimited.reserve==0)
+end
+print("PASS: unlimited reserve retains 30-round magazine, cadence and timed reload")

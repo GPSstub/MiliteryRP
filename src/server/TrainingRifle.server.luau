@@ -6,7 +6,23 @@ local ReplicatedStorage=game:GetService("ReplicatedStorage")
 local ServerStorage=game:GetService("ServerStorage")
 local Debris=game:GetService("Debris")
 local TweenService=game:GetService("TweenService")
+local MarketplaceService=game:GetService("MarketplaceService")
 local Rules=require(ReplicatedStorage:WaitForChild("Shared"):WaitForChild("TrainingRifleRules"))
+local PurchaseConfig=require(script.Parent:WaitForChild("TrainingRiflePurchaseConfig"))
+ReplicatedStorage:SetAttribute("TrainingRifleGamePassId",PurchaseConfig.GAME_PASS_ID)
+local PassAccess=require(script.Parent:WaitForChild("RiflePassAccess"))
+local access=PassAccess.new({
+    passId=PurchaseConfig.GAME_PASS_ID,
+    cacheSeconds=PurchaseConfig.OWNERSHIP_CACHE_SECONDS,
+    retrySeconds=PurchaseConfig.ERROR_RETRY_SECONDS,
+    clock=os.clock,
+    lookup=function(userId: number,passId: number): boolean
+        return MarketplaceService:UserOwnsGamePassAsync(userId,passId)
+    end,
+})
+if not PassAccess.validPassId(PurchaseConfig.GAME_PASS_ID) then
+    warn("[TrainingRifle] 구매 게임패스 ID가 설정되지 않아 총기 지급이 잠겼습니다.")
+end
 local remote=Instance.new("RemoteEvent")
 remote.Name="TrainingRifleAction"
 remote.Parent=ReplicatedStorage
@@ -289,7 +305,8 @@ local function buildTool(): Tool
     attachSound(handle,"FireSound",FIRE_SOUND_ID,0.8)
     attachSound(handle,"ReloadSound",RELOAD_SOUND_ID,0.72)
 
-    local state=Rules.new()
+    local state=Rules.new(true)
+    tool:SetAttribute("UnlimitedReserve",true)
     sessions[tool]=state
     tool:SetAttribute("Ammo",state.ammo)
     tool:SetAttribute("Reserve",state.reserve)
@@ -424,6 +441,8 @@ remote.OnServerEvent:Connect(function(player: Player,action: any,aimPoint: any)
     local now=os.clock()
     if now-(lastRemote[player] or -math.huge)<0.045 then return end
     lastRemote[player]=now
+    -- A copied Tool/client attribute cannot grant a purchase entitlement.
+    if not access.allowed(player.UserId) then return end
     local character=player.Character
     local tool=if character then character:FindFirstChild(Rules.DISPLAY_NAME) else nil
     if not tool or not tool:IsA("Tool") or tool:GetAttribute("WeaponId")~=Rules.WEAPON_ID then return end
@@ -566,8 +585,16 @@ end
 
 local function grant(player: Player,character: Model)
     task.spawn(function()
+        local owns,status=access.check(player.UserId)
+        if player.Parent~=Players or player.Character~=character then return end
+        if status~="checking" then
+            player:SetAttribute("TrainingRifleOwned",owns)
+            player:SetAttribute("TrainingRifleOwnershipStatus",status)
+        end
+        if not owns then return end
         local backpack=player:WaitForChild("Backpack",10)
-        if player.Parent~=Players or player.Character~=character or not backpack then return end
+        if player.Parent~=Players or player.Character~=character or not backpack
+            or not access.allowed(player.UserId) then return end
         if backpack:FindFirstChild(Rules.DISPLAY_NAME) or character:FindFirstChild(Rules.DISPLAY_NAME) then return end
         local tool=buildTool()
         configureR15IK(tool,character)
@@ -575,10 +602,48 @@ local function grant(player: Player,character: Model)
         else tool:Destroy() end
     end)
 end
+local function refreshAccess(player: Player)
+    task.spawn(function()
+        local owns,status=access.check(player.UserId,true)
+        if player.Parent~=Players or status=="checking" then return end
+        player:SetAttribute("TrainingRifleOwned",owns)
+        player:SetAttribute("TrainingRifleOwnershipStatus",status)
+        if owns then
+            if player.Character then grant(player,player.Character) end
+        else
+            -- Ownership lookup failed or the pass is no longer owned.
+            for _,container in {player:FindFirstChild("Backpack"),player.Character} do
+                if container then
+                    for _,child in container:GetChildren() do
+                        if child:IsA("Tool") and child:GetAttribute("WeaponId")==Rules.WEAPON_ID then
+                            child:Destroy()
+                        end
+                    end
+                end
+            end
+        end
+    end)
+end
 local function add(player: Player)
+    player:SetAttribute("TrainingRifleOwned",false)
+    player:SetAttribute("TrainingRifleOwnershipStatus","checking")
     player.CharacterAdded:Connect(function(character: Model) grant(player,character) end)
     if player.Character then grant(player,player.Character) end
 end
 Players.PlayerAdded:Connect(add)
-Players.PlayerRemoving:Connect(function(player) lastRemote[player]=nil end)
+Players.PlayerRemoving:Connect(function(player)
+    lastRemote[player]=nil
+    access.forget(player.UserId)
+end)
+MarketplaceService.PromptGamePassPurchaseFinished:Connect(function(player: Player,passId: number,purchased: boolean)
+    if purchased and passId==PurchaseConfig.GAME_PASS_ID
+        and PassAccess.validPassId(passId) and player.Parent==Players then
+        refreshAccess(player)
+    end
+end)
 for _,player in Players:GetPlayers() do add(player) end
+task.spawn(function()
+    while task.wait(30) do
+        for _,player in Players:GetPlayers() do refreshAccess(player) end
+    end
+end)

@@ -1,0 +1,18 @@
+--!strict
+local History=require("../src/server/ServerLogHistory")
+local a=History.new()
+local b=History.new()
+for i=1,37 do a.append({kind="chat",id=i}) end
+local first,cursor,more=a.page("chat",nil,15)
+assert(#first==15 and first[1].id==37 and first[15].id==23 and more)
+a.append({kind="chat",id=38})
+local second,nextCursor,nextMore=a.page("chat",cursor,15)
+assert(#second==15 and second[1].id==22 and second[15].id==8 and nextMore)
+local last,_,lastMore=a.page("chat",nextCursor,15)
+assert(#last==7 and last[7].id==1 and not lastMore)
+assert(#b.page("chat",nil,15)==0)
+assert(#a.page("command",nil,15)==0)
+a.append({kind="command",id=100})
+assert(a.page("command",nil,15)[1].id==100)
+assert(#History.new().page("chat",nil,15)==0)
+print("PASS: server log isolation, restart reset, kind isolation and stable pagination")

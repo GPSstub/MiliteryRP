@@ -3,6 +3,8 @@ local Players = game:GetService("Players")
 local TweenService = game:GetService("TweenService")
 local UserInputService = game:GetService("UserInputService")
 local GuiService = game:GetService("GuiService")
+local ReplicatedStorage=game:GetService("ReplicatedStorage")
+local MarketplaceService=game:GetService("MarketplaceService")
 local player = Players.LocalPlayer
 local function isAdmin(): boolean
     -- Presentation only. The server never trusts this replicated attribute for
@@ -57,18 +59,20 @@ toggle.Size = UDim2.fromOffset(132, 48)
 local flyout = Instance.new("Frame")
 flyout.Name = "Navigation"; flyout.AnchorPoint = Vector2.new(0, 1)
 flyout.Position = UDim2.new(0, 20, 1, -80)
-flyout.Size = UDim2.fromOffset(224, if isAdmin() then 190 else 134)
+flyout.Size = UDim2.fromOffset(224, if isAdmin() then 248 else 190)
 flyout.BackgroundColor3 = INK; flyout.BorderSizePixel = 0; flyout.Visible = false
 corner(flyout, 16); flyout.Parent = gui
 local eyebrow = label(flyout, "Eyebrow", "PERSONAL MENU", 11, MUTED)
 eyebrow.Position = UDim2.fromOffset(18, 14); eyebrow.Size = UDim2.new(1, -36, 0, 20)
 local shop = button(flyout, "ShopButton", "상점                       →")
 shop.Position = UDim2.fromOffset(12, 46); shop.Size = UDim2.new(1, -24, 0, 52)
+local passes = button(flyout, "GamePassButton", "게임패스                    →")
+passes.Position=UDim2.fromOffset(12,104); passes.Size=UDim2.new(1,-24,0,52)
 local admin = button(flyout, "AdminButton", "운영진 패널                  →")
-admin.Position = UDim2.fromOffset(12, 104); admin.Size = UDim2.new(1, -24, 0, 52)
+admin.Position = UDim2.fromOffset(12, 162); admin.Size = UDim2.new(1, -24, 0, 52)
 admin.Visible = isAdmin()
 local adminNote = label(flyout, "AdminNote", "● Roblox 그룹 운영진", 11, ACCENT)
-adminNote.Position = UDim2.fromOffset(18, 163); adminNote.Size = UDim2.new(1, -36, 0, 16)
+adminNote.Position = UDim2.fromOffset(18, 221); adminNote.Size = UDim2.new(1, -36, 0, 16)
 adminNote.Visible = isAdmin()
 local panel = Instance.new("Frame")
 panel.Name = "ContentPanel"; panel.AnchorPoint = Vector2.new(0.5, 0.5)
@@ -95,6 +99,58 @@ subtitle.Position = UDim2.new(0, 24, 0.5, 48); subtitle.Size = UDim2.new(1, -48,
 subtitle.TextXAlignment = Enum.TextXAlignment.Center; subtitle.TextWrapped = true
 local footer = label(panel, "Footer", "MILITARY RP  /  STORE", 10, MUTED)
 footer.Position = UDim2.new(0, 24, 1, -34); footer.Size = UDim2.new(1, -48, 0, 16)
+local passCard=Instance.new("Frame")
+passCard.Name="GamePassCard"; passCard.BackgroundTransparency=1
+passCard.Position=UDim2.fromOffset(24,106); passCard.Size=UDim2.new(1,-48,1,-152)
+passCard.Visible=false; passCard.Parent=panel
+local passTitle=label(passCard,"PassTitle","HK총 · HK416",22,PAPER)
+passTitle.Size=UDim2.new(1,0,0,34)
+local passDescription=label(passCard,"Description","HK416 영구 사용권\n30발 탄창 · 재장전 · 예비 탄약 무제한",14,MUTED)
+passDescription.Position=UDim2.fromOffset(0,44); passDescription.Size=UDim2.new(1,0,0,68)
+passDescription.TextWrapped=true
+local buy=button(passCard,"BuyGamePass","확인 중…")
+buy.AnchorPoint=Vector2.new(0,1); buy.Position=UDim2.fromScale(0,1); buy.Size=UDim2.new(1,0,0,48)
+local passId=0
+local sale=false
+local price: number?=nil
+local purchaseBusy=false
+local function updatePass()
+    local owned=player:GetAttribute("TrainingRifleOwned")==true
+    local status=player:GetAttribute("TrainingRifleOwnershipStatus")
+    local ready=passId>0 and sale and not owned and not purchaseBusy
+    buy.Active=ready; buy.Selectable=ready
+    buy.Text=if owned then "✓ 보유 중" elseif purchaseBusy then "구매 창 여는 중…"
+        elseif passId<=0 then "상품 확인 중…" elseif not sale then "현재 판매하지 않는 상품입니다"
+        else "구매하기"..(if price then " · "..tostring(price).." Robux" else "")
+    if status=="error" and not owned then buy.Text="구매하기 · 소유 여부 확인 지연" end
+end
+local function loadPass()
+    local id=ReplicatedStorage:GetAttribute("TrainingRifleGamePassId")
+    if type(id)~="number" or id<=0 then return end
+    passId=id
+    task.spawn(function()
+        local ok,info=pcall(function()
+            return MarketplaceService:GetProductInfoAsync(id,Enum.InfoType.GamePass)
+        end)
+        if id~=passId then return end
+        sale=ok and info.IsForSale==true
+        price=if ok and type(info.PriceInRobux)=="number" then info.PriceInRobux else nil
+        if ok then passTitle.Text=tostring(info.Name).." · HK416" end
+        updatePass()
+        if not ok then buy.Text="상품을 불러오지 못했습니다 · 탭을 다시 열어 주세요" end
+    end)
+end
+buy.Activated:Connect(function()
+    if purchaseBusy or not sale or passId<=0 or player:GetAttribute("TrainingRifleOwned")==true then return end
+    purchaseBusy=true;updatePass()
+    local ok=pcall(function() MarketplaceService:PromptGamePassPurchase(player,passId) end)
+    purchaseBusy=false;updatePass()
+    if not ok then buy.Text="구매 창을 열지 못했습니다 · 다시 시도" end
+end)
+player:GetAttributeChangedSignal("TrainingRifleOwned"):Connect(updatePass)
+player:GetAttributeChangedSignal("TrainingRifleOwnershipStatus"):Connect(updatePass)
+ReplicatedStorage:GetAttributeChangedSignal("TrainingRifleGamePassId"):Connect(loadPass)
+loadPass()
 local adminMount: ((boolean)->())?=nil
 local function showAdmin(visible: boolean)
     if not visible then
@@ -120,11 +176,13 @@ local function openPage(page: string)
     flyout.Visible = false; panel.Visible = true; toggle.Text = "       메뉴"
     local management = page == "admin"
     showAdmin(management)
-    empty.Visible = not management; subtitle.Visible = not management
+    empty.Visible = page=="shop"; subtitle.Visible = page=="shop"
+    passCard.Visible=page=="passes"
+    if page=="passes" then loadPass();updatePass() end
     cap.MaxSize = if management then Vector2.new(1024, 760) else Vector2.new(600, 400)
     panel.Size = if management then UDim2.fromScale(0.94, 0.9) else UDim2.fromScale(0.88, 0.72)
     panel:SetAttribute("Page", page)
-    heading.Text = if management then "어드민 패널" else "상점"
+    heading.Text = if management then "어드민 패널" elseif page=="passes" then "게임패스" else "상점"
     section.Text = if management then "GROUP  /  OPERATIONS" else "SUPPLY STORE"
     empty.Text = if management then "관리 기능 준비 중" else "아직 진열된 상품이 없어요"
     subtitle.Text = if management then "필요한 관리 기능을 여기에 추가할 예정이에요." else "새로운 보급품을 준비하고 있어요."
@@ -138,12 +196,13 @@ toggle.Activated:Connect(function()
     selectForGamepad(if opening then shop else toggle)
 end)
 shop.Activated:Connect(function() openPage("shop") end)
+passes.Activated:Connect(function() openPage("passes") end)
 admin.Activated:Connect(function() openPage("admin") end)
 local function updateAdminAccess()
     local can=isAdmin()
     admin.Visible=can
     adminNote.Visible=can
-    flyout.Size=UDim2.fromOffset(224,if can then 190 else 134)
+    flyout.Size=UDim2.fromOffset(224,if can then 248 else 190)
     if not can and panel.Visible and panel:GetAttribute("Page")=="admin" then
         dismiss()
     end

@@ -1,6 +1,6 @@
 --!strict
--- Pure, non-Roblox validation for durable administrator audit events.
--- Individual keys + OrderedDataStore pages avoid a fixed 60/300-log cap.
+-- Pure, non-Roblox validation for server-session administrator audit events.
+-- Validation and redaction remain independent of the in-memory history.
 local Core={}
 Core.PAGE_SIZE=15
 Core.MAX_QUEUE=600
