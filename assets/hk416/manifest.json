@@ -1,0 +1,51 @@
+{
+  "revision": "MeshyPBR-20261021",
+  "sources": [
+    {
+      "part": "Body",
+      "source": "Meshy_AI_hk416_rifle_body_1021133615_texture_fbx.zip",
+      "sha256": "09b7e7dd2a91fa3e87feddb291d30e146bdd4ea1f766a79069b95ae31904a835"
+    },
+    {
+      "part": "Magazine",
+      "source": "Meshy_AI_hk416_magazine_1021140458_texture_fbx.zip",
+      "sha256": "4c39d19d96f091716bef3dd6c2d189f4d343b0dbfe04f62a6b03c336530dd3b5"
+    }
+  ],
+  "scale": 0.64,
+  "parts": [
+    {
+      "name": "Body",
+      "mesh": "rbxassetid://115129215505520",
+      "maps": {
+        "ColorMap": "rbxassetid://98573669685193",
+        "NormalMap": "rbxassetid://120239128193184",
+        "MetalnessMap": "rbxassetid://117106620532198",
+        "RoughnessMap": "rbxassetid://80081003882719"
+      }
+    },
+    {
+      "name": "Magazine",
+      "mesh": "rbxassetid://93134885159268",
+      "maps": {
+        "ColorMap": "rbxassetid://73769282961847",
+        "NormalMap": "rbxassetid://115779673521325",
+        "MetalnessMap": "rbxassetid://128124636549987",
+        "RoughnessMap": "rbxassetid://133971973508751"
+      }
+    }
+  ],
+  "outwardNormals": true,
+  "magazineRest": [
+    0,
+    -0.24,
+    -1.08
+  ],
+  "magazineYawDegrees": 0,
+  "magazineTiltDegrees": -8,
+  "magazineFeedLipPivot": [
+    0,
+    0.39,
+    -1.08
+  ]
+}

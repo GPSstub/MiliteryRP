@@ -17,25 +17,15 @@ local STEEL=Color3.fromRGB(46,50,53)
 local DARK=Color3.fromRGB(24,28,31)
 local OLIVE=Color3.fromRGB(79,85,72)
 local ORANGE=Color3.fromRGB(223,158,63)
--- R15 test screenshots: the buttstock was in front of the first-person
--- camera, while the muzzle was close to the player. Turn the entire equipped
--- assembly around its local Y-axis. Do not rotate the meshes separately:
--- attachments, tracers, magazine and support-hand IK must stay aligned.
-local R15_GRIP_YAW_DEGREES=180
--- Keep the default R15 Tool.Grip offset. The sole grip rotation is 180° yaw;
--- no pitch compensation is applied, per the user's in-game reference.
-local R15_GRIP_PITCH_DEGREES=0
-local BASE_GRIP=CFrame.new(0,-0.29,-0.42)
-    *CFrame.Angles(0,math.rad(R15_GRIP_YAW_DEGREES),0)
--- The 5.71-stud mesh was larger than the R15 avatar in the screenshots.
--- Scale *every* world-space mesh component consistently to ~3.65 studs.
+-- Measured in Studio: the former 180-degree yaw made muzzle/root dot -0.96.
+-- New FBX geometry is authored with its pistol-grip pivot at the origin and
+-- its muzzle along local -Z; keep the equipped assembly facing forward.
+local R15_GRIP_YAW_DEGREES=0
+local R15_GRIP_PITCH_DEGREES=16
+local BASE_GRIP=CFrame.new(0,-0.15,0)
+    *CFrame.Angles(math.rad(R15_GRIP_PITCH_DEGREES),0,0)
 local HK416_MESH_SCALE=0.64
--- The OBJ body and magazine originated as independent Meshy models.
--- The previous [-1.041] Y center made the magazine's upper edge sit
--- almost entirely OUTSIDE the receiver; seat it 0.29 source units deeper.
--- This correction is in original OBJ units so scaling stays consistent.
-local HK416_MAG_INSERTION_LIFT=0.29
-local HK416_MAG_REARWARD_ADJUST=0.00
+local HK416_SOURCE_REVISION="MeshyPBR-20261021"
 -- Public Creator Store sounds. Availability still depends on experience permissions.
 local FIRE_SOUND_ID="rbxassetid://9113189096"
 local RELOAD_SOUND_ID="rbxassetid://8145744063"
@@ -120,8 +110,9 @@ local function buildTool(): Tool
     tool:SetAttribute("HK416ModelScale",HK416_MESH_SCALE)
     tool:SetAttribute("GripYawDegrees",R15_GRIP_YAW_DEGREES)
     tool:SetAttribute("GripPitchDegrees",R15_GRIP_PITCH_DEGREES)
-    tool:SetAttribute("MagazineInsertionLift",HK416_MAG_INSERTION_LIFT)
-    tool:SetAttribute("MagazineFlipDegrees",180)
+    tool:SetAttribute("MeshSourceRevision",HK416_SOURCE_REVISION)
+    tool:SetAttribute("MagazineFlipDegrees",0)
+    tool:SetAttribute("MagazineTiltDegrees",-8)
     local handle=Instance.new("Part")
     handle.Name="Handle"
     handle.Size=Vector3.new(0.29,0.32,0.89)
@@ -139,23 +130,23 @@ local function buildTool(): Tool
     local assetFolder=ServerStorage:FindFirstChild("HK416Assets")
     local bodyAsset=if assetFolder then assetFolder:FindFirstChild("Body") else nil
     local magAsset=if assetFolder then assetFolder:FindFirstChild("Magazine") else nil
-    local hasMeshes=bodyAsset~=nil and bodyAsset:IsA("MeshPart")
+    local hasMeshes=assetFolder~=nil and assetFolder:GetAttribute("SourceRevision")==HK416_SOURCE_REVISION
+        and bodyAsset~=nil and bodyAsset:IsA("MeshPart")
         and magAsset~=nil and magAsset:IsA("MeshPart")
     local mag: Motor6D
     local bolt: Motor6D
     if hasMeshes then
         tool:SetAttribute("UsingHK416Mesh",true)
-        -- OBJ meshes were reoriented and scaled together before export.
-        -- Each MeshPart is recentered at import, so its CFrame is restored to
-        -- the original shared coordinate-system bounds center here.
+        -- Templates preserve the new FBX UVs/PBR maps and normalized scale.
+        -- Studio imports this FBX facing +Z; rotate geometry around Y so
+        -- its barrel matches the -Z muzzle/IK/bolt coordinate system.
         handle.Transparency=1
         local body=(bodyAsset :: MeshPart):Clone()
         body.Name="HK416Body"
-        body.Size=Vector3.new(0.5495,1.6201,5.7085)*HK416_MESH_SCALE
-        -- Blender-exported OBJ keeps orientation but its center is near the
-        -- origin. Multiply the center's translation by the same scale.
+        body.Size=(bodyAsset :: MeshPart).Size*HK416_MESH_SCALE
         body.CFrame=handle.CFrame*CFrame.new(
-            0.0131*HK416_MESH_SCALE,0.0047*HK416_MESH_SCALE,-0.0024*HK416_MESH_SCALE)
+            Vector3.new(-0.0106,0.5443,-1.2024)*HK416_MESH_SCALE)
+            *CFrame.Angles(0,math.pi,0)
         body.Anchored=false
         body.CanCollide=false
         body.CanTouch=false
@@ -169,21 +160,14 @@ local function buildTool(): Tool
 
         local magazine=(magAsset :: MeshPart):Clone()
         magazine.Name="Magazine"
-        magazine.Size=Vector3.new(0.2240,1.4240,0.5080)*HK416_MESH_SCALE
-        -- Upper magazine lip originally ended at OBJ y=-0.329, while the
-        -- receiver magwell extends lower. New lip ends around y=-0.039,
-        -- visibly inserted into the receiver instead of dangling beneath it.
-        -- The imported independent magazine was visually upside-down.
-        -- Rotate the PART's local Z axis 180° around its own center, while
-        -- retaining the magwell center chosen by the insertion adjustment.
-        -- Position and orientation live in the Motor6D rest C0, so the
-        -- reload tween returns to the corrected orientation.
-        local MAG_ROTATION=CFrame.Angles(0,0,math.rad(180))
-        local position=CFrame.new(
-            0,
-            (-1.041+HK416_MAG_INSERTION_LIFT)*HK416_MESH_SCALE,
-            (0.121+HK416_MAG_REARWARD_ADJUST)*HK416_MESH_SCALE
-        )*MAG_ROTATION
+        magazine.Size=(magAsset :: MeshPart).Size*HK416_MESH_SCALE
+        -- The independently generated magazine faces opposite the body.
+        -- Keep it upright and seat its feed lips inside the receiver magwell.
+        -- Rotate around the inserted feed lips so the bottom leans toward
+        -- the stock without opening a gap at the top of the magazine.
+        local position=CFrame.new(Vector3.new(0,0.39,-1.08)*HK416_MESH_SCALE)
+            *CFrame.Angles(math.rad(-8),0,0)
+            *CFrame.new(0,-0.63*HK416_MESH_SCALE,0)
         magazine.CFrame=handle.CFrame*position
         magazine.Anchored=false
         magazine.CanCollide=false
@@ -202,7 +186,7 @@ local function buildTool(): Tool
         -- The original body OBJ includes the bolt as one connected mesh, so
         -- use a modest overlay action piece rather than cutting its geometry.
         bolt=articulated(tool,handle,"Bolt",Vector3.new(0.08,0.10,0.28)*HK416_MESH_SCALE,
-            CFrame.new(0.29*HK416_MESH_SCALE,0.31*HK416_MESH_SCALE,0.45*HK416_MESH_SCALE))
+            CFrame.new(Vector3.new(0.28,0.72,-0.90)*HK416_MESH_SCALE))
     else
         -- Works immediately with Rojo even before the two assets are imported.
         local plastic=Enum.Material.SmoothPlastic
@@ -254,7 +238,7 @@ local function buildTool(): Tool
     local support=Instance.new("Attachment")
     support.Name="SupportHandTarget"
     support.Position=if hasMeshes
-        then Vector3.new(-0.20,-0.07,-0.95)*HK416_MESH_SCALE
+        then Vector3.new(-0.20,0.40,-2.40)*HK416_MESH_SCALE
         else Vector3.new(-0.20,-0.07,-0.95)
     support.Parent=handle
     local magazinePart=mag.Part1
@@ -270,7 +254,7 @@ local function buildTool(): Tool
     local muzzle=Instance.new("Attachment")
     muzzle.Name="Muzzle"
     muzzle.Position=if hasMeshes
-        then Vector3.new(0,0.32,-2.91)*HK416_MESH_SCALE
+        then Vector3.new(0,0.75,-4.11)*HK416_MESH_SCALE
         else Vector3.new(0,0,-2.47)
     muzzle.Parent=handle
     local spark=Instance.new("ParticleEmitter")
@@ -331,11 +315,8 @@ local function animateMag(handle: BasePart)
     local weapon=handle.Parent
     local scale=if weapon and weapon:IsA("Tool") and weapon:GetAttribute("UsingHK416Mesh")==true
         then HK416_MESH_SCALE else 1
-    -- For the flipped HK416 magazine, move DOWN in receiver/handle space.
-    -- base*CFrame.new(...) would move upward because its Y axis is inverted.
-    local translated=if scale~=1
-        then CFrame.new(0,-0.64*scale,-0.12*scale)*base
-        else base*CFrame.new(0,-0.64*scale,-0.12*scale)
+    -- Translate in receiver space so reload always extracts downward.
+    local translated=CFrame.new(0,-0.64*scale,-0.12*scale)*base
     TweenService:Create(joint,TweenInfo.new(0.29,Enum.EasingStyle.Quad),{
         C0=translated*CFrame.Angles(math.rad(11),0,0)}):Play()
     task.delay(0.96,function()
@@ -393,6 +374,7 @@ local function fire(player: Player,tool: Tool,state: Rules.WeaponState,aimPoint:
     if bridge.Magnitude>0.1 and workspace:Raycast(head.Position,bridge,params) then return end
     if not Rules.tryFire(state,os.clock()) then return end
     publish(tool,state)
+    remote:FireClient(player,"shot",tool)
     playSound(handle,"FireSound")
     animateBolt(handle)
     local spark=muzzle:FindFirstChild("MuzzleFlash")

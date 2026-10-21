@@ -87,7 +87,6 @@ local selected: Tool?=nil
 -- magazine and bolt. No uploaded AnimationId assets are required.
 local baseGrip: CFrame?=nil
 local movementVersion=0
-local lastLocalShot=-math.huge
 local recoilPosition=0
 local recoilVelocity=0
 local recoilActive=false
@@ -131,10 +130,7 @@ local function findShoulder()
 end
 local function recoil(tool: Tool)
     if selected~=tool or not baseGrip then return end
-    if tool:GetAttribute("Reloading")==true or (tool:GetAttribute("Ammo") or 0)<=0 then return end
-    local now=os.clock()
-    if now-lastLocalShot<Rules.SHOT_INTERVAL then return end
-    lastLocalShot=now
+    if tool:GetAttribute("Reloading")==true then return end
     -- Add velocity rather than teleporting to a rotation. Critical damping
     -- gives visible upward travel and a smooth, gradual downward recovery.
     if currentGripTween then currentGripTween:Cancel();currentGripTween=nil end
@@ -189,6 +185,12 @@ local function reloadPose(tool: Tool)
         end
     end)
 end
+-- A rejected shot (wall obstruction, cooldown, empty magazine) must not kick.
+remote.OnClientEvent:Connect(function(action: unknown,tool: unknown)
+    if action=="shot" and typeof(tool)=="Instance" and tool:IsA("Tool") and selected==tool then
+        recoil(tool)
+    end
+end)
 local observed: {[Tool]: boolean}=setmetatable({}, {__mode="k"})
 local function updateAmmo()
     local tool=selected
@@ -236,7 +238,6 @@ local function equip(tool: Tool)
     baseGrip=tool.Grip
     movementVersion+=1
     local version=movementVersion
-    lastLocalShot=-math.huge
     recoilActive=false
     recoilPosition=0
     recoilVelocity=0
@@ -300,7 +301,6 @@ local function observe(child: Instance)
         local hit=workspace:Raycast(ray.Origin,ray.Direction*Rules.RANGE,params)
         local aimPoint=if hit then hit.Position else ray.Origin+ray.Direction*Rules.RANGE
         remote:FireServer("fire",aimPoint)
-        recoil(tool)
     end)
     for _,attribute in {"Ammo","Reserve","Reloading"} do
         tool:GetAttributeChangedSignal(attribute):Connect(function()

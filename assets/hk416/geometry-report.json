@@ -1,0 +1,18 @@
+[
+  {
+    "part": "Body",
+    "source": "Meshy_AI_hk416_rifle_body_1021133615_texture_fbx.zip",
+    "sha256": "09b7e7dd2a91fa3e87feddb291d30e146bdd4ea1f766a79069b95ae31904a835",
+    "triangles": 15913,
+    "signedVolume": 0.5452160603469253,
+    "originalUVLayers": 1
+  },
+  {
+    "part": "Magazine",
+    "source": "Meshy_AI_hk416_magazine_1021140458_texture_fbx.zip",
+    "sha256": "4c39d19d96f091716bef3dd6c2d189f4d343b0dbfe04f62a6b03c336530dd3b5",
+    "triangles": 15559,
+    "signedVolume": 0.01095238053692643,
+    "originalUVLayers": 1
+  }
+]
