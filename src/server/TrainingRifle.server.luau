@@ -19,7 +19,11 @@ local OLIVE=Color3.fromRGB(79,85,72)
 local ORANGE=Color3.fromRGB(223,158,63)
 -- Previous -90-degree X Grip tilted the barrel down. This grip keeps local
 -- -Z forward, with only a mild positional offset relative to the right hand.
+-- Yaw is intentionally zero until the actual R15 pose can be inspected.
+-- A 180-degree flip based only on a side screenshot could invert a correct muzzle.
+local R15_GRIP_YAW_DEGREES=0
 local BASE_GRIP=CFrame.new(0,-0.29,-0.42)
+    *CFrame.Angles(0,math.rad(R15_GRIP_YAW_DEGREES),0)
 -- Public Creator Store sounds. Availability still depends on experience permissions.
 local FIRE_SOUND_ID="rbxassetid://9113189096"
 local RELOAD_SOUND_ID="rbxassetid://8145744063"
@@ -100,6 +104,7 @@ local function buildTool(): Tool
     tool:SetAttribute("WeaponId",Rules.WEAPON_ID)
     tool:SetAttribute("MagazineSize",Rules.MAGAZINE)
     tool:SetAttribute("UsingHK416Mesh",false)
+    tool:SetAttribute("UsingR15SupportIK",false)
     local handle=Instance.new("Part")
     handle.Name="Handle"
     handle.Size=Vector3.new(0.29,0.32,0.89)
@@ -209,6 +214,20 @@ local function buildTool(): Tool
     local port=piece(tool,handle,"EjectionPort",Vector3.new(0.012,0.14,0.42),
         CFrame.new(0.216,0.16,-0.13),DARK,metal)
     port.Transparency=0.1
+    end
+
+    -- Both IK targets follow the gun. The support hand rests on the handguard;
+    -- while reloading it reaches for the magazine, which moves on Motor6D.
+    local support=Instance.new("Attachment")
+    support.Name="SupportHandTarget"
+    support.Position=Vector3.new(-0.20,-0.07,-0.95)
+    support.Parent=handle
+    local magazinePart=mag.Part1
+    if magazinePart then
+        local reloadHand=Instance.new("Attachment")
+        reloadHand.Name="MagazineHandTarget"
+        reloadHand.Position=Vector3.new(-0.15,0.21,0)
+        reloadHand.Parent=magazinePart
     end
 
     local muzzle=Instance.new("Attachment")
@@ -373,12 +392,69 @@ remote.OnServerEvent:Connect(function(player: Player,action: any,aimPoint: any)
         if humanoid and humanoid.Health>0 then reload(tool,state) end
     end
 end)
+-- The off-hand follows the HK416 through R15 IK instead of moving only one
+-- shoulder Motor6D. Server-created IKControl/Attachments replicate to clients.
+-- R6 characters continue using the existing client shoulder fallback.
+local function configureR15IK(tool: Tool,character: Model)
+    local humanoid=character:FindFirstChildOfClass("Humanoid")
+    if not humanoid or humanoid.RigType~=Enum.HumanoidRigType.R15 then return end
+    local handle=tool:FindFirstChild("Handle")
+    if not handle or not handle:IsA("BasePart") then return end
+    local rest=handle:FindFirstChild("SupportHandTarget")
+    local magazine=tool:FindFirstChild("Magazine")
+    local loading=if magazine then magazine:FindFirstChild("MagazineHandTarget") else nil
+    if not rest or not rest:IsA("Attachment") then return end
+
+    local active: IKControl?=nil
+    local function release()
+        local old=active
+        active=nil
+        tool:SetAttribute("UsingR15SupportIK",false)
+        if old and old.Parent then
+            TweenService:Create(old,TweenInfo.new(0.16,Enum.EasingStyle.Quad),{Weight=0}):Play()
+            task.delay(0.18,function() if old.Parent then old:Destroy() end end)
+        end
+    end
+    tool.Equipped:Connect(function()
+        if tool.Parent~=character or humanoid.Health<=0 then return end
+        local upper=character:FindFirstChild("LeftUpperArm")
+        local hand=character:FindFirstChild("LeftHand")
+        if not upper or not upper:IsA("BasePart")
+            or not hand or not hand:IsA("BasePart") then return end
+        release()
+        local ik=Instance.new("IKControl")
+        ik.Name="TrainingRifleLeftHandIK"
+        ik.Type=Enum.IKControlType.Position
+        ik.ChainRoot=upper
+        ik.EndEffector=hand
+        ik.Target=if tool:GetAttribute("Reloading")==true and loading then loading else rest
+        ik.SmoothTime=0.09
+        ik.Priority=10
+        ik.Weight=0
+        ik.Enabled=true
+        ik.Parent=humanoid
+        active=ik
+        tool:SetAttribute("UsingR15SupportIK",true)
+        TweenService:Create(ik,TweenInfo.new(0.24,Enum.EasingStyle.Quad,Enum.EasingDirection.Out),
+            {Weight=0.95}):Play()
+    end)
+    tool.Unequipped:Connect(release)
+    tool.Destroying:Connect(release)
+    humanoid.Died:Connect(release)
+    tool:GetAttributeChangedSignal("Reloading"):Connect(function()
+        if active and active.Parent then
+            active.Target=if tool:GetAttribute("Reloading")==true and loading then loading else rest
+        end
+    end)
+end
+
 local function grant(player: Player,character: Model)
     task.spawn(function()
         local backpack=player:WaitForChild("Backpack",10)
         if player.Parent~=Players or player.Character~=character or not backpack then return end
         if backpack:FindFirstChild(Rules.DISPLAY_NAME) or character:FindFirstChild(Rules.DISPLAY_NAME) then return end
         local tool=buildTool()
+        configureR15IK(tool,character)
         if player.Parent==Players and player.Character==character then tool.Parent=backpack
         else tool:Destroy() end
     end)
