@@ -3,6 +3,7 @@
 local Players=game:GetService("Players")
 local ReplicatedStorage=game:GetService("ReplicatedStorage")
 local UserInputService=game:GetService("UserInputService")
+local MobileUIRules=require(game:GetService("ReplicatedStorage"):WaitForChild("Shared"):WaitForChild("MobileUIRules"))
 local player=Players.LocalPlayer
 local Catalog=require(ReplicatedStorage:WaitForChild("Shared"):WaitForChild("RankCatalog"))
 local Rules=require(ReplicatedStorage:WaitForChild("Shared"):WaitForChild("ExamRules"))
@@ -149,11 +150,16 @@ local mobileLayout=mobileBody:FindFirstChildOfClass("UIListLayout")
 local function arrange(canCreate: boolean)
     local viewport=gui.AbsoluteSize
     local compact=viewport.X<760 or viewport.Y<520
-    launcher.Size=UDim2.fromOffset(if compact then 88 else 112,48)
+    launcher.Size=UDim2.fromOffset(if compact then 78 else 112,if compact then 40 else 48)
+    launcher.TextSize=if compact then 13 else 16
     launcher.AnchorPoint=if compact then Vector2.new(1,0) else Vector2.new(1,0.5)
     launcher.Position=if compact then UDim2.new(1,-8,0,86) else UDim2.new(1,-16,0.5,-62)
-    scale.Scale=1
-    window.Size=UDim2.fromOffset(math.min(900,math.max(240,viewport.X-16)),math.min(610,math.max(200,viewport.Y-16)))
+    local density=MobileUIRules.forViewport(viewport.X,viewport.Y,UserInputService.TouchEnabled)
+    scale.Scale=density.scale
+    window.Size=UDim2.fromOffset(
+        math.min(900,math.max(240,viewport.X*density.widthCoverage/density.scale)),
+        math.min(610,math.max(200,viewport.Y*density.heightCoverage/density.scale))
+    )
     mobileBody.Visible=compact
     creator.Parent=if compact then mobileBody else window
     left.Parent=if compact then mobileBody else window

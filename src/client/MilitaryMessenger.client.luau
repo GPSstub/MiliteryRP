@@ -6,6 +6,7 @@ local Players = game:GetService("Players")
 local TextChatService = game:GetService("TextChatService")
 local TweenService = game:GetService("TweenService")
 local UserInputService = game:GetService("UserInputService")
+local MobileUIRules = require(game:GetService("ReplicatedStorage"):WaitForChild("Shared"):WaitForChild("MobileUIRules"))
 
 local player = Players.LocalPlayer
 
@@ -614,12 +615,17 @@ local function updateLayout(viewportOverride: Vector2?)
 
     local viewport = viewportOverride or gui.AbsoluteSize
 
-    local width = math.min(1080, math.max(240, viewport.X - 16))
-    local height = math.min(720, math.max(180, viewport.Y - 16))
+    local density = MobileUIRules.forViewport(viewport.X,viewport.Y,UserInputService.TouchEnabled)
+    -- UIScale affects the visible window. Give the inner layout the matching
+    -- inverse logical dimensions so content is smaller without being clipped.
+    local width = math.min(1080, math.max(240, viewport.X*density.widthCoverage/density.scale))
+    local height = math.min(720, math.max(180, viewport.Y*density.heightCoverage/density.scale))
+    windowScale.Scale=density.scale
     window.AnchorPoint=Vector2.new(0.5,0.5)
     window.Position=UDim2.fromScale(0.5,0.5)
     local small=viewport.X<760 or viewport.Y<520
-    launcher.Size=UDim2.fromOffset(if small then 88 else 112,48)
+    launcher.Size=UDim2.fromOffset(if small then 78 else 112,if small then 40 else 48)
+    launcher.TextSize=if small then 13 else 16
     launcher.Position=if small then UDim2.new(1,-8,0,142) else UDim2.new(1,-16,0.5,0)
     launcher.AnchorPoint=if small then Vector2.new(1,0) else Vector2.new(1,0.5)
     compact = width < 640

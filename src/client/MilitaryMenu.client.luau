@@ -5,6 +5,7 @@ local UserInputService = game:GetService("UserInputService")
 local GuiService = game:GetService("GuiService")
 local ReplicatedStorage=game:GetService("ReplicatedStorage")
 local MarketplaceService=game:GetService("MarketplaceService")
+local MobileUIRules=require(ReplicatedStorage:WaitForChild("Shared"):WaitForChild("MobileUIRules"))
 local player = Players.LocalPlayer
 local function isAdmin(): boolean
     -- Presentation only. The server never trusts this replicated attribute for
@@ -56,12 +57,18 @@ end
 toggle.AnchorPoint = Vector2.new(0, 1)
 toggle.Position = UDim2.new(0, 20, 1, -20)
 toggle.Size = UDim2.fromOffset(132, 48)
+local toggleScale=Instance.new("UIScale")
+toggleScale.Name="MobileDensity"
+toggleScale.Parent=toggle
 local flyout = Instance.new("Frame")
 flyout.Name = "Navigation"; flyout.AnchorPoint = Vector2.new(0, 1)
 flyout.Position = UDim2.new(0, 20, 1, -80)
 flyout.Size = UDim2.fromOffset(224, if isAdmin() then 248 else 190)
 flyout.BackgroundColor3 = INK; flyout.BorderSizePixel = 0; flyout.Visible = false
 corner(flyout, 16); flyout.Parent = gui
+local flyoutScale=Instance.new("UIScale")
+flyoutScale.Name="MobileDensity"
+flyoutScale.Parent=flyout
 local eyebrow = label(flyout, "Eyebrow", "PERSONAL MENU", 11, MUTED)
 eyebrow.Position = UDim2.fromOffset(18, 14); eyebrow.Size = UDim2.new(1, -36, 0, 20)
 local shop = button(flyout, "ShopButton", "상점                       →")
@@ -80,6 +87,9 @@ panel.Position = UDim2.fromScale(0.5, 0.5); panel.Size = UDim2.fromScale(0.88, 0
 panel.BackgroundColor3 = INK; panel.BorderSizePixel = 0; panel.Visible = false
 corner(panel, 20); panel.Parent = gui
 local cap = Instance.new("UISizeConstraint"); cap.MaxSize = Vector2.new(600, 400); cap.Parent = panel
+local panelScale=Instance.new("UIScale")
+panelScale.Name="MobileDensity"
+panelScale.Parent=panel
 local accent = Instance.new("Frame"); accent.Name = "Accent"
 accent.Position = UDim2.fromOffset(24, 25); accent.Size = UDim2.fromOffset(4, 40)
 accent.BackgroundColor3 = ACCENT; accent.BorderSizePixel = 0; corner(accent, 2); accent.Parent = panel
@@ -155,11 +165,20 @@ ReplicatedStorage:GetAttributeChangedSignal("TrainingRifleGamePassId"):Connect(l
 loadPass()
 local function layoutMenu()
     local size=gui.AbsoluteSize
-    local compact=size.X<760 or size.Y<520
+    local density=MobileUIRules.forViewport(size.X,size.Y,UserInputService.TouchEnabled)
+    local compact=density.compact
     local management=panel:GetAttribute("Page")=="admin"
+    panelScale.Scale=density.scale
+    toggleScale.Scale=if compact then density.scale else 1
+    flyoutScale.Scale=if compact then density.scale else 1
     if compact then
-        panel.Size=UDim2.fromOffset(math.max(240,size.X-16),math.max(180,size.Y-16))
-        cap.MaxSize=Vector2.new(1024,760)
+        -- Keep margins on phone screens while shrinking every descendant
+        -- (including admin buttons and scrolling content) by the same factor.
+        panel.Size=UDim2.fromOffset(
+            math.max(220,size.X*density.widthCoverage/density.scale),
+            math.max(220,size.Y*density.heightCoverage/density.scale)
+        )
+        cap.MaxSize=Vector2.new(1500,1500)
     else
         panel.Size=if management then UDim2.fromScale(0.94,0.9) else UDim2.fromScale(0.88,0.72)
         cap.MaxSize=if management then Vector2.new(1024,760) else Vector2.new(600,400)
@@ -177,10 +196,10 @@ local function layoutMenu()
     admin.Position=UDim2.fromOffset(12,if short then 104 else 162)
     for _,b in {shop,passes,admin} do b.Size=UDim2.new(1,-24,0,row) end
     eyebrow.Visible=not short;adminNote.Visible=isAdmin() and not short
-    flyout.Size=UDim2.fromOffset(math.min(224,size.X-16),if short then (if isAdmin() then 156 else 108) else (if isAdmin() then 248 else 190))
+    flyout.Size=UDim2.fromOffset(math.min(224,(size.X-16)/flyoutScale.Scale),if short then (if isAdmin() then 156 else 108) else (if isAdmin() then 248 else 190))
     local shortHeader=compact and management
     heading.Position=UDim2.fromOffset(24,if shortHeader then 16 else 42)
-    heading.TextSize=if shortHeader then 21 else 24
+    heading.TextSize=if shortHeader then 18 else 24
     section.Visible=not shortHeader;accent.Visible=not shortHeader
     line.Position=UDim2.fromOffset(24,if shortHeader then 63 else 90)
     footer.Visible=not shortHeader
