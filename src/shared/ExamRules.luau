@@ -3,6 +3,7 @@
 -- Exams are session-only; joining is not a pass and never promotes a player.
 local Rules = {}
 Rules.MAX_ACTIVE = 6
+Rules.MAX_PARTICIPANTS = 10 -- per exam, excluding the host
 Rules.TARGET_IDS = table.freeze({
     "private", "private_first_class", "corporal", "sergeant",
     "staff_sergeant", "sergeant_first_class", "master_sergeant", "sergeant_major",
@@ -56,7 +57,10 @@ function Rules.valid(state: any): boolean
         if joined[exam.hostId] then return false end
         joined[exam.hostId]=true
         ids[exam.id]=true
+        local participantCount=0
         for userId,active in exam.participants do
+            participantCount+=1
+            if participantCount>Rules.MAX_PARTICIPANTS then return false end
             if not validUserId(userId) or active~=true or joined[userId]
                 or userId==exam.hostId then return false end
             joined[userId]=true
@@ -107,6 +111,11 @@ function Rules.apply(state: any,actor: any,action: any,targetId: any,examId: any
         end
         if Rules.busy(state,actor.userId) then return nil,"이미 다른 시험을 개최하거나 참가 중입니다." end
         if actor.rankId~=exam.targetId then return nil,"시험 계급과 현재 계급이 같아야 참가할 수 있습니다." end
+        local participantCount=0
+        for _ in exam.participants do participantCount+=1 end
+        if participantCount>=Rules.MAX_PARTICIPANTS then
+            return nil,"시험 정원("..tostring(Rules.MAX_PARTICIPANTS).."명)이 가득 찼습니다."
+        end
         exam.participants[actor.userId]=true
     elseif action=="leave" then
         local _,exam=locate(nextState,examId)
