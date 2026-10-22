@@ -65,7 +65,7 @@ local function identity(player: Player): any
 end
 
 local function snapshot(player: Player): any
-    local result={revision=board.revision,maxActive=Rules.MAX_ACTIVE,
+    local result={revision=board.revision,maxActive=Rules.MAX_ACTIVE,maxParticipants=Rules.MAX_PARTICIPANTS,
         canCreate=canHost(player) and not Rules.busy(board,player.UserId),
         rankId=(hostRank(player) or {}).id,sessions={}}
     for _,exam in board.sessions do
