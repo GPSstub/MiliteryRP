@@ -140925,6 +140925,7 @@ local UserInputService = game:GetService("UserInputService")
 local GuiService = game:GetService("GuiService")
 local ReplicatedStorage=game:GetService("ReplicatedStorage")
 local MarketplaceService=game:GetService("MarketplaceService")
+local MobileUIRules=require(ReplicatedStorage:WaitForChild("Shared"):WaitForChild("MobileUIRules"))
 local player = Players.LocalPlayer
 local function isAdmin(): boolean
     -- Presentation only. The server never trusts this replicated attribute for
@@ -140976,12 +140977,18 @@ end
 toggle.AnchorPoint = Vector2.new(0, 1)
 toggle.Position = UDim2.new(0, 20, 1, -20)
 toggle.Size = UDim2.fromOffset(132, 48)
+local toggleScale=Instance.new("UIScale")
+toggleScale.Name="MobileDensity"
+toggleScale.Parent=toggle
 local flyout = Instance.new("Frame")
 flyout.Name = "Navigation"; flyout.AnchorPoint = Vector2.new(0, 1)
 flyout.Position = UDim2.new(0, 20, 1, -80)
 flyout.Size = UDim2.fromOffset(224, if isAdmin() then 248 else 190)
 flyout.BackgroundColor3 = INK; flyout.BorderSizePixel = 0; flyout.Visible = false
 corner(flyout, 16); flyout.Parent = gui
+local flyoutScale=Instance.new("UIScale")
+flyoutScale.Name="MobileDensity"
+flyoutScale.Parent=flyout
 local eyebrow = label(flyout, "Eyebrow", "PERSONAL MENU", 11, MUTED)
 eyebrow.Position = UDim2.fromOffset(18, 14); eyebrow.Size = UDim2.new(1, -36, 0, 20)
 local shop = button(flyout, "ShopButton", "상점                       →")
@@ -141000,6 +141007,9 @@ panel.Position = UDim2.fromScale(0.5, 0.5); panel.Size = UDim2.fromScale(0.88, 0
 panel.BackgroundColor3 = INK; panel.BorderSizePixel = 0; panel.Visible = false
 corner(panel, 20); panel.Parent = gui
 local cap = Instance.new("UISizeConstraint"); cap.MaxSize = Vector2.new(600, 400); cap.Parent = panel
+local panelScale=Instance.new("UIScale")
+panelScale.Name="MobileDensity"
+panelScale.Parent=panel
 local accent = Instance.new("Frame"); accent.Name = "Accent"
 accent.Position = UDim2.fromOffset(24, 25); accent.Size = UDim2.fromOffset(4, 40)
 accent.BackgroundColor3 = ACCENT; accent.BorderSizePixel = 0; corner(accent, 2); accent.Parent = panel
@@ -141075,11 +141085,20 @@ ReplicatedStorage:GetAttributeChangedSignal("TrainingRifleGamePassId"):Connect(l
 loadPass()
 local function layoutMenu()
     local size=gui.AbsoluteSize
-    local compact=size.X&lt;760 or size.Y&lt;520
+    local density=MobileUIRules.forViewport(size.X,size.Y,UserInputService.TouchEnabled)
+    local compact=density.compact
     local management=panel:GetAttribute("Page")=="admin"
+    panelScale.Scale=density.scale
+    toggleScale.Scale=if compact then density.scale else 1
+    flyoutScale.Scale=if compact then density.scale else 1
     if compact then
-        panel.Size=UDim2.fromOffset(math.max(240,size.X-16),math.max(180,size.Y-16))
-        cap.MaxSize=Vector2.new(1024,760)
+        -- Keep margins on phone screens while shrinking every descendant
+        -- (including admin buttons and scrolling content) by the same factor.
+        panel.Size=UDim2.fromOffset(
+            math.max(220,size.X*density.widthCoverage/density.scale),
+            math.max(220,size.Y*density.heightCoverage/density.scale)
+        )
+        cap.MaxSize=Vector2.new(1500,1500)
     else
         panel.Size=if management then UDim2.fromScale(0.94,0.9) else UDim2.fromScale(0.88,0.72)
         cap.MaxSize=if management then Vector2.new(1024,760) else Vector2.new(600,400)
@@ -141097,10 +141116,10 @@ local function layoutMenu()
     admin.Position=UDim2.fromOffset(12,if short then 104 else 162)
     for _,b in {shop,passes,admin} do b.Size=UDim2.new(1,-24,0,row) end
     eyebrow.Visible=not short;adminNote.Visible=isAdmin() and not short
-    flyout.Size=UDim2.fromOffset(math.min(224,size.X-16),if short then (if isAdmin() then 156 else 108) else (if isAdmin() then 248 else 190))
+    flyout.Size=UDim2.fromOffset(math.min(224,(size.X-16)/flyoutScale.Scale),if short then (if isAdmin() then 156 else 108) else (if isAdmin() then 248 else 190))
     local shortHeader=compact and management
     heading.Position=UDim2.fromOffset(24,if shortHeader then 16 else 42)
-    heading.TextSize=if shortHeader then 21 else 24
+    heading.TextSize=if shortHeader then 18 else 24
     section.Visible=not shortHeader;accent.Visible=not shortHeader
     line.Position=UDim2.fromOffset(24,if shortHeader then 63 else 90)
     footer.Visible=not shortHeader
@@ -141217,7 +141236,7 @@ local C={
     red=Color3.fromRGB(235,148,145),
     yellow=Color3.fromRGB(236,205,128),
 }
-local TEAM_NAMES={"HQ","위관급","영관급","장관급"}
+local TEAM_NAMES={"HQ","본부","장관급","영관급","위관급","부사관급","병사"}
 local NAV={
     {"overview","개요"},
     {"god","무적"},
@@ -141342,7 +141361,7 @@ function Panel.mount(parent: Frame): (boolean)-&gt;()
 
     local currentTab="overview"
     local selectedTarget="나"
-    local selectedTeam="위관급"
+    local selectedTeam="병사"
     local selectedRank="second_lieutenant"
     local pickerVisible=false
     local logKind="chat"
@@ -141510,8 +141529,8 @@ function Panel.mount(parent: Frame): (boolean)-&gt;()
         local summary=text(intro,"접속 "..#members.."명    |    HQ "..totals.HQ.."명    |    일반 관리 대상 "..(#members-totals.HQ).."명",13,C.accent,true)
         summary.Position=UDim2.fromOffset(14,82)
         summary.Size=UDim2.new(1,-28,0,22)
-        local teamCard=card("TeamOverview",176)
-        description(teamCard,"편제 현황","계급이 위관·영관·장관으로 변경되면 소속 팀이 자동 조정됩니다.")
+        local teamCard=card("TeamOverview",263)
+        description(teamCard,"편제 현황","admin은 HQ · 준위는 위관급 · 본부는 수동 배정")
         for index,name in TEAM_NAMES do
             local column=(index-1)%2
             local r=math.floor((index-1)/2)
@@ -141582,7 +141601,7 @@ function Panel.mount(parent: Frame): (boolean)-&gt;()
     end
     local function drawTeam()
         targetCard()
-        local frame=card("TeamAssignment",264)
+        local frame=card("TeamAssignment",365)
         description(frame,"팀 배정","HQ 팀에 배정해도 관리자 권한은 생기지 않습니다. 그룹 운영진 등급이 있어야 명령을 실행할 수 있습니다.")
         for index,teamName in TEAM_NAMES do
             local column=(index-1)%2
@@ -141595,7 +141614,7 @@ function Panel.mount(parent: Frame): (boolean)-&gt;()
             b.Activated:Connect(function() selectedTeam=teamName;render() end)
         end
         local submit=button(frame,"선택한 팀으로 이동시키기",UDim2.new(1,-28,0,44),C.raised)
-        submit.Position=UDim2.fromOffset(14,202)
+        submit.Position=UDim2.fromOffset(14,304)
         submit.Activated:Connect(function()
             if selectedTeam=="HQ" then
                 pendingHQTarget=currentTarget()
@@ -141609,7 +141628,7 @@ function Panel.mount(parent: Frame): (boolean)-&gt;()
             end
         end)
         local note=card("TeamNote",92)
-        description(note,"자동 편제 규칙","위관·영관·장관 계급은 자동 배정됩니다. HQ는 계급으로 얻을 수 없고 직접 지정해야 합니다.")
+        description(note,"자동 편제 규칙","admin→HQ, 준위→위관급, 하사~원사→부사관급, 훈련병~병장→병사. 본부는 관리자 수동 배정.")
     end
     local function drawRank()
         targetCard()
@@ -141672,7 +141691,7 @@ function Panel.mount(parent: Frame): (boolean)-&gt;()
             ";계급목록",
             ";무적 나 켜기",
             ";비행 나 끄기",
-            ";팀 나 HQ",
+            ";팀 나 본부",
             ";to 플레이어이름",
             ";here 플레이어이름",
             ";kill 플레이어이름",
@@ -141966,10 +141985,17 @@ local ReplicatedStorage=game:GetService("ReplicatedStorage")
 local RunService=game:GetService("RunService")
 local UserInputService=game:GetService("UserInputService")
 local player=Players.LocalPlayer
+local VisibilityRules=require(ReplicatedStorage:WaitForChild("Shared"):WaitForChild("FlightControlsRules"))
 local remote=ReplicatedStorage:WaitForChild("AdminFlightInput") :: RemoteEvent
 local timer=0
 local focused=true
-local gui=Instance.new("ScreenGui");gui.Name="FlightControls";gui.ResetOnSpawn=false;gui.ScreenInsets=Enum.ScreenInsets.CoreUISafeInsets;gui.Parent=player:WaitForChild("PlayerGui")
+local gui=Instance.new("ScreenGui")
+gui.Name="FlightControls"
+gui.ResetOnSpawn=false
+gui.ScreenInsets=Enum.ScreenInsets.CoreUISafeInsets
+-- Start hidden: no visible frame before the server's AdminFlying value arrives.
+gui.Enabled=false
+gui.Parent=player:WaitForChild("PlayerGui")
 local upHeld,downHeld=false,false
 for i,spec in {{"상승",true},{"하강",false}} do
     local b=Instance.new("TextButton");b.Name=if spec[2] then "Up" else "Down";b.Text=spec[1] :: string
@@ -141988,10 +142014,21 @@ for i,spec in {{"상승",true},{"하강",false}} do
     end)
 end
 local function updateVisibility()
-    gui.Enabled=player:GetAttribute("AdminFlying")==true
-    upHeld=false;downHeld=false
+    -- Flight owns this ScreenGui.Enabled flag. MobileLayout only publishes
+    -- whether a compact-screen modal blocks the controls; it must not enable
+    -- the flight GUI just because a window was closed.
+    gui.Enabled=VisibilityRules.visible(
+        player:GetAttribute("AdminFlying"),
+        gui:GetAttribute("HiddenByModal")
+    )
+    if not gui.Enabled then
+        upHeld=false
+        downHeld=false
+    end
 end
-player:GetAttributeChangedSignal("AdminFlying"):Connect(updateVisibility);updateVisibility()
+player:GetAttributeChangedSignal("AdminFlying"):Connect(updateVisibility)
+gui:GetAttributeChangedSignal("HiddenByModal"):Connect(updateVisibility)
+updateVisibility()
 UserInputService.WindowFocusReleased:Connect(function() focused=false;upHeld=false;downHeld=false;remote:FireServer(Vector3.zero,Vector3.new(0,0,-1)) end)
 UserInputService.WindowFocused:Connect(function() focused=true end)
 RunService.Heartbeat:Connect(function(dt)
@@ -142040,6 +142077,7 @@ local Players = game:GetService("Players")
 local TextChatService = game:GetService("TextChatService")
 local TweenService = game:GetService("TweenService")
 local UserInputService = game:GetService("UserInputService")
+local MobileUIRules = require(game:GetService("ReplicatedStorage"):WaitForChild("Shared"):WaitForChild("MobileUIRules"))
 
 local player = Players.LocalPlayer
 
@@ -142639,6 +142677,7 @@ create("UIListLayout", membersFeed, {
 -- 반응형 레이아웃
 -- ==========================================
 
+local openingTween: Tween?=nil
 local function updateLayout(viewportOverride: Vector2?)
     local camera = workspace.CurrentCamera
 
@@ -142648,12 +142687,24 @@ local function updateLayout(viewportOverride: Vector2?)
 
     local viewport = viewportOverride or gui.AbsoluteSize
 
-    local width = math.min(1080, math.max(240, viewport.X - 16))
-    local height = math.min(720, math.max(180, viewport.Y - 16))
+    local density = MobileUIRules.forViewport(viewport.X,viewport.Y,UserInputService.TouchEnabled)
+    -- UIScale affects the visible window. Give the inner layout the matching
+    -- inverse logical dimensions so content is smaller without being clipped.
+    local width = math.min(1080, math.max(240, viewport.X*density.widthCoverage/density.scale))
+    local height = math.min(720, math.max(180, viewport.Y*density.heightCoverage/density.scale))
+    -- A viewport change must cancel an in-progress opening animation before
+    -- applying the newly calculated scale. Otherwise the tween can restore
+    -- a stale larger size after the phone rotates or the window resizes.
+    if openingTween then
+        openingTween:Cancel()
+        openingTween=nil
+    end
+    windowScale.Scale=density.scale
     window.AnchorPoint=Vector2.new(0.5,0.5)
     window.Position=UDim2.fromScale(0.5,0.5)
     local small=viewport.X&lt;760 or viewport.Y&lt;520
-    launcher.Size=UDim2.fromOffset(if small then 88 else 112,48)
+    launcher.Size=UDim2.fromOffset(if small then 78 else 112,if small then 40 else 48)
+    launcher.TextSize=if small then 13 else 16
     launcher.Position=if small then UDim2.new(1,-8,0,142) else UDim2.new(1,-16,0.5,0)
     launcher.AnchorPoint=if small then Vector2.new(1,0) else Vector2.new(1,0.5)
     compact = width &lt; 640
@@ -144167,25 +144218,31 @@ local function setOpen(state)
 
     launcher.Visible = not state
     window.Visible = state
-
+    if openingTween then
+        openingTween:Cancel()
+        openingTween=nil
+    end
+    local viewport=gui.AbsoluteSize
     if state then
-        windowScale.Scale = 0.94
-
-        TweenService:Create(
+        -- Keep the MOBILE target scale instead of tweening back to 1.0.
+        -- Before this fix, the opening animation undid updateLayout() and
+        -- made the messenger spill past the phone screen.
+        local initial,target=MobileUIRules.openingScales(
+            viewport.X,viewport.Y,UserInputService.TouchEnabled
+        )
+        windowScale.Scale=initial
+        openingTween=TweenService:Create(
             windowScale,
-            TweenInfo.new(
-                0.18,
-                Enum.EasingStyle.Quint,
-                Enum.EasingDirection.Out
-            ),
-            {
-                Scale = 1,
-            }
-        ):Play()
-
+            TweenInfo.new(0.18,Enum.EasingStyle.Quint,Enum.EasingDirection.Out),
+            {Scale=target}
+        )
+        openingTween:Play()
         selectChannel(selectedChannel)
         renderMessages()
     else
+        windowScale.Scale=MobileUIRules.forViewport(
+            viewport.X,viewport.Y,UserInputService.TouchEnabled
+        ).scale
         input:ReleaseFocus()
     end
 end
@@ -144710,6 +144767,7 @@ task.delay(0.6,refresh)
 local Players=game:GetService("Players")
 local ReplicatedStorage=game:GetService("ReplicatedStorage")
 local UserInputService=game:GetService("UserInputService")
+local MobileUIRules=require(game:GetService("ReplicatedStorage"):WaitForChild("Shared"):WaitForChild("MobileUIRules"))
 local player=Players.LocalPlayer
 local Catalog=require(ReplicatedStorage:WaitForChild("Shared"):WaitForChild("RankCatalog"))
 local Rules=require(ReplicatedStorage:WaitForChild("Shared"):WaitForChild("ExamRules"))
@@ -144856,11 +144914,16 @@ local mobileLayout=mobileBody:FindFirstChildOfClass("UIListLayout")
 local function arrange(canCreate: boolean)
     local viewport=gui.AbsoluteSize
     local compact=viewport.X&lt;760 or viewport.Y&lt;520
-    launcher.Size=UDim2.fromOffset(if compact then 88 else 112,48)
+    launcher.Size=UDim2.fromOffset(if compact then 78 else 112,if compact then 40 else 48)
+    launcher.TextSize=if compact then 13 else 16
     launcher.AnchorPoint=if compact then Vector2.new(1,0) else Vector2.new(1,0.5)
     launcher.Position=if compact then UDim2.new(1,-8,0,86) else UDim2.new(1,-16,0.5,-62)
-    scale.Scale=1
-    window.Size=UDim2.fromOffset(math.min(900,math.max(240,viewport.X-16)),math.min(610,math.max(200,viewport.Y-16)))
+    local density=MobileUIRules.forViewport(viewport.X,viewport.Y,UserInputService.TouchEnabled)
+    scale.Scale=density.scale
+    window.Size=UDim2.fromOffset(
+        math.min(900,math.max(240,viewport.X*density.widthCoverage/density.scale)),
+        math.min(610,math.max(200,viewport.Y*density.heightCoverage/density.scale))
+    )
     mobileBody.Visible=compact
     creator.Parent=if compact then mobileBody else window
     left.Parent=if compact then mobileBody else window
@@ -146127,7 +146190,11 @@ local function refresh()
     local context=playerGui:FindFirstChild("ContextActionGui")
     if context and context:IsA("ScreenGui") then context.Enabled=not modal end
     local flight=playerGui:FindFirstChild("FlightControls")
-    if flight and flight:IsA("ScreenGui") then flight.Enabled=not modal end
+    if flight and flight:IsA("ScreenGui") then
+        -- The flight controller alone owns Enabled. Only provide modal state
+        -- so closing a dialog cannot reveal buttons when not flying.
+        flight:SetAttribute("HiddenByModal",modal)
+    end
     local hud=playerGui:FindFirstChild("TrainingRifleHUD")
     if hud and hud:IsA("ScreenGui") then hud.Enabled=not modal end
 end
@@ -146149,6 +146216,11 @@ local function bind(object: Instance)
 end
 -- Some UI helpers parent buttons before assigning their final names.
 playerGui.DescendantAdded:Connect(function(object) task.defer(bind,object) end)
+-- AdminFlight can create its ScreenGui after this script starts. Apply the
+-- current modal suppression as soon as the flight GUI appears.
+playerGui.ChildAdded:Connect(function(object)
+    if object.Name=="FlightControls" then task.defer(refresh) end
+end)
 for _,object in playerGui:GetDescendants() do bind(object) end
 local viewportConnection: RBXScriptConnection?=nil
 local function cameraChanged()
@@ -146159,6 +146231,693 @@ local function cameraChanged()
 end
 workspace:GetPropertyChangedSignal("CurrentCamera"):Connect(cameraChanged)
 cameraChanged()
+</ProtectedString><bool name="Disabled">false</bool></Properties></Item><Item class="LocalScript" referent="MessengerSync17"><Properties><string name="Name">AKRifle</string><ProtectedString name="Source">--!strict
+-- Equip-aware HUD and input for the server-authoritative training rifle.
+local Players=game:GetService("Players")
+local ReplicatedStorage=game:GetService("ReplicatedStorage")
+local ContextActionService=game:GetService("ContextActionService")
+local TweenService=game:GetService("TweenService")
+local UserInputService=game:GetService("UserInputService")
+local player=Players.LocalPlayer
+local mouse=player:GetMouse()
+local Rules=require(ReplicatedStorage:WaitForChild("Shared"):WaitForChild("AKRifleRules"))
+local Spring=require(ReplicatedStorage:WaitForChild("Shared"):WaitForChild("RifleRecoilSpring"))
+local Viewmodel=require(script.Parent:WaitForChild("AKRifleViewmodel"))
+local RunService=game:GetService("RunService")
+local remote=ReplicatedStorage:WaitForChild("AKRifleAction") :: RemoteEvent
+
+local gui=Instance.new("ScreenGui")
+gui.Name="AKRifleHUD"
+gui.ResetOnSpawn=false
+gui.DisplayOrder=35
+gui.ScreenInsets=Enum.ScreenInsets.CoreUISafeInsets
+gui.Parent=player:WaitForChild("PlayerGui")
+local panel=Instance.new("Frame")
+panel.Name="AmmoPanel"
+panel.AnchorPoint=Vector2.new(1,1)
+panel.Position=UDim2.new(1,-18,1,-18)
+panel.Size=UDim2.fromOffset(208,91)
+panel.BackgroundColor3=Color3.fromRGB(20,23,29)
+panel.BackgroundTransparency=0.06
+panel.BorderSizePixel=0
+panel.Visible=false
+panel.Parent=gui
+local corner=Instance.new("UICorner")
+corner.CornerRadius=UDim.new(0,12)
+corner.Parent=panel
+local stroke=Instance.new("UIStroke")
+stroke.Color=Color3.fromRGB(75,83,84)
+stroke.Transparency=0.25
+stroke.Parent=panel
+local title=Instance.new("TextLabel")
+title.Name="WeaponName"
+title.Text=Rules.DISPLAY_NAME
+title.Size=UDim2.new(1,-20,0,22)
+title.Position=UDim2.fromOffset(10,4)
+title.BackgroundTransparency=1
+title.TextColor3=Color3.fromRGB(204,208,201)
+title.Font=Enum.Font.GothamMedium
+title.TextSize=12
+title.TextXAlignment=Enum.TextXAlignment.Left
+title.Parent=panel
+local ammo=Instance.new("TextLabel")
+ammo.Name="Ammo"
+ammo.Text="30 / 90"
+ammo.Size=UDim2.new(1,-20,0,43)
+ammo.Position=UDim2.fromOffset(10,24)
+ammo.BackgroundTransparency=1
+ammo.TextColor3=Color3.fromRGB(244,245,237)
+ammo.Font=Enum.Font.GothamBold
+ammo.TextSize=29
+ammo.TextXAlignment=Enum.TextXAlignment.Right
+ammo.Parent=panel
+local hint=Instance.new("TextLabel")
+hint.Name="Hint"
+hint.Text="R  ·  재장전"
+hint.Size=UDim2.new(1,-20,0,19)
+hint.Position=UDim2.fromOffset(10,69)
+hint.BackgroundTransparency=1
+hint.TextColor3=Color3.fromRGB(170,185,171)
+hint.Font=Enum.Font.Gotham
+hint.TextSize=12
+hint.TextXAlignment=Enum.TextXAlignment.Right
+hint.Parent=panel
+local function layoutHUD()
+    local size=gui.AbsoluteSize
+    local compact=size.X&lt;760 or size.Y&lt;520
+    local touch=UserInputService.TouchEnabled and compact
+    panel.AnchorPoint=if touch then Vector2.new(0.5,0) else Vector2.new(1,1)
+    panel.Position=if touch then UDim2.new(0.5,0,0,4) else UDim2.new(1,-12,1,-12)
+    panel.Size=UDim2.fromOffset(if compact then 158 else 208,if compact then 78 else 91)
+    ammo.TextSize=if compact then 24 else 29
+    ammo.Position=UDim2.fromOffset(10,if compact then 20 else 24)
+    ammo.Size=UDim2.new(1,-20,0,if compact then 34 else 43)
+    hint.Position=UDim2.fromOffset(10,if compact then 56 else 69)
+    title.TextSize=if compact then 11 else 12
+end
+gui:GetPropertyChangedSignal("AbsoluteSize"):Connect(layoutHUD)
+UserInputService:GetPropertyChangedSignal("TouchEnabled"):Connect(layoutHUD)
+layoutHUD()
+
+local crosshair=Instance.new("TextLabel")
+crosshair.Name="RifleReticle"
+crosshair.AnchorPoint=Vector2.new(0.5,0.5)
+crosshair.Position=UDim2.fromScale(0.5,0.5)
+crosshair.Size=UDim2.fromOffset(30,30)
+crosshair.BackgroundTransparency=1
+crosshair.Text="+"
+crosshair.TextColor3=Color3.fromRGB(240,242,237)
+crosshair.TextStrokeTransparency=0.6
+crosshair.TextSize=28
+crosshair.Font=Enum.Font.Gotham
+crosshair.Visible=false
+crosshair.Parent=gui
+
+local selected: Tool?=nil
+-- Client-only body/weapon motion complements the server-replicated moving
+-- magazine and bolt. No uploaded AnimationId assets are required.
+local baseGrip: CFrame?=nil
+local movementVersion=0
+local recoilPosition=0
+local recoilVelocity=0
+local recoilActive=false
+local previousCameraKick=0
+local currentGripTween: Tween?=nil
+local leftShoulder: Motor6D?=nil
+local leftShoulderBase: CFrame?=nil
+local armTween: Tween?=nil
+
+local function animateGrip(tool: Tool,target: CFrame,duration: number,style: Enum.EasingStyle?)
+    if currentGripTween then currentGripTween:Cancel() end
+    if tool.Parent==nil then return end
+    local tween=TweenService:Create(tool,TweenInfo.new(duration,style or Enum.EasingStyle.Quad,
+        Enum.EasingDirection.Out),{Grip=target})
+    currentGripTween=tween
+    tween:Play()
+end
+local function shoulderTarget(target: CFrame,duration: number)
+    if armTween then armTween:Cancel() end
+    if not leftShoulder or not leftShoulder.Parent then return end
+    armTween=TweenService:Create(leftShoulder,TweenInfo.new(duration,Enum.EasingStyle.Quad,
+        Enum.EasingDirection.Out),{C0=target})
+    armTween:Play()
+end
+local function findShoulder()
+    leftShoulder=nil
+    leftShoulderBase=nil
+    local character=player.Character
+    if not character then return end
+    local humanoid=character:FindFirstChildOfClass("Humanoid")
+    -- R15 off-hand is driven by a server IKControl linked to the weapon.
+    -- Rotating LeftShoulder.C0 here would fight the whole-arm IK solver.
+    if humanoid and humanoid.RigType==Enum.HumanoidRigType.R15 then return end
+    local torso=character:FindFirstChild("UpperTorso") or character:FindFirstChild("Torso")
+    if not torso then return end
+    local shoulder=torso:FindFirstChild("LeftShoulder") or torso:FindFirstChild("Left Shoulder")
+    if shoulder and shoulder:IsA("Motor6D") then
+        leftShoulder=shoulder
+        leftShoulderBase=shoulder.C0
+    end
+end
+local function recoil(tool: Tool)
+    if selected~=tool or not baseGrip then return end
+    if tool:GetAttribute("Reloading")==true then return end
+    -- Add velocity rather than teleporting to a rotation. Critical damping
+    -- gives visible upward travel and a smooth, gradual downward recovery.
+    if currentGripTween then currentGripTween:Cancel();currentGripTween=nil end
+    movementVersion+=1
+    recoilVelocity=math.min(recoilVelocity+Spring.KICK,Spring.KICK*1.5)
+    recoilActive=true
+end
+
+RunService:BindToRenderStep("AKRifleSmoothRecoil",
+    Enum.RenderPriority.Camera.Value+1,function(dt)
+        if not selected then return end
+        recoilPosition,recoilVelocity=Spring.step(recoilPosition,recoilVelocity,dt)
+        local camera=workspace.CurrentCamera
+        local nextCameraKick=recoilPosition*1.65
+        if camera then
+            local delta=nextCameraKick-previousCameraKick
+            camera.CFrame=camera.CFrame*CFrame.Angles(math.rad(delta),0,0)
+        end
+        previousCameraKick=nextCameraKick
+        if recoilActive and baseGrip and selected:GetAttribute("Reloading")~=true then
+            local rest=baseGrip
+            selected.Grip=rest*CFrame.new(0,-recoilPosition*0.04,recoilPosition*0.12)
+                *CFrame.Angles(math.rad(recoilPosition*6),0,0)
+            if recoilPosition==0 and recoilVelocity==0 then
+                selected.Grip=rest
+                recoilActive=false
+            end
+        end
+        -- RightGrip is disabled while the torso mount holds the rifle.
+        -- Convert the same equip/reload/recoil Grip pose into mount space so
+        -- the intentional animations survive without following arm swings.
+        local handle=selected:FindFirstChild("Handle")
+        local mount=if handle then handle:FindFirstChild("RifleHoldJoint") else nil
+        if mount and mount:IsA("Motor6D") and baseGrip then
+            local rest=mount:GetAttribute("RestC0")
+            if typeof(rest)=="CFrame" then
+                mount.C0=rest*baseGrip*selected.Grip:Inverse()
+            end
+        end
+        Viewmodel.update(selected,camera,if baseGrip then baseGrip*selected.Grip:Inverse() else CFrame.identity)
+    end)
+
+local function reloadPose(tool: Tool)
+    if selected~=tool or not baseGrip then return end
+    movementVersion+=1
+    recoilActive=false
+    local version=movementVersion
+    local rest=baseGrip
+    animateGrip(tool,rest*CFrame.new(0,-0.12,0.16)
+        *CFrame.Angles(math.rad(21),math.rad(-12),math.rad(-9)),0.24)
+    if leftShoulder and leftShoulderBase then
+        shoulderTarget(leftShoulderBase*CFrame.Angles(math.rad(-46),0,math.rad(32)),0.25)
+    end
+    task.delay(0.38,function()
+        if movementVersion~=version or selected~=tool then return end
+        animateGrip(tool,rest*CFrame.new(0,-0.18,0.22)
+            *CFrame.Angles(math.rad(31),math.rad(-18),math.rad(-12)),0.33)
+    end)
+    task.delay(1.17,function()
+        if movementVersion~=version or selected~=tool then return end
+        animateGrip(tool,rest,0.48,Enum.EasingStyle.Back)
+        if leftShoulder and leftShoulderBase then
+            shoulderTarget(leftShoulderBase*CFrame.Angles(math.rad(-22),0,math.rad(14)),0.42)
+        end
+    end)
+end
+-- A rejected shot (wall obstruction, cooldown, empty magazine) must not kick.
+remote.OnClientEvent:Connect(function(action: unknown,tool: unknown,hitPoint: unknown)
+    if action=="shot" and typeof(tool)=="Instance" and tool:IsA("Tool") and selected==tool then
+        recoil(tool)
+        if typeof(hitPoint)=="Vector3" then Viewmodel.shot(tool,hitPoint) end
+    end
+end)
+local observed: {[Tool]: boolean}=setmetatable({}, {__mode="k"})
+local function updateAmmo()
+    local tool=selected
+    if not tool then return end
+    local mag=tool:GetAttribute("Ammo")
+    local reserve=tool:GetAttribute("Reserve")
+    local isReloading=tool:GetAttribute("Reloading")==true
+    ammo.Text=tostring(if type(mag)=="number" then mag else "?")
+        .." / "..(if tool:GetAttribute("UnlimitedReserve")==true then "∞" else tostring(if type(reserve)=="number" then reserve else "?"))
+    hint.Text=if isReloading then "재장전 중..."
+        elseif mag==0 and reserve==0 then "예비 탄약 없음"
+        else (if UserInputService.TouchEnabled then "재장전 버튼" else "R  ·  재장전")
+end
+local function reloadAction(_name: string,inputState: Enum.UserInputState,_input: InputObject): Enum.ContextActionResult
+    if inputState==Enum.UserInputState.Begin and selected then
+        remote:FireServer("reload")
+    end
+    return Enum.ContextActionResult.Sink
+end
+local function unequip(tool: Tool)
+    if selected~=tool then return end
+    movementVersion+=1
+    recoilActive=false
+    recoilPosition=0
+    recoilVelocity=0
+    previousCameraKick=0
+    if currentGripTween then currentGripTween:Cancel();currentGripTween=nil end
+    if baseGrip then tool.Grip=baseGrip end
+    if armTween then armTween:Cancel();armTween=nil end
+    if leftShoulder and leftShoulderBase and leftShoulder.Parent then
+        leftShoulder.C0=leftShoulderBase
+    end
+    leftShoulder=nil
+    leftShoulderBase=nil
+    baseGrip=nil
+    selected=nil
+    Viewmodel.clear()
+    panel.Visible=false
+    crosshair.Visible=false
+    ContextActionService:UnbindAction("AKRifleReload")
+end
+local function equip(tool: Tool)
+    if selected==tool then return end
+    if selected then unequip(selected) end
+    selected=tool
+    baseGrip=tool.Grip
+    movementVersion+=1
+    local version=movementVersion
+    recoilActive=false
+    recoilPosition=0
+    recoilVelocity=0
+    previousCameraKick=0
+    findShoulder()
+    panel.Visible=true
+    -- PC now aims by mouse cursor, not the center reticle. Avoid drawing
+    -- a misleading fixed '+' at screen center. Touch retains center aiming.
+    crosshair.Visible=not UserInputService.MouseEnabled
+    updateAmmo()
+    local rest=baseGrip
+    tool.Grip=rest*CFrame.new(0,-0.15,0.14)*CFrame.Angles(math.rad(20),0,0)
+    task.defer(function()
+        if selected==tool and movementVersion==version then animateGrip(tool,rest,0.23) end
+    end)
+    if leftShoulder and leftShoulderBase then
+        shoulderTarget(leftShoulderBase*CFrame.Angles(math.rad(-22),0,math.rad(14)),0.22)
+    end
+    ContextActionService:BindAction("AKRifleReload",reloadAction,true,Enum.KeyCode.R)
+    ContextActionService:SetTitle("AKRifleReload","재장전")
+    ContextActionService:SetPosition("AKRifleReload",UDim2.new(1,-132,1,-200))
+    local reloadButton=ContextActionService:GetButton("AKRifleReload")
+    if reloadButton then reloadButton.Size=UDim2.fromOffset(52,52) end
+    if tool:GetAttribute("Reloading")==true then reloadPose(tool) end
+end
+local function observe(child: Instance)
+    if not child:IsA("Tool") then return end
+    local tool=child :: Tool
+    if observed[tool] then return end
+    if tool:GetAttribute("WeaponId")~=Rules.WEAPON_ID then
+        -- Attributes can replicate immediately after a new Backpack child.
+        local connection: RBXScriptConnection?=nil
+        connection=tool:GetAttributeChangedSignal("WeaponId"):Connect(function()
+            if tool:GetAttribute("WeaponId")==Rules.WEAPON_ID then
+                if connection then connection:Disconnect() end
+                observe(tool)
+            end
+        end)
+        return
+    end
+    observed[tool]=true
+    tool.Equipped:Connect(function() equip(tool) end)
+    tool.Unequipped:Connect(function() unequip(tool) end)
+    tool.Destroying:Connect(function() unequip(tool) end)
+    tool.Activated:Connect(function()
+        if selected~=tool then return end
+        local camera=workspace.CurrentCamera
+        if not camera then return end
+        -- PC mouse.UnitRay points at the actual pointer position, including
+        -- when the camera is in third person. Shift-lock naturally aims
+        -- through the locked cursor. Mobile still uses a center-screen ray.
+        local ray: Ray
+        if UserInputService.MouseEnabled then
+            ray=mouse.UnitRay
+        else
+            local size=camera.ViewportSize
+            ray=camera:ViewportPointToRay(size.X*0.5,size.Y*0.5)
+        end
+        local params=RaycastParams.new()
+        params.FilterType=Enum.RaycastFilterType.Exclude
+        params.FilterDescendantsInstances=if player.Character then {player.Character} else {}
+        params.IgnoreWater=true
+        local hit=workspace:Raycast(ray.Origin,ray.Direction*Rules.RANGE,params)
+        local aimPoint=if hit then hit.Position else ray.Origin+ray.Direction*Rules.RANGE
+        remote:FireServer("fire",aimPoint)
+    end)
+    for _,attribute in {"Ammo","Reserve","Reloading","UnlimitedReserve"} do
+        tool:GetAttributeChangedSignal(attribute):Connect(function()
+            if selected==tool then
+                updateAmmo()
+                if attribute=="Reloading" and tool:GetAttribute("Reloading")==true then
+                    reloadPose(tool)
+                end
+            end
+        end)
+    end
+    if tool.Parent==player.Character then equip(tool) end
+end
+local backpack=player:WaitForChild("Backpack")
+backpack.ChildAdded:Connect(observe)
+for _,item in backpack:GetChildren() do observe(item) end
+local function watchCharacter(character: Model)
+    character.ChildAdded:Connect(observe)
+    for _,item in character:GetChildren() do observe(item) end
+    if selected and selected.Parent~=character then unequip(selected) end
+end
+player.CharacterAdded:Connect(watchCharacter)
+if player.Character then watchCharacter(player.Character) end
+</ProtectedString><bool name="Disabled">false</bool></Properties></Item><Item class="ModuleScript" referent="MessengerSync18"><Properties><string name="Name">AKRifleViewmodel</string><ProtectedString name="Source">--!strict
+-- Local camera-space presentation only. Hits, ammo and wall checks stay server-side.
+local Players=game:GetService("Players")
+local Debris=game:GetService("Debris")
+local player=Players.LocalPlayer
+local Viewmodel={}
+local CAMERA_GRIP=CFrame.new(0.60,-0.70,-0.75)
+local owner: Tool?=nil
+local model: Model?=nil
+local sourceHandle: BasePart?=nil
+local copies: {[BasePart]: BasePart}={}
+local hidden: {[BasePart]: number}={}
+local hiddenParticles: {[ParticleEmitter]: number}={}
+local lastFrame=CFrame.identity
+
+function Viewmodel.clear()
+    for part,value in hidden do
+        if part.Parent then part.LocalTransparencyModifier=value end
+    end
+    for emitter,value in hiddenParticles do
+        if emitter.Parent then emitter.LocalTransparencyModifier=value end
+    end
+    table.clear(copies)
+    table.clear(hidden)
+    table.clear(hiddenParticles)
+    if model then model:Destroy() end
+    owner=nil
+    model=nil
+    sourceHandle=nil
+end
+
+local function addPart(part: BasePart,parent: Model)
+    local copy=part:Clone()
+    for _,child in copy:GetDescendants() do
+        -- Modern R15 rigs also use AnimationConstraint/RigidConstraint, whose
+        -- attachments can still refer to the REAL character after Part:Clone.
+        -- Strip every physics/animation controller BEFORE anchoring/parenting.
+        if child:IsA("JointInstance") or child:IsA("WeldConstraint")
+            or child:IsA("Constraint") or child:IsA("BodyMover")
+            or child:IsA("IKControl") or child:IsA("Humanoid")
+            or child:IsA("AnimationController") or child:IsA("Animator")
+            or child:IsA("Sound") or child:IsA("LuaSourceContainer") then
+            child:Destroy()
+        end
+    end
+    copy.Anchored=true
+    copy.CanCollide=false
+    copy.CanTouch=false
+    copy.CanQuery=false
+    copy.CastShadow=false
+    copy.LocalTransparencyModifier=0
+    copy.Parent=parent
+    copies[part]=copy
+    hidden[part]=part.LocalTransparencyModifier
+    for _,child in part:GetDescendants() do
+        if child:IsA("ParticleEmitter") then
+            hiddenParticles[child]=child.LocalTransparencyModifier
+        end
+    end
+end
+
+local function build(tool: Tool,camera: Camera): boolean
+    local handle=tool:FindFirstChild("Handle")
+    if not handle or not handle:IsA("BasePart") then return false end
+    local view=Instance.new("Model")
+    view.Name="AKRifleViewmodel"
+    for _,child in tool:GetChildren() do
+        if child:IsA("BasePart") then addPart(child,view) end
+    end
+    local character=player.Character
+    if character then
+        for _,name in {"RightUpperArm","RightLowerArm","RightHand",
+            "LeftUpperArm","LeftLowerArm","LeftHand","Right Arm","Left Arm"} do
+            local arm=character:FindFirstChild(name)
+            if arm and arm:IsA("BasePart") then addPart(arm,view) end
+        end
+    end
+    sourceHandle=handle
+    owner=tool
+    model=view
+    view.Parent=camera
+    return true
+end
+
+function Viewmodel.update(tool: Tool?,camera: Camera?,pose: CFrame)
+    local firstPerson=camera~=nil and (player.CameraMode==Enum.CameraMode.LockFirstPerson
+        or (camera.CFrame.Position-camera.Focus.Position).Magnitude&lt;1)
+    if not firstPerson or not tool or not camera then
+        if model then Viewmodel.clear() end
+        return
+    end
+    if owner~=tool then
+        Viewmodel.clear()
+        if not build(tool,camera) then return end
+    end
+    local view=model
+    local handle=sourceHandle
+    if not view or not handle or not handle.Parent then Viewmodel.clear();return end
+    view.Parent=camera
+    lastFrame=camera.CFrame*CAMERA_GRIP*pose
+    for source,copy in copies do
+        if source.Parent and copy.Parent then
+            source.LocalTransparencyModifier=1
+            copy.CFrame=lastFrame*handle.CFrame:ToObjectSpace(source.CFrame)
+        end
+    end
+    for emitter in hiddenParticles do
+        if emitter.Parent then emitter.LocalTransparencyModifier=1 end
+    end
+end
+
+function Viewmodel.shot(tool: Tool,hitPoint: Vector3)
+    if owner~=tool or not model then return end
+    local muzzle=model:FindFirstChild("Muzzle",true)
+    if not muzzle or not muzzle:IsA("Attachment") then return end
+    local spark=muzzle:FindFirstChild("MuzzleFlash")
+    if spark and spark:IsA("ParticleEmitter") then spark:Emit(7) end
+    local light=muzzle:FindFirstChild("FlashLight")
+    if light and light:IsA("PointLight") then
+        light.Enabled=true
+        task.delay(0.07,function() if light.Parent then light.Enabled=false end end)
+    end
+    local origin=muzzle.WorldPosition
+    local distance=(hitPoint-origin).Magnitude
+    if distance&lt;0.1 then return end
+    local tracer=Instance.new("Part")
+    tracer.Name="AKRifleViewTracer"
+    tracer.Anchored=true
+    tracer.CanCollide=false
+    tracer.CanTouch=false
+    tracer.CanQuery=false
+    tracer.Material=Enum.Material.Neon
+    tracer.Color=Color3.fromRGB(251,202,130)
+    tracer.Transparency=0.35
+    tracer.Size=Vector3.new(0.035,0.035,distance)
+    tracer.CFrame=CFrame.lookAt(origin,hitPoint)*CFrame.new(0,0,-distance/2)
+    tracer.Parent=workspace
+    Debris:AddItem(tracer,0.075)
+end
+
+-- Hide only our own world-space tracer while showing the camera-space one.
+-- Other players keep seeing the authoritative muzzle and tracer as usual.
+workspace.ChildAdded:Connect(function(child: Instance)
+    if child.Name~="AKRifleTracer" or not child:IsA("BasePart") then return end
+    local function hideOwnTracer()
+        if model and child:GetAttribute("ShooterUserId")==player.UserId then
+            child.LocalTransparencyModifier=1
+        end
+    end
+    hideOwnTracer()
+    local connection=child:GetAttributeChangedSignal("ShooterUserId"):Connect(hideOwnTracer)
+    child.Destroying:Once(function() connection:Disconnect() end)
+end)
+return Viewmodel
+</ProtectedString></Properties></Item><Item class="LocalScript" referent="MessengerSync19"><Properties><string name="Name">MilitaryCommandHelp</string><ProtectedString name="Source">--!strict
+-- Standalone, responsive command-list modal. It does not execute commands.
+local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local UserInputService = game:GetService("UserInputService")
+local GuiService = game:GetService("GuiService")
+
+local player = Players.LocalPlayer
+local helpEvent = ReplicatedStorage:WaitForChild("MilitaryCommandHelp") :: RemoteEvent
+local Catalog = require(ReplicatedStorage:WaitForChild("Shared"):WaitForChild("CommandHelpCatalog"))
+local gui = Instance.new("ScreenGui")
+gui.Name = "MilitaryCommandHelpGui"
+gui.ResetOnSpawn = false
+gui.IgnoreGuiInset = true
+gui.DisplayOrder = 95
+gui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+gui.Enabled = false
+gui.Parent = player:WaitForChild("PlayerGui")
+
+local function make(className: string, parent: Instance, props: {[string]: any}): any
+    local object = Instance.new(className)
+    for name, value in props do
+        (object :: any)[name] = value
+    end
+    object.Parent = parent
+    return object
+end
+local backdrop = make("TextButton", gui, {
+    Name = "Backdrop", Text = "", AutoButtonColor = false,
+    BackgroundColor3 = Color3.fromRGB(6,10,15),
+    BackgroundTransparency = 0.27,
+    BorderSizePixel = 0, Size = UDim2.fromScale(1,1),
+})
+local panel = make("Frame", backdrop, {
+    Name = "CommandHelpPanel",
+    AnchorPoint = Vector2.new(0.5,0.5),
+    Position = UDim2.fromScale(0.5,0.5),
+    BackgroundColor3 = Color3.fromRGB(24,32,37),
+    BorderSizePixel = 0, Active = true,
+})
+make("UICorner", panel, {CornerRadius = UDim.new(0,14)})
+make("UIStroke", panel, {
+    Color = Color3.fromRGB(80,101,101), Thickness = 1.2, Transparency = 0.25,
+})
+local heading = make("TextLabel", panel, {
+    Name = "Heading", Text = "군사 RP  /  명령어 목록",
+    Size = UDim2.new(1,-94,0,33), Position = UDim2.fromOffset(20,13),
+    BackgroundTransparency = 1, Font = Enum.Font.GothamBold, TextSize = 21,
+    TextColor3 = Color3.fromRGB(236,244,239),
+    TextXAlignment = Enum.TextXAlignment.Left,
+})
+local close = make("TextButton", panel, {
+    Name = "Close", Text = "✕", AutoButtonColor = true,
+    Size = UDim2.fromOffset(40,36),
+    Position = UDim2.new(1,-51,0,12),
+    BackgroundColor3 = Color3.fromRGB(56,69,71),
+    TextColor3 = Color3.fromRGB(247,249,246),
+    Font = Enum.Font.GothamBold, TextSize = 19,
+})
+make("UICorner",close,{CornerRadius=UDim.new(0,8)})
+local subtitle = make("TextLabel",panel,{
+    Name = "Subtitle",
+    Text = "채팅창에서 ;? 또는 ;help 로 다시 열 수 있습니다.",
+    Size = UDim2.new(1,-40,0,30),
+    Position = UDim2.fromOffset(20,49), BackgroundTransparency = 1,
+    TextColor3 = Color3.fromRGB(153,181,171), Font = Enum.Font.Gotham,
+    TextSize = 13, TextXAlignment = Enum.TextXAlignment.Left,
+    TextWrapped = true,
+})
+local scroller = make("ScrollingFrame",panel,{
+    Name = "CommandList",
+    Position = UDim2.fromOffset(14,87),
+    Size = UDim2.new(1,-28,1,-157),
+    BackgroundColor3 = Color3.fromRGB(19,26,30),
+    BorderSizePixel = 0, ScrollBarThickness = 5,
+    ScrollBarImageColor3 = Color3.fromRGB(119,157,142),
+    CanvasSize = UDim2.fromOffset(0,0),
+    AutomaticCanvasSize = Enum.AutomaticSize.Y,
+    ScrollingDirection = Enum.ScrollingDirection.Y,
+})
+make("UICorner",scroller,{CornerRadius=UDim.new(0,10)})
+make("UIPadding",scroller,{
+    PaddingLeft=UDim.new(0,9),PaddingRight=UDim.new(0,13),
+    PaddingTop=UDim.new(0,9),PaddingBottom=UDim.new(0,12),
+})
+make("UIListLayout",scroller,{
+    SortOrder=Enum.SortOrder.LayoutOrder,
+    Padding=UDim.new(0,8),
+})
+local sortIndex = 0
+for _,section in Catalog.Sections do
+    sortIndex += 1
+    make("TextLabel",scroller,{
+        Name="Section", LayoutOrder=sortIndex,
+        Size=UDim2.new(1,0,0,29),
+        BackgroundTransparency=1,
+        Text=section.title,
+        Font=Enum.Font.GothamBold,TextSize=15,
+        TextColor3=Color3.fromRGB(145,202,158),
+        TextXAlignment=Enum.TextXAlignment.Left,
+    })
+    for _,entry in section.entries do
+        sortIndex += 1
+        local card=make("Frame",scroller,{
+            Name="CommandRow",LayoutOrder=sortIndex,
+            Size=UDim2.new(1,0,0,99),
+            BackgroundColor3=Color3.fromRGB(37,48,52),
+            BorderSizePixel=0,
+        })
+        make("UICorner",card,{CornerRadius=UDim.new(0,9)})
+        make("TextLabel",card,{
+            Name="Syntax",Position=UDim2.fromOffset(12,7),
+            Size=UDim2.new(1,-24,0,37),
+            Text=entry.syntax,BackgroundTransparency=1,
+            Font=Enum.Font.Code,TextSize=14,TextWrapped=true,
+            TextColor3=Color3.fromRGB(244,214,142),
+            TextXAlignment=Enum.TextXAlignment.Left,TextYAlignment=Enum.TextYAlignment.Center,
+        })
+        make("TextLabel",card,{
+            Name="Description",Position=UDim2.fromOffset(12,46),
+            Size=UDim2.new(1,-24,0,45),
+            Text=entry.description,BackgroundTransparency=1,
+            Font=Enum.Font.Gotham,TextSize=13,TextWrapped=true,
+            TextColor3=Color3.fromRGB(209,223,219),
+            TextXAlignment=Enum.TextXAlignment.Left,TextYAlignment=Enum.TextYAlignment.Center,
+        })
+    end
+end
+local footer=make("TextLabel",panel,{
+    Name="Permissions", Position=UDim2.new(0,18,1,-62),
+    Size=UDim2.new(1,-36,0,50), BackgroundTransparency=1,
+    Text="대상: 나 / 실제 사용자 이름 / 표시 닉네임 (중복 시 선택)",
+    Font=Enum.Font.GothamMedium,TextSize=12,TextWrapped=true,
+    TextColor3=Color3.fromRGB(187,199,198),
+    TextXAlignment=Enum.TextXAlignment.Left,
+})
+local function resize()
+    local size=backdrop.AbsoluteSize
+    local width=math.min(706,math.max(228,size.X-24))
+    local height=math.min(704,math.max(235,size.Y-26))
+    panel.Size=UDim2.fromOffset(width,height)
+    heading.TextSize=if size.X&lt;450 then 17 else 21
+    subtitle.TextSize=if size.X&lt;450 then 11 else 13
+end
+backdrop:GetPropertyChangedSignal("AbsoluteSize"):Connect(resize)
+resize()
+local function dismiss()
+    gui.Enabled=false
+    if UserInputService.PreferredInput==Enum.PreferredInput.Gamepad then
+        GuiService.SelectedObject=nil
+    end
+end
+close.Activated:Connect(dismiss)
+backdrop.Activated:Connect(dismiss)
+UserInputService.InputBegan:Connect(function(input: InputObject)
+    if gui.Enabled and (input.KeyCode==Enum.KeyCode.Escape
+        or input.KeyCode==Enum.KeyCode.ButtonB) then
+        dismiss()
+    end
+end)
+helpEvent.OnClientEvent:Connect(function(canUseAdmin: any)
+    footer.Text=if canUseAdmin==true
+        then "그룹 관리자 권한 확인됨 · 대상은 나 / 이름 일부 / 표시 닉네임 (중복 시 선택)"
+        else "명령어 열람은 가능하지만 실행은 Roblox 그룹 랭크 200 이상만 허용됩니다."
+    scroller.CanvasPosition=Vector2.zero
+    gui.Enabled=true
+    -- Re-evaluate viewport size on first open (disabled ScreenGui can report
+    -- a zero AbsoluteSize until it becomes visible).
+    resize()
+    if UserInputService.PreferredInput==Enum.PreferredInput.Gamepad then
+        GuiService.SelectedObject=close
+    end
+end)
 </ProtectedString><bool name="Disabled">false</bool></Properties></Item></Item>
 		<Item class="StarterCharacterScripts" referent="RBX280decb0b2774230b3f4a5d109ab505e">
 			<Properties>
@@ -146792,11 +147551,13 @@ local definitions: {{string}} = {
     {"major_general", "소장", "장관"},
     {"lieutenant_general", "중장", "장관"},
     {"general", "대장", "장관"},
+    {"admin", "admin", "관리자"},
 }
 local colors: {[string]: {number}} = {
     ["훈련병"]={190,198,190}, ["병"]={212,225,204}, ["부사관"]={235,199,110},
     ["준사관"]={237,214,158}, ["위관"]={217,224,234},
     ["영관"]={210,220,235}, ["장관"]={246,221,137},
+    ["관리자"]={148,211,255},
 }
 local ordered: {Rank} = {}
 local byId: {[string]: Rank} = {}
@@ -146808,7 +147569,8 @@ for order, entry in definitions do
     elseif order == 10 then symbol="diamond"; marks=1
     elseif order &lt;= 13 and order &gt;= 11 then symbol="diamond"; marks=order-10
     elseif order &lt;= 16 and order &gt;= 14 then symbol="flower"; marks=order-13
-    elseif order &gt;= 17 then symbol="star"; marks=order-16 end
+    elseif order &gt;= 17 and order &lt;= 20 then symbol="star"; marks=order-16
+    elseif entry[1] == "admin" then symbol="admin"; marks=0 end
     local rank: Rank = {id=entry[1], name=entry[2], category=entry[3],
         order=order, color=table.clone(colors[entry[3]]), symbol=symbol, marks=marks}
     table.freeze(rank.color)
@@ -147200,6 +147962,124 @@ function Rules.completeReload(state: WeaponState,now: number): boolean
     return true
 end
 return table.freeze(Rules)
+</ProtectedString></Properties></Item><Item class="ModuleScript" referent="MessengerSync13"><Properties><string name="Name">AKRifleRules</string><ProtectedString name="Source">--!strict
+-- Pure magazine/cooldown/reload rules. Roblox services are not needed for testing.
+local Rules = {
+    WEAPON_ID = "AKRifle",
+    DISPLAY_NAME = "AK 소총",
+    MAGAZINE = 30,
+    RESERVE = 90,
+    DAMAGE = 12,
+    RANGE = 300,
+    SHOT_INTERVAL = 0.16,
+    RELOAD_SECONDS = 1.8,
+}
+export type WeaponState = {
+    ammo: number, reserve: number, lastShot: number, reloadUntil: number, unlimitedReserve: boolean,
+}
+function Rules.new(unlimitedReserve: boolean?): WeaponState
+    return {ammo=Rules.MAGAZINE,reserve=Rules.RESERVE,lastShot=-math.huge,reloadUntil=0,unlimitedReserve=unlimitedReserve==true}
+end
+function Rules.tryFire(state: WeaponState,now: number): (boolean,string)
+    if type(now)~="number" or now~=now then return false,"잘못된 시간" end
+    if state.reloadUntil&gt;0 then return false,"재장전 중" end
+    if state.ammo&lt;=0 then return false,"탄약 없음" end
+    if now-state.lastShot&lt;Rules.SHOT_INTERVAL then return false,"발사 간격 제한" end
+    state.ammo-=1
+    state.lastShot=now
+    return true,"발사"
+end
+function Rules.startReload(state: WeaponState,now: number): (boolean,string)
+    if type(now)~="number" or now~=now then return false,"잘못된 시간" end
+    if state.reloadUntil&gt;0 then return false,"이미 재장전 중" end
+    if state.ammo&gt;=Rules.MAGAZINE then return false,"탄창이 가득 참" end
+    if not state.unlimitedReserve and state.reserve&lt;=0 then return false,"예비 탄약 없음" end
+    state.reloadUntil=now+Rules.RELOAD_SECONDS
+    return true,"재장전 시작"
+end
+function Rules.completeReload(state: WeaponState,now: number): boolean
+    if state.reloadUntil&lt;=0 or type(now)~="number" or now&lt;state.reloadUntil then return false end
+    local loaded=if state.unlimitedReserve then Rules.MAGAZINE-state.ammo else math.min(Rules.MAGAZINE-state.ammo,state.reserve)
+    state.ammo+=loaded
+    if not state.unlimitedReserve then state.reserve-=loaded end
+    state.reloadUntil=0
+    return true
+end
+return table.freeze(Rules)
+</ProtectedString></Properties></Item><Item class="ModuleScript" referent="MessengerSync14"><Properties><string name="Name">CommandHelpCatalog</string><ProtectedString name="Source">--!strict
+-- Display-only command reference. Never use this table to grant privileges.
+-- Actual execution always goes through the server's group-rank checks.
+local Catalog = {
+    Sections = {
+        {
+            title = "계급 · 팀",
+            entries = {
+                {syntax = ";계급 나 대위  /  ;rank 나 captain", description = "내 계급 변경. 플레이어 이름을 넣으면 대상을 변경합니다."},
+                {syntax = ";계급 대상 admin  /  ;rank 대상 admin", description = "대상에게 실제 admin 계급을 저장하면 HQ 팀으로 자동 배정됩니다."},
+                {syntax = ";계급목록  /  ;ranks", description = "사용 가능한 계급 목록을 채팅에 표시합니다."},
+                {syntax = ";팀 대상 본부  /  ;team 대상 본부", description = "대상을 지정한 팀으로 이동. 본부 등 7개 팀을 지원합니다."},
+            },
+        },
+        {
+            title = "운영진 제어",
+            entries = {
+                {syntax = ";무적 대상 켜기  /  ;god 대상 on", description = "무적 켜기·끄기 (끄기 또는 off)."},
+                {syntax = ";비행 대상 켜기  /  ;fly 대상 on", description = "비행 켜기·끄기 (끄기 또는 off)."},
+                {syntax = ";to 대상", description = "내가 대상 플레이어 옆으로 순간이동합니다."},
+                {syntax = ";here 대상", description = "대상 플레이어를 내 위치로 소환합니다."},
+                {syntax = ";kill 대상", description = "대상 플레이어를 사망 처리합니다."},
+                {syntax = ";폭발 대상  /  ;explode 대상", description = "폭발 효과와 함께 대상 플레이어를 사망 처리합니다."},
+            },
+        },
+        {
+            title = "도움말",
+            entries = {
+                {syntax = ";?  /  ;help", description = "지금 보고 있는 명령어 안내창을 엽니다."},
+            },
+        },
+    },
+}
+return table.freeze(Catalog)
+</ProtectedString></Properties></Item><Item class="ModuleScript" referent="MessengerSync15"><Properties><string name="Name">FlightControlsRules</string><ProtectedString name="Source">--!strict
+-- A cosmetic flight control is visible only while the SERVER considers this
+-- player to be flying and the compact-screen UI is not covering game controls.
+local Rules={}
+function Rules.visible(adminFlying: any,hiddenByModal: any): boolean
+    return adminFlying==true and hiddenByModal~=true
+end
+return table.freeze(Rules)
+</ProtectedString></Properties></Item><Item class="ModuleScript" referent="MessengerSync16"><Properties><string name="Name">MobileUIRules</string><ProtectedString name="Source">--!strict
+-- Shared UI density rules for mobile + small emulated viewports.
+-- Pair UIScale with a larger logical frame so every input, label and spacing
+-- shrinks proportionally while scrollable content retains its full extent.
+local Rules={}
+function Rules.forViewport(width: number,height: number,touch: boolean): any
+    local compact=width&lt;900 or height&lt;580
+    local cramped=width&lt;480 or height&lt;440
+    local scale: number
+    if compact and cramped then
+        scale=if touch then 0.82 else 0.86
+    elseif compact then
+        scale=0.90
+    elseif touch then
+        scale=0.92
+    else
+        scale=1
+    end
+    return {
+        compact=compact,
+        scale=scale,
+        widthCoverage=if compact then 0.92 else 0.94,
+        heightCoverage=if compact then 0.88 else 0.94,
+    }
+end
+-- Return the opening animation's start and END scale together. This keeps
+-- the target proportional to the current screen instead of resetting to 1.
+function Rules.openingScales(width: number,height: number,touch: boolean): (number,number)
+    local target=Rules.forViewport(width,height,touch).scale
+    return target*0.94,target
+end
+return table.freeze(Rules)
 </ProtectedString></Properties></Item></Item>
 	</Item>
 	<Item class="ServerScriptService" referent="RBX5">
@@ -147303,7 +148183,7 @@ local function renderCharacter(player: Player, character: Model, version: number
     tag.StudsOffsetWorldSpace=Vector3.new(0,2.7,0);tag.MaxDistance=100
     tag.AlwaysOnTop=true;tag.LightInfluence=0
     if TeamService.isHQ(player) then
-        -- HQ is a temporary team presentation, not a persisted rank. Build
+        -- HQ is a team presentation, never an override of the saved rank. Build
         -- before parenting so an incomplete nameplate is never replicated.
         local success,errorMessage=pcall(function()
             if not HQBadge then error("HQ badge renderer not available") end
@@ -147323,6 +148203,24 @@ local function renderCharacter(player: Player, character: Model, version: number
             emergency.Size=UDim2.fromScale(1,1)
             emergency.Parent=tag
         end
+        -- Keep the HQ emblem, but still show the actual persisted rank:
+        -- manually placing an ordinary soldier in HQ must not make them admin.
+        local actual=Catalog.find(states[player])
+        local badgeHeight=tag.Size.Y.Offset
+        tag.Size=UDim2.fromOffset(tag.Size.X.Offset,badgeHeight+21)
+        local actualLabel=Instance.new("TextLabel")
+        actualLabel.Name="ActualRank"
+        actualLabel.Text=if actual then actual.name else "계급 확인 중"
+        actualLabel.TextColor3=if actual
+            then Color3.fromRGB(actual.color[1],actual.color[2],actual.color[3])
+            else Color3.fromRGB(220,220,220)
+        actualLabel.TextStrokeTransparency=0.25
+        actualLabel.TextSize=14
+        actualLabel.Font=Enum.Font.GothamBold
+        actualLabel.BackgroundTransparency=1
+        actualLabel.Position=UDim2.fromOffset(0,badgeHeight-3)
+        actualLabel.Size=UDim2.new(1,0,0,20)
+        actualLabel.Parent=tag
         tag.Parent=head
         return
     end
@@ -147354,12 +148252,11 @@ local function updateVisibleRank(player: Player)
     local id=states[player]
     local stored=if id then Catalog.find(id) else nil
     if not stored then return end
-    local hq=TeamService.isHQ(player)
-    local display=if hq then "admin" else stored.name
-    -- RankId / RankCategory / RankOrder continue to represent the saved
-    -- military rank. Never persist "admin" or promote based on HQ membership.
+    -- Rank, RankDisplayId and leaderstats always show the saved rank.
+    -- Being transferred into HQ is *not* a rank promotion.
+    local display=stored.name
     player:SetAttribute("Rank",display)
-    player:SetAttribute("RankDisplayId",if hq then "admin" else stored.id)
+    player:SetAttribute("RankDisplayId",stored.id)
     local stats=player:FindFirstChild("leaderstats")
     local label=if stats then stats:FindFirstChild("계급") else nil
     if label and label:IsA("StringValue") then
@@ -147385,8 +148282,7 @@ local function publish(player: Player, rank: Rank)
     player:SetAttribute("RankCategory",rank.category)
     player:SetAttribute("RankOrder",rank.order)
     updateVisibleRank(player)
-    -- Never update rank widgets inside an HQ tag. Rebuild the overhead with
-    -- the correct HQ/rank branch after the server's rank attributes settle.
+    -- Rebuild the nameplate after both saved-rank and team attributes settle.
     if connections[player] then queueRedraw(player) end
 end
 -- Server-only assignment API. A command succeeds only after UpdateAsync confirms
@@ -147524,7 +148420,9 @@ function Insignia.render(tag: Instance, rank: Rank)
     plate:SetAttribute("Symbol", rank.symbol)
     plate:SetAttribute("Marks", rank.marks)
     plate.Parent = tag
-    if rank.symbol == "training" then return end
+    -- The icon atlas contains exactly the original 20 military ranks.
+    -- The persisted admin rank has its own nameplate, not an atlas tile.
+    if rank.symbol == "training" or rank.symbol == "admin" then return end
     local index = rank.order - 1
     local column, row = index % COLUMNS, math.floor(index / COLUMNS)
     -- Normalized clipping remains correct if Roblox resizes the uploaded texture.
@@ -147894,7 +148792,7 @@ function Service.execute(actor: Player, text: any): (boolean, string, boolean?)
                 return TeamService.assign(actor,selected,teamName)
             end
         else
-            failure="사용법: ;팀 대상 HQ/위관급/영관급/장관급"
+            failure="사용법: ;팀 대상 HQ/본부/장관급/영관급/위관급/부사관급/병사"
         end
     elseif PlayerCommandParser.isVerb(verb) then
         local command=PlayerCommandParser.parse(text)
@@ -148282,26 +149180,35 @@ Players.PlayerRemoving:Connect(function(p) last[p]=nil;editing[p]=nil;metadataLa
 			<Properties>
 				<Content name="LinkedSource"><null /></Content>
 				<ProtectedString name="Source">--!strict
--- Pure team membership and HQ visual-branding rules. Team assignment is NOT
--- administrator permission: command authority comes from AdminGroupPolicy.
+-- The Team roster and exact order are authoritative here.
+-- Team membership never grants Roblox group-based administrative commands.
 local Policy={}
 Policy.HQ="HQ"
-Policy.OWNER_USER_ID=1153125948
-
+Policy.HEADQUARTERS="본부"
+-- The ordering matches the requested hierarchy, top to bottom.
+-- Each TeamColor is unique so Roblox's built-in Teams system can distinguish them.
 Policy.SPECS={
     {name="HQ",color=1003},
-    {name="위관급",color=23},
-    {name="영관급",color=24},
+    {name="본부",color=106},
     {name="장관급",color=21},
+    {name="영관급",color=24},
+    {name="위관급",color=23},
+    {name="부사관급",color=105},
+    {name="병사",color=28},
 }
 
 function Policy.teamForCategory(category: any): string?
-    if category=="위관" then return "위관급" end
-    if category=="영관" then return "영관급" end
+    if category=="관리자" then return Policy.HQ end
     if category=="장관" then return "장관급" end
+    if category=="영관" then return "영관급" end
+    if category=="위관" or category=="준사관" then return "위관급" end
+    if category=="부사관" then return "부사관급" end
+    if category=="병" or category=="훈련병" then return "병사" end
     return nil
 end
 
+-- The "본부" team has no automatic rank assignment yet.
+-- Administrators can place players there manually for the current session.
 function Policy.isDefined(name: any): boolean
     if type(name)~="string" then return false end
     for _,spec in Policy.SPECS do
@@ -148309,11 +149216,9 @@ function Policy.isDefined(name: any): boolean
     end
     return false
 end
-
 function Policy.isHQ(teamName: any,neutral: any): boolean
     return teamName==Policy.HQ and neutral==false
 end
-
 return table.freeze(Policy)
 </ProtectedString>
 				<string name="ScriptGuid">{3466c0a6-8fbb-44fb-becb-8051a8d7d117}</string>
@@ -149505,9 +150410,9 @@ return Actions
 			<Properties>
 				<Content name="LinkedSource"><null /></Content>
 				<ProtectedString name="Source">--!strict
--- Creates official Roblox Team instances and assigns rank-category teams.
--- HQ is an appearance/team label. Admin command permission is instead based
--- on independently verified Roblox GROUP roles, never on Team membership.
+-- Server-owned team assignment. Actual rank -&gt; team mapping; "본부" is
+-- manually assigned for a session until a later rank change.
+-- Administrator command authority is independent of ranks and teams.
 local Players=game:GetService("Players")
 local Teams=game:GetService("Teams")
 local Policy=require(script.Parent.TeamPolicy)
@@ -149515,10 +150420,12 @@ local AdminGroupService=require(script.Parent.AdminGroupService)
 
 local Service={}
 local started=false
-local watched: {[Player]: RBXScriptConnection}={}
+local watched: {[Player]: {RBXScriptConnection}}={}
+local queued: {[Player]: boolean}={}
 
 function Service.ensure()
-    for _,spec in Policy.SPECS do
+    local ordered: {Team}={}
+    for index,spec in Policy.SPECS do
         local existing=Teams:FindFirstChild(spec.name)
         local team: Team
         if existing and existing:IsA("Team") then
@@ -149527,56 +150434,70 @@ function Service.ensure()
             if existing then error("Team name is occupied: "..spec.name) end
             team=Instance.new("Team")
             team.Name=spec.name
-            team.Parent=Teams
         end
         team.TeamColor=BrickColor.new(spec.color)
         team.AutoAssignable=false
+        team:SetAttribute("TeamOrder",index)
+        table.insert(ordered,team)
     end
+    -- Native team lists commonly use parenting/insertion order. Reparent in
+    -- the requested hierarchy even when the four old teams already exist.
+    -- No existing team objects are destroyed.
+    for _,team in ordered do team.Parent=nil end
+    for _,team in ordered do team.Parent=Teams end
 end
 
--- Permission check for every administrative command, panel, and log.
 function Service.isAdmin(player: Player): boolean
     return AdminGroupService.isAdmin(player)
 end
-
--- Visual HQ branding and session-only team selection remain independent.
 function Service.isHQ(player: Player): boolean
     if player.Parent~=Players then return false end
     local hq=Teams:FindFirstChild(Policy.HQ)
     return hq~=nil and hq:IsA("Team") and player.Team==hq and not player.Neutral
 end
-
 local function applyRankTeam(player: Player)
     if player.Parent~=Players then return end
-    if Service.isHQ(player) then return end
-    local teamName=Policy.teamForCategory(player:GetAttribute("RankCategory"))
-    local team=if teamName then Teams:FindFirstChild(teamName) else nil
+    local name=Policy.teamForCategory(player:GetAttribute("RankCategory"))
+    -- New players are trainees: join the soldier team before DataStore returns.
+    if name==nil and player:GetAttribute("RankId")==nil then name="병사" end
+    local team=if name then Teams:FindFirstChild(name) else nil
     if team and team:IsA("Team") then
-        player.Team=team
-        player.Neutral=false
-    else
+        if player.Team~=team or player.Neutral then
+            player.Team=team
+            player.Neutral=false
+        end
+    elseif player.Team or not player.Neutral then
         player.Neutral=true
         player.Team=nil
     end
 end
-
-local function add(player: Player)
-    if watched[player] then return end
-    if player.UserId==Policy.OWNER_USER_ID then
-        local hq=Teams:FindFirstChild(Policy.HQ)
-        if hq and hq:IsA("Team") then player.Team=hq;player.Neutral=false end
-    else
-        applyRankTeam(player)
-    end
-    watched[player]=player:GetAttributeChangedSignal("RankCategory"):Connect(function()
-        applyRankTeam(player)
+local function queueRankTeam(player: Player)
+    if queued[player] then return end
+    queued[player]=true
+    -- RankService publishes RankId before RankCategory, so defer once to
+    -- observe the *final* category. A new rank assignment overrides a prior
+    -- manual HQ/본부/team transfer; ordinary team switches do not.
+    task.defer(function()
+        queued[player]=nil
+        if watched[player] then applyRankTeam(player) end
     end)
 end
-
+local function add(player: Player)
+    if watched[player] then return end
+    watched[player]={
+        player:GetAttributeChangedSignal("RankCategory"):Connect(function()
+            queueRankTeam(player)
+        end),
+        player:GetAttributeChangedSignal("RankId"):Connect(function()
+            queueRankTeam(player)
+        end),
+    }
+    applyRankTeam(player)
+end
 function Service.assign(actor: Player,target: Player,name: string): (boolean,string)
     if not Service.isAdmin(actor) then return false,"Roblox 그룹 관리자만 팀을 배정할 수 있습니다." end
     if target.Parent~=Players or not Policy.isDefined(name) then
-        return false,"HQ · 위관급 · 영관급 · 장관급 팀 중에서 선택하세요."
+        return false,"HQ · 본부 · 장관급 · 영관급 · 위관급 · 부사관급 · 병사 팀 중에서 선택하세요."
     end
     local team=Teams:FindFirstChild(name)
     if not team or not team:IsA("Team") then return false,"등록된 팀을 찾을 수 없습니다." end
@@ -149584,7 +150505,6 @@ function Service.assign(actor: Player,target: Player,name: string): (boolean,str
     target.Neutral=false
     return true,target.Name.." → "..name
 end
-
 function Service.start()
     if started then return end
     Service.ensure()
@@ -149592,12 +150512,13 @@ function Service.start()
     started=true
     Players.PlayerAdded:Connect(add)
     Players.PlayerRemoving:Connect(function(player)
-        local connection=watched[player]
-        if connection then connection:Disconnect();watched[player]=nil end
+        local list=watched[player]
+        watched[player]=nil
+        queued[player]=nil
+        if list then for _,connection in list do connection:Disconnect() end end
     end)
     for _,player in Players:GetPlayers() do add(player) end
 end
-
 return Service
 </ProtectedString>
 				<string name="ScriptGuid">{2197fb24-8125-40f8-bfe0-51e390a122e4}</string>
@@ -151846,7 +152767,584 @@ function History.new()
     return store
 end
 return History
-</ProtectedString></Properties></Item></Item>
+</ProtectedString></Properties></Item><Item class="ModuleScript" referent="MessengerSync10"><Properties><string name="Name">AKMeshConfig</string><ProtectedString name="Source">--!strict
+-- Uploaded to the experience creator CURTLE team, 2026-10-22.
+return table.freeze({
+    REVISION="AK-Rounded-Hex-20261022",
+    TEXTURE="rbxassetid://125025670845510",
+    Body={id=80809581652817,size=Vector3.new(.42900002,3.71477938,1.056),
+        offset=CFrame.new(-.0735,.192,-.49821067)*CFrame.Angles(0,0,math.pi)*CFrame.Angles(math.pi/2,0,0)},
+    Magazine={id=108435614268341,size=Vector3.new(.23134163,.61357623,.89476240),
+        offset=CFrame.new(0,-.25538117,-.83833921)*CFrame.Angles(0,0,math.pi)*CFrame.Angles(math.pi/2,0,0)},
+})
+</ProtectedString></Properties></Item><Item class="Script" referent="MessengerSync11"><Properties><string name="Name">AKRifle</string><ProtectedString name="Source">--!strict
+-- Polished single-tool training carbine: server grants it, authorizes every shot,
+-- supplies positional SFX, and animates magazine/bolt for other players too.
+local Players=game:GetService("Players")
+local ReplicatedStorage=game:GetService("ReplicatedStorage")
+local ServerStorage=game:GetService("ServerStorage")
+local Debris=game:GetService("Debris")
+local TweenService=game:GetService("TweenService")
+local Rules=require(ReplicatedStorage:WaitForChild("Shared"):WaitForChild("AKRifleRules"))
+local remote=Instance.new("RemoteEvent")
+remote.Name="AKRifleAction"
+remote.Parent=ReplicatedStorage
+
+-- Persisted Studio templates are preferred; uploaded IDs make a fresh clone usable.
+local MeshConfig=require(script.Parent:WaitForChild("AKMeshConfig"))
+if not ServerStorage:FindFirstChild("AKAssets") then
+    local folder=Instance.new("Folder")
+    folder.Name="AKAssets"
+    folder:SetAttribute("SourceRevision",MeshConfig.REVISION)
+    local ok,err=pcall(function()
+        for _,name in {"Body","Magazine"} do
+            local config=MeshConfig[name]
+            local part=game:GetService("AssetService"):CreateMeshPartAsync(
+                Content.fromUri("rbxassetid://"..tostring(config.id)),
+                {CollisionFidelity=Enum.CollisionFidelity.Box})
+            part.Name=name
+            part.Size=config.size
+            part.TextureID=MeshConfig.TEXTURE
+            part.CFrame=config.offset
+            part:SetAttribute("HandleOffset",config.offset)
+            part.Anchored=true
+            part.CanCollide=false
+            part.CanTouch=false
+            part.CanQuery=false
+            part.Massless=true
+            part.Parent=folder
+        end
+    end)
+    if ok then folder.Parent=ServerStorage
+    else folder:Destroy();warn("[AKRifle] Mesh loading failed: "..tostring(err)) end
+end
+
+local sessions: {[Tool]: Rules.WeaponState}={}
+local lastRemote: {[Player]: number}={}
+local STEEL=Color3.fromRGB(46,50,53)
+local DARK=Color3.fromRGB(24,28,31)
+local OLIVE=Color3.fromRGB(79,85,72)
+local ORANGE=Color3.fromRGB(223,158,63)
+-- Measured in Studio: the former 180-degree yaw made muzzle/root dot -0.96.
+-- New FBX geometry is authored with its pistol-grip pivot at the origin and
+-- its muzzle along local -Z; keep the equipped assembly facing forward.
+local R15_GRIP_YAW_DEGREES=0
+local R15_GRIP_PITCH_DEGREES=16
+local BASE_GRIP=CFrame.new(0,0.1,-0.3)
+    *CFrame.Angles(math.rad(R15_GRIP_PITCH_DEGREES),0,0)
+local AK_MESH_SCALE=1
+local AK_SOURCE_REVISION="AK-Rounded-Hex-20261022"
+-- Public Creator Store sounds. Availability still depends on experience permissions.
+local FIRE_SOUND_ID="rbxassetid://9113189096"
+local RELOAD_SOUND_ID="rbxassetid://8145744063"
+local motorBases: {[Motor6D]: CFrame}={}
+
+local function piece(tool: Tool,handle: Part,name: string,size: Vector3,
+    offset: CFrame,color: Color3,material: Enum.Material?,shape: Enum.PartType?): Part
+    local p=Instance.new("Part")
+    p.Name=name
+    p.Size=size
+    p.CFrame=handle.CFrame*offset
+    p.Color=color
+    p.Material=material or Enum.Material.Metal
+    if shape then p.Shape=shape end
+    p.CanCollide=false
+    p.CanTouch=false
+    p.CanQuery=false
+    p.Anchored=false
+    p.Massless=true
+    local w=Instance.new("WeldConstraint")
+    w.Part0=handle
+    w.Part1=p
+    w.Parent=p
+    p.Parent=tool
+    return p
+end
+local function articulated(tool: Tool,handle: Part,name: string,size: Vector3,
+    offset: CFrame): Motor6D
+    local p=Instance.new("Part")
+    p.Name=name
+    p.Size=size
+    p.CFrame=handle.CFrame*offset
+    p.Material=Enum.Material.Metal
+    p.Color=DARK
+    p.CanCollide=false
+    p.CanTouch=false
+    p.CanQuery=false
+    p.Anchored=false
+    p.Massless=true
+    p.Parent=tool
+    local motor=Instance.new("Motor6D")
+    motor.Name=name.."Joint"
+    motor.Part0=handle
+    motor.Part1=p
+    motor.C0=offset
+    motor.C1=CFrame.identity
+    motor.Parent=handle
+    motorBases[motor]=offset
+    return motor
+end
+local function attachSound(handle: Part,name: string,id: string,volume: number)
+    local s=Instance.new("Sound")
+    s.Name=name
+    s.SoundId=id
+    s.Volume=volume
+    s.RollOffMode=Enum.RollOffMode.InverseTapered
+    s.RollOffMinDistance=15
+    s.RollOffMaxDistance=220
+    s.Parent=handle
+end
+local function playSound(handle: BasePart,name: string)
+    local template=handle:FindFirstChild(name)
+    if not template or not template:IsA("Sound") then return end
+    local s=template:Clone()
+    s.Name=name.."Playing"
+    if name=="FireSound" then s.PlaybackSpeed=math.random(98,103)/100 end
+    s.Parent=handle
+    s:Play()
+    Debris:AddItem(s,if name=="FireSound" then 4 else 3)
+end
+local function buildTool(): Tool
+    local tool=Instance.new("Tool")
+    tool.Name=Rules.DISPLAY_NAME
+    tool.ToolTip="AK · 기본 지급 · 30발 · R 재장전"
+    tool.RequiresHandle=true
+    tool.CanBeDropped=false
+    tool.Grip=BASE_GRIP
+    tool:SetAttribute("WeaponId",Rules.WEAPON_ID)
+    tool:SetAttribute("MagazineSize",Rules.MAGAZINE)
+    tool:SetAttribute("UsingAKMesh",false)
+    tool:SetAttribute("UsingR15SupportIK",false)
+    tool:SetAttribute("UsingStableRifleMount",false)
+    tool:SetAttribute("AKModelScale",AK_MESH_SCALE)
+    tool:SetAttribute("GripYawDegrees",R15_GRIP_YAW_DEGREES)
+    tool:SetAttribute("GripPitchDegrees",R15_GRIP_PITCH_DEGREES)
+    tool:SetAttribute("MeshSourceRevision",AK_SOURCE_REVISION)
+    tool:SetAttribute("MagazineFlipDegrees",0)
+    tool:SetAttribute("MagazineTiltDegrees",15)
+    local handle=Instance.new("Part")
+    handle.Name="Handle"
+    handle.Size=Vector3.new(0.29,0.32,0.89)
+    handle.Color=STEEL
+    handle.Material=Enum.Material.Metal
+    handle.CanCollide=false
+    handle.CanTouch=false
+    handle.CanQuery=false
+    handle.Massless=true
+    handle.Parent=tool
+
+    -- Imported rounded hexagonal AK. Keep HK assets and entitlement separate.
+    local assetFolder=ServerStorage:FindFirstChild("AKAssets")
+    local bodyAsset=if assetFolder then assetFolder:FindFirstChild("Body") else nil
+    local magAsset=if assetFolder then assetFolder:FindFirstChild("Magazine") else nil
+    assert(bodyAsset and bodyAsset:IsA("MeshPart"),"AKAssets/Body mesh is missing")
+    assert(magAsset and magAsset:IsA("MeshPart"),"AKAssets/Magazine mesh is missing")
+    handle.Transparency=1
+    tool:SetAttribute("UsingAKMesh",true)
+    tool:SetAttribute("MagazineTiltDegrees",0)
+    local function cloneMesh(source: MeshPart,name: string,offset: CFrame): MeshPart
+        local part=source:Clone()
+        part.Name=name
+        part.CFrame=handle.CFrame*offset
+        part.Anchored=false
+        part.CanCollide=false
+        part.CanTouch=false
+        part.CanQuery=false
+        part.Massless=true
+        part.Parent=tool
+        return part
+    end
+    local bodyOffset=bodyAsset:GetAttribute("HandleOffset")
+    local magazineOffset=magAsset:GetAttribute("HandleOffset")
+    assert(typeof(bodyOffset)=="CFrame" and typeof(magazineOffset)=="CFrame","AK mesh offsets are missing")
+    local body=cloneMesh(bodyAsset,"AKBody",bodyOffset)
+    local weld=Instance.new("WeldConstraint")
+    weld.Part0=handle
+    weld.Part1=body
+    weld.Parent=body
+    local magazine=cloneMesh(magAsset,"Magazine",magazineOffset)
+    local mag=Instance.new("Motor6D")
+    mag.Name="MagazineJoint"
+    mag.Part0=handle
+    mag.Part1=magazine
+    -- Pivot at the feed lips; the mesh center remains in C1.
+    local feed=CFrame.new(0,0.192,-0.672)
+    mag.C0=feed
+    mag.C1=magazineOffset:Inverse()*feed
+    mag.Parent=handle
+    motorBases[mag]=feed
+    local bolt=articulated(tool,handle,"Bolt",Vector3.new(0.06,0.06,0.14),CFrame.new(0.16,0.468,-0.564))
+    local support=Instance.new("Attachment")
+    support.Name="SupportHandTarget"
+    support.Position=Vector3.new(-0.18,0.32,-1.128)
+    support.Parent=handle
+    local reloadHand=Instance.new("Attachment")
+    reloadHand.Name="MagazineHandTarget"
+    reloadHand.Position=Vector3.new(-0.14,0.18,0)
+    reloadHand.Parent=magazine
+    local muzzle=Instance.new("Attachment")
+    muzzle.Name="Muzzle"
+    muzzle.Position=Vector3.new(0,0.384,-2.3556)
+    muzzle.Parent=handle
+    local spark=Instance.new("ParticleEmitter")
+    spark.Name="MuzzleFlash"
+    spark.Enabled=false
+    spark.EmissionDirection=Enum.NormalId.Front
+    spark.LockedToPart=true
+    spark.Rate=0
+    spark.Texture="rbxasset://textures/particles/sparkles_main.dds"
+    spark.Lifetime=NumberRange.new(0.04,0.10)
+    spark.Speed=NumberRange.new(2,6)
+    spark.Size=NumberSequence.new(0.23,0)
+    spark.Color=ColorSequence.new(Color3.fromRGB(255,219,147),Color3.fromRGB(255,121,44))
+    spark.SpreadAngle=Vector2.new(35,35)
+    spark.LightEmission=1
+    spark.Parent=muzzle
+    local light=Instance.new("PointLight")
+    light.Name="FlashLight"
+    light.Color=Color3.fromRGB(255,200,110)
+    light.Range=10
+    light.Brightness=2.8
+    light.Enabled=false
+    light.Parent=muzzle
+    attachSound(handle,"FireSound",FIRE_SOUND_ID,0.8)
+    attachSound(handle,"ReloadSound",RELOAD_SOUND_ID,0.72)
+
+    local state=Rules.new(true)
+    tool:SetAttribute("UnlimitedReserve",true)
+    sessions[tool]=state
+    tool:SetAttribute("Ammo",state.ammo)
+    tool:SetAttribute("Reserve",state.reserve)
+    tool:SetAttribute("Reloading",false)
+    tool.Destroying:Connect(function()
+        sessions[tool]=nil
+        motorBases[mag]=nil
+        motorBases[bolt]=nil
+    end)
+    return tool
+end
+local function publish(tool: Tool,state: Rules.WeaponState)
+    tool:SetAttribute("Ammo",state.ammo)
+    tool:SetAttribute("Reserve",state.reserve)
+    tool:SetAttribute("Reloading",state.reloadUntil&gt;0)
+end
+local function animateBolt(handle: BasePart)
+    local joint=handle:FindFirstChild("BoltJoint")
+    if not joint or not joint:IsA("Motor6D") then return end
+    local base=motorBases[joint]
+    if not base then return end
+    local weapon=handle.Parent
+    local scale=if weapon and weapon:IsA("Tool") and weapon:GetAttribute("UsingAKMesh")==true
+        then AK_MESH_SCALE else 1
+    joint.C0=base*CFrame.new(0,0,0.17*scale)
+    TweenService:Create(joint,TweenInfo.new(0.12,Enum.EasingStyle.Quad,Enum.EasingDirection.Out),{C0=base}):Play()
+end
+local function animateMag(handle: BasePart)
+    local joint=handle:FindFirstChild("MagazineJoint")
+    if not joint or not joint:IsA("Motor6D") then return end
+    local base=motorBases[joint]
+    if not base then return end
+    local weapon=handle.Parent
+    local scale=if weapon and weapon:IsA("Tool") and weapon:GetAttribute("UsingAKMesh")==true
+        then AK_MESH_SCALE else 1
+    -- Translate in receiver space so reload always extracts downward.
+    local translated=CFrame.new(0,-0.64*scale,-0.12*scale)*base
+    TweenService:Create(joint,TweenInfo.new(0.29,Enum.EasingStyle.Quad),{
+        C0=translated*CFrame.Angles(math.rad(11),0,0)}):Play()
+    task.delay(0.96,function()
+        if joint.Parent then
+            TweenService:Create(joint,TweenInfo.new(0.41,Enum.EasingStyle.Back,Enum.EasingDirection.Out),{C0=base}):Play()
+        end
+    end)
+end
+local function makeTracer(from: Vector3,to: Vector3,shooterId: number)
+    local length=(to-from).Magnitude
+    if length&lt;0.1 then return end
+    local p=Instance.new("Part")
+    p.Name="AKRifleTracer"
+    p:SetAttribute("ShooterUserId",shooterId)
+    p.Anchored=true
+    p.CanCollide=false
+    p.CanTouch=false
+    p.CanQuery=false
+    p.Material=Enum.Material.Neon
+    p.Transparency=0.35
+    p.Color=Color3.fromRGB(251,202,130)
+    p.Size=Vector3.new(0.045,0.045,length)
+    p.CFrame=CFrame.lookAt(from,to)*CFrame.new(0,0,-length/2)
+    p.Parent=workspace
+    Debris:AddItem(p,0.075)
+end
+local function fire(player: Player,tool: Tool,state: Rules.WeaponState,aimPoint: any)
+    if typeof(aimPoint)~="Vector3" then return end
+    if aimPoint.X~=aimPoint.X or aimPoint.Y~=aimPoint.Y or aimPoint.Z~=aimPoint.Z
+        or math.max(math.abs(aimPoint.X),math.abs(aimPoint.Y),math.abs(aimPoint.Z))&gt;100000 then return end
+    local character=player.Character
+    if not character or tool.Parent~=character then return end
+    local head=character:FindFirstChild("Head")
+    local root=character:FindFirstChild("HumanoidRootPart")
+    local humanoid=character:FindFirstChildOfClass("Humanoid")
+    if not head or not head:IsA("BasePart") or not root or not root:IsA("BasePart")
+        or not humanoid or humanoid.Health&lt;=0 then return end
+    local handle=tool:FindFirstChild("Handle")
+    local muzzle=tool:FindFirstChild("Muzzle",true)
+    if not handle or not handle:IsA("BasePart") or not muzzle or not muzzle:IsA("Attachment") then return end
+    local origin=muzzle.WorldPosition
+    if (origin-head.Position).Magnitude&gt;8 then return end
+    local toAim=(aimPoint :: Vector3)-origin
+    if toAim.Magnitude&lt;0.5 then return end
+    local direction=toAim.Unit
+    -- Forward hemisphere check prevents backwards/behind-the-head exploit shots.
+    local facing=Vector3.new(root.CFrame.LookVector.X,0,root.CFrame.LookVector.Z)
+    local heading=Vector3.new(direction.X,0,direction.Z)
+    if facing.Magnitude&gt;0.1 and heading.Magnitude&gt;0.1
+        and facing.Unit:Dot(heading.Unit)&lt;-0.45 then return end
+    local params=RaycastParams.new()
+    params.FilterType=Enum.RaycastFilterType.Exclude
+    params.FilterDescendantsInstances={character}
+    params.IgnoreWater=true
+    local bridge=origin-head.Position
+    if bridge.Magnitude&gt;0.1 and workspace:Raycast(head.Position,bridge,params) then return end
+    if not Rules.tryFire(state,os.clock()) then return end
+    publish(tool,state)
+    playSound(handle,"FireSound")
+    animateBolt(handle)
+    local spark=muzzle:FindFirstChild("MuzzleFlash")
+    if spark and spark:IsA("ParticleEmitter") then spark:Emit(7) end
+    local light=muzzle:FindFirstChild("FlashLight")
+    if light and light:IsA("PointLight") then
+        light.Enabled=true
+        task.delay(0.07,function() if light.Parent then light.Enabled=false end end)
+    end
+    local result=workspace:Raycast(origin,direction*Rules.RANGE,params)
+    local hitPoint=if result then result.Position else origin+direction*Rules.RANGE
+    makeTracer(origin,hitPoint,player.UserId)
+    remote:FireClient(player,"shot",tool,hitPoint)
+    if not result then return end
+    local model=result.Instance:FindFirstAncestorOfClass("Model")
+    local victim=if model then model:FindFirstChildOfClass("Humanoid") else nil
+    if not victim or victim.Health&lt;=0 or victim==humanoid then return end
+    local target=Players:GetPlayerFromCharacter(model :: Model)
+    if target and player.Team and not player.Neutral and target.Team==player.Team and not target.Neutral then return end
+    victim:TakeDamage(Rules.DAMAGE)
+end
+local function reload(tool: Tool,state: Rules.WeaponState)
+    if not Rules.startReload(state,os.clock()) then return end
+    publish(tool,state)
+    local handle=tool:FindFirstChild("Handle")
+    if handle and handle:IsA("BasePart") then
+        playSound(handle,"ReloadSound")
+        animateMag(handle)
+    end
+    task.delay(Rules.RELOAD_SECONDS+0.04,function()
+        if sessions[tool]~=state or not tool.Parent then return end
+        if Rules.completeReload(state,os.clock()) then publish(tool,state) end
+    end)
+end
+remote.OnServerEvent:Connect(function(player: Player,action: any,aimPoint: any)
+    if type(action)~="string" or #action&gt;12 then return end
+    local now=os.clock()
+    if now-(lastRemote[player] or -math.huge)&lt;0.045 then return end
+    lastRemote[player]=now
+    -- Only server-created sessions can fire this free default rifle.
+    local character=player.Character
+    local tool=if character then character:FindFirstChild(Rules.DISPLAY_NAME) else nil
+    if not tool or not tool:IsA("Tool") or tool:GetAttribute("WeaponId")~=Rules.WEAPON_ID then return end
+    local state=sessions[tool]
+    if not state then return end
+    if action=="fire" then
+        fire(player,tool,state,aimPoint)
+    elseif action=="reload" then
+        local humanoid=character:FindFirstChildOfClass("Humanoid")
+        if humanoid and humanoid.Health&gt;0 then reload(tool,state) end
+    end
+end)
+-- Fix the weapon to the torso; IK makes both hands follow the weapon instead
+-- of allowing the walk/tool arm animations to drag its muzzle around.
+-- R6 retains Roblox's normal grip and the existing client shoulder fallback.
+local function configureR15IK(tool: Tool,character: Model)
+    local humanoid=character:FindFirstChildOfClass("Humanoid")
+    if not humanoid or humanoid.RigType~=Enum.HumanoidRigType.R15 then return end
+    local handle=tool:FindFirstChild("Handle")
+    if not handle or not handle:IsA("BasePart") then return end
+    local rest=handle:FindFirstChild("SupportHandTarget")
+    local magazine=tool:FindFirstChild("Magazine")
+    local loading=if magazine then magazine:FindFirstChild("MagazineHandTarget") else nil
+    if not rest or not rest:IsA("Attachment") then return end
+
+    local active: IKControl?=nil
+    local rightControl: IKControl?=nil
+    local rightTarget: Attachment?=nil
+    local mount: Motor6D?=nil
+    local defaultGrip: JointInstance?=nil
+    local gripWasEnabled=true
+    local equipVersion=0
+    local function release()
+        equipVersion+=1
+        if active then active:Destroy();active=nil end
+        if rightControl then rightControl:Destroy();rightControl=nil end
+        if mount then mount:Destroy();mount=nil end
+        if rightTarget then rightTarget:Destroy();rightTarget=nil end
+        if defaultGrip and defaultGrip.Parent then defaultGrip.Enabled=gripWasEnabled end
+        defaultGrip=nil
+        tool:SetAttribute("UsingR15SupportIK",false)
+        tool:SetAttribute("UsingStableRifleMount",false)
+    end
+    tool.Equipped:Connect(function()
+        release()
+        local version=equipVersion
+        -- Client-owned R15 animation can reach the server after Equipped.
+        -- Wait for the actual forward hold pose, never freeze the spawn pose
+        -- with the arm dangling down. The bounded wait cancels on unequip.
+        task.spawn(function()
+            local ready=false
+            for attempt=1,80 do
+                if version~=equipVersion or tool.Parent~=character or humanoid.Health&lt;=0 then return end
+                local root=character:FindFirstChild("HumanoidRootPart")
+                local hand=character:FindFirstChild("RightHand")
+                local grip=if hand then hand:FindFirstChild("RightGrip") else nil
+                if attempt&gt;=4 and grip and grip:IsA("JointInstance") and grip.Part1==handle
+                    and root and root:IsA("BasePart")
+                    and handle.CFrame.LookVector:Dot(root.CFrame.LookVector)&gt;0.85
+                    and handle.CFrame.UpVector.Y&gt;0.75 then
+                    ready=true
+                    break
+                end
+                task.wait(0.05)
+            end
+            if not ready then return end
+            local torso=character:FindFirstChild("UpperTorso")
+            local leftUpper=character:FindFirstChild("LeftUpperArm")
+            local leftHand=character:FindFirstChild("LeftHand")
+            local rightUpper=character:FindFirstChild("RightUpperArm")
+            local rightHand=character:FindFirstChild("RightHand")
+            if not torso or not torso:IsA("BasePart")
+                or not leftUpper or not leftUpper:IsA("BasePart")
+                or not leftHand or not leftHand:IsA("BasePart")
+                or not rightUpper or not rightUpper:IsA("BasePart")
+                or not rightHand or not rightHand:IsA("BasePart") then return end
+            local grip=rightHand:FindFirstChild("RightGrip")
+            if not grip or not grip:IsA("JointInstance") or grip.Part1~=handle then return end
+
+            local target=Instance.new("Attachment")
+            target.Name="TriggerHandTarget"
+            target.CFrame=handle.CFrame:ToObjectSpace(rightHand.CFrame)
+            target.Parent=handle
+            rightTarget=target
+            local joint=Instance.new("Motor6D")
+            joint.Name="RifleHoldJoint"
+            joint.Part0=torso
+            joint.Part1=handle
+            -- Server animation replication can lag the owning client's arm.
+            -- Keep the fitted grip position, with a level forward rifle frame.
+            local root=character:FindFirstChild("HumanoidRootPart")
+            if not root or not root:IsA("BasePart") then target:Destroy();rightTarget=nil;return end
+            local held=CFrame.lookAt(handle.Position,
+                handle.Position+root.CFrame.LookVector,root.CFrame.UpVector)
+            joint.C0=torso.CFrame:ToObjectSpace(held)
+            joint.C1=CFrame.identity
+            joint:SetAttribute("RestC0",joint.C0)
+            defaultGrip=grip
+            gripWasEnabled=grip.Enabled
+            grip.Enabled=false
+            joint.Parent=handle
+            mount=joint
+
+            local right=Instance.new("IKControl")
+            right.Name="AKRifleRightHandIK"
+            right.Type=Enum.IKControlType.Transform
+            right.ChainRoot=rightUpper
+            right.EndEffector=rightHand
+            right.Target=target
+            right.SmoothTime=0
+            right.Priority=20
+            right.Weight=1
+            right.Parent=humanoid
+            rightControl=right
+
+            local left=Instance.new("IKControl")
+            left.Name="AKRifleLeftHandIK"
+            left.Type=Enum.IKControlType.Position
+            left.ChainRoot=leftUpper
+            left.EndEffector=leftHand
+            left.Target=if tool:GetAttribute("Reloading")==true and loading then loading else rest
+            left.SmoothTime=0
+            left.Priority=10
+            left.Weight=1
+            left.Parent=humanoid
+            active=left
+            tool:SetAttribute("UsingR15SupportIK",true)
+            tool:SetAttribute("UsingStableRifleMount",true)
+        end)
+    end)
+    tool.Unequipped:Connect(release)
+    tool.Destroying:Connect(release)
+    humanoid.Died:Connect(release)
+    tool:GetAttributeChangedSignal("Reloading"):Connect(function()
+        if active and active.Parent then
+            active.Target=if tool:GetAttribute("Reloading")==true and loading then loading else rest
+        end
+    end)
+end
+
+local function grant(player: Player,character: Model)
+    task.spawn(function()
+        local backpack=player:WaitForChild("Backpack",10)
+        if player.Parent~=Players or player.Character~=character or not backpack then return end
+        if backpack:FindFirstChild(Rules.DISPLAY_NAME) or character:FindFirstChild(Rules.DISPLAY_NAME) then return end
+        local assets=ServerStorage:FindFirstChild("AKAssets")
+        if not assets or not assets:FindFirstChild("Body") or not assets:FindFirstChild("Magazine") then
+            warn("[AKRifle] AKAssets missing: import assets/ak/AK_Roblox.glb and run installer")
+            return
+        end
+        local tool=buildTool()
+        configureR15IK(tool,character)
+        if player.Parent==Players and player.Character==character then tool.Parent=backpack
+        else tool:Destroy() end
+    end)
+end
+local function add(player: Player)
+    player.CharacterAdded:Connect(function(character: Model) grant(player,character) end)
+    if player.Character then grant(player,player.Character) end
+end
+Players.PlayerAdded:Connect(add)
+Players.PlayerRemoving:Connect(function(player: Player) lastRemote[player]=nil end)
+for _,player in Players:GetPlayers() do add(player) end
+</ProtectedString><bool name="Disabled">false</bool></Properties></Item><Item class="Script" referent="MessengerSync12"><Properties><string name="Name">CommandHelp</string><ProtectedString name="Source">--!strict
+-- TextChatCommand consumes ;? / ;help without broadcasting a chat message.
+-- Viewing help is harmless and available to all; executing admin commands is
+-- still restricted to server-verified Roblox group rank &gt;= 200.
+local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local TextChatService = game:GetService("TextChatService")
+local TeamService = require(script.Parent:WaitForChild("TeamService"))
+
+local event = Instance.new("RemoteEvent")
+event.Name = "MilitaryCommandHelp"
+event.Parent = ReplicatedStorage
+
+local lastOpen: {[Player]: number} = {}
+local command = Instance.new("TextChatCommand")
+command.Name = "MilitaryCommandHelpCommand"
+command.PrimaryAlias = ";?"
+command.SecondaryAlias = ";help"
+command.Enabled = true
+command.AutocompleteVisible = true
+command.Triggered:Connect(function(source: TextSource, raw: string)
+    if not source or (raw ~= ";?" and string.lower(raw) ~= ";help") then return end
+    local player = Players:GetPlayerByUserId(source.UserId)
+    if not player or player.Parent ~= Players then return end
+    local now = os.clock()
+    if now - (lastOpen[player] or -math.huge) &lt; 0.35 then return end
+    lastOpen[player] = now
+    event:FireClient(player, TeamService.isAdmin(player))
+end)
+command.Parent = TextChatService
+
+Players.PlayerRemoving:Connect(function(player: Player)
+    lastOpen[player] = nil
+end)
+</ProtectedString><bool name="Disabled">false</bool></Properties></Item></Item>
 	<Item class="ServerStorage" referent="RBX145d135019bc473e8e27cb539e78a4e9">
 		<Properties>
 			<BinaryString name="AttributesSerialize" />
