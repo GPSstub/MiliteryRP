@@ -14182,7 +14182,7 @@ local creator=make("Frame",window,{Name="CreateSection",
 rounded(creator,12)
 local createTitle=text(creator,"Title","시험 창설  ·  개최할 시험 계급을 선택하세요",15,C.white,true)
 createTitle.Position=UDim2.fromOffset(15,8);createTitle.Size=UDim2.fromOffset(700,29)
-local createInfo=text(creator,"Hint","위관급 이상 개최 · 1인 1시험 · 같은 계급만 참가",11,C.muted,false)
+local createInfo=text(creator,"Hint","위관급 이상 개최 · 1인 1시험 · 정원 10명 · 같은 계급만 참가",11,C.muted,false)
 createInfo.Position=UDim2.fromOffset(15,91);createInfo.Size=UDim2.fromOffset(685,20)
 local createButton=button(creator,"CreateButton","시험 창설",C.accent)
 createButton.Position=UDim2.fromOffset(720,46);createButton.Size=UDim2.fromOffset(127,49)
@@ -14425,7 +14425,7 @@ local function render()
             if selected then C.accent else C.bg)
         entry.LayoutOrder=index
         entry.Size=UDim2.new(1,-5,0,106)
-        entry.Text="  "..tostring(exam.targetName).." 시험 · "..tostring(exam.areaIndex).."번 구역  ·  "..tostring(#(exam.participants or {})).."명 참가\n"
+        entry.Text="  "..tostring(exam.targetName).." 시험 · "..tostring(exam.areaIndex).."번 구역  ·  "..tostring(#(exam.participants or {})).." / "..tostring(Rules.MAX_PARTICIPANTS).."명 참가\n"
             .."  개최: "..tostring(host.rank or "계급 확인 중").."  "..personName(host)
             .."\n  "..(if selected then "▶ 선택된 시험" else "클릭하여 참가자 확인")
         entry.TextXAlignment=Enum.TextXAlignment.Left
@@ -14449,7 +14449,7 @@ local function render()
         .."  "..personName(selected.host)
     detailExtra.Text=(if selected.phase=="running" then "시험 진행 중 · 추가 참가 불가" else "참가자 모집 중").."  ·  @"..tostring(selected.host.username or "?")
     local people=selected.participants or {}
-    rosterHeading.Text="참가자  ·  "..tostring(#people).."명"
+    rosterHeading.Text="참가자  ·  "..tostring(#people).." / "..tostring(Rules.MAX_PARTICIPANTS).."명"
     if #people==0 then
         local empty=text(roster,"Nobody","아직 참가자가 없습니다.",14,C.muted,false)
         empty.Size=UDim2.new(1,-8,0,45)
@@ -14473,9 +14473,13 @@ local function render()
     end
     examAction.Visible=true
     local eligible=board and board.rankId==selected.targetId and selected.phase~="running"
-    examAction.Text=if not isHost and not joined and not eligible then "시험 계급과 현재 계급이 같아야 참가 가능" elseif isHost then "시험 종료" elseif joined then "참가 취소" else "시험 참가하기"
-    examAction.BackgroundColor3=if isHost or joined then C.hover else C.accent
-    examAction.Active=not pending and (isHost or joined or eligible==true)
+    local full=#people&gt;=Rules.MAX_PARTICIPANTS
+    examAction.Text=if isHost then "시험 종료" elseif joined then "참가 취소"
+        elseif selected.phase=="running" then "시험 진행 중 · 추가 참가 불가"
+        elseif full then "시험 정원 마감 · "..tostring(Rules.MAX_PARTICIPANTS).."명"
+        elseif not eligible then "시험 계급과 현재 계급이 같아야 참가 가능" else "시험 참가하기"
+    examAction.BackgroundColor3=if isHost or joined then C.hover elseif full then C.hover else C.accent
+    examAction.Active=not pending and (isHost or joined or (eligible==true and not full))
 end
 
 gui:GetPropertyChangedSignal("AbsoluteSize"):Connect(render)
@@ -14545,6 +14549,7 @@ createButton.Activated:Connect(function()
     end
 end)
 examAction.Activated:Connect(function()
+    if pending then return end
     local exam=findSelected()
     if not exam then return end
     local isHost=exam.host and exam.host.userId==player.UserId
@@ -14552,6 +14557,7 @@ examAction.Activated:Connect(function()
     for _,member in exam.participants or {} do
         if member.userId==player.UserId then mutate("leave",{examId=exam.id});return end
     end
+    if #(exam.participants or {})&gt;=Rules.MAX_PARTICIPANTS then return end
     mutate("join",{examId=exam.id})
 end)
 local function toggle()
@@ -17269,7 +17275,7 @@ return table.freeze(Config)
 -- Exams are session-only; joining is not a pass and never promotes a player.
 local Rules = {}
 Rules.MAX_ACTIVE = 6
-Rules.MAX_PARTICIPANTS = 30
+Rules.MAX_PARTICIPANTS = 10 -- per exam, excluding the host
 Rules.COMMANDS = table.freeze({"우향우", "좌향우", "좌향좌", "우향좌", "앞으로서", "뒤로돌아", "시험관 주시"})
 
 function Rules.isCommand(command: any): boolean
@@ -17333,7 +17339,10 @@ function Rules.valid(state: any): boolean
         joined[exam.hostId]=true
         ids[exam.id]=true
         areas[exam.areaIndex]=true
+        local participantCount=0
         for userId,active in exam.participants do
+            participantCount+=1
+            if participantCount&gt;Rules.MAX_PARTICIPANTS then return false end
             if not validUserId(userId) or active~=true or joined[userId]
                 or userId==exam.hostId then return false end
             joined[userId]=true
@@ -17382,9 +17391,6 @@ function Rules.apply(state: any,actor: any,action: any,targetId: any,examId: any
         local _,exam=locate(nextState,examId)
         if not exam then return nil,"종료되었거나 존재하지 않는 시험입니다." end
         if exam.phase=="running" then return nil,"이미 시작한 시험입니다." end
-        local count=0
-        for _ in exam.participants do count+=1 end
-        if count&gt;=Rules.MAX_PARTICIPANTS then return nil,"참가 정원은 30명입니다." end
         if exam.hostId==actor.userId then return nil,"자신이 개최한 시험에는 참가할 수 없습니다." end
         if exam.participants[actor.userId] then return nil,"이미 참가한 시험입니다." end
         for _,other in nextState.sessions do
@@ -17392,6 +17398,11 @@ function Rules.apply(state: any,actor: any,action: any,targetId: any,examId: any
         end
         if Rules.busy(state,actor.userId) then return nil,"이미 다른 시험을 개최하거나 참가 중입니다." end
         if actor.rankId~=exam.targetId then return nil,"시험 계급과 현재 계급이 같아야 참가할 수 있습니다." end
+        local participantCount=0
+        for _ in exam.participants do participantCount+=1 end
+        if participantCount&gt;=Rules.MAX_PARTICIPANTS then
+            return nil,"시험 정원("..tostring(Rules.MAX_PARTICIPANTS).."명)이 가득 찼습니다."
+        end
         exam.participants[actor.userId]=true
     elseif action=="leave" then
         local _,exam=locate(nextState,examId)
@@ -21363,7 +21374,7 @@ local function identity(player: Player): any
 end
 
 local function snapshot(player: Player): any
-    local result={revision=board.revision,maxActive=Rules.MAX_ACTIVE,
+    local result={revision=board.revision,maxActive=Rules.MAX_ACTIVE,maxParticipants=Rules.MAX_PARTICIPANTS,
         canCreate=canHost(player) and not Rules.busy(board,player.UserId),
         rankId=(hostRank(player) or {}).id,sessions={}}
     for _,exam in board.sessions do

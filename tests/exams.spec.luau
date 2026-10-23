@@ -24,6 +24,7 @@ local studioJoined=Rules.apply(studioCreated,{userId=-2,canHost=false,rankId="pr
 check(studioJoined~=nil and studioJoined.sessions[1].participants[-2],
     "Studio mock negative UserId can join")
 check(#Rules.TARGET_IDS==8,"There should be exactly eight exam target ranks")
+check(Rules.MAX_PARTICIPANTS==10,"Each exam must allow exactly ten attendees")
 for _,id in Rules.TARGET_IDS do check(Rules.isTarget(id),"Invalid target in published catalog") end
 for _,id in {"trainee","warrant_officer","captain","major","general","fake"} do
     check(not Rules.isTarget(id),"Disallowed target: "..id)
@@ -97,6 +98,24 @@ for _,id in Rules.TARGET_IDS do
     check(not Rules.apply(single,{userId=20,rankId="trainee"},"join",nil,"exam_1"),"Other rank denied "..id)
     check(not Rules.apply(single,{userId=20},"join",nil,"exam_1"),"Unloaded rank denied "..id)
 end
+-- Participant cap is per exam and does not count the host.
+local capacityBoard=Rules.apply(Rules.new(),host,"create","private")
+check(capacityBoard~=nil,"Capacity test exam created")
+for userId=101,110 do
+    local nextBoard,message=Rules.apply(capacityBoard,{userId=userId,rankId="private"},"join",nil,"exam_1")
+    check(nextBoard~=nil,"First ten attendees can join: "..tostring(message))
+    capacityBoard=nextBoard
+end
+check(Rules.valid(capacityBoard),"Exactly ten participants is valid")
+check(not Rules.apply(capacityBoard,{userId=111,rankId="private"},"join",nil,"exam_1"),
+    "Eleventh attendee must be rejected")
+local vacancy,removedOne=Rules.removePlayer(capacityBoard,110)
+check(removedOne and Rules.valid(vacancy),"Participant departure reopens a slot")
+check(Rules.apply(vacancy,{userId=111,rankId="private"},"join",nil,"exam_1")~=nil,
+    "Eleventh attendee can join after a spot becomes available")
+capacityBoard.sessions[1].participants[111]=true
+check(not Rules.valid(capacityBoard),"Over-capacity state must be rejected")
+
 print("Exam board rules passed "..assertions.." assertions")
 
 -- Drill lifecycle and authorization regressions.
@@ -121,7 +140,8 @@ for _,command in {"", "promote", string.rep("x",1000), 123, {}} do
     check(not Rules.isCommand(command),"Invalid drill command rejected")
 end
 local full=Rules.apply(Rules.new(),host,"create","private")
-for id=100,129 do full=Rules.apply(full,{userId=id,rankId="private"},"join",nil,"exam_1") end
+for id=100,99+Rules.MAX_PARTICIPANTS do full=Rules.apply(full,{userId=id,rankId="private"},"join",nil,"exam_1") end
+check(full~=nil and Rules.valid(full),"Full formation remains valid")
 check(not Rules.apply(full,{userId=130,rankId="private"},"join",nil,"exam_1"),"Formation capacity enforced")
 print("Exam drill lifecycle and security passed; total "..assertions.." assertions")
 

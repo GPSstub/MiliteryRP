@@ -3,7 +3,7 @@
 -- Exams are session-only; joining is not a pass and never promotes a player.
 local Rules = {}
 Rules.MAX_ACTIVE = 6
-Rules.MAX_PARTICIPANTS = 30
+Rules.MAX_PARTICIPANTS = 10 -- per exam, excluding the host
 Rules.COMMANDS = table.freeze({"우향우", "좌향우", "좌향좌", "우향좌", "앞으로서", "뒤로돌아", "시험관 주시"})
 
 function Rules.isCommand(command: any): boolean
@@ -67,7 +67,10 @@ function Rules.valid(state: any): boolean
         joined[exam.hostId]=true
         ids[exam.id]=true
         areas[exam.areaIndex]=true
+        local participantCount=0
         for userId,active in exam.participants do
+            participantCount+=1
+            if participantCount>Rules.MAX_PARTICIPANTS then return false end
             if not validUserId(userId) or active~=true or joined[userId]
                 or userId==exam.hostId then return false end
             joined[userId]=true
@@ -116,9 +119,6 @@ function Rules.apply(state: any,actor: any,action: any,targetId: any,examId: any
         local _,exam=locate(nextState,examId)
         if not exam then return nil,"종료되었거나 존재하지 않는 시험입니다." end
         if exam.phase=="running" then return nil,"이미 시작한 시험입니다." end
-        local count=0
-        for _ in exam.participants do count+=1 end
-        if count>=Rules.MAX_PARTICIPANTS then return nil,"참가 정원은 30명입니다." end
         if exam.hostId==actor.userId then return nil,"자신이 개최한 시험에는 참가할 수 없습니다." end
         if exam.participants[actor.userId] then return nil,"이미 참가한 시험입니다." end
         for _,other in nextState.sessions do
@@ -126,6 +126,11 @@ function Rules.apply(state: any,actor: any,action: any,targetId: any,examId: any
         end
         if Rules.busy(state,actor.userId) then return nil,"이미 다른 시험을 개최하거나 참가 중입니다." end
         if actor.rankId~=exam.targetId then return nil,"시험 계급과 현재 계급이 같아야 참가할 수 있습니다." end
+        local participantCount=0
+        for _ in exam.participants do participantCount+=1 end
+        if participantCount>=Rules.MAX_PARTICIPANTS then
+            return nil,"시험 정원("..tostring(Rules.MAX_PARTICIPANTS).."명)이 가득 찼습니다."
+        end
         exam.participants[actor.userId]=true
     elseif action=="leave" then
         local _,exam=locate(nextState,examId)
