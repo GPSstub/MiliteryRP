@@ -98,3 +98,41 @@ for _,id in Rules.TARGET_IDS do
     check(not Rules.apply(single,{userId=20},"join",nil,"exam_1"),"Unloaded rank denied "..id)
 end
 print("Exam board rules passed "..assertions.." assertions")
+
+-- Drill lifecycle and authorization regressions.
+local drill=Rules.apply(Rules.new(),host,"create","private")
+check(not Rules.apply(drill,host,"start",nil,"exam_1"),"Empty exam cannot start")
+drill=Rules.apply(drill,{userId=30,rankId="private"},"join",nil,"exam_1")
+check(not Rules.apply(drill,{userId=30,canHost=true},"start",nil,"exam_1"),"Participant cannot start")
+check(not Rules.apply(drill,{userId=1,canHost=false},"start",nil,"exam_1"),"Lost host authority denied")
+local running=Rules.apply(drill,host,"start",nil,"exam_1")
+check(running.sessions[1].phase=="running","Host starts exam")
+check(drill.sessions[1].phase=="recruiting","Start does not mutate old board")
+check(not Rules.apply(running,host,"start",nil,"exam_1"),"Duplicate start rejected")
+check(not Rules.apply(running,{userId=31,rankId="private"},"join",nil,"exam_1"),"Late joins rejected")
+local second=Rules.apply(running,otherHost,"create","private")
+second=Rules.apply(second,{userId=32,rankId="private"},"join",nil,"exam_2")
+local concurrent=Rules.apply(second,otherHost,"start",nil,"exam_2")
+check(concurrent~=nil and concurrent.sessions[1].areaIndex~=concurrent.sessions[2].areaIndex,"Concurrent exams use distinct areas")
+second=Rules.apply(second,host,"close",nil,"exam_1")
+check(Rules.apply(second,otherHost,"start",nil,"exam_2")~=nil,"Closing frees training ground")
+for _,command in Rules.COMMANDS do check(Rules.isCommand(command),"Published drill command accepted") end
+for _,command in {"", "promote", string.rep("x",1000), 123, {}} do
+    check(not Rules.isCommand(command),"Invalid drill command rejected")
+end
+local full=Rules.apply(Rules.new(),host,"create","private")
+for id=100,129 do full=Rules.apply(full,{userId=id,rankId="private"},"join",nil,"exam_1") end
+check(not Rules.apply(full,{userId=130,rankId="private"},"join",nil,"exam_1"),"Formation capacity enforced")
+print("Exam drill lifecycle and security passed; total "..assertions.." assertions")
+
+local six=Rules.new()
+for id=1,6 do
+    six=Rules.apply(six,{userId=id,canHost=true},"create","private")
+    six=Rules.apply(six,{userId=id+100,rankId="private"},"join",nil,"exam_"..id)
+    six=Rules.apply(six,{userId=id,canHost=true},"start",nil,"exam_"..id)
+    check(six.sessions[id].areaIndex==id and six.sessions[id].phase=="running","All six areas run independently")
+end
+six=Rules.apply(six,{userId=3,canHost=true},"close",nil,"exam_3")
+six=Rules.apply(six,{userId=7,canHost=true},"create","private")
+check(six.sessions[6].areaIndex==3,"Closed area is reusable without moving other exams")
+print("PASS: six concurrent exams and stable independent area allocation")

@@ -3,6 +3,12 @@
 -- Exams are session-only; joining is not a pass and never promotes a player.
 local Rules = {}
 Rules.MAX_ACTIVE = 6
+Rules.MAX_PARTICIPANTS = 30
+Rules.COMMANDS = table.freeze({"우향우", "좌향우", "좌향좌", "우향좌", "앞으로서", "뒤로돌아", "시험관 주시"})
+
+function Rules.isCommand(command: any): boolean
+    return type(command)=="string" and table.find(Rules.COMMANDS,command)~=nil
+end
 Rules.TARGET_IDS = table.freeze({
     "private", "private_first_class", "corporal", "sergeant",
     "staff_sergeant", "sergeant_first_class", "master_sergeant", "sergeant_major",
@@ -30,7 +36,7 @@ local function copy(state: any): any
         for userId,joined in exam.participants do attendees[userId]=joined end
         table.insert(result.sessions,{
             id=exam.id,hostId=exam.hostId,targetId=exam.targetId,
-            startedAt=exam.startedAt,participants=attendees,
+            startedAt=exam.startedAt,participants=attendees,phase=exam.phase,areaIndex=exam.areaIndex,
         })
     end
     return result
@@ -47,15 +53,20 @@ function Rules.valid(state: any): boolean
         or type(state.sessions)~="table" or #state.sessions>Rules.MAX_ACTIVE then return false end
     local joined={}
     local ids={}
+    local areas={}
     for _,exam in state.sessions do
         if type(exam)~="table" or type(exam.id)~="string"
             or not exam.id:match("^exam_%d+$") or ids[exam.id]
+            or type(exam.areaIndex)~="number" or exam.areaIndex%1~=0
+            or exam.areaIndex<1 or exam.areaIndex>Rules.MAX_ACTIVE or areas[exam.areaIndex]
             or not validUserId(exam.hostId)
             or not Rules.isTarget(exam.targetId)
+            or (exam.phase~=nil and exam.phase~="recruiting" and exam.phase~="running")
             or type(exam.startedAt)~="number" or type(exam.participants)~="table" then return false end
         if joined[exam.hostId] then return false end
         joined[exam.hostId]=true
         ids[exam.id]=true
+        areas[exam.areaIndex]=true
         for userId,active in exam.participants do
             if not validUserId(userId) or active~=true or joined[userId]
                 or userId==exam.hostId then return false end
@@ -90,16 +101,24 @@ function Rules.apply(state: any,actor: any,action: any,targetId: any,examId: any
         if Rules.busy(state,actor.userId) then return nil,"이미 시험을 개최하거나 참가 중입니다. 먼저 종료 또는 참가 취소해 주세요." end
         if not Rules.isTarget(targetId) then return nil,"선택할 수 없는 시험 계급입니다." end
         if #nextState.sessions>=Rules.MAX_ACTIVE then return nil,"동시에 개최 가능한 시험은 6개입니다." end
+        local used={}
+        for _,exam in nextState.sessions do used[exam.areaIndex]=true end
+        local areaIndex=1
+        while used[areaIndex] do areaIndex+=1 end
         nextState.nextId+=1
         table.insert(nextState.sessions,{
             id="exam_"..tostring(nextState.nextId),
             hostId=actor.userId,targetId=targetId,
             startedAt=if type(now)=="number" and now>=0 then now else 0,
-            participants={},
+            participants={},phase="recruiting",areaIndex=areaIndex,
         })
     elseif action=="join" then
         local _,exam=locate(nextState,examId)
         if not exam then return nil,"종료되었거나 존재하지 않는 시험입니다." end
+        if exam.phase=="running" then return nil,"이미 시작한 시험입니다." end
+        local count=0
+        for _ in exam.participants do count+=1 end
+        if count>=Rules.MAX_PARTICIPANTS then return nil,"참가 정원은 30명입니다." end
         if exam.hostId==actor.userId then return nil,"자신이 개최한 시험에는 참가할 수 없습니다." end
         if exam.participants[actor.userId] then return nil,"이미 참가한 시험입니다." end
         for _,other in nextState.sessions do
@@ -112,6 +131,14 @@ function Rules.apply(state: any,actor: any,action: any,targetId: any,examId: any
         local _,exam=locate(nextState,examId)
         if not exam or not exam.participants[actor.userId] then return nil,"참가 중인 시험이 아닙니다." end
         exam.participants[actor.userId]=nil
+    elseif action=="start" then
+        local _,exam=locate(nextState,examId)
+        if not exam or exam.hostId~=actor.userId or actor.canHost~=true then
+            return nil,"개최자만 시험을 시작할 수 있습니다."
+        end
+        if exam.phase=="running" then return nil,"이미 시작한 시험입니다." end
+        if next(exam.participants)==nil then return nil,"참가자가 필요합니다." end
+        exam.phase="running"
     elseif action=="close" then
         local index,exam=locate(nextState,examId)
         if not exam then return nil,"종료되었거나 존재하지 않는 시험입니다." end

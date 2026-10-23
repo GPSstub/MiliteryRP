@@ -4,6 +4,7 @@ local Players=game:GetService("Players")
 local ReplicatedStorage=game:GetService("ReplicatedStorage")
 local Rules=require(ReplicatedStorage:WaitForChild("Shared"):WaitForChild("ExamRules"))
 local Catalog=require(ReplicatedStorage:WaitForChild("Shared"):WaitForChild("RankCatalog"))
+local Formation=require(script.Parent:WaitForChild("ExamFormation"))
 local RankService=require(script.Parent:WaitForChild("RankService"))
 
 local request=Instance.new("RemoteFunction")
@@ -13,10 +14,15 @@ local changed=Instance.new("RemoteEvent")
 changed.Name="ExamBoardChanged"
 changed.Parent=ReplicatedStorage
 
+local command=Instance.new("RemoteEvent")
+command.Name="ExamDrillCommand"
+command.Parent=ReplicatedStorage
+
 local board=Rules.new()
 local lastMutate: {[Player]: number}={}
 local lastRead: {[Player]: number}={}
 local rankConnections: {[Player]: RBXScriptConnection}={}
+local characterConnections: {[Player]: RBXScriptConnection}={}
 
 local function hostRank(player: Player): any
     if player.Parent~=Players or player:GetAttribute("RankStorageStatus")~="Ready" then return nil end
@@ -28,6 +34,7 @@ local function canHost(player: Player): boolean
 end
 
 local function announce()
+    Formation.reconcile(board.sessions)
     changed:FireAllClients(board.revision)
 end
 
@@ -41,6 +48,14 @@ end
 
 local function track(player: Player)
     if rankConnections[player] then return end
+    characterConnections[player]=player.CharacterRemoving:Connect(function()
+        for _,exam in board.sessions do
+            if exam.phase=="running" and (exam.hostId==player.UserId or exam.participants[player.UserId]) then
+                remove(player)
+                break
+            end
+        end
+    end)
     rankConnections[player]=player:GetAttributeChangedSignal("RankId"):Connect(function()
         local rank=RankService.get(player)
         local incompatible=false
@@ -82,7 +97,7 @@ local function snapshot(player: Player): any
                 id=exam.id,targetId=exam.targetId,
                 targetName=if target then target.name else "알 수 없음",
                 host=identity(host),participants=participants,
-                startedAt=exam.startedAt,
+                startedAt=exam.startedAt,phase=exam.phase or "recruiting",areaIndex=exam.areaIndex,
             })
         end
     end
@@ -116,7 +131,25 @@ request.OnServerInvoke=function(player: Player,action: any,payload: any): any
     end
     local rank=hostRank(player)
     local actor={userId=player.UserId,canHost=Rules.canHost(rank),rankId=if rank then rank.id else nil}
+    local selected: any=nil
+    for _,exam in board.sessions do if exam.id==examId then selected=exam;break end end
+    if action=="command" then
+        if not selected or selected.hostId~=player.UserId or not actor.canHost
+            or selected.phase~="running" or not Rules.isCommand(payload.command) then
+            return {ok=false,message="진행 중인 시험의 개최자만 구령을 전달할 수 있습니다."}
+        end
+        for userId in selected.participants do
+            local participant=Players:GetPlayerByUserId(userId)
+            if participant then command:FireClient(participant,payload.command,player.DisplayName) end
+        end
+        return {ok=true,message="구령 전달: "..payload.command,data=snapshot(player)}
+    end
     local updated,message=Rules.apply(board,actor,action,targetId,examId,os.time())
+    if updated and action=="start" then
+        local ready,reason=Formation.ready(selected)
+        if not ready then return {ok=false,message=reason} end
+        Formation.start(selected)
+    end
     if not updated then return {ok=false,message=message} end
     board=updated
     announce()
@@ -127,6 +160,8 @@ Players.PlayerAdded:Connect(track)
 Players.PlayerRemoving:Connect(function(player)
     local connection=rankConnections[player]
     if connection then connection:Disconnect();rankConnections[player]=nil end
+    local characterConnection=characterConnections[player]
+    if characterConnection then characterConnection:Disconnect();characterConnections[player]=nil end
     lastMutate[player]=nil
     lastRead[player]=nil
     remove(player)

@@ -1,0 +1,14 @@
+{
+  "sourceTriangles": 917480,
+  "triangles": 239998,
+  "parts": 16,
+  "maxPartTriangles": 15000,
+  "size": [
+    174.578369140625,
+    199.99769592285156,
+    71.0547866821289
+  ],
+  "uvLayers": 1,
+  "colorTextureSize": 4096,
+  "normalMap": true
+}

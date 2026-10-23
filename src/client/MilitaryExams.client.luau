@@ -231,8 +231,90 @@ local function findSelected(): any
     end
     return nil
 end
+-- Independent host controls stay available when the exam browser is closed.
+local drillPanel=make("Frame",gui,{Name="DrillControls",AnchorPoint=Vector2.new(0.5,1),
+    Position=UDim2.new(0.5,0,1,-100),Size=UDim2.fromOffset(530,194),
+    BackgroundColor3=C.sidebar,BorderSizePixel=0,Visible=false})
+rounded(drillPanel,12);stroke(drillPanel)
+local drillScale=make("UIScale",drillPanel,{Scale=1})
+local drillTitle=text(drillPanel,"Heading","시험 진행",16,C.light,true)
+drillTitle.Position=UDim2.fromOffset(14,7);drillTitle.Size=UDim2.fromOffset(340,27)
+local drillStatus=text(drillPanel,"Status","참가자 모집 후 시작하세요.",12,C.muted,false)
+drillStatus.Position=UDim2.fromOffset(14,34);drillStatus.Size=UDim2.new(1,-28,0,22)
+local startButton=button(drillPanel,"StartExam","시험 시작 · 훈련장으로 이동",C.accent)
+startButton.Position=UDim2.fromOffset(14,65);startButton.Size=UDim2.new(1,-28,0,48)
+local commandButtons: {TextButton}={}
+local ownExam: any=nil
+local drillFeedback=""
+local drillFeedbackUntil=0
+startButton.Activated:Connect(function()
+    if ownExam then mutate("start",{examId=ownExam.id}) end
+end)
+for index,label in Rules.COMMANDS do
+    local item=button(drillPanel,"Command"..index,label,C.hover)
+    item.Size=UDim2.fromOffset(119,44)
+    item.Position=UDim2.fromOffset(14+((index-1)%4)*128,65+math.floor((index-1)/4)*53)
+    item.TextSize=14
+    item.Activated:Connect(function()
+        if ownExam then mutate("command",{examId=ownExam.id,command=label}) end
+    end)
+    table.insert(commandButtons,item)
+end
+local endButton=button(drillPanel,"EndExam","시험 종료",C.hover)
+endButton.Position=UDim2.fromOffset(398,12);endButton.Size=UDim2.fromOffset(118,36)
+endButton.Activated:Connect(function()
+    if ownExam then mutate("close",{examId=ownExam.id}) end
+end)
+local commandBanner=make("Frame",gui,{Name="DrillCommandBanner",AnchorPoint=Vector2.new(0.5,0),
+    Position=UDim2.fromScale(0.5,0.05),Size=UDim2.new(0.8,0,0,104),
+    BackgroundColor3=C.sidebar,BorderSizePixel=0,Visible=false})
+make("UISizeConstraint",commandBanner,{MaxSize=Vector2.new(620,104)})
+rounded(commandBanner,12);stroke(commandBanner)
+local bannerTitle=text(commandBanner,"Examiner","시험관 구령",14,C.light,true)
+bannerTitle.Position=UDim2.fromOffset(16,8);bannerTitle.Size=UDim2.new(1,-32,0,24)
+local bannerCommand=text(commandBanner,"Command","",32,C.white,true)
+bannerCommand.Position=UDim2.fromOffset(16,32);bannerCommand.Size=UDim2.new(1,-32,0,62)
+bannerCommand.TextXAlignment=Enum.TextXAlignment.Center
+local bannerVersion=0
+local drillRemote=ReplicatedStorage:WaitForChild("ExamDrillCommand") :: RemoteEvent
+drillRemote.OnClientEvent:Connect(function(command: any,hostName: any)
+    if not Rules.isCommand(command) then return end
+    bannerVersion+=1
+    local version=bannerVersion
+    bannerTitle.Text="시험관 "..tostring(hostName).."의 구령 · 직접 동작하세요"
+    bannerCommand.Text=command
+    commandBanner.Visible=true
+    task.delay(5,function() if bannerVersion==version then commandBanner.Visible=false end end)
+end)
+local function renderDrill(sessions: {any})
+    ownExam=nil
+    local attending=false
+    for _,exam in sessions do
+        if exam.host and exam.host.userId==player.UserId then ownExam=exam end
+        if exam.phase=="running" then
+            for _,member in exam.participants or {} do
+                if member.userId==player.UserId then attending=true end
+            end
+        end
+    end
+    if not attending then bannerVersion+=1;commandBanner.Visible=false end
+    drillPanel.Visible=ownExam~=nil
+    drillScale.Scale=math.min(1,(gui.AbsoluteSize.X-20)/530,(gui.AbsoluteSize.Y*0.42)/194)
+    local running=ownExam and ownExam.phase=="running"
+    startButton.Visible=ownExam~=nil and not running
+    startButton.Active=not pending
+    for _,item in commandButtons do item.Visible=running==true;item.Active=not pending end
+    if ownExam then
+        drillTitle.Text=tostring(ownExam.areaIndex).."번 구역 · "..(if running then "제식 시험 진행 중" else "시험 참가자 모집 중")
+        drillPanel.Size=UDim2.fromOffset(530,if running then 174 else 130)
+        drillStatus.Text=if running then "버튼을 누르면 참가자 화면에 구령이 표시됩니다."
+            else "참가 "..tostring(#ownExam.participants).." / 30명 · 시작 시 전원 정렬"
+        if os.clock()<drillFeedbackUntil then drillStatus.Text=drillFeedback end
+    end
+end
 local function render()
     local sessions=if board and type(board.sessions)=="table" then board.sessions else {}
+    renderDrill(sessions)
     local canCreate=board and board.canCreate==true
     arrange(canCreate==true)
     capacity.Text="진행 중 "..tostring(#sessions).." / "..tostring(Rules.MAX_ACTIVE)
@@ -254,7 +336,7 @@ local function render()
             if selected then C.accent else C.bg)
         entry.LayoutOrder=index
         entry.Size=UDim2.new(1,-5,0,106)
-        entry.Text="  "..tostring(exam.targetName).." 시험  ·  "..tostring(#(exam.participants or {})).."명 참가\n"
+        entry.Text="  "..tostring(exam.targetName).." 시험 · "..tostring(exam.areaIndex).."번 구역  ·  "..tostring(#(exam.participants or {})).."명 참가\n"
             .."  개최: "..tostring(host.rank or "계급 확인 중").."  "..personName(host)
             .."\n  "..(if selected then "▶ 선택된 시험" else "클릭하여 참가자 확인")
         entry.TextXAlignment=Enum.TextXAlignment.Left
@@ -273,10 +355,10 @@ local function render()
         examAction.Visible=false
         return
     end
-    detailTitle.Text=tostring(selected.targetName).." 시험"
+    detailTitle.Text=tostring(selected.targetName).." 시험 · "..tostring(selected.areaIndex).."번 구역"
     detailHost.Text="개최: "..tostring(selected.host.rank or "계급 확인 중")
         .."  "..personName(selected.host)
-    detailExtra.Text="개최자 계정: @"..tostring(selected.host.username or "?")
+    detailExtra.Text=(if selected.phase=="running" then "시험 진행 중 · 추가 참가 불가" else "참가자 모집 중").."  ·  @"..tostring(selected.host.username or "?")
     local people=selected.participants or {}
     rosterHeading.Text="참가자  ·  "..tostring(#people).."명"
     if #people==0 then
@@ -301,7 +383,7 @@ local function render()
         if member.userId==player.UserId then joined=true;break end
     end
     examAction.Visible=true
-    local eligible=board and board.rankId==selected.targetId
+    local eligible=board and board.rankId==selected.targetId and selected.phase~="running"
     examAction.Text=if not isHost and not joined and not eligible then "시험 계급과 현재 계급이 같아야 참가 가능" elseif isHost then "시험 종료" elseif joined then "참가 취소" else "시험 참가하기"
     examAction.BackgroundColor3=if isHost or joined then C.hover else C.accent
     examAction.Active=not pending and (isHost or joined or eligible==true)
@@ -344,6 +426,7 @@ end
 mutate=function(action: string,payload: any)
     if pending then return end
     pending=true
+    render()
     examAction.Active=false
     createButton.Active=false
     status.Text="서버에 요청하고 있습니다..."
@@ -361,6 +444,8 @@ mutate=function(action: string,payload: any)
         else
             status.Text="서버에 연결할 수 없습니다. 다시 시도하세요."
         end
+        drillFeedback=status.Text
+        drillFeedbackUntil=os.clock()+4
         scheduleRefresh()
         render()
     end)
